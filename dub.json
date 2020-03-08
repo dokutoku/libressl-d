@@ -1,0 +1,9 @@
+{
+	"name": "libressl-d",
+	"description": "D bindings for LibreSSL.",
+	"authors": ["dokutoku"],
+	"license": "proprietary",
+	"copyright": "Copyright © 2020, dokutoku",
+	"homepage": "https://gitlab.com/dokutoku/libressl-d",
+	"targetType": "sourceLibrary"
+}
