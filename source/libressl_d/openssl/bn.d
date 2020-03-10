@@ -167,12 +167,20 @@ nothrow @nogc:
  * 2 times faster than system compilers for the big number stuff.
  * For machines with only one compiler (or shared libraries), this should
  * be on.  Again this in only really a problem on machines
- * using "core.stdc.config.cpp_longlong's", are 32bit, and are not using my assembler code.
+ * using "long long's", are 32bit, and are not using my assembler code.
  */
 /* version = BN_DIV2W; */
 
+//ToDo:
+version (Windows) {
+} else {
+	version (D_LP64) {
+			version = C_LP64;
+	}
+}
+
 //#if defined(_LP64)
-version (X86_64) {
+version (C_LP64) {
 	//#undef BN_LLONG
 	alias BN_ULONG = core.stdc.config.c_ulong;
 	alias BN_LONG = core.stdc.config.c_long;

@@ -75,7 +75,11 @@ version (X86) {
 //#elif defined(__ILP64__)
 } else version (X86_64) {
 	alias RIPEMD160_LONG = core.stdc.config.c_ulong;
-	enum RIPEMD160_LONG_LOG2 = 3;
+
+	version (Windows) {
+	} else {
+		enum RIPEMD160_LONG_LOG2 = 3;
+	}
 } else {
 	alias RIPEMD160_LONG = uint;
 }

@@ -163,14 +163,7 @@ int GOSTR341194_Final(ubyte* md, .GOSTR341194_CTX* c);
 void GOSTR341194_Transform(.GOSTR341194_CTX* c, const (ubyte)* data);
 ubyte* GOSTR341194(const (ubyte)* d, size_t n, ubyte* md, int nid);
 
-//#if defined(_LP64)
-version (X86_64) {
-	alias STREEBOG_LONG64 = core.stdc.config.c_ulong;
-	//#define U64(C) C##UL
-} else {
-	alias STREEBOG_LONG64 = core.stdc.config.cpp_ulonglong;
-	//#define U64(C) C##ULL
-}
+alias STREEBOG_LONG64 = ulong;
 
 enum STREEBOG_LBLOCK = 8;
 enum STREEBOG_CBLOCK = 64;
