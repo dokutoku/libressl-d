@@ -1,4 +1,4 @@
-/* $OpenBSD: evp.h,v 1.77 2019/09/09 18:06:25 jsing Exp $ */
+/* $OpenBSD: evp.h,v 1.79 2020/04/27 19:31:02 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -115,6 +115,7 @@ enum EVP_PKT_EXP = 0x1000;
 
 alias EVP_PKEY_NONE = libressl_d.openssl.objects.NID_undef;
 alias EVP_PKEY_RSA = libressl_d.openssl.objects.NID_rsaEncryption;
+alias EVP_PKEY_RSA_PSS = libressl_d.openssl.objects.NID_rsassaPss;
 alias EVP_PKEY_RSA2 = libressl_d.openssl.objects.NID_rsa;
 alias EVP_PKEY_DSA = libressl_d.openssl.objects.NID_dsa;
 alias EVP_PKEY_DSA1 = libressl_d.openssl.objects.NID_dsa_2;
@@ -1718,6 +1719,7 @@ enum EVP_R_INITIALIZATION_ERROR = 134;
 enum EVP_R_INPUT_NOT_INITIALIZED = 111;
 enum EVP_R_INVALID_DIGEST = 152;
 enum EVP_R_INVALID_FIPS_MODE = 168;
+enum EVP_R_INVALID_IV_LENGTH = 194;
 enum EVP_R_INVALID_KEY_LENGTH = 130;
 enum EVP_R_INVALID_OPERATION = 148;
 enum EVP_R_IV_TOO_LARGE = 102;

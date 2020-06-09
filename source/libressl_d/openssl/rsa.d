@@ -1,4 +1,4 @@
-/* $OpenBSD: rsa.h,v 1.40 2019/06/05 15:41:33 gilles Exp $ */
+/* $OpenBSD: rsa.h,v 1.51 2019/11/04 12:30:56 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -88,6 +88,31 @@ nothrow @nogc:
 /* alias RSA = libressl_d.openssl.rsa.rsa_st; */
 /* alias RSA_METHOD = libressl_d.openssl.rsa.rsa_meth_st; */
 
+struct rsa_pss_params_st
+{
+	libressl_d.openssl.ossl_typ.X509_ALGOR* hashAlgorithm;
+	libressl_d.openssl.ossl_typ.X509_ALGOR* maskGenAlgorithm;
+	libressl_d.openssl.ossl_typ.ASN1_INTEGER* saltLength;
+	libressl_d.openssl.ossl_typ.ASN1_INTEGER* trailerField;
+
+	/* Hash algorithm decoded from maskGenAlgorithm. */
+	libressl_d.openssl.ossl_typ.X509_ALGOR* maskHash;
+}
+
+alias RSA_PSS_PARAMS = .rsa_pss_params_st;
+
+struct rsa_oaep_params_st
+{
+	libressl_d.openssl.ossl_typ.X509_ALGOR* hashFunc;
+	libressl_d.openssl.ossl_typ.X509_ALGOR* maskGenFunc;
+	libressl_d.openssl.ossl_typ.X509_ALGOR* pSourceFunc;
+
+	/* Hash algorithm decoded from maskGenFunc. */
+	libressl_d.openssl.ossl_typ.X509_ALGOR* maskHash;
+}
+
+alias RSA_OAEP_PARAMS = .rsa_oaep_params_st;
+
 struct rsa_meth_st
 {
 	const (char)* name;
@@ -170,6 +195,12 @@ struct rsa_st
 	libressl_d.openssl.ossl_typ.BIGNUM* dmp1;
 	libressl_d.openssl.ossl_typ.BIGNUM* dmq1;
 	libressl_d.openssl.ossl_typ.BIGNUM* iqmp;
+
+	/**
+	 * Parameter restrictions for PSS only keys.
+	 */
+	.RSA_PSS_PARAMS* pss;
+
 	/* be careful using this if the RSA structure is shared */
 	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
 	int references;
@@ -235,21 +266,50 @@ enum RSA_FLAG_SIGN_VER = 0x0040;
  */
 enum RSA_FLAG_NO_BLINDING = 0x0080;
 
-//#define EVP_PKEY_CTX_set_rsa_padding(ctx, pad) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, -1, .EVP_PKEY_CTRL_RSA_PADDING, pad, null)
+/**
+ * Salt length matches digest
+ */
+enum RSA_PSS_SALTLEN_DIGEST = -1;
 
-//#define EVP_PKEY_CTX_get_rsa_padding(ctx, ppad) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, -1, .EVP_PKEY_CTRL_GET_RSA_PADDING, 0, ppad)
+/**
+ * Verify only: auto detect salt length
+ */
+enum RSA_PSS_SALTLEN_AUTO = -2;
 
-//#define EVP_PKEY_CTX_set_rsa_pss_saltlen(ctx, len) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, (libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY), .EVP_PKEY_CTRL_RSA_PSS_SALTLEN, len, null)
+/**
+ * Set salt length to maximum possible
+ */
+enum RSA_PSS_SALTLEN_MAX = -3;
 
-//#define EVP_PKEY_CTX_get_rsa_pss_saltlen(ctx, plen) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, (libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY), .EVP_PKEY_CTRL_GET_RSA_PSS_SALTLEN, 0, plen)
+//#define EVP_PKEY_CTX_set_rsa_padding(ctx, pad) .RSA_pkey_ctx_ctrl(ctx, -1, .EVP_PKEY_CTRL_RSA_PADDING, pad, null)
 
-//#define EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, bits) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_BITS, bits, null)
+//#define EVP_PKEY_CTX_get_rsa_padding(ctx, ppad) .RSA_pkey_ctx_ctrl(ctx, -1, .EVP_PKEY_CTRL_GET_RSA_PADDING, 0, ppad)
 
-//#define EVP_PKEY_CTX_set_rsa_keygen_pubexp(ctx, pubexp) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_PUBEXP, 0, pubexp)
+//#define EVP_PKEY_CTX_set_rsa_pss_saltlen(ctx, len) .RSA_pkey_ctx_ctrl(ctx, (libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY), .EVP_PKEY_CTRL_RSA_PSS_SALTLEN, len, null)
 
-//#define EVP_PKEY_CTX_set_rsa_mgf1_md(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG, .EVP_PKEY_CTRL_RSA_MGF1_MD, 0, cast(void*)(md))
+//#define EVP_PKEY_CTX_set_rsa_pss_keygen_saltlen(ctx, len) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_PSS_SALTLEN, len, null)
 
-//#define EVP_PKEY_CTX_get_rsa_mgf1_md(ctx, pmd) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG, .EVP_PKEY_CTRL_GET_RSA_MGF1_MD, 0, cast(void*)(pmd))
+//#define EVP_PKEY_CTX_get_rsa_pss_saltlen(ctx, plen) .RSA_pkey_ctx_ctrl(ctx, (libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY), .EVP_PKEY_CTRL_GET_RSA_PSS_SALTLEN, 0, plen)
+
+//#define EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, bits) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_BITS, bits, null)
+
+//#define EVP_PKEY_CTX_set_rsa_keygen_pubexp(ctx, pubexp) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_PUBEXP, 0, pubexp)
+
+//#define EVP_PKEY_CTX_set_rsa_mgf1_md(ctx, md) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG | libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_MGF1_MD, 0, (void*) (md))
+
+//#define EVP_PKEY_CTX_set_rsa_pss_keygen_mgf1_md(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_MGF1_MD, 0, (void*) (md))
+
+//#define EVP_PKEY_CTX_set_rsa_oaep_md(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_OAEP_MD, 0, (void*) (md))
+
+//#define EVP_PKEY_CTX_get_rsa_mgf1_md(ctx, pmd) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG | libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_MGF1_MD, 0, (void*) (pmd))
+
+//#define EVP_PKEY_CTX_get_rsa_oaep_md(ctx, pmd) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_OAEP_MD, 0, (void*) (pmd))
+
+//#define EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, l, llen) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_OAEP_LABEL, llen, (void*) (l))
+
+//#define EVP_PKEY_CTX_get0_rsa_oaep_label(ctx, l) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_OAEP_LABEL, 0, (void*) (l))
+
+//#define s(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, libressl_d.openssl.evp.EVP_PKEY_CTRL_MD, 0, (void*) (md))
 
 enum EVP_PKEY_CTRL_RSA_PADDING = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
 enum EVP_PKEY_CTRL_RSA_PSS_SALTLEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
@@ -261,6 +321,12 @@ enum EVP_PKEY_CTRL_RSA_MGF1_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 5;
 enum EVP_PKEY_CTRL_GET_RSA_PADDING = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 6;
 enum EVP_PKEY_CTRL_GET_RSA_PSS_SALTLEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 7;
 enum EVP_PKEY_CTRL_GET_RSA_MGF1_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 8;
+
+enum EVP_PKEY_CTRL_RSA_OAEP_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 9;
+enum EVP_PKEY_CTRL_RSA_OAEP_LABEL = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 10;
+
+enum EVP_PKEY_CTRL_GET_RSA_OAEP_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 11;
+enum EVP_PKEY_CTRL_GET_RSA_OAEP_LABEL = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 12;
 
 enum RSA_PKCS1_PADDING = 1;
 enum RSA_SSLV23_PADDING = 2;
@@ -310,10 +376,12 @@ const (libressl_d.openssl.ossl_typ.RSA_METHOD)* RSA_get_default_method();
 const (libressl_d.openssl.ossl_typ.RSA_METHOD)* RSA_get_method(const (libressl_d.openssl.ossl_typ.RSA)* rsa);
 int RSA_set_method(libressl_d.openssl.ossl_typ.RSA* rsa, const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth);
 
-/* these are the actual SSLeay RSA functions */
+const (libressl_d.openssl.ossl_typ.RSA_METHOD)* RSA_PKCS1_OpenSSL();
 const (libressl_d.openssl.ossl_typ.RSA_METHOD)* RSA_PKCS1_SSLeay();
 
 const (libressl_d.openssl.ossl_typ.RSA_METHOD)* RSA_null_method();
+
+int RSA_pkey_ctx_ctrl(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int optype, int cmd, int p1, void* p2);
 
 libressl_d.openssl.ossl_typ.RSA* d2i_RSAPublicKey(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_RSAPublicKey(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** out_);
@@ -322,21 +390,17 @@ libressl_d.openssl.ossl_typ.RSA* d2i_RSAPrivateKey(libressl_d.openssl.ossl_typ.R
 int i2d_RSAPrivateKey(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** out_);
 extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSAPrivateKey_it;
 
-struct rsa_pss_params_st
-{
-	libressl_d.openssl.ossl_typ.X509_ALGOR* hashAlgorithm;
-	libressl_d.openssl.ossl_typ.X509_ALGOR* maskGenAlgorithm;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* saltLength;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* trailerField;
-}
-
-alias RSA_PSS_PARAMS = .rsa_pss_params_st;
-
 .RSA_PSS_PARAMS* RSA_PSS_PARAMS_new();
 void RSA_PSS_PARAMS_free(.RSA_PSS_PARAMS* a);
 .RSA_PSS_PARAMS* d2i_RSA_PSS_PARAMS(.RSA_PSS_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_RSA_PSS_PARAMS(.RSA_PSS_PARAMS* a, ubyte** out_);
 extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_PSS_PARAMS_it;
+
+.RSA_OAEP_PARAMS* RSA_OAEP_PARAMS_new();
+void RSA_OAEP_PARAMS_free(.RSA_OAEP_PARAMS* a);
+.RSA_OAEP_PARAMS* d2i_RSA_OAEP_PARAMS(.RSA_OAEP_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
+int i2d_RSA_OAEP_PARAMS(.RSA_OAEP_PARAMS* a, ubyte** out_);
+extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_OAEP_PARAMS_it;
 
 int RSA_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.RSA)* r, int offset);
 
@@ -377,6 +441,8 @@ int RSA_padding_check_PKCS1_type_2(ubyte* to, int tlen, const (ubyte)* f, int fl
 int PKCS1_MGF1(ubyte* mask, core.stdc.config.c_long len, const (ubyte)* seed, core.stdc.config.c_long seedlen, const (libressl_d.openssl.ossl_typ.EVP_MD)* dgst);
 int RSA_padding_add_PKCS1_OAEP(ubyte* to, int tlen, const (ubyte)* f, int fl, const (ubyte)* p, int pl);
 int RSA_padding_check_PKCS1_OAEP(ubyte* to, int tlen, const (ubyte)* f, int fl, int rsa_len, const (ubyte)* p, int pl);
+int RSA_padding_add_PKCS1_OAEP_mgf1(ubyte* to, int tlen, const (ubyte)* from, int flen, const (ubyte)* param, int plen, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, const (libressl_d.openssl.ossl_typ.EVP_MD)* mgf1md);
+int RSA_padding_check_PKCS1_OAEP_mgf1(ubyte* to, int tlen, const (ubyte)* from, int flen, int num, const (ubyte)* param, int plen, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, const (libressl_d.openssl.ossl_typ.EVP_MD)* mgf1md);
 int RSA_padding_add_none(ubyte* to, int tlen, const (ubyte)* f, int fl);
 int RSA_padding_check_none(ubyte* to, int tlen, const (ubyte)* f, int fl, int rsa_len);
 int RSA_padding_add_X931(ubyte* to, int tlen, const (ubyte)* f, int fl);
@@ -541,17 +607,22 @@ enum RSA_R_DATA_TOO_LARGE_FOR_KEY_SIZE = 110;
 enum RSA_R_DATA_TOO_LARGE_FOR_MODULUS = 132;
 enum RSA_R_DATA_TOO_SMALL = 111;
 enum RSA_R_DATA_TOO_SMALL_FOR_KEY_SIZE = 122;
+enum RSA_R_DIGEST_DOES_NOT_MATCH = 158;
+enum RSA_R_DIGEST_NOT_ALLOWED = 145;
 enum RSA_R_DIGEST_TOO_BIG_FOR_RSA_KEY = 112;
 enum RSA_R_DMP1_NOT_CONGRUENT_TO_D = 124;
 enum RSA_R_DMQ1_NOT_CONGRUENT_TO_D = 125;
 enum RSA_R_D_E_NOT_CONGRUENT_TO_1 = 123;
 enum RSA_R_FIRST_OCTET_INVALID = 133;
 enum RSA_R_ILLEGAL_OR_UNSUPPORTED_PADDING_MODE = 144;
+enum RSA_R_INVALID_DIGEST = 157;
 enum RSA_R_INVALID_DIGEST_LENGTH = 143;
 enum RSA_R_INVALID_HEADER = 137;
 enum RSA_R_INVALID_KEYBITS = 145;
+enum RSA_R_INVALID_LABEL = 160;
 enum RSA_R_INVALID_MESSAGE_LENGTH = 131;
 enum RSA_R_INVALID_MGF1_MD = 156;
+enum RSA_R_INVALID_OAEP_PARAMETERS = 161;
 enum RSA_R_INVALID_PADDING = 138;
 enum RSA_R_INVALID_PADDING_MODE = 141;
 enum RSA_R_INVALID_PSS_PARAMETERS = 149;
@@ -563,6 +634,7 @@ enum RSA_R_IQMP_NOT_INVERSE_OF_Q = 126;
 enum RSA_R_KEY_SIZE_TOO_SMALL = 120;
 enum RSA_R_LAST_OCTET_INVALID = 134;
 enum RSA_R_MODULUS_TOO_LARGE = 105;
+enum RSA_R_MGF1_DIGEST_NOT_ALLOWED = 152;
 enum RSA_R_NON_FIPS_RSA_METHOD = 157;
 enum RSA_R_NO_PUBLIC_EXPONENT = 140;
 enum RSA_R_NULL_BEFORE_BLOCK_MISSING = 113;
@@ -571,6 +643,7 @@ enum RSA_R_OAEP_DECODING_ERROR = 121;
 enum RSA_R_OPERATION_NOT_ALLOWED_IN_FIPS_MODE = 158;
 enum RSA_R_OPERATION_NOT_SUPPORTED_FOR_THIS_KEYTYPE = 148;
 enum RSA_R_PADDING_CHECK_FAILED = 114;
+enum RSA_R_PSS_SALTLEN_TOO_SMALL = 164;
 enum RSA_R_P_NOT_PRIME = 128;
 enum RSA_R_Q_NOT_PRIME = 129;
 enum RSA_R_RSA_OPERATIONS_NOT_SUPPORTED = 130;
@@ -579,9 +652,12 @@ enum RSA_R_SLEN_RECOVERY_FAILED = 135;
 enum RSA_R_SSLV3_ROLLBACK_ATTACK = 115;
 enum RSA_R_THE_ASN1_OBJECT_IDENTIFIER_IS_NOT_KNOWN_FOR_THIS_MD = 116;
 enum RSA_R_UNKNOWN_ALGORITHM_TYPE = 117;
+enum RSA_R_UNKNOWN_DIGEST = 166;
 enum RSA_R_UNKNOWN_MASK_DIGEST = 151;
 enum RSA_R_UNKNOWN_PADDING_TYPE = 118;
 enum RSA_R_UNKNOWN_PSS_DIGEST = 152;
+enum RSA_R_UNSUPPORTED_ENCRYPTION_TYPE = 162;
+enum RSA_R_UNSUPPORTED_LABEL_SOURCE = 163;
 enum RSA_R_UNSUPPORTED_MASK_ALGORITHM = 153;
 enum RSA_R_UNSUPPORTED_MASK_PARAMETER = 154;
 enum RSA_R_UNSUPPORTED_SIGNATURE_TYPE = 155;

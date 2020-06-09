@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl3.h,v 1.49 2018/11/08 22:28:52 jsing Exp $ */
+/* $OpenBSD: ssl3.h,v 1.50 2020/03/12 17:01:53 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -343,78 +343,81 @@ enum TLS1_HB_REQUEST = 1;
 enum TLS1_HB_RESPONSE = 2;
 
 //#if !defined(OPENSSL_NO_SSL_INTERN)
-struct ssl3_record_st
-{
-	/**
-	 * type of record
-	 */
-	/*r */
-	int type;
+version (LIBRESSL_INTERNAL) {
+} else {
+	struct ssl3_record_st
+	{
+		/**
+		 * type of record
+		 */
+		/*r */
+		int type;
 
-	/**
-	 * How many bytes available
-	 */
-	/* rw */
-	uint length_;
+		/**
+		 * How many bytes available
+		 */
+		/* rw */
+		uint length_;
 
-	/**
-	 * read/write offset into 'buf'
-	 */
-	/* r */
-	uint off;
+		/**
+		 * read/write offset into 'buf'
+		 */
+		/* r */
+		uint off;
 
-	/**
-	 * pointer to the record data
-	 */
-	/* rw */
-	ubyte* data;
+		/**
+		 * pointer to the record data
+		 */
+		/* rw */
+		ubyte* data;
 
-	/**
-	 * where the decode bytes are
-	 */
-	/* rw */
-	ubyte* input;
+		/**
+		 * where the decode bytes are
+		 */
+		/* rw */
+		ubyte* input;
 
-	/**
-	 * epoch number, needed by DTLS1
-	 */
-	/* r */
-	core.stdc.config.c_ulong epoch;
+		/**
+		 * epoch number, needed by DTLS1
+		 */
+		/* r */
+		core.stdc.config.c_ulong epoch;
 
-	/**
-	 * sequence number, needed by DTLS1
-	 */
-	/* r */
-	ubyte[8] seq_num;
+		/**
+		 * sequence number, needed by DTLS1
+		 */
+		/* r */
+		ubyte[8] seq_num;
+	}
+
+	alias SSL3_RECORD = .ssl3_record_st;
+
+	struct ssl3_buffer_st
+	{
+		/**
+		 * at least SSL3_RT_MAX_PACKET_SIZE bytes,
+		 * see ssl3_setup_buffers()
+		 */
+		ubyte* buf;
+
+		/**
+		 * buffer size
+		 */
+		size_t len;
+
+		/**
+		 * where to 'copy from'
+		 */
+		int offset;
+
+		/**
+		 * how many bytes left
+		 */
+		int left;
+	}
+
+	alias SSL3_BUFFER = .ssl3_buffer_st;
 }
-
-alias SSL3_RECORD = .ssl3_record_st;
-
-struct ssl3_buffer_st
-{
-	/**
-	 * at least SSL3_RT_MAX_PACKET_SIZE bytes,
-	 * see ssl3_setup_buffers()
-	 */
-	ubyte* buf;
-
-	/**
-	 * buffer size
-	 */
-	size_t len;
-
-	/**
-	 * where to 'copy from'
-	 */
-	int offset;
-
-	/**
-	 * how many bytes left
-	 */
-	int left;
-}
-
-alias SSL3_BUFFER = .ssl3_buffer_st;
 //#endif
 
 enum SSL3_CT_RSA_SIGN = 1;

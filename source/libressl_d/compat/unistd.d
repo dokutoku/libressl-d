@@ -5,6 +5,7 @@
 module libressl_d.compat.unistd;
 
 
+private static import core.sys.windows.winbase;
 private static import libressl_d.compat.sys.types;
 public import core.sys.posix.unistd;
 
@@ -33,6 +34,22 @@ version (Posix) {
 	enum SEEK_END = 2;
 
 	//alias access = _access;
+
+	version (Windows) {
+		public import core.sys.windows.windows;
+
+		pragma(inline, true)
+		nothrow @nogc
+		package(libressl_d)
+		uint sleep(uint seconds)
+
+			do
+			{
+				core.sys.windows.winbase.Sleep(seconds * 1000);
+
+				return seconds;
+			}
+	}
 
 	//uint sleep(uint seconds);
 

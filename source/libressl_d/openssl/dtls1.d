@@ -1,4 +1,4 @@
-/* $OpenBSD: dtls1.h,v 1.22 2018/08/24 19:35:05 jsing Exp $ */
+/* $OpenBSD: dtls1.h,v 1.23 2020/03/12 17:01:53 jsing Exp $ */
 /*
  * DTLS implementation written by Nagendra Modadugu
  * (nagendra@cs.stanford.edu) for the OpenSSL project 2005.
@@ -192,15 +192,18 @@ struct dtls1_state_st
 
 alias DTLS1_STATE = .dtls1_state_st;
 
-struct dtls1_record_data_st
-{
-	ubyte* packet;
-	uint packet_length;
-	libressl_d.openssl.ssl3.SSL3_BUFFER rbuf;
-	libressl_d.openssl.ssl3.SSL3_RECORD rrec;
-}
+version (LIBRESSL_INTERNAL) {
+} else {
+	struct dtls1_record_data_st
+	{
+		ubyte* packet;
+		uint packet_length;
+		libressl_d.openssl.ssl3.SSL3_BUFFER rbuf;
+		libressl_d.openssl.ssl3.SSL3_RECORD rrec;
+	}
 
-alias DTLS1_RECORD_DATA = .dtls1_record_data_st;
+	alias DTLS1_RECORD_DATA = .dtls1_record_data_st;
+}
 //#endif
 
 /* Timeout multipliers (timeout slice is defined in apps/timeouts.h */

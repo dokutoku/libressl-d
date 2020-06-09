@@ -594,6 +594,11 @@ enum LN_mgf1 = "mgf1";
 enum NID_mgf1 = 911;
 //#define OBJ_mgf1 OBJ_pkcs1, 8L
 
+enum SN_pSpecified = "PSPECIFIED";
+enum LN_pSpecified = "pSpecified";
+enum NID_pSpecified = 992;
+//enum OBJ_pSpecified OBJ_pkcs1, 9L;
+
 enum SN_rsassaPss = "RSASSA-PSS";
 enum LN_rsassaPss = "rsassaPss";
 enum NID_rsassaPss = 912;

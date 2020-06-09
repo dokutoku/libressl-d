@@ -1,4 +1,4 @@
-/* $OpenBSD: conf.h,v 1.14 2015/02/07 13:19:15 doug Exp $ */
+/* $OpenBSD: conf.h,v 1.15 2020/02/17 12:51:48 inoguchi Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -254,4 +254,5 @@ enum CONF_R_NO_SUCH_FILE = 114;
 enum CONF_R_NO_VALUE = 108;
 enum CONF_R_UNABLE_TO_CREATE_NEW_SECTION = 103;
 enum CONF_R_UNKNOWN_MODULE_NAME = 113;
+enum CONF_R_VARIABLE_EXPANSION_TOO_LONG = 116;
 enum CONF_R_VARIABLE_HAS_NO_VALUE = 104;

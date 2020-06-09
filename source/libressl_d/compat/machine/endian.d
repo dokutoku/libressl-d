@@ -18,6 +18,7 @@ version (Windows) {
 	} else {
 		enum BYTE_ORDER = .BIG_ENDIAN;
 	}
+//#elif defined(__linux__) || defined(__midipix__)
 } else version (linux) {
 //	#include <endian.h>
 //#elif defined(__sun) || defined(_AIX) || defined(__hpux)
