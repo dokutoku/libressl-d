@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl3.h,v 1.50 2020/03/12 17:01:53 jsing Exp $ */
+/* $OpenBSD: ssl3.h,v 1.51 2020/06/05 18:14:05 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -433,7 +433,7 @@ enum SSL3_CT_FORTEZZA_DMS = 20;
  * enough to contain all of the cert types defined either for
  * SSLv3 and TLSv1.
  */
-enum SSL3_CT_NUMBER = 11;
+enum SSL3_CT_NUMBER = 13;
 
 enum SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS = 0x0001;
 enum TLS1_FLAGS_SKIP_CERT_VERIFY = 0x0010;

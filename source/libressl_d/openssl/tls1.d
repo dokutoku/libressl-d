@@ -1,4 +1,4 @@
-/* $OpenBSD: tls1.h,v 1.40 2020/01/02 06:23:16 jsing Exp $ */
+/* $OpenBSD: tls1.h,v 1.41 2020/06/05 18:14:05 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -792,27 +792,29 @@ enum TLS_CT_RSA_SIGN = 1;
 enum TLS_CT_DSS_SIGN = 2;
 enum TLS_CT_RSA_FIXED_DH = 3;
 enum TLS_CT_DSS_FIXED_DH = 4;
+enum TLS_CT_GOST94_SIGN = 21;
+enum TLS_CT_GOST01_SIGN = 22;
 enum TLS_CT_ECDSA_SIGN = 64;
 enum TLS_CT_RSA_FIXED_ECDH = 65;
 enum TLS_CT_ECDSA_FIXED_ECDH = 66;
-enum TLS_CT_GOST94_SIGN = 21;
-enum TLS_CT_GOST01_SIGN = 22;
+enum TLS_CT_GOST12_256_SIGN = 67;
+enum TLS_CT_GOST12_512_SIGN = 68;
 
 /**
- *  FIXME: IANA
+ *  pre-IANA, for compat
  */
-enum TLS_CT_GOST12_256_SIGN = 238;
+enum TLS_CT_GOST12_256_SIGN_COMPAT = 238;
 
 /**
- *  FIXME: IANA
+ *  pre-IANA, for compat
  */
-enum TLS_CT_GOST12_512_SIGN = 239;
+enum TLS_CT_GOST12_512_SIGN_COMPAT = 239;
 
 /**
  * when correcting this number, correct also SSL3_CT_NUMBER in ssl3.h (see
  * comment there)
  */
-enum TLS_CT_NUMBER = 11;
+enum TLS_CT_NUMBER = 13;
 
 enum TLS1_FINISH_MAC_LENGTH = 12;
 

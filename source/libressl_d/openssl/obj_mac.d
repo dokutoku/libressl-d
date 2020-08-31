@@ -4257,13 +4257,55 @@ enum LN_id_tc26_gost3411_2012_512 = "GOST R 34-11-2012 (512 bit)";
 enum NID_id_tc26_gost3411_2012_512 = 942;
 //#define OBJ_id_tc26_gost3411_2012_512 OBJ_tc26, 1L, 2L, 3L
 
-enum SN_id_tc26_gost_3410_2012_512_paramSetA = "id-tc26-gost-3410-2012-512-paramSetA";
-enum NID_id_tc26_gost_3410_2012_512_paramSetA = 943;
-//#define OBJ_id_tc26_gost_3410_2012_512_paramSetA OBJ_tc26, 2L, 1L, 2L, 1L
+enum SN_id_tc26_hmac_gost_3411_12_256 = "id-tc26-hmac-gost-3411-12-256";
+enum LN_id_tc26_hmac_gost_3411_12_256 = "HMAC STREEBOG 256";
+enum NID_id_tc26_hmac_gost_3411_12_256 = 999;
+//#define OBJ_id_tc26_hmac_gost_3411_12_256 OBJ_tc26, 1L, 4L, 1L
 
-enum SN_id_tc26_gost_3410_2012_512_paramSetB = "id-tc26-gost-3410-2012-512-paramSetB";
-enum NID_id_tc26_gost_3410_2012_512_paramSetB = 944;
-//#define OBJ_id_tc26_gost_3410_2012_512_paramSetB OBJ_tc26, 2L, 1L, 2L, 2L
+enum SN_id_tc26_hmac_gost_3411_12_512 = "id-tc26-hmac-gost-3411-12-512";
+enum LN_id_tc26_hmac_gost_3411_12_512 = "HMAC STREEBOG 512";
+enum NID_id_tc26_hmac_gost_3411_12_512 = 1000;
+//#define OBJ_id_tc26_hmac_gost_3411_12_512 OBJ_tc26, 1L, 4L, 2L
+
+enum SN_id_tc26_gost_3410_12_256_paramSetA = "id-tc26-gost-3410-12-256-paramSetA";
+enum LN_id_tc26_gost_3410_12_256_paramSetA = "GOST R 34.10-2012 (256 bit) ParamSet A";
+enum NID_id_tc26_gost_3410_12_256_paramSetA = 993;
+//#define OBJ_id_tc26_gost_3410_12_256_paramSetA OBJ_tc26, 2L, 1L, 1L, 1L
+
+enum SN_id_tc26_gost_3410_12_256_paramSetB = "id-tc26-gost-3410-12-256-paramSetB";
+enum LN_id_tc26_gost_3410_12_256_paramSetB = "GOST R 34.10-2012 (256 bit) ParamSet B";
+enum NID_id_tc26_gost_3410_12_256_paramSetB = 994;
+//#define OBJ_id_tc26_gost_3410_12_256_paramSetB OBJ_tc26, 2L, 1L, 1L, 2L
+
+enum SN_id_tc26_gost_3410_12_256_paramSetC = "id-tc26-gost-3410-12-256-paramSetC";
+enum LN_id_tc26_gost_3410_12_256_paramSetC = "GOST R 34.10-2012 (256 bit) ParamSet C";
+enum NID_id_tc26_gost_3410_12_256_paramSetC = 995;
+//#define OBJ_id_tc26_gost_3410_12_256_paramSetC OBJ_tc26, 2L, 1L, 1L, 3L
+
+enum SN_id_tc26_gost_3410_12_256_paramSetD = "id-tc26-gost-3410-12-256-paramSetD";
+enum LN_id_tc26_gost_3410_12_256_paramSetD = "GOST R 34.10-2012 (256 bit) ParamSet D";
+enum NID_id_tc26_gost_3410_12_256_paramSetD = 996;
+//#define OBJ_id_tc26_gost_3410_12_256_paramSetD OBJ_tc26, 2L, 1L, 1L, 4L
+
+enum SN_id_tc26_gost_3410_12_512_paramSetTest = "id-tc26-gost-3410-12-512-paramSetTest";
+enum LN_id_tc26_gost_3410_12_512_paramSetTest = "GOST R 34.10-2012 (512 bit) testing parameter set";
+enum NID_id_tc26_gost_3410_12_512_paramSetTest = 997;
+//#define OBJ_id_tc26_gost_3410_12_512_paramSetTest OBJ_tc26, 2L, 1L, 2L, 0L
+
+enum SN_id_tc26_gost_3410_12_512_paramSetA = "id-tc26-gost-3410-12-512-paramSetA";
+enum LN_id_tc26_gost_3410_12_512_paramSetA = "GOST R 34.10-2012 (512 bit) ParamSet A";
+enum NID_id_tc26_gost_3410_12_512_paramSetA = 943;
+//#define OBJ_id_tc26_gost_3410_12_512_paramSetA OBJ_tc26, 2L, 1L, 2L, 1L
+
+enum SN_id_tc26_gost_3410_12_512_paramSetB = "id-tc26-gost-3410-12-512-paramSetB";
+enum LN_id_tc26_gost_3410_12_512_paramSetB = "GOST R 34.10-2012 (512 bit) ParamSet B";
+enum NID_id_tc26_gost_3410_12_512_paramSetB = 944;
+//#define OBJ_id_tc26_gost_3410_12_512_paramSetB OBJ_tc26, 2L, 1L, 2L, 2L
+
+enum SN_id_tc26_gost_3410_12_512_paramSetC = "id-tc26-gost-3410-12-512-paramSetC";
+enum LN_id_tc26_gost_3410_12_512_paramSetC = "GOST R 34.10-2012 (512 bit) ParamSet C";
+enum NID_id_tc26_gost_3410_12_512_paramSetC = 998;
+//#define OBJ_id_tc26_gost_3410_12_512_paramSetC OBJ_tc26, 2L, 1L, 2L, 3L
 
 enum SN_id_tc26_gost_28147_param_Z = "id-tc26-gost-28147-param-Z";
 enum NID_id_tc26_gost_28147_param_Z = 945;
