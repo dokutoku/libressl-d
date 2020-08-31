@@ -398,12 +398,12 @@ void* BN_GENCB_get_arg(libressl_d.openssl.ossl_typ.BN_GENCB* cb);
  */
 int BN_GENCB_call(libressl_d.openssl.ossl_typ.BN_GENCB* cb, int a, int b);
 
-/**
+/*
  * Macro to populate a BN_GENCB structure with an "old"-style callback
  */
 //#define BN_GENCB_set_old(gencb, callback, cb_arg) { libressl_d.openssl.ossl_typ.BN_GENCB* tmp_gencb = gencb; tmp_gencb.ver = 1; tmp_gencb.arg = cb_arg; tmp_gencb.cb.cb_1 = callback; }
 
-/**
+/*
  * Macro to populate a BN_GENCB structure with a "new"-style callback
  */
 //#define BN_GENCB_set(gencb, callback, cb_arg) { libressl_d.openssl.ossl_typ.BN_GENCB* tmp_gencb = gencb; tmp_gencb.ver = 2; tmp_gencb.arg = cb_arg; tmp_gencb.cb.cb_2 = callback; }
@@ -552,7 +552,7 @@ int BN_sqr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl
  */
 void BN_set_negative(libressl_d.openssl.ossl_typ.BIGNUM* b, int n);
 
-/**
+/*
  * BN_is_negative returns 1 if the BIGNUM is negative
  * \param  a  pointer to the BIGNUM object
  * \return 1 if a < 0 and 0 otherwise

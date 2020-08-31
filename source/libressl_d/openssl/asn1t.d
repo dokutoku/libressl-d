@@ -72,7 +72,7 @@ extern (C):
 nothrow @nogc:
 
 //#if !defined(LIBRESSL_INTERNAL)
-/**
+/*
  * Macro to obtain ASN1_ADB pointer from a type (only used internally)
  */
 //#define ASN1_ADB_ptr(iptr) ((const (.ASN1_ADB)*) (iptr))

@@ -35,7 +35,7 @@ version (Posix) {
 	alias S_IFCHR = core.sys.windows.stat.S_IFCHR;
 
 	//#if !defined(S_IFFIFO)
-		/**
+		/*
 		 * Pipe
 		 */
 		//alias S_IFFIFO = _S_IFFIFO;

@@ -18,10 +18,10 @@ public import core.sys.posix.poll;
 public import core.sys.windows.winsock2;
 
 version (Windows) {
-	/**
+	/*
 	 * Type used for the number of file descriptors.
 	 */
-	//typedef core.stdc.config.c_ulong int nfds_t;
+	alias nfds_t = core.stdc.config.c_ulong;
 
 	//#if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0600)
 		/**
@@ -100,9 +100,7 @@ version (Windows) {
 		enum POLLNVAL = 0x0020;
 	//#endif
 
-	/+
 	extern (C)
-	nothrow @nogc:
+	nothrow @nogc
 	int poll(.pollfd* pfds, .nfds_t nfds, int timeout);
-	+/
 }

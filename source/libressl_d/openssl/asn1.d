@@ -597,12 +597,12 @@ package alias ASN1_VALUE = void;
 alias ASN1_ITEM_EXP = const libressl_d.openssl.ossl_typ.ASN1_ITEM;
 
 //#if !defined(LIBRESSL_INTERNAL)
-/**
+/*
  * Macro to obtain ASN1_ITEM pointer from exported type
  */
 //#define ASN1_ITEM_ptr(iptr) (iptr)
 
-/**
+/*
  * Macro to include ASN1_ITEM pointer from base type
  */
 //#define ASN1_ITEM_ref(iptr) (&(iptr##_it))
