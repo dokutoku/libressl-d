@@ -229,11 +229,11 @@ struct X509_name_st
 	 */
 	int modified;
 
-	//#if !defined(OPENSSL_NO_BUFFER)
+	version (OPENSSL_NO_BUFFER) {
+		char* bytes;
+	} else {
 		libressl_d.openssl.ossl_typ.BUF_MEM* bytes;
-	//#else
-		//char* bytes;
-	//#endif
+	}
 
 	/*	core.stdc.config.c_ulong hash; Keep the hash around for lookups */
 	ubyte* canon_enc;
@@ -424,9 +424,10 @@ struct x509_st
 	libressl_d.openssl.x509v3.stack_st_GENERAL_NAME* altname;
 	libressl_d.openssl.ossl_typ.NAME_CONSTRAINTS* nc;
 
-	//#if !defined(OPENSSL_NO_SHA)
-	ubyte[libressl_d.openssl.sha.SHA_DIGEST_LENGTH] sha1_hash;
-	//#endif
+	version (OPENSSL_NO_SHA) {
+	} else {
+		ubyte[libressl_d.openssl.sha.SHA_DIGEST_LENGTH] sha1_hash;
+	}
 
 	.X509_CERT_AUX* aux;
 }
@@ -655,9 +656,10 @@ struct X509_crl_st
 	libressl_d.openssl.ossl_typ.ASN1_INTEGER* crl_number;
 	libressl_d.openssl.ossl_typ.ASN1_INTEGER* base_crl_number;
 
-	//#if !defined(OPENSSL_NO_SHA)
-	ubyte[libressl_d.openssl.sha.SHA_DIGEST_LENGTH] sha1_hash;
-	//#endif
+	version (OPENSSL_NO_SHA) {
+	} else {
+		ubyte[libressl_d.openssl.sha.SHA_DIGEST_LENGTH] sha1_hash;
+	}
 
 	stack_st_GENERAL_NAMES* issuers;
 	const (libressl_d.openssl.ossl_typ.X509_CRL_METHOD)* meth;

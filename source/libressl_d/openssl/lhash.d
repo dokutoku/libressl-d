@@ -82,9 +82,10 @@ struct lhash_node_st
 	void* data;
 	.lhash_node_st* next;
 
-	//#if !defined(OPENSSL_NO_HASH_COMP)
-	core.stdc.config.c_ulong hash;
-	//#endif
+	version (OPENSSL_NO_HASH_COMP) {
+	} else {
+		core.stdc.config.c_ulong hash;
+	}
 }
 
 alias LHASH_NODE = .lhash_node_st;

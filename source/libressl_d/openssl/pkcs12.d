@@ -89,13 +89,13 @@ enum PKCS12_SALT_LEN = 8;
 
 /* version = PBE_UNICODE; */
 
-//#if defined(PBE_UNICODE)
+version (PBE_UNICODE) {
 	alias PKCS12_key_gen = .PKCS12_key_gen_uni;
 	alias PKCS12_add_friendlyname = .PKCS12_add_friendlyname_uni;
-//#else
-	//alias PKCS12_key_gen = .PKCS12_key_gen_asc;
-	//alias PKCS12_add_friendlyname = .PKCS12_add_friendlyname_asc;
-//#endif
+} else {
+	alias PKCS12_key_gen = .PKCS12_key_gen_asc;
+	alias PKCS12_add_friendlyname = .PKCS12_add_friendlyname_asc;
+}
 
 /* MS key usage constants */
 

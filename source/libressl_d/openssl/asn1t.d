@@ -308,12 +308,13 @@ struct ASN1_TEMPLATE_st
 	 */
 	core.stdc.config.c_ulong offset;
 
-	//#if !defined(NO_ASN1_FIELD_NAMES)
-	/**
-	 * Field name
-	 */
-	const (char)* field_name;
-	//#endif
+	version (NO_ASN1_FIELD_NAMES) {
+	} else {
+		/**
+		 * Field name
+		 */
+		const (char)* field_name;
+	}
 
 	/**
 	 * Relevant ASN1_ITEM or ASN1_ADB
@@ -532,12 +533,13 @@ struct ASN1_ITEM_st
 	 */
 	core.stdc.config.c_long size;
 
-	//#if !defined(NO_ASN1_FIELD_NAMES)
-	/**
-	 * Structure name
-	 */
-	const (char)* sname;
-	//#endif
+	version (NO_ASN1_FIELD_NAMES) {
+	} else {
+		/**
+		 * Structure name
+		 */
+		const (char)* sname;
+	}
 }
 
 /*

@@ -151,40 +151,45 @@ struct evp_pkey_st
 	{
 		char* ptr_;
 
-		//#if !defined(OPENSSL_NO_RSA)
-		/**
-		 * RSA
-		 */
-		libressl_d.openssl.rsa.rsa_st* rsa;
-		//#endif
+		version (OPENSSL_NO_RSA) {
+		} else {
+			/**
+			 * RSA
+			 */
+			libressl_d.openssl.rsa.rsa_st* rsa;
+		}
 
-		//#if !defined(OPENSSL_NO_DSA)
-		/**
-		 * DSA
-		 */
-		libressl_d.openssl.dsa.dsa_st* dsa;
-		//#endif
+		version (OPENSSL_NO_DSA) {
+		} else {
+			/**
+			 * DSA
+			 */
+			libressl_d.openssl.dsa.dsa_st* dsa;
+		}
 
-		//#if !defined(OPENSSL_NO_DH)
-		/**
-		 * DH
-		 */
-		libressl_d.openssl.dh.dh_st* dh;
-		//#endif
+		version (OPENSSL_NO_DH) {
+		} else {
+			/**
+			 * DH
+			 */
+			libressl_d.openssl.dh.dh_st* dh;
+		}
 
-		//#if !defined(OPENSSL_NO_EC)
-		/**
-		 * ECC
-		 */
-		libressl_d.openssl.ec.ec_key_st* ec;
-		//#endif
+		version (OPENSSL_NO_EC) {
+		} else {
+			/**
+			 * ECC
+			 */
+			libressl_d.openssl.ec.ec_key_st* ec;
+		}
 
-		//#if !defined(OPENSSL_NO_GOST)
-		/**
-		 * GOST
-		 */
-		libressl_d.openssl.gost.gost_key_st* gost;
-		//#endif
+		version (OPENSSL_NO_GOST) {
+		} else {
+			/**
+			 * GOST
+			 */
+			libressl_d.openssl.gost.gost_key_st* gost;
+		}
 	}
 
 	pkey_ pkey;

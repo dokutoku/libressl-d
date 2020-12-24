@@ -106,9 +106,10 @@ version = OPENSSL_NO_SSL3_METHOD;
 /* version = OPENSSL_NO_TLS1_2; */
 /* version = OPENSSL_NO_TLS1_2_METHOD; */
 
-//#if !defined(LIBRESSL_HAS_TLS1_3)
-version = OPENSSL_NO_TLS1_3;
-//#endif
+version (LIBRESSL_HAS_TLS1_3) {
+} else {
+	version = OPENSSL_NO_TLS1_3;
+}
 
 /* version = OPENSSL_NO_TLS1_METHOD; */
 /* version = OPENSSL_NO_TS; */
