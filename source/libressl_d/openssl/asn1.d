@@ -1,4 +1,4 @@
-/* $OpenBSD: asn1.h,v 1.53 2018/11/30 04:51:19 jeremy Exp $ */
+/* $OpenBSD: asn1.h,v 1.54 2020/12/08 15:06:42 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -1340,6 +1340,7 @@ enum ASN1_R_BAD_CLASS = 101;
 enum ASN1_R_BAD_OBJECT_HEADER = 102;
 enum ASN1_R_BAD_PASSWORD_READ = 103;
 enum ASN1_R_BAD_TAG = 104;
+enum ASN1_R_BAD_TEMPLATE = 230;
 enum ASN1_R_BMPSTRING_IS_WRONG_LENGTH = 214;
 enum ASN1_R_BN_LIB = 105;
 enum ASN1_R_BOOLEAN_IS_WRONG_LENGTH = 106;

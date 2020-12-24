@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl.h,v 1.178 2020/09/20 09:42:00 tb Exp $ */
+/* $OpenBSD: ssl.h,v 1.179 2020/10/14 16:49:57 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -1727,6 +1727,11 @@ void SSL_free(libressl_d.openssl.ossl_typ.SSL* ssl);
 int SSL_up_ref(libressl_d.openssl.ossl_typ.SSL* ssl);
 int SSL_accept(libressl_d.openssl.ossl_typ.SSL* ssl);
 int SSL_connect(libressl_d.openssl.ossl_typ.SSL* ssl);
+
+version (LIBRESSL_INTERNAL) {
+	int SSL_is_dtls(const (libressl_d.openssl.ossl_typ.SSL)* s);
+}
+
 int SSL_is_server(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_read(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
 int SSL_peek(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
