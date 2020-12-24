@@ -305,7 +305,7 @@ struct pkcs7_st
 	 * all encryption/message digests are applied to the 'contents',
 	 * leaving out the 'type' field.
 	 */
-	union d
+	union d_
 	{
 		char* ptr_;
 
@@ -344,6 +344,8 @@ struct pkcs7_st
 		 */
 		libressl_d.openssl.asn1.ASN1_TYPE* other;
 	}
+
+	d_ d;
 }
 
 alias PKCS7 = .pkcs7_st;

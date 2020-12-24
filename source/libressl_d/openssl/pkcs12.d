@@ -124,7 +124,7 @@ struct PKCS12_SAFEBAG
 {
 	libressl_d.openssl.asn1.ASN1_OBJECT* type;
 
-	union value
+	union value_
 	{
 		/**
 		 * secret, crl and certbag
@@ -145,6 +145,7 @@ struct PKCS12_SAFEBAG
 		libressl_d.openssl.asn1.ASN1_TYPE* other;
 	}
 
+	value_ value;
 	libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* attrib;
 }
 
@@ -160,7 +161,7 @@ struct pkcs12_bag_st
 {
 	libressl_d.openssl.asn1.ASN1_OBJECT* type;
 
-	union value
+	union value_
 	{
 		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* x509cert;
 		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* x509crl;
@@ -172,6 +173,8 @@ struct pkcs12_bag_st
 		 */
 		libressl_d.openssl.asn1.ASN1_TYPE* other;
 	}
+
+	value_ value;
 }
 
 alias PKCS12_BAGS = .pkcs12_bag_st;

@@ -205,12 +205,13 @@ struct SHA512state_st
 	.SHA_LONG64 Nl;
 	.SHA_LONG64 Nh;
 
-	union u
+	union u_
 	{
 		.SHA_LONG64[.SHA_LBLOCK] d;
 		ubyte[.SHA512_CBLOCK] p;
 	}
 
+	u_ u;
 	uint num;
 	uint md_len;
 }

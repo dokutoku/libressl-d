@@ -375,7 +375,7 @@ struct bn_gencb_st
 	 */
 	void* arg;
 
-	union cb
+	union cb_
 	{
 		/**
 		 * if(ver==1) - handles old style callbacks
@@ -387,6 +387,8 @@ struct bn_gencb_st
 		 */
 		int function(int, int, libressl_d.openssl.ossl_typ.BN_GENCB*) cb_2;
 	}
+
+	cb_ cb;
 }
 
 libressl_d.openssl.ossl_typ.BN_GENCB* BN_GENCB_new();

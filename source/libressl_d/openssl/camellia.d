@@ -82,7 +82,7 @@ alias KEY_TABLE_TYPE = uint[.CAMELLIA_TABLE_WORD_LEN];
 
 struct camellia_key_st
 {
-	union u
+	union u_
 	{
 		/**
 		 * ensures 64-bit align
@@ -92,6 +92,7 @@ struct camellia_key_st
 		.KEY_TABLE_TYPE rd_key;
 	}
 
+	u_ u;
 	int grand_rounds;
 }
 

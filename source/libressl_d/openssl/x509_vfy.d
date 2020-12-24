@@ -135,13 +135,15 @@ struct x509_object_st
 	 */
 	int type;
 
-	union data
+	union data_
 	{
 		char* ptr_;
 		libressl_d.openssl.ossl_typ.X509* x509;
 		libressl_d.openssl.ossl_typ.X509_CRL* crl;
 		libressl_d.openssl.ossl_typ.EVP_PKEY* pkey;
 	}
+
+	data_ data;
 }
 
 alias X509_OBJECT = .x509_object_st;

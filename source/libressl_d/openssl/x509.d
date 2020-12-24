@@ -278,7 +278,7 @@ struct x509_attributes_st
 	 */
 	int single;
 
-	union value
+	union value_
 	{
 		char* ptr_;
 
@@ -292,6 +292,8 @@ struct x509_attributes_st
 		 */
 		libressl_d.openssl.asn1.ASN1_TYPE* single;
 	}
+
+	value_ value;
 }
 
 alias X509_ATTRIBUTE = .x509_attributes_st;

@@ -192,15 +192,16 @@ struct pem_ctx_st
 	 */
 	int type;
 
-	struct proc_type
+	struct proc_type_
 	{
 		int version_;
 		int mode;
 	}
 
+	proc_type_ proc_type;
 	char* domain;
 
-	struct DEK_info
+	struct DEK_info_
 	{
 		int cipher;
 		/*
@@ -209,6 +210,7 @@ struct pem_ctx_st
 		*/
 	}
 
+	DEK_info_ DEK_info;
 	.PEM_USER* originator;
 
 	int num_recipient;

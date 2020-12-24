@@ -207,7 +207,7 @@ struct GENERAL_NAME_st
 
 	int type;
 
-	union d
+	union d_
 	{
 		char* ptr_;
 
@@ -252,6 +252,8 @@ struct GENERAL_NAME_st
 		 */
 		libressl_d.openssl.asn1.ASN1_TYPE* other;
 	}
+
+	d_ d;
 }
 
 alias GENERAL_NAME = .GENERAL_NAME_st;
@@ -286,11 +288,13 @@ struct DIST_POINT_NAME_st
 {
 	int type;
 
-	union name
+	union name_
 	{
 		.GENERAL_NAMES* fullname;
 		libressl_d.openssl.x509.stack_st_X509_NAME_ENTRY* relativename;
 	}
+
+	name_ name;
 
 	/**
 	 * If relativename then this contains the full distribution point name
@@ -384,12 +388,14 @@ struct POLICYQUALINFO_st
 {
 	libressl_d.openssl.asn1.ASN1_OBJECT* pqualid;
 
-	union d
+	union d_
 	{
 		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* cpsuri;
 		.USERNOTICE* usernotice;
 		libressl_d.openssl.asn1.ASN1_TYPE* other;
 	}
+
+	d_ d;
 }
 
 alias POLICYQUALINFO = .POLICYQUALINFO_st;

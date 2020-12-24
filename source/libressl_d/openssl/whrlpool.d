@@ -14,7 +14,7 @@ enum WHIRLPOOL_COUNTER = 256 / 8;
 
 struct WHIRLPOOL_CTX
 {
-	union H
+	union H_
 	{
 		ubyte[.WHIRLPOOL_DIGEST_LENGTH] c;
 
@@ -24,6 +24,7 @@ struct WHIRLPOOL_CTX
 		double[.WHIRLPOOL_DIGEST_LENGTH / double.sizeof] q;
 	}
 
+	H_ H;
 	ubyte[.WHIRLPOOL_BBLOCK / 8] data;
 	uint bitoff;
 	size_t[.WHIRLPOOL_COUNTER / size_t.sizeof] bitlen;

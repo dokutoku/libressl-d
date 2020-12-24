@@ -241,11 +241,13 @@ struct ocsp_responder_id_st
 {
 	int type;
 
-	union value
+	union value_
 	{
 		libressl_d.openssl.ossl_typ.X509_NAME* byName;
 		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* byKey;
 	}
+
+	value_ value;
 }
 
 //DECLARE_STACK_OF(OCSP_RESPID)
@@ -292,12 +294,14 @@ struct ocsp_cert_status_st
 {
 	int type;
 
-	union value
+	union value_
 	{
 		libressl_d.openssl.ossl_typ.ASN1_NULL* good;
 		.OCSP_REVOKEDINFO* revoked;
 		libressl_d.openssl.ossl_typ.ASN1_NULL* unknown;
 	}
+
+	value_ value;
 }
 
 alias OCSP_CERTSTATUS = .ocsp_cert_status_st;

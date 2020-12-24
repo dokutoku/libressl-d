@@ -147,7 +147,7 @@ struct evp_pkey_st
 	const (libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* ameth;
 	libressl_d.openssl.ossl_typ.ENGINE* engine;
 
-	union pkey
+	union pkey_
 	{
 		char* ptr_;
 
@@ -187,6 +187,7 @@ struct evp_pkey_st
 		//#endif
 	}
 
+	pkey_ pkey;
 	int save_parameters;
 
 	/**

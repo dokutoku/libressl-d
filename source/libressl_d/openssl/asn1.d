@@ -712,7 +712,7 @@ struct asn1_type_st
 {
 	int type;
 
-	union value
+	union value_
 	{
 		char* ptr_;
 		libressl_d.openssl.ossl_typ.ASN1_BOOLEAN boolean;
@@ -740,6 +740,8 @@ struct asn1_type_st
 		libressl_d.openssl.ossl_typ.ASN1_STRING* sequence;
 		.ASN1_VALUE* asn1_value;
 	}
+
+	value_ value;
 }
 
 alias ASN1_TYPE = .asn1_type_st;
