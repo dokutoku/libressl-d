@@ -71,5 +71,6 @@ public import libressl_d.openssl.ui;
 public import libressl_d.openssl.ui_compat;
 public import libressl_d.openssl.whrlpool;
 public import libressl_d.openssl.x509;
+public import libressl_d.openssl.x509_verify;
 public import libressl_d.openssl.x509_vfy;
 public import libressl_d.openssl.x509v3;

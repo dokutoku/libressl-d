@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl.h,v 1.171 2020/03/16 15:25:13 tb Exp $ */
+/* $OpenBSD: ssl.h,v 1.178 2020/09/20 09:42:00 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -1419,7 +1419,13 @@ enum SSL_CTRL_SET_GROUPS_LIST = 92;
 
 enum SSL_CTRL_SET_ECDH_AUTO = 94;
 
-enum SSL_CTRL_GET_SERVER_TMP_KEY = 109;
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+version (all) {
+	enum SSL_CTRL_GET_PEER_TMP_KEY = 109;
+	enum SSL_CTRL_GET_SERVER_TMP_KEY = .SSL_CTRL_GET_PEER_TMP_KEY;
+} else {
+	enum SSL_CTRL_GET_SERVER_TMP_KEY = 109;
+}
 
 enum SSL_CTRL_GET_CHAIN_CERTS = 115;
 
@@ -1500,6 +1506,10 @@ alias SSL_set1_curves_list = .SSL_set1_groups_list;
 
 //#define SSL_get_server_tmp_key(s, pk) .SSL_ctrl(s, .SSL_CTRL_GET_SERVER_TMP_KEY, 0, pk)
 
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+	//#define SSL_get_peer_tmp_key(s, pk) .SSL_ctrl(s, .SSL_CTRL_GET_PEER_TMP_KEY, 0, pk)
+//#endif
+
 //#if !defined(LIBRESSL_INTERNAL)
 /*
  * Also provide those functions as macros for compatibility with
@@ -1544,6 +1554,11 @@ void BIO_ssl_shutdown(libressl_d.openssl.bio.BIO* ssl_bio);
 
 .stack_st_SSL_CIPHER* SSL_CTX_get_ciphers(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
 int SSL_CTX_set_cipher_list(libressl_d.openssl.ossl_typ.SSL_CTX*, const (char)* str);
+
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+	int SSL_CTX_set_ciphersuites(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (char)* str);
+//#endif
+
 libressl_d.openssl.ossl_typ.SSL_CTX* SSL_CTX_new(const (.SSL_METHOD)* meth);
 void SSL_CTX_free(libressl_d.openssl.ossl_typ.SSL_CTX*);
 int SSL_CTX_up_ref(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
@@ -1585,6 +1600,11 @@ void SSL_set_bio(libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.bio.BIO*
 libressl_d.openssl.bio.BIO* SSL_get_rbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
 libressl_d.openssl.bio.BIO* SSL_get_wbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_set_cipher_list(libressl_d.openssl.ossl_typ.SSL* s, const (char)* str);
+
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+	int SSL_set_ciphersuites(libressl_d.openssl.ossl_typ.SSL* s, const (char)* str);
+//#endif
+
 void SSL_set_read_ahead(libressl_d.openssl.ossl_typ.SSL* s, int yes);
 int SSL_get_verify_mode(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_get_verify_depth(const (libressl_d.openssl.ossl_typ.SSL)* s);
@@ -1636,6 +1656,12 @@ void SSL_SESSION_free(.SSL_SESSION* ses);
 int SSL_SESSION_up_ref(.SSL_SESSION* ss);
 const (ubyte)* SSL_SESSION_get_id(const (.SSL_SESSION)* ss, uint* len);
 const (ubyte)* SSL_SESSION_get0_id_context(const (.SSL_SESSION)* ss, uint* len);
+
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+	core.stdc.stdint.uint32_t SSL_SESSION_get_max_early_data(const (.SSL_SESSION)* sess);
+	int SSL_SESSION_set_max_early_data(.SSL_SESSION* sess, core.stdc.stdint.uint32_t max_early_data);
+//#endif
+
 core.stdc.config.c_ulong SSL_SESSION_get_ticket_lifetime_hint(const (.SSL_SESSION)* s);
 int SSL_SESSION_has_ticket(const (.SSL_SESSION)* s);
 uint SSL_SESSION_get_compress_id(const (.SSL_SESSION)* ss);
@@ -1687,6 +1713,10 @@ int SSL_CTX_set_trust(libressl_d.openssl.ossl_typ.SSL_CTX* s, int trust);
 int SSL_set_trust(libressl_d.openssl.ossl_typ.SSL* s, int trust);
 int SSL_set1_host(libressl_d.openssl.ossl_typ.SSL* s, const (char)* hostname);
 
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+	const (char)* SSL_get0_peername(libressl_d.openssl.ossl_typ.SSL* s);
+//#endif
+
 libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* SSL_CTX_get0_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
 int SSL_CTX_set1_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* vpm);
 libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* SSL_get0_param(libressl_d.openssl.ossl_typ.SSL* ssl);
@@ -1701,6 +1731,26 @@ int SSL_is_server(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_read(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
 int SSL_peek(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
 int SSL_write(libressl_d.openssl.ossl_typ.SSL* ssl, const (void)* buf, int num);
+
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+	core.stdc.stdint.uint32_t SSL_CTX_get_max_early_data(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
+	int SSL_CTX_set_max_early_data(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.stdint.uint32_t max_early_data);
+
+	core.stdc.stdint.uint32_t SSL_get_max_early_data(const (libressl_d.openssl.ossl_typ.SSL)* s);
+	int SSL_set_max_early_data(libressl_d.openssl.ossl_typ.SSL* s, core.stdc.stdint.uint32_t max_early_data);
+
+	enum SSL_EARLY_DATA_NOT_SENT = 0;
+	enum SSL_EARLY_DATA_REJECTED = 1;
+	enum SSL_EARLY_DATA_ACCEPTED = 2;
+	int SSL_get_early_data_status(const (libressl_d.openssl.ossl_typ.SSL)* s);
+
+	enum SSL_READ_EARLY_DATA_ERROR = 0;
+	enum SSL_READ_EARLY_DATA_SUCCESS = 1;
+	enum SSL_READ_EARLY_DATA_FINISH = 2;
+	int SSL_read_early_data(libressl_d.openssl.ossl_typ.SSL* s, void* buf, size_t num, size_t* readbytes);
+	int SSL_write_early_data(libressl_d.openssl.ossl_typ.SSL* s, const (void)* buf, size_t num, size_t* written);
+//#endif
+
 core.stdc.config.c_long SSL_ctrl(libressl_d.openssl.ossl_typ.SSL* ssl, int cmd, core.stdc.config.c_long larg, void* parg);
 core.stdc.config.c_long SSL_callback_ctrl(libressl_d.openssl.ossl_typ.SSL*, int, void function());
 core.stdc.config.c_long SSL_CTX_ctrl(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int cmd, core.stdc.config.c_long larg, void* parg);

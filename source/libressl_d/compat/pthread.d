@@ -14,12 +14,21 @@ public import core.sys.windows.windows;
 package(libressl_d):
 
 version (Windows) {
+	private static import core.stdc.errno;
+	public import core.stdc.stdlib;
+	//#include <malloc.h>
+
 	/*
 	 * Static once initialization values.
 	 */
 	//#define PTHREAD_ONCE_INIT { INIT_ONCE_STATIC_INIT }
 
 	/+
+	/*
+	 * Static mutex initialization values.
+	 */
+	#define PTHREAD_MUTEX_INITIALIZER { .lock = null }
+
 	/*
 	 * Once definitions.
 	 */
@@ -77,7 +86,12 @@ version (Windows) {
 			return t1 == t2;
 		}
 
-	alias pthread_mutex_t = core.sys.windows.winbase.CRITICAL_SECTION;
+	struct pthread_mutex
+	{
+		volatile core.sys.windows.winbase.LPCRITICAL_SECTION lock;
+	}
+
+	alias pthread_mutex_t = .pthread_mutex;
 	alias pthread_mutexattr_t = void;
 
 	pragma(inline, true)
@@ -86,7 +100,13 @@ version (Windows) {
 
 		do
 		{
-			core.sys.windows.winbase.InitializeCriticalSection(mutex);
+			mutex.lock = core.stdc.stdlib.malloc(core.sys.windows.winbase.CRITICAL_SECTION.sizeof);
+
+			if (mutex.lock == null) {
+				core.stdc.stdlib.exit(core.stdc.errno.ENOMEM);
+			}
+
+			core.sys.windows.winbase.InitializeCriticalSection(mutex.lock);
 
 			return 0;
 		}
@@ -97,7 +117,22 @@ version (Windows) {
 
 		do
 		{
-			core.sys.windows.winbase.EnterCriticalSection(mutex);
+			if (mutex.lock == null) {
+				core.sys.windows.winbase.LPCRITICAL_SECTION lcs = core.stdc.stdlib.malloc(core.sys.windows.winbase.CRITICAL_SECTION.sizeof);
+
+				if (lcs == null) {
+					core.stdc.stdlib.exit(core.stdc.errno.ENOMEM);
+				}
+
+				core.sys.windows.winbase.InitializeCriticalSection(lcs);
+
+				if (core.sys.windows.winbase.InterlockedCompareExchangePointer(cast(core.sys.windows.winnt.PVOID*)(&mutex.lock), cast(core.sys.windows.winnt.PVOID)(lcs), null) != null) {
+					core.sys.windows.winbase.DeleteCriticalSection(lcs);
+					core.stdc.stdlib.free(lcs);
+				}
+			}
+
+			core.sys.windows.winbase.EnterCriticalSection(mutex.lock);
 
 			return 0;
 		}
@@ -108,7 +143,7 @@ version (Windows) {
 
 		do
 		{
-			core.sys.windows.winbase.LeaveCriticalSection(mutex);
+			core.sys.windows.winbase.LeaveCriticalSection(mutex.lock);
 
 			return 0;
 		}
