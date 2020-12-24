@@ -5,7 +5,6 @@
 module libressl_d.compat.sys.types;
 
 
-private static import libressl_d.compat.limits;
 public import core.stdc.stdint;
 public import core.sys.posix.sys.types;
 public import core.sys.windows.basetsd;
