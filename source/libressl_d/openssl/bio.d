@@ -868,20 +868,14 @@ int BIO_get_shutdown(.BIO* a);
 void BIO_set_shutdown(.BIO* a, int shut);
 void BIO_vfree(.BIO* a);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int BIO_read(.BIO* b, void* data, int len)
-+/
+int BIO_read(.BIO* b, void* data, int len);
 
-/+
 //__attribute__((__bounded__(__string__, 2, 3)));
-int BIO_gets(.BIO* bp, char* buf, int size)
-+/
+int BIO_gets(.BIO* bp, char* buf, int size);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int BIO_write(.BIO* b, const (void)* data, int len)
-+/
+int BIO_write(.BIO* b, const (void)* data, int len);
 
 int BIO_puts(.BIO* bp, const (char)* buf);
 int BIO_indent(.BIO* b, int indent, int max);
@@ -974,45 +968,29 @@ void BIO_copy_next_retry(.BIO* b);
 /*core.stdc.config.c_long BIO_ghbn_ctrl(int cmd, int iarg, char* arg); */
 
 //#if defined(__MINGW_PRINTF_FORMAT)
-	/+
 	//__attribute__((__format__(__MINGW_PRINTF_FORMAT, 2, 3), __nonnull__(2)));
-	int BIO_printf(.BIO* bio, const (char)* format, ...)
-	+/
+	int BIO_printf(.BIO* bio, const (char)* format, ...);
 
-	/+
 	//__attribute__((__format__(__MINGW_PRINTF_FORMAT, 2, 0), __nonnull__(2)));
-	int BIO_vprintf(.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args)
-	+/
+	int BIO_vprintf(.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args);
 
-	/+
 	//__attribute__((__deprecated__, __format__(__MINGW_PRINTF_FORMAT, 3, 4), __nonnull__(3)));
-	int BIO_snprintf(char* buf, size_t n, const (char)* format, ...)
-	+/
+	int BIO_snprintf(char* buf, size_t n, const (char)* format, ...);
 
-	/+
 	//__attribute__((__deprecated__, __format__(__MINGW_PRINTF_FORMAT, 3, 0), __nonnull__(3)));
-	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args)
-	+/
+	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args);
 //#else
-	/+
 	//__attribute__((__format__(__printf__, 2, 3), __nonnull__(2)));
-	int BIO_printf(.BIO* bio, const (char)* format, ...)
-	+/
+	int BIO_printf(.BIO* bio, const (char)* format, ...);
 
-	/+
 	//__attribute__((__format__(__printf__, 2, 0), __nonnull__(2)));
-	int BIO_vprintf(.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args)
-	+/
+	int BIO_vprintf(.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args);
 
-	/+
 	//__attribute__((__deprecated__, __format__(__printf__, 3, 4), __nonnull__(3)));
-	int BIO_snprintf(char* buf, size_t n, const (char)* format, ...)
-	+/
+	int BIO_snprintf(char* buf, size_t n, const (char)* format, ...);
 
-	/+
 	//__attribute__((__deprecated__, __format__(__printf__, 3, 0), __nonnull__(3)));
-	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args)
-	+/
+	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args);
 //#endif
 
 /* BEGIN ERROR CODES */

@@ -103,15 +103,11 @@ void BUF_reverse(ubyte* out_, const (ubyte)* in_, size_t siz);
 
 /* safe string functions */
 
-/+
 //__attribute__((__bounded__(__string__, 1, 3)));
-size_t BUF_strlcpy(char* dst, const (char)* src, size_t siz)
-+/
+size_t BUF_strlcpy(char* dst, const (char)* src, size_t siz);
 
-/+
 //__attribute__((__bounded__(__string__, 1, 3)));
-size_t BUF_strlcat(char* dst, const (char)* src, size_t siz)
-+/
+size_t BUF_strlcat(char* dst, const (char)* src, size_t siz);
 //#endif
 
 /* BEGIN ERROR CODES */

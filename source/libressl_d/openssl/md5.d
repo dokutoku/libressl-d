@@ -101,16 +101,12 @@ alias MD5_CTX = .MD5state_st;
 
 int MD5_Init(.MD5_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int MD5_Update(.MD5_CTX* c, const (void)* data, size_t len)
-+/
+int MD5_Update(.MD5_CTX* c, const (void)* data, size_t len);
 
 int MD5_Final(ubyte* md, .MD5_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* MD5(const (ubyte)* d, size_t n, ubyte* md)
-+/
+ubyte* MD5(const (ubyte)* d, size_t n, ubyte* md);
 
 void MD5_Transform(.MD5_CTX* c, const (ubyte)* b);
