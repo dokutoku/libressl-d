@@ -111,17 +111,13 @@ alias SHA_CTX = SHAstate_st;
 //#if !defined(OPENSSL_NO_SHA1)
 int SHA1_Init(.SHA_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA1_Update(.SHA_CTX* c, const (void)* data, size_t len)
-+/
+int SHA1_Update(.SHA_CTX* c, const (void)* data, size_t len);
 
 int SHA1_Final(ubyte* md, .SHA_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA1(const (ubyte)* d, size_t n, ubyte* md)
-+/
+ubyte* SHA1(const (ubyte)* d, size_t n, ubyte* md);
 
 void SHA1_Transform(.SHA_CTX* c, const (ubyte)* data);
 //#endif
@@ -151,31 +147,23 @@ alias SHA256_CTX = .SHA256state_st;
 //#if !defined(OPENSSL_NO_SHA256)
 int SHA224_Init(.SHA256_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA224_Update(.SHA256_CTX* c, const (void)* data, size_t len)
-+/
+int SHA224_Update(.SHA256_CTX* c, const (void)* data, size_t len);
 
 int SHA224_Final(ubyte* md, .SHA256_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA224(const (ubyte)* d, size_t n, ubyte* md)
-+/
+ubyte* SHA224(const (ubyte)* d, size_t n, ubyte* md);
 
 int SHA256_Init(.SHA256_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA256_Update(.SHA256_CTX* c, const (void)* data, size_t len)
-+/
+int SHA256_Update(.SHA256_CTX* c, const (void)* data, size_t len);
 
 int SHA256_Final(ubyte* md, .SHA256_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA256(const (ubyte)* d, size_t n, ubyte* md)
-+/
+ubyte* SHA256(const (ubyte)* d, size_t n, ubyte* md);
 
 void SHA256_Transform(.SHA256_CTX* c, const (ubyte)* data);
 //#endif
@@ -222,31 +210,23 @@ alias SHA512_CTX = .SHA512state_st;
 //#if !defined(OPENSSL_NO_SHA512)
 int SHA384_Init(.SHA512_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA384_Update(.SHA512_CTX* c, const (void)* data, size_t len)
-+/
+int SHA384_Update(.SHA512_CTX* c, const (void)* data, size_t len);
 
 int SHA384_Final(ubyte* md, .SHA512_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA384(const (ubyte)* d, size_t n, ubyte* md)
-+/
+ubyte* SHA384(const (ubyte)* d, size_t n, ubyte* md);
 
 int SHA512_Init(.SHA512_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA512_Update(.SHA512_CTX* c, const (void)* data, size_t len)
-+/
+int SHA512_Update(.SHA512_CTX* c, const (void)* data, size_t len);
 
 int SHA512_Final(ubyte* md, .SHA512_CTX* c);
 
-/+
 //__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA512(const (ubyte)* d, size_t n, ubyte* md)
-+/
+ubyte* SHA512(const (ubyte)* d, size_t n, ubyte* md);
 
 void SHA512_Transform(.SHA512_CTX* c, const (ubyte)* data);
 //#endif
