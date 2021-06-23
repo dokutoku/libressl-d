@@ -857,9 +857,29 @@ enum SN_id_smime_ct_compressedData = "id-smime-ct-compressedData";
 enum NID_id_smime_ct_compressedData = 786;
 //#define OBJ_id_smime_ct_compressedData OBJ_id_smime_ct, 9L
 
+enum SN_id_ct_routeOriginAuthz = "id-ct-routeOriginAuthz";
+enum NID_id_ct_routeOriginAuthz = 1001;
+//#define OBJ_id_ct_routeOriginAuthz OBJ_id_smime_ct, 24L
+
+enum SN_id_ct_rpkiManifest = "id-ct-rpkiManifest";
+enum NID_id_ct_rpkiManifest = 1002;
+//#define OBJ_id_ct_rpkiManifest OBJ_id_smime_ct, 26L
+
 enum SN_id_ct_asciiTextWithCRLF = "id-ct-asciiTextWithCRLF";
 enum NID_id_ct_asciiTextWithCRLF = 787;
 //#define OBJ_id_ct_asciiTextWithCRLF OBJ_id_smime_ct, 27L
+
+enum SN_id_ct_rpkiGhostbusters = "id-ct-rpkiGhostbusters";
+enum NID_id_ct_rpkiGhostbusters = 1003;
+//#define OBJ_id_ct_rpkiGhostbusters OBJ_id_smime_ct, 35L
+
+enum SN_id_ct_resourceTaggedAttest = "id-ct-resourceTaggedAttest";
+enum NID_id_ct_resourceTaggedAttest = 1004;
+//#define OBJ_id_ct_resourceTaggedAttest OBJ_id_smime_ct, 36L
+
+enum SN_id_ct_geofeedCSVwithCRLF = "id-ct-geofeedCSVwithCRLF";
+enum NID_id_ct_geofeedCSVwithCRLF = 1013;
+//#define OBJ_id_ct_geofeedCSVwithCRLF OBJ_id_smime_ct, 47L
 
 enum SN_id_smime_aa_receiptRequest = "id-smime-aa-receiptRequest";
 enum NID_id_smime_aa_receiptRequest = 212;
@@ -1370,6 +1390,10 @@ enum SN_id_cct = "id-cct";
 enum NID_id_cct = 268;
 //#define OBJ_id_cct .OBJ_id_pkix, 12L
 
+enum SN_id_cp = "id-cp";
+enum NID_id_cp = 1005;
+//#define OBJ_id_cp OBJ_id_pkix, 14L
+
 enum SN_id_ppl = "id-ppl";
 enum NID_id_ppl = 662;
 //#define OBJ_id_ppl .OBJ_id_pkix, 21L
@@ -1493,6 +1517,14 @@ enum SN_proxyCertInfo = "proxyCertInfo";
 enum LN_proxyCertInfo = "Proxy Certificate Information";
 enum NID_proxyCertInfo = 663;
 //#define OBJ_proxyCertInfo .OBJ_id_pe, 14L
+
+enum SN_sbgp_ipAddrBlockv2 = "sbgp-ipAddrBlockv2";
+enum NID_sbgp_ipAddrBlockv2 = 1006;
+//#define OBJ_sbgp_ipAddrBlockv2 OBJ_id_pe, 28L
+
+enum SN_sbgp_autonomousSysNumv2 = "sbgp-autonomousSysNumv2";
+enum NID_sbgp_autonomousSysNumv2 = 1007;
+//#define OBJ_sbgp_autonomousSysNumv2 OBJ_id_pe, 29L
 
 enum SN_id_qt_cps = "id-qt-cps";
 enum LN_id_qt_cps = "Policy Qualifier CPS";
@@ -1827,6 +1859,14 @@ enum SN_id_cct_PKIResponse = "id-cct-PKIResponse";
 enum NID_id_cct_PKIResponse = 362;
 //#define OBJ_id_cct_PKIResponse OBJ_id_cct, 3L
 
+enum SN_ipAddr_asNumber = "ipAddr-asNumber";
+enum NID_ipAddr_asNumber = 1008;
+//#define OBJ_ipAddr_asNumber OBJ_id_cp, 2L
+
+enum SN_ipAddr_asNumberv2 = "ipAddr-asNumberv2";
+enum NID_ipAddr_asNumberv2 = 1009;
+//#define OBJ_ipAddr_asNumberv2 OBJ_id_cp, 3L
+
 enum SN_id_ppl_anyLanguage = "id-ppl-anyLanguage";
 enum LN_id_ppl_anyLanguage = "Any language";
 enum NID_id_ppl_anyLanguage = 664;
@@ -1866,6 +1906,21 @@ enum SN_caRepository = "caRepository";
 enum LN_caRepository = "CA Repository";
 enum NID_caRepository = 785;
 //#define OBJ_caRepository .OBJ_id_ad, 5L
+
+enum SN_rpkiManifest = "rpkiManifest";
+enum LN_rpkiManifest = "RPKI Manifest";
+enum NID_rpkiManifest = 1010;
+//#define OBJ_rpkiManifest OBJ_id_ad, 10L
+
+enum SN_signedObject = "signedObject";
+enum LN_signedObject = "Signed Object";
+enum NID_signedObject = 1011;
+//#define OBJ_signedObject OBJ_id_ad, 11L
+
+enum SN_rpkiNotify = "rpkiNotify";
+enum LN_rpkiNotify = "RPKI Notify";
+enum NID_rpkiNotify = 1012;
+//#define OBJ_rpkiNotify OBJ_id_ad, 13L
 
 //#define OBJ_id_pkix_OCSP .OBJ_ad_OCSP
 

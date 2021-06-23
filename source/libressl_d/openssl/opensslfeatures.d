@@ -9,6 +9,7 @@ module libressl_d.openssl.opensslfeatures;
 version (none):
 
 /* version = LIBRESSL_HAS_TLS1_3; */
+/* version = LIBRESSL_HAS_DTLS1_2; */
 
 version = OPENSSL_THREADS;
 

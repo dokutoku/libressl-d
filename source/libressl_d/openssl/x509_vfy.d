@@ -1,4 +1,4 @@
-/* $OpenBSD: x509_vfy.h,v 1.31 2020/09/13 15:06:17 beck Exp $ */
+/* $OpenBSD: x509_vfy.h,v 1.32 2021/02/24 18:01:31 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -445,7 +445,7 @@ struct x509_store_ctx_st
 	int valid;
 
 	/**
-	 * index of last untrusted cert
+	 * XXX: number of untrusted certs in chain!!!
 	 */
 	int last_untrusted;
 

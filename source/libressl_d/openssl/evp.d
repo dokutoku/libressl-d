@@ -1,4 +1,4 @@
-/* $OpenBSD: evp.h,v 1.79 2020/04/27 19:31:02 tb Exp $ */
+/* $OpenBSD: evp.h,v 1.81 2021/03/31 16:47:01 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -1369,6 +1369,7 @@ int EVP_PKEY_CTX_get_operation(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
 void EVP_PKEY_CTX_set0_keygen_info(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int* dat, int datlen);
 
 libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new_mac_key(int type, libressl_d.openssl.ossl_typ.ENGINE* e, const (ubyte)* key, int keylen);
+libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new_CMAC_key(libressl_d.openssl.ossl_typ.ENGINE* e, const (ubyte)* priv, size_t len, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher);
 
 void EVP_PKEY_CTX_set_data(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* data);
 void* EVP_PKEY_CTX_get_data(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
@@ -1730,6 +1731,7 @@ enum EVP_R_INVALID_KEY_LENGTH = 130;
 enum EVP_R_INVALID_OPERATION = 148;
 enum EVP_R_IV_TOO_LARGE = 102;
 enum EVP_R_KEYGEN_FAILURE = 120;
+enum EVP_R_KEY_SETUP_FAILED = 180;
 enum EVP_R_MESSAGE_DIGEST_IS_NULL = 159;
 enum EVP_R_METHOD_NOT_SUPPORTED = 144;
 enum EVP_R_MISSING_PARAMETERS = 103;

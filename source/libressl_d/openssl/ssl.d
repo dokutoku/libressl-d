@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl.h,v 1.179 2020/10/14 16:49:57 jsing Exp $ */
+/* $OpenBSD: ssl.h,v 1.186 2021/03/31 16:59:32 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -376,6 +376,7 @@ enum SSL_TXT_STREEBOG256 = "STREEBOG256";
 enum SSL_TXT_STREEBOG512 = "STREEBOG512";
 
 enum SSL_TXT_DTLS1 = "DTLSv1";
+enum SSL_TXT_DTLS1_2 = "DTLSv1.2";
 enum SSL_TXT_SSLV2 = "SSLv2";
 enum SSL_TXT_SSLV3 = "SSLv3";
 enum SSL_TXT_TLSV1 = "TLSv1";
@@ -709,6 +710,9 @@ enum SSL_OP_NO_TLSv1_1 = 0x10000000L;
 //#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
 enum SSL_OP_NO_TLSv1_3 = 0x20000000L;
 //#endif
+
+enum SSL_OP_NO_DTLSv1 = 0x40000000L;
+enum SSL_OP_NO_DTLSv1_2 = 0x80000000L;
 
 /**
  * SSL_OP_ALL: various bug workarounds that should be rather harmless.
@@ -1621,6 +1625,7 @@ int SSL_use_certificate_ASN1(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)
 int SSL_use_RSAPrivateKey_file(libressl_d.openssl.ossl_typ.SSL* ssl, const (char)* file, int type);
 int SSL_use_PrivateKey_file(libressl_d.openssl.ossl_typ.SSL* ssl, const (char)* file, int type);
 int SSL_use_certificate_file(libressl_d.openssl.ossl_typ.SSL* ssl, const (char)* file, int type);
+int SSL_use_certificate_chain_file(libressl_d.openssl.ossl_typ.SSL* ssl, const (char)* file);
 int SSL_CTX_use_RSAPrivateKey_file(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (char)* file, int type);
 int SSL_CTX_use_PrivateKey_file(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (char)* file, int type);
 int SSL_CTX_use_certificate_file(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (char)* file, int type);
@@ -1712,10 +1717,8 @@ int SSL_set_purpose(libressl_d.openssl.ossl_typ.SSL* s, int purpose);
 int SSL_CTX_set_trust(libressl_d.openssl.ossl_typ.SSL_CTX* s, int trust);
 int SSL_set_trust(libressl_d.openssl.ossl_typ.SSL* s, int trust);
 int SSL_set1_host(libressl_d.openssl.ossl_typ.SSL* s, const (char)* hostname);
-
-//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
-	const (char)* SSL_get0_peername(libressl_d.openssl.ossl_typ.SSL* s);
-//#endif
+void SSL_set_hostflags(libressl_d.openssl.ossl_typ.SSL* s, uint flags);
+const (char)* SSL_get0_peername(libressl_d.openssl.ossl_typ.SSL* s);
 
 libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* SSL_CTX_get0_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
 int SSL_CTX_set1_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* vpm);
@@ -1727,11 +1730,7 @@ void SSL_free(libressl_d.openssl.ossl_typ.SSL* ssl);
 int SSL_up_ref(libressl_d.openssl.ossl_typ.SSL* ssl);
 int SSL_accept(libressl_d.openssl.ossl_typ.SSL* ssl);
 int SSL_connect(libressl_d.openssl.ossl_typ.SSL* ssl);
-
-version (LIBRESSL_INTERNAL) {
-	int SSL_is_dtls(const (libressl_d.openssl.ossl_typ.SSL)* s);
-}
-
+int SSL_is_dtls(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_is_server(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_read(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
 int SSL_peek(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
@@ -1856,6 +1855,21 @@ const (.SSL_METHOD)* DTLSv1_server_method();
  * DTLSv1.0
  */
 const (.SSL_METHOD)* DTLSv1_client_method();
+
+/**
+ * DTLSv1.2
+ */
+const (.SSL_METHOD)* DTLSv1_2_method();
+
+/**
+ * DTLSv1.2
+ */
+const (.SSL_METHOD)* DTLSv1_2_server_method();
+
+/**
+ * DTLSv1.2
+ */
+const (.SSL_METHOD)* DTLSv1_2_client_method();
 
 /**
  * DTLS v1.0 or later

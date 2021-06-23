@@ -147,5 +147,17 @@ version (Windows) {
 
 			return 0;
 		}
+
+	pragma(inline, true)
+	package(libressl_d)
+	int pthread_mutex_destroy(.pthread_mutex_t* mutex)
+
+		do
+		{
+			core.sys.windows.winbase.DeleteCriticalSection(mutex.lock);
+			core.stdc.stdlib.free(mutex.lock);
+
+			return 0;
+		}
 	+/
 }
