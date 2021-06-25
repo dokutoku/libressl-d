@@ -120,7 +120,7 @@ struct _wdirent
 	/**
 	 * File name
 	 */
-	core.stdc.stddef.wchar_t[libressl_d.compat.limits.PATH_MAX] d_name;
+	core.stdc.stddef.wchar_t[libressl_d.compat.limits.PATH_MAX] d_name = '\0';
 }
 
 struct _WDIR
@@ -179,7 +179,7 @@ struct dirent
 	/**
 	 * File name
 	 */
-	char[libressl_d.compat.limits.PATH_MAX] d_name;
+	char[libressl_d.compat.limits.PATH_MAX] d_name = '\0';
 }
 
 struct DIR

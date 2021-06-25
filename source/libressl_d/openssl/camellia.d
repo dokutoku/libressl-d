@@ -87,7 +87,7 @@ struct camellia_key_st
 		/**
 		 * ensures 64-bit align
 		 */
-		double d;
+		double d = 0;
 
 		.KEY_TABLE_TYPE rd_key;
 	}
