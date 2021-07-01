@@ -347,6 +347,17 @@ enum UI_string_types
 	UIT_ERROR,
 }
 
+//Declaration name in C language
+enum
+{
+	UIT_NONE = .UI_string_types.UIT_NONE,
+	UIT_PROMPT = .UI_string_types.UIT_PROMPT,
+	UIT_VERIFY = .UI_string_types.UIT_VERIFY,
+	UIT_BOOLEAN = .UI_string_types.UIT_BOOLEAN,
+	UIT_INFO = .UI_string_types.UIT_INFO,
+	UIT_ERROR = .UI_string_types.UIT_ERROR,
+}
+
 /* Create and manipulate methods */
 libressl_d.openssl.ossl_typ.UI_METHOD* UI_create_method(const (char)* name);
 void UI_destroy_method(libressl_d.openssl.ossl_typ.UI_METHOD* ui_method);

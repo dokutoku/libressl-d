@@ -122,6 +122,14 @@ enum point_conversion_form_t
 	POINT_CONVERSION_HYBRID = 6,
 }
 
+//Declaration name in C language
+enum
+{
+	POINT_CONVERSION_COMPRESSED = .point_conversion_form_t.POINT_CONVERSION_COMPRESSED,
+	POINT_CONVERSION_UNCOMPRESSED = .point_conversion_form_t.POINT_CONVERSION_UNCOMPRESSED,
+	POINT_CONVERSION_HYBRID = .point_conversion_form_t.POINT_CONVERSION_HYBRID,
+}
+
 package alias ec_method_st = void;
 alias EC_METHOD = .ec_method_st;
 
