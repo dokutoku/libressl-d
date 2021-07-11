@@ -169,7 +169,7 @@ char* DES_fcrypt(const (char)* buf, const (char)* salt, char* ret);
 char* DES_crypt(const (char)* buf, const (char)* salt);
 void DES_ofb_encrypt(const (ubyte)* in_, ubyte* out_, int numbits, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .DES_cblock* ivec);
 void DES_pcbc_encrypt(const (ubyte)* input, ubyte* output, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .DES_cblock* ivec, int enc);
-libressl_d.openssl.opensslconf.DES_LONG DES_quad_cksum(const (ubyte)* input, .DES_cblock[] output, core.stdc.config.c_long length_, int out_count, .DES_cblock* seed);
+libressl_d.openssl.opensslconf.DES_LONG DES_quad_cksum(const (ubyte)* input, .DES_cblock* output, core.stdc.config.c_long length_, int out_count, .DES_cblock* seed);
 int DES_random_key(.DES_cblock* ret);
 void DES_set_odd_parity(.DES_cblock* key);
 int DES_check_key_parity(.const_DES_cblock* key);

@@ -690,7 +690,7 @@ int EC_POINT_is_on_curve(const (.EC_GROUP)* group, const (.EC_POINT)* point, lib
 int EC_POINT_cmp(const (.EC_GROUP)* group, const (.EC_POINT)* a, const (.EC_POINT)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 int EC_POINT_make_affine(const (.EC_GROUP)* group, .EC_POINT* point, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-int EC_POINTs_make_affine(const (.EC_GROUP)* group, size_t num, .EC_POINT*[] points, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINTs_make_affine(const (.EC_GROUP)* group, size_t num, .EC_POINT** points, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes r = generator * n sum_{i=0}^num p[i] * m[i]
@@ -703,7 +703,7 @@ int EC_POINTs_make_affine(const (.EC_GROUP)* group, size_t num, .EC_POINT*[] poi
  *  \param  ctx    BN_CTX object (optional)
  *  \return 1 on success and 0 if an error occured
  */
-int EC_POINTs_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* n, size_t num, const (.EC_POINT)*[] p, const (libressl_d.openssl.ossl_typ.BIGNUM)*[] m, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINTs_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* n, size_t num, const (.EC_POINT)** p, const (libressl_d.openssl.ossl_typ.BIGNUM)** m, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes r = generator * n + q * m

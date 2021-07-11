@@ -768,46 +768,46 @@ int BN_GF2m_mod_solve_quad(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libress
  *     t^p[0] + t^p[1] + ... + t^p[k]
  * where m = p[0] > p[1] > ... > p[k] = 0.
  */
-int BN_GF2m_mod_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int[] p);
+int BN_GF2m_mod_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int* p);
 /* r = a mod p */
 
 /**
  * r = (a * b) mod p
  */
-int BN_GF2m_mod_mul_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int[] p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int BN_GF2m_mod_mul_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * r = (a * a) mod p
  */
-int BN_GF2m_mod_sqr_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int[] p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int BN_GF2m_mod_sqr_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * r = (1 / b) mod p
  */
-int BN_GF2m_mod_inv_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int[] p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int BN_GF2m_mod_inv_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * r = (a / b) mod p
  */
-int BN_GF2m_mod_div_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int[] p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int BN_GF2m_mod_div_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * r = (a ^ b) mod p
  */
-int BN_GF2m_mod_exp_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int[] p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int BN_GF2m_mod_exp_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, const int* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * r = sqrt(a) mod p
  */
-int BN_GF2m_mod_sqrt_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int[] p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int BN_GF2m_mod_sqrt_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * r^2 + r = a mod p
  */
-int BN_GF2m_mod_solve_quad_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int[] p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int BN_GF2m_mod_solve_quad_arr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const int* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-int BN_GF2m_poly2arr(const (libressl_d.openssl.ossl_typ.BIGNUM)* a, int[] p, int max);
-int BN_GF2m_arr2poly(const int[] p, libressl_d.openssl.ossl_typ.BIGNUM* a);
+int BN_GF2m_poly2arr(const (libressl_d.openssl.ossl_typ.BIGNUM)* a, int* p, int max);
+int BN_GF2m_arr2poly(const int* p, libressl_d.openssl.ossl_typ.BIGNUM* a);
 //#endif
 
 /*

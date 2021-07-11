@@ -510,8 +510,8 @@ void ERR_add_error_data(int num, ...);
 void ERR_add_error_vdata(int num, core.stdc.stdarg.va_list args);
 //#endif
 
-void ERR_load_strings(int lib, .ERR_STRING_DATA[] str);
-void ERR_unload_strings(int lib, .ERR_STRING_DATA[] str);
+void ERR_load_strings(int lib, .ERR_STRING_DATA* str);
+void ERR_unload_strings(int lib, .ERR_STRING_DATA* str);
 void ERR_load_ERR_strings();
 void ERR_load_crypto_strings();
 void ERR_free_strings();
