@@ -420,7 +420,7 @@ void BIO_clear_flags(.BIO* b, int flags);
 //#define BIO_should_write(a) .BIO_test_flags(a, .BIO_FLAGS_WRITE)
 //#define BIO_should_io_special(a) .BIO_test_flags(a, .BIO_FLAGS_IO_SPECIAL)
 //#define BIO_retry_type(a) .BIO_test_flags(a, .BIO_FLAGS_RWS)
-//#define BIO_should_retry(a) .BIO_test_flags(a, .BIO_FLAGS_SHOULD_RETRY)
+int BIO_should_retry(const (.BIO)* a) { return BIO_test_flags(a, .BIO_FLAGS_SHOULD_RETRY);}
 
 /*
  * The next three are used in conjunction with the

@@ -782,7 +782,7 @@ enum SSL_MODE_RELEASE_BUFFERS = 0x00000010L;
  * they cannot be used to clear bits.
  */
 
-//#define SSL_CTX_set_options(ctx, op) .SSL_CTX_ctrl(ctx, .SSL_CTRL_OPTIONS, op, null)
+core.stdc.config.c_long SSL_CTX_set_options(SSL_CTX* ctx, int op) { return SSL_CTX_ctrl(ctx, .SSL_CTRL_OPTIONS, op, null); }
 //#define SSL_CTX_clear_options(ctx, op) .SSL_CTX_ctrl(ctx, .SSL_CTRL_CLEAR_OPTIONS, op, null)
 //#define SSL_CTX_get_options(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_OPTIONS, 0, null)
 //#define SSL_set_options(ssl, op) .SSL_ctrl(ssl, .SSL_CTRL_OPTIONS, op, null)
@@ -1154,11 +1154,12 @@ enum SSL_CB_HANDSHAKE_DONE = 0x20;
 
 /* Is the SSL_connection established? */
 //#define SSL_get_state(a) (.SSL_state(a))
-//#define SSL_is_init_finished(a) (.SSL_state(a) == .SSL_ST_OK)
-//#define SSL_in_init(a) (.SSL_state(a) & .SSL_ST_INIT)
-//#define SSL_in_before(a) (.SSL_state(a) & .SSL_ST_BEFORE)
-//#define SSL_in_connect_init(a) (.SSL_state(a) & .SSL_ST_CONNECT)
-//#define SSL_in_accept_init(a) (.SSL_state(a) & .SSL_ST_ACCEPT)
+alias SSL_get_state = SSL_state;
+bool SSL_is_init_finished(const (SSL)* a)  { return  (.SSL_state(a) == .SSL_ST_OK); }
+bool SSL_in_init(const (SSL)* a)  { return  (.SSL_state(a) & SSL_ST_INIT) == SSL_ST_INIT; }
+bool SSL_in_before(const (SSL)* a)  { return  (.SSL_state(a) & SSL_ST_INIT) == SSL_ST_BEFORE;}
+bool SSL_in_connect_init(const (SSL)* a)  { return  (.SSL_state(a) & SSL_ST_INIT) == SSL_ST_CONNECT; }
+bool SSL_in_accept_init(const (SSL)* a)  { return  (.SSL_state(a) & SSL_ST_INIT) == SSL_ST_ACCEPT; }
 
 /*
  * The following 2 states are kept in ssl.rstate when reads fail,
@@ -1188,6 +1189,7 @@ enum SSL_VERIFY_CLIENT_ONCE = 0x04;
 
 //#define OpenSSL_add_ssl_algorithms() .SSL_library_init()
 //#define SSLeay_add_ssl_algorithms() .SSL_library_init()
+
 
 /* More backward compatibility */
 //#define SSL_get_cipher(s) .SSL_CIPHER_get_name(.SSL_get_current_cipher(s))
