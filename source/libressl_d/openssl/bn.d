@@ -286,10 +286,11 @@ auto BN_get_flags(B, N)(scope const B* b, N n)
  */
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-void BN_with_flags(ref libressl_d.openssl.ossl_typ.BIGNUM dest, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, int n)
+void BN_with_flags(scope libressl_d.openssl.ossl_typ.BIGNUM* dest, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, int n)
 
 	in
 	{
+		assert(dest != null):
 		assert(b != null);
 	}
 
