@@ -38,7 +38,7 @@ version (Posix) {
 	//#if !defined(HAVE_TIMESPECSUB)
 		pragma(inline, true)
 		pure nothrow @trusted @nogc @live
-		void timespecsub(libressl_d.compat.sys.time.timespec* tsp, libressl_d.compat.sys.time.timespec* usp, libressl_d.compat.sys.time.timespec* vsp)
+		void timespecsub(scope const libressl_d.compat.sys.time.timespec* tsp, scope const libressl_d.compat.sys.time.timespec* usp, scope libressl_d.compat.sys.time.timespec* vsp)
 
 			in
 			{

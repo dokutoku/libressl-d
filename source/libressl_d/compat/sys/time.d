@@ -17,7 +17,7 @@ version (Windows) {
 version (Posix) {
 	pragma(inline, true)
 	pure nothrow @trusted @nogc @live
-	void timersub(core.sys.posix.sys.time.timeval* tvp, core.sys.posix.sys.time.timeval* uvp, core.sys.posix.sys.time.timeval* vvp)
+	void timersub(scope const core.sys.posix.sys.time.timeval* tvp, scope const core.sys.posix.sys.time.timeval* uvp, scope core.sys.posix.sys.time.timeval* vvp)
 
 		in
 		{

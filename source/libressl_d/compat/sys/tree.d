@@ -268,7 +268,7 @@ template RBT_HEAD(string _name, string _type)
 
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-static void _rb_init(.rb_tree* rbt)
+static void _rb_init(scope .rb_tree* rbt)
 
 	in
 	{
@@ -282,7 +282,7 @@ static void _rb_init(.rb_tree* rbt)
 
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-static int _rb_empty(.rb_tree* rbt)
+static int _rb_empty(scope const .rb_tree* rbt)
 
 	in
 	{
