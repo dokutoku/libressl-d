@@ -67,30 +67,26 @@ enum NAME_MAX = (!__traits(compiles, libressl_d.compat.limits.NAME_MAX)) ? (.FIL
 /**
  * Return the exact length of d_namlen without zero terminator
  */
-/+
 pragma(inline, true)
-pure nothrow @safe @nogc
-void _D_EXACT_NAMLEN(p)
+pure nothrow @trusted @nogc @live
+void _D_EXACT_NAMLEN(P)(P p)
 
 	do
 	{
 		return p.d_namlen;
 	}
-+/
 
 /**
  * Return number of bytes needed to store d_namlen
  */
-/+
 pragma(inline, true)
-pure nothrow @safe @nogc
-void _D_ALLOC_NAMLEN(p)
+pure nothrow @safe @nogc @live
+void _D_ALLOC_NAMLEN(P)(P p)
 
 	do
 	{
 		return libressl_d.compat.limits.PATH_MAX;
 	}
-+/
 
 /**
  * Wide-character version

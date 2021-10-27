@@ -76,9 +76,17 @@ private static import libressl_d.openssl.x509_vfy;
 private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.stack;
 
-//#if !defined(CHECKED_PTR_OF)
-	//#define CHECKED_PTR_OF(type, p) ((void*) ((1) ? (p) : (cast(type*)(0))))
-//#endif
+version (CHECKED_PTR_OF) {
+} else {
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	void* CHECKED_PTR_OF(string type, P)(return scope P* p)
+
+		do
+		{
+			return cast(void*)((true) ? (p) : (cast(mixin (type)*)(0)));
+		}
+}
 
 /*
  * In C++ we get problems because an explicit cast is needed from (void *)
@@ -86,7 +94,14 @@ public import libressl_d.openssl.stack;
  * below.
  */
 
-//#define CHECKED_STACK_OF(type, p) ((libressl_d.openssl.stack._STACK*) ((1) ? (p) : ((STACK_OF(type)*) 0)))
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+libressl_d.openssl.stack._STACK* CHECKED_STACK_OF(string type, P)(return scope P* p)
+
+	do
+	{
+		return cast(libressl_d.openssl.stack._STACK*)((true) ? (p) : (cast(mixin (libressl_d.openssl.safestack.STACK_OF!(type))*)(0)));
+	}
 
 //#define CHECKED_SK_FREE_FUNC(type, p) ((void (*)(void*))(((1) ? (p) : ((void (*)(type*)) 0))))
 
@@ -94,11 +109,25 @@ public import libressl_d.openssl.stack;
 
 //#define CHECKED_SK_CMP_FUNC(type, p) ((int (*)(const (void)*, const (void)*))(((1) ? (p) : ((int (*)(const (type)* const*, const (type)* const*)) 0))))
 
-//#define STACK_OF(type) struct stack_st_##type
-//#define PREDECLARE_STACK_OF(type) STACK_OF(type);
+template STACK_OF(string type)
+{
+	enum STACK_OF = "stack_st_" ~ type;
+}
 
-//#define DECLARE_STACK_OF(type) STACK_OF(type) { libressl_d.openssl.stack._STACK stack; }
-//#define DECLARE_SPECIAL_STACK_OF(type, type2) STACK_OF(type) { libressl_d.openssl.stack._STACK stack; }
+template PREDECLARE_STACK_OF(string type)
+{
+	enum PREDECLARE_STACK_OF = libressl_d.openssl.safestack.STACK_OF!(type);
+}
+
+template DECLARE_STACK_OF(string type)
+{
+	enum DECLARE_STACK_OF = "struct " ~ libressl_d.openssl.safestack.STACK_OF!(type) ~ " { libressl_d.openssl.stack._STACK stack; }";
+}
+
+template DECLARE_SPECIAL_STACK_OF(string type, string type2)
+{
+	enum DECLARE_SPECIAL_STACK_OF = "struct " ~ libressl_d.openssl.safestack.STACK_OF!(type) ~ " { libressl_d.openssl.stack._STACK stack; }";
+}
 
 //#define IMPLEMENT_STACK_OF(type) /* nada (obsolete in new safestack approach) */
 
@@ -154,8 +183,8 @@ struct stack_st_OPENSSL_BLOCK
  * SKM_sk_... stack macros are internal to safestack.h:
  * never use them directly, use sk_<type>_... instead
  */
-#define SKM_sk_new(type, cmp) ((STACK_OF(type)*) libressl_d.openssl.stack.sk_new(CHECKED_SK_CMP_FUNC(type, cmp)))
-#define SKM_sk_new_null(type) ((STACK_OF(type)*) libressl_d.openssl.stack.sk_new_null())
+#define SKM_sk_new(type, cmp) ((libressl_d.openssl.safestack.STACK_OF!(type)*) libressl_d.openssl.stack.sk_new(CHECKED_SK_CMP_FUNC(type, cmp)))
+#define SKM_sk_new_null(type) ((libressl_d.openssl.safestack.STACK_OF!(type)*) libressl_d.openssl.stack.sk_new_null())
 #define SKM_sk_free(type, st) libressl_d.openssl.stack.sk_free(CHECKED_STACK_OF(type, st))
 #define SKM_sk_num(type, st) libressl_d.openssl.stack.sk_num(CHECKED_STACK_OF(type, st))
 #define SKM_sk_value(type, st, i) ((type*) libressl_d.openssl.stack.sk_value(CHECKED_STACK_OF(type, st), i))
@@ -169,7 +198,7 @@ struct stack_st_OPENSSL_BLOCK
 #define SKM_sk_delete_ptr(type, st, ptr_) cast(type*)(libressl_d.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, ptr_)))
 #define SKM_sk_insert(type, st, val, i) libressl_d.openssl.stack.sk_insert(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, val), i)
 #define SKM_sk_set_cmp_func(type, st, cmp) ((int (*)(const (type)* const*, const (type)* const*)) libressl_d.openssl.stack.sk_set_cmp_func(CHECKED_STACK_OF(type, st), CHECKED_SK_CMP_FUNC(type, cmp)))
-#define SKM_sk_dup(type, st) (STACK_OF(type)*) libressl_d.openssl.stack.sk_dup(CHECKED_STACK_OF(type, st))
+#define SKM_sk_dup(type, st) (libressl_d.openssl.safestack.STACK_OF!(type)*) libressl_d.openssl.stack.sk_dup(CHECKED_STACK_OF(type, st))
 #define SKM_sk_pop_free(type, st, free_func) libressl_d.openssl.stack.sk_pop_free(CHECKED_STACK_OF(type, st), CHECKED_SK_FREE_FUNC(type, free_func))
 #define SKM_sk_shift(type, st) cast(type*)(libressl_d.openssl.stack.sk_shift(CHECKED_STACK_OF(type, st)))
 #define SKM_sk_pop(type, st) cast(type*)(libressl_d.openssl.stack.sk_pop(CHECKED_STACK_OF(type, st)))

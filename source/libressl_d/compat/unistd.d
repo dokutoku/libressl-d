@@ -74,8 +74,23 @@ version (Posix) {
 	//int getpagesize();
 //#endif
 
-//#define pledge(request, paths) 0
-//#define unveil(path, permissions) 0
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+int pledge(REQUEST, PATHS)(REQUEST request, PATHS paths)
+
+	do
+	{
+		return 0;
+	}
+
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+int unveil(PATH, PERMISSIONS)(PATH path, PERMISSIONS permissions)
+
+	do
+	{
+		return 0;
+	}
 
 //#if !defined(HAVE_PIPE2)
 	//int pipe2(int[2] fildes, int flags);

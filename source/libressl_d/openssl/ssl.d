@@ -782,27 +782,136 @@ enum SSL_MODE_RELEASE_BUFFERS = 0x00000010L;
  * they cannot be used to clear bits.
  */
 
-//#define SSL_CTX_set_options(ctx, op) .SSL_CTX_ctrl(ctx, .SSL_CTRL_OPTIONS, op, null)
-//#define SSL_CTX_clear_options(ctx, op) .SSL_CTX_ctrl(ctx, .SSL_CTRL_CLEAR_OPTIONS, op, null)
-//#define SSL_CTX_get_options(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_OPTIONS, 0, null)
-//#define SSL_set_options(ssl, op) .SSL_ctrl(ssl, .SSL_CTRL_OPTIONS, op, null)
-//#define SSL_clear_options(ssl, op) .SSL_ctrl(ssl, .SSL_CTRL_CLEAR_OPTIONS, op, null)
-//#define SSL_get_options(ssl) .SSL_ctrl(ssl, .SSL_CTRL_OPTIONS, 0, null)
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_options(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long op)
 
-//#define SSL_CTX_set_mode(ctx, op) .SSL_CTX_ctrl(ctx, .SSL_CTRL_MODE, op, null)
-//#define SSL_CTX_clear_mode(ctx, op) .SSL_CTX_ctrl(ctx, .SSL_CTRL_CLEAR_MODE, op, null)
-//#define SSL_CTX_get_mode(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_MODE, 0, null)
-//#define SSL_clear_mode(ssl, op) .SSL_ctrl(ssl, .SSL_CTRL_CLEAR_MODE, op, null)
-//#define SSL_set_mode(ssl, op) .SSL_ctrl(ssl, .SSL_CTRL_MODE, op, null)
-//#define SSL_get_mode(ssl) .SSL_ctrl(ssl, .SSL_CTRL_MODE, 0, null)
-//#define SSL_set_mtu(ssl, mtu) .SSL_ctrl(ssl, .SSL_CTRL_SET_MTU, mtu, null)
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_OPTIONS, op, null);
+	}
 
-//#define SSL_get_secure_renegotiation_support(ssl) .SSL_ctrl(ssl, .SSL_CTRL_GET_RI_SUPPORT, 0, null)
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_clear_options(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long op)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_CLEAR_OPTIONS, op, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_get_options(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_OPTIONS, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_options(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long op)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_OPTIONS, op, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_clear_options(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long op)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_CLEAR_OPTIONS, op, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_get_options(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_OPTIONS, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_mode(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long op)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_MODE, op, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_clear_mode(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long op)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_CLEAR_MODE, op, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_get_mode(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_MODE, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_clear_mode(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long op)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_CLEAR_MODE, op, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_mode(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long op)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_MODE, op, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_get_mode(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_MODE, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_mtu(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long mtu)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_SET_MTU, mtu, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_get_secure_renegotiation_support(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_GET_RI_SUPPORT, 0, null);
+	}
 
 void SSL_CTX_set_msg_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void function(int write_p, int version_, int content_type, const (void)* buf, size_t len, libressl_d.openssl.ossl_typ.SSL* ssl, void* arg) cb);
 void SSL_set_msg_callback(libressl_d.openssl.ossl_typ.SSL* ssl, void function(int write_p, int version_, int content_type, const (void)* buf, size_t len, libressl_d.openssl.ossl_typ.SSL* ssl, void* arg) cb);
-//#define SSL_CTX_set_msg_callback_arg(ctx, arg) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_MSG_CALLBACK_ARG, 0, arg)
-//#define SSL_set_msg_callback_arg(ssl, arg) .SSL_ctrl((ssl), .SSL_CTRL_SET_MSG_CALLBACK_ARG, 0, arg)
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_msg_callback_arg(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* arg)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_MSG_CALLBACK_ARG, 0, arg);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_msg_callback_arg(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_SET_MSG_CALLBACK_ARG, 0, arg);
+	}
 
 //struct ssl_aead_ctx_st;
 package alias ssl_aead_ctx_st = void;
@@ -909,18 +1018,102 @@ enum SSL_SESS_CACHE_NO_INTERNAL_STORE = 0x0200;
 enum SSL_SESS_CACHE_NO_INTERNAL = .SSL_SESS_CACHE_NO_INTERNAL_LOOKUP | .SSL_SESS_CACHE_NO_INTERNAL_STORE;
 
 .lhash_st_SSL_SESSION* SSL_CTX_sessions(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
-//#define SSL_CTX_sess_number(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_NUMBER, 0, null)
-//#define SSL_CTX_sess_connect(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CONNECT, 0, null)
-//#define SSL_CTX_sess_connect_good(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CONNECT_GOOD, 0, null)
-//#define SSL_CTX_sess_connect_renegotiate(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CONNECT_RENEGOTIATE, 0, null)
-//#define SSL_CTX_sess_accept(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_ACCEPT, 0, null)
-//#define SSL_CTX_sess_accept_renegotiate(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_ACCEPT_RENEGOTIATE, 0, null)
-//#define SSL_CTX_sess_accept_good(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_ACCEPT_GOOD, 0, null)
-//#define SSL_CTX_sess_hits(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_HIT, 0, null)
-//#define SSL_CTX_sess_cb_hits(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CB_HIT, 0, null)
-//#define SSL_CTX_sess_misses(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_MISSES, 0, null)
-//#define SSL_CTX_sess_timeouts(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_TIMEOUTS, 0, null)
-//#define SSL_CTX_sess_cache_full(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CACHE_FULL, 0, null)
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_number(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_NUMBER, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_connect(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CONNECT, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_connect_good(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CONNECT_GOOD, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_connect_renegotiate(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CONNECT_RENEGOTIATE, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_accept(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_ACCEPT, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_accept_renegotiate(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_ACCEPT_RENEGOTIATE, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_accept_good(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_ACCEPT_GOOD, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_hits(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_HIT, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_cb_hits(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CB_HIT, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_misses(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_MISSES, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_timeouts(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_TIMEOUTS, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_cache_full(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CACHE_FULL, 0, null);
+	}
 
 void SSL_CTX_sess_set_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(.ssl_st* ssl, .SSL_SESSION* sess) new_session_cb);
 //int (*SSL_CTX_sess_get_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(.ssl_st* ssl, .SSL_SESSION* sess);
@@ -960,10 +1153,37 @@ enum SSL_READING = 3;
 enum SSL_X509_LOOKUP = 4;
 
 /* These will only be used when doing non-blocking IO */
-//#define SSL_want_nothing(s) (.SSL_want(s) == .SSL_NOTHING)
-//#define SSL_want_read(s) (.SSL_want(s) == .SSL_READING)
-//#define SSL_want_write(s) (.SSL_want(s) == .SSL_WRITING)
-//#define SSL_want_x509_lookup(s) (.SSL_want(s) == .SSL_X509_LOOKUP)
+pragma(inline, true)
+bool SSL_want_nothing(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_want(s) == .SSL_NOTHING;
+	}
+
+pragma(inline, true)
+bool SSL_want_read(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_want(s) == .SSL_READING;
+	}
+
+pragma(inline, true)
+bool SSL_want_write(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_want(s) == .SSL_WRITING;
+	}
+
+pragma(inline, true)
+bool SSL_want_x509_lookup(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_want(s) == .SSL_X509_LOOKUP;
+	}
 
 enum SSL_MAC_FLAG_READ_MAC_STREAM = 1;
 enum SSL_MAC_FLAG_WRITE_MAC_STREAM = 2;
@@ -1109,12 +1329,54 @@ struct ssl_st
 //#endif
 
 /* compatibility */
-//#define SSL_set_app_data(s, arg) (.SSL_set_ex_data(s, 0, cast(char*)(arg)))
-//#define SSL_get_app_data(s) (.SSL_get_ex_data(s, 0))
-//#define SSL_SESSION_set_app_data(s, a) (.SSL_SESSION_set_ex_data(s, 0, cast(char*)(a)))
-//#define SSL_SESSION_get_app_data(s) (.SSL_SESSION_get_ex_data(s, 0))
-//#define SSL_CTX_get_app_data(ctx) (.SSL_CTX_get_ex_data(ctx, 0))
-//#define SSL_CTX_set_app_data(ctx, arg) (.SSL_CTX_set_ex_data(ctx, 0, cast(char*)(arg)))
+
+pragma(inline, true)
+int SSL_set_app_data(libressl_d.openssl.ossl_typ.SSL* s, char* arg)
+
+	do
+	{
+		return .SSL_set_ex_data(s, 0, arg);
+	}
+
+pragma(inline, true)
+void* SSL_get_app_data(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_get_ex_data(s, 0);
+	}
+
+pragma(inline, true)
+int SSL_SESSION_set_app_data(.SSL_SESSION* s, char* a)
+
+	do
+	{
+		return .SSL_SESSION_set_ex_data(s, 0, a);
+	}
+
+pragma(inline, true)
+void* SSL_SESSION_get_app_data(const (.SSL_SESSION)* s)
+
+	do
+	{
+		return .SSL_SESSION_get_ex_data(s, 0);
+	}
+
+pragma(inline, true)
+void* SSL_CTX_get_app_data(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx)
+
+	do
+	{
+		return .SSL_CTX_get_ex_data(ctx, 0);
+	}
+
+pragma(inline, true)
+int SSL_CTX_set_app_data(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, char* arg)
+
+	do
+	{
+		return .SSL_CTX_set_ex_data(ctx, 0, arg);
+	}
 
 /*
  * The following are the possible values for ssl.state are are
@@ -1153,12 +1415,47 @@ enum SSL_CB_HANDSHAKE_START = 0x10;
 enum SSL_CB_HANDSHAKE_DONE = 0x20;
 
 /* Is the SSL_connection established? */
-//#define SSL_get_state(a) (.SSL_state(a))
-//#define SSL_is_init_finished(a) (.SSL_state(a) == .SSL_ST_OK)
-//#define SSL_in_init(a) (.SSL_state(a) & .SSL_ST_INIT)
-//#define SSL_in_before(a) (.SSL_state(a) & .SSL_ST_BEFORE)
-//#define SSL_in_connect_init(a) (.SSL_state(a) & .SSL_ST_CONNECT)
-//#define SSL_in_accept_init(a) (.SSL_state(a) & .SSL_ST_ACCEPT)
+alias SSL_get_state = .SSL_state;
+
+pragma(inline, true)
+bool SSL_is_init_finished(const (libressl_d.openssl.ossl_typ.SSL)* a)
+
+	do
+	{
+		return .SSL_state(a) == .SSL_ST_OK;
+	}
+
+pragma(inline, true)
+int SSL_in_init(const (libressl_d.openssl.ossl_typ.SSL)* a)
+
+	do
+	{
+		return .SSL_state(a) & .SSL_ST_INIT;
+	}
+
+pragma(inline, true)
+int SSL_in_before(const (libressl_d.openssl.ossl_typ.SSL)* a)
+
+	do
+	{
+		return .SSL_state(a) & .SSL_ST_BEFORE;
+	}
+
+pragma(inline, true)
+int SSL_in_connect_init(const (libressl_d.openssl.ossl_typ.SSL)* a)
+
+	do
+	{
+		return .SSL_state(a) & .SSL_ST_CONNECT;
+	}
+
+pragma(inline, true)
+int SSL_in_accept_init(const (libressl_d.openssl.ossl_typ.SSL)* a)
+
+	do
+	{
+		return .SSL_state(a) & .SSL_ST_ACCEPT;
+	}
 
 /*
  * The following 2 states are kept in ssl.rstate when reads fail,
@@ -1186,18 +1483,46 @@ enum SSL_VERIFY_PEER = 0x01;
 enum SSL_VERIFY_FAIL_IF_NO_PEER_CERT = 0x02;
 enum SSL_VERIFY_CLIENT_ONCE = 0x04;
 
-//#define OpenSSL_add_ssl_algorithms() .SSL_library_init()
-//#define SSLeay_add_ssl_algorithms() .SSL_library_init()
+alias OpenSSL_add_ssl_algorithms = .SSL_library_init;
+alias SSLeay_add_ssl_algorithms = .SSL_library_init;
 
 /* More backward compatibility */
-//#define SSL_get_cipher(s) .SSL_CIPHER_get_name(.SSL_get_current_cipher(s))
-//#define SSL_get_cipher_bits(s, np) .SSL_CIPHER_get_bits(.SSL_get_current_cipher(s), np)
-//#define SSL_get_cipher_version(s) .SSL_CIPHER_get_version(.SSL_get_current_cipher(s))
-//#define SSL_get_cipher_name(s) .SSL_CIPHER_get_name(.SSL_get_current_cipher(s))
-//#define SSL_get_time(a) .SSL_SESSION_get_time(a)
-//#define SSL_set_time(a, b) .SSL_SESSION_set_time(a, b)
-//#define SSL_get_timeout(a) .SSL_SESSION_get_timeout(a)
-//#define SSL_set_timeout(a, b) .SSL_SESSION_set_timeout(a, b)
+pragma(inline, true)
+const (char)* SSL_get_cipher(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_CIPHER_get_name(.SSL_get_current_cipher(s));
+	}
+
+pragma(inline, true)
+int SSL_get_cipher_bits(const (libressl_d.openssl.ossl_typ.SSL)* s, int* np)
+
+	do
+	{
+		return .SSL_CIPHER_get_bits(.SSL_get_current_cipher(s), np);
+	}
+
+pragma(inline, true)
+const (char)* SSL_get_cipher_version(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_CIPHER_get_version(.SSL_get_current_cipher(s));
+	}
+
+pragma(inline, true)
+const (char)* SSL_get_cipher_name(const (libressl_d.openssl.ossl_typ.SSL)* s)
+
+	do
+	{
+		return .SSL_CIPHER_get_name(.SSL_get_current_cipher(s));
+	}
+
+alias SSL_get_time = .SSL_SESSION_get_time;
+alias SSL_set_time = .SSL_SESSION_set_time;
+alias SSL_get_timeout = .SSL_SESSION_get_timeout;
+alias SSL_set_timeout = .SSL_SESSION_set_timeout;
 
 //#define d2i_SSL_SESSION_bio(bp, s_id) libressl_d.openssl.asn1.ASN1_d2i_bio_of(.SSL_SESSION, .SSL_SESSION_new, .d2i_SSL_SESSION, bp, s_id)
 //#define i2d_SSL_SESSION_bio(bp, s_id) libressl_d.openssl.asn1.ASN1_i2d_bio_of(.SSL_SESSION, .i2d_SSL_SESSION, bp, s_id)
@@ -1440,28 +1765,157 @@ enum SSL_CTRL_SET_MAX_PROTO_VERSION = 124;
 enum SSL_CTRL_GET_MIN_PROTO_VERSION = 130;
 enum SSL_CTRL_GET_MAX_PROTO_VERSION = 131;
 
-//#define DTLSv1_get_timeout(ssl, arg) .SSL_ctrl(ssl, .DTLS_CTRL_GET_TIMEOUT, 0, cast(void*)(arg))
-//#define DTLSv1_handle_timeout(ssl) .SSL_ctrl(ssl, .DTLS_CTRL_HANDLE_TIMEOUT, 0, null)
-//#define DTLSv1_listen(ssl, peer) .SSL_ctrl(ssl, .DTLS_CTRL_LISTEN, 0, cast(void*)(peer))
+pragma(inline, true)
+core.stdc.config.c_long DTLSv1_get_timeout(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
 
-//#define SSL_session_reused(ssl) .SSL_ctrl(ssl, .SSL_CTRL_GET_SESSION_REUSED, 0, null)
-//#define SSL_num_renegotiations(ssl) .SSL_ctrl(ssl, .SSL_CTRL_GET_NUM_RENEGOTIATIONS, 0, null)
-//#define SSL_clear_num_renegotiations(ssl) .SSL_ctrl(ssl, .SSL_CTRL_CLEAR_NUM_RENEGOTIATIONS, 0, null)
-//#define SSL_total_renegotiations(ssl) .SSL_ctrl(ssl, .SSL_CTRL_GET_TOTAL_RENEGOTIATIONS, 0, null)
+	do
+	{
+		return .SSL_ctrl(ssl, .DTLS_CTRL_GET_TIMEOUT, 0, arg);
+	}
 
-//#define SSL_CTX_need_tmp_RSA(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_NEED_TMP_RSA, 0, null)
-//#define SSL_CTX_set_tmp_rsa(ctx, rsa) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_TMP_RSA, 0, cast(char*)(rsa))
-//#define SSL_CTX_set_tmp_dh(ctx, dh) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_TMP_DH, 0, cast(char*)(dh))
-//#define SSL_CTX_set_tmp_ecdh(ctx, ecdh) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_TMP_ECDH, 0, cast(char*)(ecdh))
-//#define SSL_CTX_set_dh_auto(ctx, onoff) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_DH_AUTO, onoff, null)
-//#define SSL_CTX_set_ecdh_auto(ctx, onoff) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_ECDH_AUTO, onoff, null)
+pragma(inline, true)
+core.stdc.config.c_long DTLSv1_handle_timeout(libressl_d.openssl.ossl_typ.SSL* ssl)
 
-//#define SSL_need_tmp_RSA(ssl) .SSL_ctrl(ssl, .SSL_CTRL_NEED_TMP_RSA, 0, null)
-//#define SSL_set_tmp_rsa(ssl, rsa) .SSL_ctrl(ssl, .SSL_CTRL_SET_TMP_RSA, 0, cast(char*)(rsa))
-//#define SSL_set_tmp_dh(ssl, dh) .SSL_ctrl(ssl, .SSL_CTRL_SET_TMP_DH, 0, cast(char*)(dh))
-//#define SSL_set_tmp_ecdh(ssl, ecdh) .SSL_ctrl(ssl, .SSL_CTRL_SET_TMP_ECDH, 0, cast(char*)(ecdh))
-//#define SSL_set_dh_auto(s, onoff) .SSL_ctrl(s, .SSL_CTRL_SET_DH_AUTO, onoff, null)
-//#define SSL_set_ecdh_auto(s, onoff) .SSL_ctrl(s, .SSL_CTRL_SET_ECDH_AUTO, onoff, null)
+	do
+	{
+		return .SSL_ctrl(ssl, .DTLS_CTRL_HANDLE_TIMEOUT, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long DTLSv1_listen(libressl_d.openssl.ossl_typ.SSL* ssl, void* peer)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .DTLS_CTRL_LISTEN, 0, peer);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_session_reused(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_GET_SESSION_REUSED, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_num_renegotiations(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_GET_NUM_RENEGOTIATIONS, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_clear_num_renegotiations(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_CLEAR_NUM_RENEGOTIATIONS, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_total_renegotiations(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_GET_TOTAL_RENEGOTIATIONS, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_need_tmp_RSA(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_NEED_TMP_RSA, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_tmp_rsa(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, char* rsa)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_TMP_RSA, 0, rsa);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_tmp_dh(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, char* dh)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_TMP_DH, 0, dh);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_tmp_ecdh(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, char* ecdh)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_TMP_ECDH, 0, ecdh);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_dh_auto(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long onoff)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_DH_AUTO, onoff, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_ecdh_auto(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long onoff)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_ECDH_AUTO, onoff, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_need_tmp_RSA(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_NEED_TMP_RSA, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_tmp_rsa(libressl_d.openssl.ossl_typ.SSL* ssl, char* rsa)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_SET_TMP_RSA, 0, rsa);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_tmp_dh(libressl_d.openssl.ossl_typ.SSL* ssl, char* dh)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_SET_TMP_DH, 0, dh);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_tmp_ecdh(libressl_d.openssl.ossl_typ.SSL* ssl, char* ecdh)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_SET_TMP_ECDH, 0, ecdh);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_dh_auto(libressl_d.openssl.ossl_typ.SSL* s, core.stdc.config.c_long onoff)
+
+	do
+	{
+		return .SSL_ctrl(s, .SSL_CTRL_SET_DH_AUTO, onoff, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_ecdh_auto(libressl_d.openssl.ossl_typ.SSL* s, core.stdc.config.c_long onoff)
+
+	do
+	{
+		return .SSL_ctrl(s, .SSL_CTRL_SET_ECDH_AUTO, onoff, null);
+	}
 
 int SSL_CTX_set0_chain(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.x509.stack_st_X509* chain);
 int SSL_CTX_set1_chain(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.x509.stack_st_X509* chain);
@@ -1503,15 +1957,54 @@ alias SSL_set1_curves = .SSL_set1_groups;
 alias SSL_set1_curves_list = .SSL_set1_groups_list;
 //#endif
 
-//#define SSL_CTX_add_extra_chain_cert(ctx, x509) .SSL_CTX_ctrl(ctx, .SSL_CTRL_EXTRA_CHAIN_CERT, 0, cast(char*)(x509))
-//#define SSL_CTX_get_extra_chain_certs(ctx, px509) .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_EXTRA_CHAIN_CERTS, 0, px509)
-//#define SSL_CTX_get_extra_chain_certs_only(ctx, px509) .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_EXTRA_CHAIN_CERTS, 1, px509)
-//#define SSL_CTX_clear_extra_chain_certs(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_CLEAR_EXTRA_CHAIN_CERTS, 0, null)
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_add_extra_chain_cert(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, char* x509)
 
-//#define SSL_get_server_tmp_key(s, pk) .SSL_ctrl(s, .SSL_CTRL_GET_SERVER_TMP_KEY, 0, pk)
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_EXTRA_CHAIN_CERT, 0, x509);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_get_extra_chain_certs(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* px509)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_EXTRA_CHAIN_CERTS, 0, px509);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_get_extra_chain_certs_only(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* px509)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_EXTRA_CHAIN_CERTS, 1, px509);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_clear_extra_chain_certs(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_CLEAR_EXTRA_CHAIN_CERTS, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_get_server_tmp_key(libressl_d.openssl.ossl_typ.SSL* s, void* pk)
+
+	do
+	{
+		return .SSL_ctrl(s, .SSL_CTRL_GET_SERVER_TMP_KEY, 0, pk);
+	}
 
 //#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
-	//#define SSL_get_peer_tmp_key(s, pk) .SSL_ctrl(s, .SSL_CTRL_GET_PEER_TMP_KEY, 0, pk)
+	pragma(inline, true)
+	core.stdc.config.c_long SSL_get_peer_tmp_key(libressl_d.openssl.ossl_typ.SSL* s, void* pk)
+
+		do
+		{
+			return .SSL_ctrl(s, .SSL_CTRL_GET_PEER_TMP_KEY, 0, pk);
+		}
 //#endif
 
 //#if !defined(LIBRESSL_INTERNAL)
@@ -1974,22 +2467,104 @@ int SSL_CTX_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_
 
 int SSL_get_ex_data_X509_STORE_CTX_idx();
 
-//#define SSL_CTX_sess_set_cache_size(ctx, t) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_SESS_CACHE_SIZE, t, null)
-//#define SSL_CTX_sess_get_cache_size(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_SESS_CACHE_SIZE, 0, null)
-//#define SSL_CTX_set_session_cache_mode(ctx, m) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_SESS_CACHE_MODE, m, null)
-//#define SSL_CTX_get_session_cache_mode(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_SESS_CACHE_MODE, 0, null)
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_set_cache_size(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long t)
 
-//#define SSL_CTX_get_default_read_ahead(ctx) .SSL_CTX_get_read_ahead(ctx)
-//#define SSL_CTX_set_default_read_ahead(ctx, m) .SSL_CTX_set_read_ahead(ctx, m)
-//#define SSL_CTX_get_read_ahead(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_READ_AHEAD, 0, null)
-//#define SSL_CTX_set_read_ahead(ctx, m) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_READ_AHEAD, m, null)
-//#define SSL_CTX_get_max_cert_list(ctx) .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_MAX_CERT_LIST, 0, null)
-//#define SSL_CTX_set_max_cert_list(ctx, m) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_MAX_CERT_LIST, m, null)
-//#define SSL_get_max_cert_list(ssl) .SSL_ctrl(ssl, .SSL_CTRL_GET_MAX_CERT_LIST, 0, null)
-//#define SSL_set_max_cert_list(ssl, m) .SSL_ctrl(ssl, .SSL_CTRL_SET_MAX_CERT_LIST, m, null)
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_SESS_CACHE_SIZE, t, null);
+	}
 
-//#define SSL_CTX_set_max_send_fragment(ctx, m) .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_MAX_SEND_FRAGMENT, m, null)
-//#define SSL_set_max_send_fragment(ssl, m) .SSL_ctrl(ssl, .SSL_CTRL_SET_MAX_SEND_FRAGMENT, m, null)
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_sess_get_cache_size(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_SESS_CACHE_SIZE, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_session_cache_mode(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long m)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_SESS_CACHE_MODE, m, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_get_session_cache_mode(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_SESS_CACHE_MODE, 0, null);
+	}
+
+alias SSL_CTX_get_default_read_ahead = .SSL_CTX_get_read_ahead;
+alias SSL_CTX_set_default_read_ahead = .SSL_CTX_set_read_ahead;
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_get_read_ahead(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_READ_AHEAD, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_read_ahead(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long m)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_READ_AHEAD, m, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_get_max_cert_list(libressl_d.openssl.ossl_typ.SSL_CTX* ctx)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_GET_MAX_CERT_LIST, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_max_cert_list(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long m)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_MAX_CERT_LIST, m, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_get_max_cert_list(libressl_d.openssl.ossl_typ.SSL* ssl)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_GET_MAX_CERT_LIST, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_max_cert_list(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long m)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_SET_MAX_CERT_LIST, m, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_CTX_set_max_send_fragment(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, core.stdc.config.c_long m)
+
+	do
+	{
+		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SET_MAX_SEND_FRAGMENT, m, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_set_max_send_fragment(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long m)
+
+	do
+	{
+		return .SSL_ctrl(ssl, .SSL_CTRL_SET_MAX_SEND_FRAGMENT, m, null);
+	}
 
 /* NB: the keylength is only applicable when is_export is true */
 void SSL_CTX_set_tmp_rsa_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.RSA* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength) cb);

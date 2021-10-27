@@ -226,13 +226,33 @@ enum CRYPTO_UNLOCK = 2;
 enum CRYPTO_READ = 4;
 enum CRYPTO_WRITE = 8;
 
-//#if !defined(CRYPTO_w_lock)
-//#define CRYPTO_w_lock(type) .CRYPTO_lock(.CRYPTO_LOCK | .CRYPTO_WRITE, type, __FILE__, __LINE__)
-//#define CRYPTO_w_unlock(type) .CRYPTO_lock(.CRYPTO_UNLOCK | .CRYPTO_WRITE, type, __FILE__, __LINE__)
-//#define CRYPTO_r_lock(type) .CRYPTO_lock(.CRYPTO_LOCK | .CRYPTO_READ, type, __FILE__, __LINE__)
-//#define CRYPTO_r_unlock(type) .CRYPTO_lock(.CRYPTO_UNLOCK | .CRYPTO_READ, type, __FILE__, __LINE__)
-//#define CRYPTO_add(addr, amount, type) .CRYPTO_add_lock(addr, amount, type, __FILE__, __LINE__)
-//#endif
+version (CRYPTO_w_lock) {
+} else {
+	template CRYPTO_w_lock(string type)
+	{
+		enum CRYPTO_w_lock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_LOCK | libressl_d.openssl.crypto.CRYPTO_WRITE, " ~ type ~ ", __FILE__, __LINE__);";
+	}
+
+	template CRYPTO_w_unlock(string type)
+	{
+		enum CRYPTO_w_unlock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_UNLOCK | libressl_d.openssl.crypto.CRYPTO_WRITE, " ~ type ~ ", __FILE__, __LINE__);";
+	}
+
+	template CRYPTO_r_lock(string type)
+	{
+		enum CRYPTO_r_lock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_LOCK | libressl_d.openssl.crypto.CRYPTO_READ, " ~ type ~ ", __FILE__, __LINE__);";
+	}
+
+	template CRYPTO_r_unlock(string type)
+	{
+		enum CRYPTO_r_unlock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_UNLOCK | libressl_d.openssl.crypto.CRYPTO_READ, " ~ type ~ ", __FILE__, __LINE__);";
+	}
+
+	template CRYPTO_add(string addr, string amount, string type)
+	{
+		enum CRYPTO_add = "libressl_d.openssl.crypto.CRYPTO_add_lock(" ~ addr ~ ", " ~ amount ~ ", " ~ type ~ ", __FILE__, __LINE__);";
+	}
+}
 
 /**
  * Some applications as well as some parts of OpenSSL need to allocate
@@ -369,8 +389,23 @@ enum CRYPTO_EX_INDEX_EC_KEY = 16;
 enum CRYPTO_EX_INDEX_USER = 100;
 
 //#if !defined(LIBRESSL_INTERNAL)
-//#define CRYPTO_malloc_init() (0)
-//#define CRYPTO_malloc_debug_init() (0)
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+int CRYPTO_malloc_init()
+
+	do
+	{
+		return 0;
+	}
+
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+int CRYPTO_malloc_debug_init()
+
+	do
+	{
+		return 0;
+	}
 
 //#if defined(CRYPTO_MDEBUG_ALL) || defined(CRYPTO_MDEBUG_TIME) || defined(CRYPTO_MDEBUG_THREAD)
 	/* avoid duplicate #define */
@@ -383,19 +418,56 @@ int CRYPTO_mem_ctrl(int mode);
 int CRYPTO_is_mem_check_on();
 
 /* for applications */
-//#define MemCheck_start() .CRYPTO_mem_ctrl(.CRYPTO_MEM_CHECK_ON)
-//#define MemCheck_stop() .CRYPTO_mem_ctrl(CRYPTO_MEM_CHECK_OFF)
+pragma(inline, true)
+int MemCheck_start()
 
-//#define OPENSSL_malloc(num) .CRYPTO_malloc(cast(int)(num), __FILE__, __LINE__)
-//#define OPENSSL_strdup(str) .CRYPTO_strdup((str), __FILE__, __LINE__)
-//#define OPENSSL_realloc(addr, num) .CRYPTO_realloc(cast(char*)(addr), cast(int)(num), __FILE__, __LINE__)
-//#define OPENSSL_realloc_clean(addr, old_num, num) .CRYPTO_realloc_clean(addr, old_num, num, __FILE__, __LINE__)
-//#define OPENSSL_remalloc(addr, num) .CRYPTO_remalloc(cast(char**)(addr), cast(int)(num), __FILE__, __LINE__)
+	do
+	{
+		return .CRYPTO_mem_ctrl(.CRYPTO_MEM_CHECK_ON);
+	}
+
+pragma(inline, true)
+int MemCheck_stop()
+
+	do
+	{
+		return .CRYPTO_mem_ctrl(.CRYPTO_MEM_CHECK_OFF);
+	}
+
+template OPENSSL_malloc(string num)
+{
+	enum OPENSSL_malloc = "libressl_d.openssl.crypto.CRYPTO_malloc(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+}
+
+template OPENSSL_strdup(string str)
+{
+	enum OPENSSL_strdup = "libressl_d.openssl.crypto.CRYPTO_strdup(" ~ str ~ ", __FILE__, __LINE__)";
+}
+
+template OPENSSL_realloc(string addr, string num)
+{
+	enum OPENSSL_realloc = "libressl_d.openssl.crypto.CRYPTO_realloc(cast(char*)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+}
+
+template OPENSSL_realloc_clean(string addr, string old_num, string num)
+{
+	enum OPENSSL_realloc_clean = "libressl_d.openssl.crypto.CRYPTO_realloc_clean(" ~ addr ~ ", " ~ old_num ~ ", " ~ num ~ ", __FILE__, __LINE__)";
+}
+
+template OPENSSL_remalloc(string addr, string num)
+{
+	enum OPENSSL_remalloc = "libressl_d.openssl.crypto.CRYPTO_remalloc(cast(char**)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+}
+
 alias OPENSSL_freeFunc = .CRYPTO_free;
-//#define OPENSSL_free(addr) .CRYPTO_free(addr)
+alias OPENSSL_free = .CRYPTO_free;
 
-//#define OPENSSL_malloc_locked(num) .CRYPTO_malloc_locked(cast(int)(num), __FILE__, __LINE__)
-//#define OPENSSL_free_locked(addr) .CRYPTO_free_locked(addr)
+template OPENSSL_malloc_locked(num)
+{
+	enum OPENSSL_malloc_locked = "libressl_d.openssl.crypto.CRYPTO_malloc_locked(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+}
+
+alias OPENSSL_free_locked = .CRYPTO_free_locked;
 //#endif
 
 const (char)* OpenSSL_version(int type);
@@ -538,7 +610,11 @@ void OPENSSL_cleanse(void* ptr_, size_t len);
 void CRYPTO_set_mem_debug_options(core.stdc.config.c_long bits);
 core.stdc.config.c_long CRYPTO_get_mem_debug_options();
 
-//#define CRYPTO_push_info(info) .CRYPTO_push_info_(info, __FILE__, __LINE__);
+template CRYPTO_push_info(string info)
+{
+	enum CRYPTO_push_info = "libressl_d.openssl.crypto.CRYPTO_push_info_(" ~ info ~ ", __FILE__, __LINE__)";
+}
+
 int CRYPTO_push_info_(const (char)* info, const (char)* file, int line);
 int CRYPTO_pop_info();
 int CRYPTO_remove_all_info();

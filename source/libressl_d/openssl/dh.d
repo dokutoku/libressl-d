@@ -246,9 +246,21 @@ int DHparams_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openss
 //	int DHparams_print(char* bp, const (libressl_d.openssl.ossl_typ.DH)* x);
 //#endif
 
-//#define EVP_PKEY_CTX_set_dh_paramgen_prime_len(ctx, len) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_DH, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN, .EVP_PKEY_CTRL_DH_PARAMGEN_PRIME_LEN, len, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_dh_paramgen_prime_len(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int len)
 
-//#define EVP_PKEY_CTX_set_dh_paramgen_generator(ctx, gen) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_DH, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN, libressl_d.openssl.evp.EVP_PKEY_CTRL_DH_PARAMGEN_GENERATOR, gen, null)
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_DH, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN, .EVP_PKEY_CTRL_DH_PARAMGEN_PRIME_LEN, len, null);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_set_dh_paramgen_generator(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int gen)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_DH, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN, .EVP_PKEY_CTRL_DH_PARAMGEN_GENERATOR, gen, null);
+	}
 
 enum EVP_PKEY_CTRL_DH_PARAMGEN_PRIME_LEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
 enum EVP_PKEY_CTRL_DH_PARAMGEN_GENERATOR = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;

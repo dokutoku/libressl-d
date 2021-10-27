@@ -758,7 +758,14 @@ int i2d_ECPKParameters(const (.EC_GROUP)*, ubyte** out_);
 //#define d2i_ECPKParameters_bio(bp, x) libressl_d.openssl.asn1.ASN1_d2i_bio_of(.EC_GROUP, null, .d2i_ECPKParameters, bp, x)
 //#define i2d_ECPKParameters_bio(bp, x) libressl_d.openssl.asn1.ASN1_i2d_bio_of_const(.EC_GROUP, .i2d_ECPKParameters, bp, x)
 //#define d2i_ECPKParameters_fp(fp, x) cast(.EC_GROUP*)(libressl_d.openssl.asn1.ASN1_d2i_fp(null, (char* (*) ()) .d2i_ECPKParameters, fp, cast(ubyte**)(x)))
-//#define i2d_ECPKParameters_fp(fp, x) libressl_d.openssl.asn1.ASN1_i2d_fp(.i2d_ECPKParameters, fp, cast(ubyte*)(x))
+
+pragma(inline, true)
+int i2d_ECPKParameters_fp(libressl_d.compat.stdio.FILE* fp, ubyte* x)
+
+	do
+	{
+		return libressl_d.openssl.asn1.ASN1_i2d_fp(&.i2d_ECPKParameters, fp, x);
+	}
 
 //#if !defined(OPENSSL_NO_BIO)
 int ECPKParameters_print(libressl_d.openssl.bio.BIO* bp, const (.EC_GROUP)* x, int off);
@@ -1041,7 +1048,14 @@ int ECParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key
  */
 int EC_KEY_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key, int off);
 
-//#define EC_KEY_get_ex_new_index(l, p, newf, dupf, freef) libressl_d.openssl.crypto.CRYPTO_get_ex_new_index(libressl_d.openssl.crypto.CRYPTO_EX_INDEX_EC_KEY, l, p, newf, dupf, freef)
+pragma(inline, true)
+int EC_KEY_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* newf, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dupf, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* freef)
+
+	do
+	{
+		return libressl_d.openssl.crypto.CRYPTO_get_ex_new_index(libressl_d.openssl.crypto.CRYPTO_EX_INDEX_EC_KEY, l, p, newf, dupf, freef);
+	}
+
 int EC_KEY_set_ex_data(.EC_KEY* key, int idx, void* arg);
 void* EC_KEY_get_ex_data(const (.EC_KEY)* key, int idx);
 
@@ -1070,36 +1084,126 @@ void EC_KEY_METHOD_get_compute_key(const (.EC_KEY_METHOD)* meth, int function(vo
 	//#endif
 //#endif
 
-//#define EVP_PKEY_CTX_set_ec_paramgen_curve_nid(ctx, nid) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAMGEN_CURVE_NID, nid, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_ec_paramgen_curve_nid(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int nid)
 
-//#define EVP_PKEY_CTX_set_ec_param_enc(ctx, flag) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAM_ENC, flag, null)
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAMGEN_CURVE_NID, nid, null);
+	}
 
-//#define EVP_PKEY_CTX_set_ecdh_cofactor_mode(ctx, flag) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, flag, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_ec_param_enc(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int flag)
 
-//#define EVP_PKEY_CTX_get_ecdh_cofactor_mode(ctx) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, -2, null)
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAM_ENC, flag, null);
+	}
 
-//#define EVP_PKEY_CTX_set_ecdh_kdf_type(ctx, kdf) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, kdf, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_ecdh_cofactor_mode(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int flag)
 
-//#define EVP_PKEY_CTX_get_ecdh_kdf_type(ctx) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, -2, null)
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, flag, null);
+	}
 
-//#define EVP_PKEY_CTX_set_ecdh_kdf_md(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_MD, 0, cast(void*)(md))
+pragma(inline, true)
+int EVP_PKEY_CTX_get_ecdh_cofactor_mode(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx)
 
-//#define EVP_PKEY_CTX_get_ecdh_kdf_md(ctx, pmd) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_MD, 0, cast(void*)(pmd))
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, -2, null);
+	}
 
-//#define EVP_PKEY_CTX_set_ecdh_kdf_outlen(ctx, len) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_OUTLEN, len, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_ecdh_kdf_type(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int kdf)
 
-//#define EVP_PKEY_CTX_get_ecdh_kdf_outlen(ctx, plen) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_OUTLEN, 0, cast(void*)(plen))
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, kdf, null);
+	}
 
-//#define EVP_PKEY_CTX_set0_ecdh_kdf_ukm(ctx, p, plen) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_UKM, plen, cast(void*)(p))
+pragma(inline, true)
+int EVP_PKEY_CTX_get_ecdh_kdf_type(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx)
 
-//#define EVP_PKEY_CTX_get0_ecdh_kdf_ukm(ctx, p) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_UKM, 0, cast(void*)(p))
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, -2, null);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_set_ecdh_kdf_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* md)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_MD, 0, md);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_get_ecdh_kdf_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* pmd)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_MD, 0, pmd);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_set_ecdh_kdf_outlen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int len)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_OUTLEN, len, null);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_get_ecdh_kdf_outlen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* plen)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_OUTLEN, 0, plen);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_set0_ecdh_kdf_ukm(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* p, int plen)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_UKM, plen, p);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_get0_ecdh_kdf_ukm(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* p)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_UKM, 0, p);
+	}
 
 /* SM2 will skip the operation check so no need to pass operation here */
-//#define EVP_PKEY_CTX_set1_id(ctx, id, id_len) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_SET1_ID, cast(int)(id_len), cast(void*)(id))
+pragma(inline, true)
+int EVP_PKEY_CTX_set1_id(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id, int id_len)
 
-//#define EVP_PKEY_CTX_get1_id(ctx, id) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID, 0, cast(void*)(id))
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_SET1_ID, id_len, id);
+	}
 
-//#define EVP_PKEY_CTX_get1_id_len(ctx, id_len) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID_LEN, 0, cast(void*)(id_len))
+pragma(inline, true)
+int EVP_PKEY_CTX_get1_id(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID, 0, id);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_get1_id_len(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id_len)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID_LEN, 0, id_len);
+	}
 
 enum EVP_PKEY_CTRL_EC_PARAMGEN_CURVE_NID = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
 enum EVP_PKEY_CTRL_EC_PARAM_ENC = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;

@@ -81,20 +81,49 @@ module libressl_d.compat.sys.queue;
  */
 
 //#if defined(QUEUE_MACRO_DEBUG) || (defined(_KERNEL) && defined(DIAGNOSTIC))
-	//#define _Q_INVALID ((void*) -1)
-	//#define _Q_INVALIDATE(a) (a) = _Q_INVALID
-//#else
-	//#define _Q_INVALIDATE(a)
-//#endif
+version (none) {
+	enum _Q_INVALID = cast(void*)(-1);
+
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	void _Q_INVALIDATE(scope void* a)
+
+		do
+		{
+			a = ._Q_INVALID;
+		}
+} else {
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	void _Q_INVALIDATE(scope void* a)
+
+		do
+		{
+		}
+}
 
 /*
  * Singly-linked List definitions.
  */
-//#define SLIST_HEAD(name, type) struct name { struct type* slh_first; /* first element */ }
+template SLIST_HEAD(string name, string type)
+{
+	enum SLIST_HEAD = "struct " ~ name ~ " { " ~ type ~ "* slh_first; /* first element */ }";
+}
 
-//#define SLIST_HEAD_INITIALIZER(head) { NULL }
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+HEAD SLIST_HEAD_INITIALIZER(HEAD)(scope const HEAD* head)
+	if (is(HEAD == struct))
 
-//#define SLIST_ENTRY(type) struct { struct type* sle_next; /* next element */ }
+	do
+	{
+		return HEAD.init;
+	}
+
+template SLIST_ENTRY(string type)
+{
+	enum SLIST_ENTRY = "struct { " ~ type ~ "* sle_next; /* next element */ }";
+}
 
 /*
  * Singly-linked List access methods.
@@ -126,11 +155,25 @@ module libressl_d.compat.sys.queue;
 /*
  * List definitions.
  */
-//#define LIST_HEAD(name, type) struct name { struct type* lh_first; /* first element */ }
+template LIST_HEAD(string name, string type)
+{
+	enum LIST_HEAD = "struct " ~ name ~ " { " ~ type ~ "* lh_first; /* first element */ }";
+}
 
-//#define LIST_HEAD_INITIALIZER(head) { NULL }
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+HEAD LIST_HEAD_INITIALIZER(HEAD)(scope const HEAD* head)
+	if (is(HEAD == struct))
 
-//#define LIST_ENTRY(type) struct { struct type* le_next; /* next element */ struct type** le_prev; /* address of previous next element */ }
+	do
+	{
+		return HEAD.init;
+	}
+
+template LIST_ENTRY(string type)
+{
+	enum LIST_ENTRY = "struct { " ~ type ~ "* le_next; /* next element */ " ~ type ~ "** le_prev; /* address of previous next element */ }";
+}
 
 /*
  * List access methods.
@@ -162,11 +205,30 @@ module libressl_d.compat.sys.queue;
 /*
  * Simple queue definitions.
  */
-//#define SIMPLEQ_HEAD(name, type) struct name { struct type* sqh_first; /* first element */ struct type** sqh_last; /* addr of last next element */ }
+template SIMPLEQ_HEAD(string name, string type)
+{
+	enum SIMPLEQ_HEAD = "struct " ~ name ~ " { " ~ type ~ "* sqh_first; /* first element */ " ~ type ~ "** sqh_last; /* addr of last next element */ }";
+}
 
-//#define SIMPLEQ_HEAD_INITIALIZER(head) { NULL, &(head).sqh_first }
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+HEAD LIST_HEAD_INITIALIZER(HEAD)(HEAD head)
 
-//#define SIMPLEQ_ENTRY(type) struct { struct type* sqe_next; /* next element */ }
+	do
+	{
+		HEAD output =
+		{
+			null,
+			&(head).sqh_first,
+		};
+
+		return output;
+	}
+
+template SIMPLEQ_ENTRY(string type)
+{
+	enum SIMPLEQ_ENTRY = "struct { " ~ type ~ "* sqe_next; /* next element */ }";
+}
 
 /*
  * Simple queue access methods.
@@ -200,9 +262,15 @@ module libressl_d.compat.sys.queue;
 /*
  * XOR Simple queue definitions.
  */
-//#define XSIMPLEQ_HEAD(name, type) struct name { struct type* sqx_first; /* first element */ struct type** sqx_last; /* addr of last next element */ unsigned long sqx_cookie; }
+template XSIMPLEQ_HEAD(string name, string type)
+{
+	enum XSIMPLEQ_HEAD = "struct " ~ name ~ " { " ~ type ~ "* sqx_first; /* first element */ " ~ type ~ "** sqx_last; /* addr of last next element */ core.stdc.config.c_ulong sqx_cookie; }";
+}
 
-//#define XSIMPLEQ_ENTRY(type) struct { struct type* sqx_next; /* next element */ }
+template XSIMPLEQ_ENTRY(string type)
+{
+	enum XSIMPLEQ_ENTRY = "struct { " ~ type ~ "* sqx_next; /* next element */ }";
+}
 
 /*
  * XOR Simple queue access methods.
@@ -235,11 +303,30 @@ module libressl_d.compat.sys.queue;
 /*
  * Tail queue definitions.
  */
-//#define TAILQ_HEAD(name, type) struct name { struct type* tqh_first; /* first element */ struct type** tqh_last; /* addr of last next element */ }
+template TAILQ_HEAD(string name, string type)
+{
+	enum TAILQ_HEAD = "struct " ~ name ~ " { " ~ type ~ "* tqh_first; /* first element */ " ~ type ~ "** tqh_last; /* addr of last next element */ }";
+}
 
-//#define TAILQ_HEAD_INITIALIZER(head) { NULL, &(head).tqh_first }
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+HEAD TAILQ_HEAD_INITIALIZER(HEAD)(HEAD head)
 
-//#define TAILQ_ENTRY(type) struct { struct type* tqe_next; /* next element */ struct type** tqe_prev; /* address of previous next element */ }
+	do
+	{
+		HEAD output =
+		{
+			null,
+			&(head).tqh_first,
+		};
+
+		return output;
+	}
+
+template TAILQ_ENTRY(string type)
+{
+	enum TAILQ_ENTRY = "struct { " ~ type ~ "* tqe_next; /* next element */ " ~ type ~ "** tqe_prev; /* address of previous next element */ }";
+}
 
 /*
  * Tail queue access methods.

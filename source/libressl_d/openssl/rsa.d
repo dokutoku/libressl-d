@@ -281,35 +281,125 @@ enum RSA_PSS_SALTLEN_AUTO = -2;
  */
 enum RSA_PSS_SALTLEN_MAX = -3;
 
-//#define EVP_PKEY_CTX_set_rsa_padding(ctx, pad) .RSA_pkey_ctx_ctrl(ctx, -1, .EVP_PKEY_CTRL_RSA_PADDING, pad, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_padding(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int pad)
 
-//#define EVP_PKEY_CTX_get_rsa_padding(ctx, ppad) .RSA_pkey_ctx_ctrl(ctx, -1, .EVP_PKEY_CTRL_GET_RSA_PADDING, 0, ppad)
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, -1, .EVP_PKEY_CTRL_RSA_PADDING, pad, null);
+	}
 
-//#define EVP_PKEY_CTX_set_rsa_pss_saltlen(ctx, len) .RSA_pkey_ctx_ctrl(ctx, (libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY), .EVP_PKEY_CTRL_RSA_PSS_SALTLEN, len, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_get_rsa_padding(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* ppad)
 
-//#define EVP_PKEY_CTX_set_rsa_pss_keygen_saltlen(ctx, len) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_PSS_SALTLEN, len, null)
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, -1, .EVP_PKEY_CTRL_GET_RSA_PADDING, 0, ppad);
+	}
 
-//#define EVP_PKEY_CTX_get_rsa_pss_saltlen(ctx, plen) .RSA_pkey_ctx_ctrl(ctx, (libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY), .EVP_PKEY_CTRL_GET_RSA_PSS_SALTLEN, 0, plen)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_pss_saltlen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int len)
 
-//#define EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, bits) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_BITS, bits, null)
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY, .EVP_PKEY_CTRL_RSA_PSS_SALTLEN, len, null);
+	}
 
-//#define EVP_PKEY_CTX_set_rsa_keygen_pubexp(ctx, pubexp) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_PUBEXP, 0, pubexp)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_pss_keygen_saltlen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int len)
 
-//#define EVP_PKEY_CTX_set_rsa_mgf1_md(ctx, md) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG | libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_MGF1_MD, 0, (void*) (md))
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_PSS_SALTLEN, len, null);
+	}
 
-//#define EVP_PKEY_CTX_set_rsa_pss_keygen_mgf1_md(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_MGF1_MD, 0, (void*) (md))
+pragma(inline, true)
+int EVP_PKEY_CTX_get_rsa_pss_saltlen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* plen)
 
-//#define EVP_PKEY_CTX_set_rsa_oaep_md(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_OAEP_MD, 0, (void*) (md))
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_SIGN | libressl_d.openssl.evp.EVP_PKEY_OP_VERIFY, .EVP_PKEY_CTRL_GET_RSA_PSS_SALTLEN, 0, plen);
+	}
 
-//#define EVP_PKEY_CTX_get_rsa_mgf1_md(ctx, pmd) .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG | libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_MGF1_MD, 0, (void*) (pmd))
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_keygen_bits(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int bits)
 
-//#define EVP_PKEY_CTX_get_rsa_oaep_md(ctx, pmd) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_OAEP_MD, 0, (void*) (pmd))
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_BITS, bits, null);
+	}
 
-//#define EVP_PKEY_CTX_set0_rsa_oaep_label(ctx, l, llen) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_OAEP_LABEL, llen, (void*) (l))
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_keygen_pubexp(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* pubexp)
 
-//#define EVP_PKEY_CTX_get0_rsa_oaep_label(ctx, l) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_OAEP_LABEL, 0, (void*) (l))
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_KEYGEN_PUBEXP, 0, pubexp);
+	}
 
-//#define s(ctx, md) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, libressl_d.openssl.evp.EVP_PKEY_CTRL_MD, 0, (void*) (md))
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_mgf1_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* md)
+
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG | libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_MGF1_MD, 0, md);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_pss_keygen_mgf1_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* md)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_RSA_MGF1_MD, 0, md);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_set_rsa_oaep_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* md)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_OAEP_MD, 0, md);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_get_rsa_mgf1_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* pmd)
+
+	do
+	{
+		return .RSA_pkey_ctx_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_SIG | libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_MGF1_MD, 0, pmd);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_get_rsa_oaep_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* pmd)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_OAEP_MD, 0, pmd);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_set0_rsa_oaep_label(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* l, int llen)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_RSA_OAEP_LABEL, llen, l);
+	}
+
+pragma(inline, true)
+int EVP_PKEY_CTX_get0_rsa_oaep_label(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* l)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA, libressl_d.openssl.evp.EVP_PKEY_OP_TYPE_CRYPT, .EVP_PKEY_CTRL_GET_RSA_OAEP_LABEL, 0, l);
+	}
+
+pragma(inline, true)
+int s(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* md)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_RSA_PSS, libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, libressl_d.openssl.evp.EVP_PKEY_CTRL_MD, 0, md);
+	}
 
 enum EVP_PKEY_CTRL_RSA_PADDING = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
 enum EVP_PKEY_CTRL_RSA_PSS_SALTLEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
@@ -338,8 +428,21 @@ enum RSA_PKCS1_PSS_PADDING = 6;
 
 enum RSA_PKCS1_PADDING_SIZE = 11;
 
-//#define RSA_set_app_data(s, arg) RSA_set_ex_data(s, 0, arg)
-//#define RSA_get_app_data(s) RSA_get_ex_data(s, 0)
+pragma(inline, true)
+int RSA_set_app_data(libressl_d.openssl.ossl_typ.RSA* s, void* arg)
+
+	do
+	{
+		return .RSA_set_ex_data(s, 0, arg);
+	}
+
+pragma(inline, true)
+void* RSA_get_app_data(const (libressl_d.openssl.ossl_typ.RSA)* s)
+
+	do
+	{
+		return .RSA_get_ex_data(s, 0);
+	}
 
 libressl_d.openssl.ossl_typ.RSA* RSA_new();
 libressl_d.openssl.ossl_typ.RSA* RSA_new_method(libressl_d.openssl.ossl_typ.ENGINE* engine);

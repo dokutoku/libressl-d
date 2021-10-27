@@ -318,8 +318,23 @@ struct x509_store_st
 
 int X509_STORE_set_depth(libressl_d.openssl.ossl_typ.X509_STORE* store, int depth);
 
-//#define X509_STORE_set_verify_cb_func(ctx, func) (ctx.verify_cb = func)
-//#define X509_STORE_set_verify_func(ctx, func) (ctx.verify = func)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void X509_STORE_set_verify_cb_func(scope libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(int ok, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) func)
+
+	do
+	{
+		ctx.verify_cb = func;
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void X509_STORE_set_verify_func(scope libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) func)
+
+	do
+	{
+		ctx.verify = func;
+	}
 
 /**
  * This is the functions plus an instance of the local variables.
@@ -499,18 +514,49 @@ struct x509_store_ctx_st
 
 void X509_STORE_CTX_set_depth(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int depth);
 
-//#define X509_STORE_CTX_set_app_data(ctx, data) X509_STORE_CTX_set_ex_data(ctx, 0, data)
-//#define X509_STORE_CTX_get_app_data(ctx) X509_STORE_CTX_get_ex_data(ctx, 0)
+pragma(inline, true)
+int X509_STORE_CTX_set_app_data(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, void* data)
+
+	do
+	{
+		return .X509_STORE_CTX_set_ex_data(ctx, 0, data);
+	}
+
+pragma(inline, true)
+void* X509_STORE_CTX_get_app_data(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx)
+
+	do
+	{
+		return .X509_STORE_CTX_get_ex_data(ctx, 0);
+	}
 
 enum X509_L_FILE_LOAD = 1;
 enum X509_L_ADD_DIR = 2;
 enum X509_L_MEM = 3;
 
-//#define X509_LOOKUP_load_file(x, name, type) X509_LOOKUP_ctrl(x, .X509_L_FILE_LOAD, name, cast(core.stdc.config.c_long)(type), null)
+pragma(inline, true)
+int X509_LOOKUP_load_file(.X509_LOOKUP* x, const (char)* name, core.stdc.config.c_long type)
 
-//#define X509_LOOKUP_add_dir(x, name, type) X509_LOOKUP_ctrl(x, .X509_L_ADD_DIR, name, cast(core.stdc.config.c_long)(type), null)
+	do
+	{
+		return .X509_LOOKUP_ctrl(x, .X509_L_FILE_LOAD, name, type, null);
+	}
 
-//#define X509_LOOKUP_add_mem(x, iov, type) X509_LOOKUP_ctrl(x, .X509_L_MEM, cast(const (char)*)(iov), cast(core.stdc.config.c_long)(type), null)
+pragma(inline, true)
+int X509_LOOKUP_add_dir(.X509_LOOKUP* x, const (char)* name, core.stdc.config.c_long type)
+
+	do
+	{
+		return .X509_LOOKUP_ctrl(x, .X509_L_ADD_DIR, name, type, null);
+	}
+
+pragma(inline, true)
+int X509_LOOKUP_add_mem(.X509_LOOKUP* x, const (char)* iov, core.stdc.config.c_long type)
+
+	do
+	{
+		return .X509_LOOKUP_ctrl(x, .X509_L_MEM, iov, type, null);
+	}
 
 enum X509_V_OK = 0;
 enum X509_V_ERR_UNSPECIFIED = 1;
@@ -725,7 +771,13 @@ libressl_d.openssl.x509.stack_st_X509_CRL* X509_STORE_get1_crls(libressl_d.opens
 void* X509_STORE_get_ex_data(libressl_d.openssl.ossl_typ.X509_STORE* xs, int idx);
 int X509_STORE_set_ex_data(libressl_d.openssl.ossl_typ.X509_STORE* xs, int idx, void* data);
 
-//#define X509_STORE_get_ex_new_index(l, p, newf, dupf, freef) libressl_d.openssl.crypto.CRYPTO_get_ex_new_index(libressl_d.openssl.crypto.CRYPTO_EX_INDEX_X509_STORE, l, p, newf, dupf, freef)
+pragma(inline, true)
+int X509_STORE_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* newf, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dupf, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* freef)
+
+	do
+	{
+		return libressl_d.openssl.crypto.CRYPTO_get_ex_new_index(libressl_d.openssl.crypto.CRYPTO_EX_INDEX_X509_STORE, l, p, newf, dupf, freef);
+	}
 
 int X509_STORE_set_flags(libressl_d.openssl.ossl_typ.X509_STORE* ctx, core.stdc.config.c_ulong flags);
 int X509_STORE_set_purpose(libressl_d.openssl.ossl_typ.X509_STORE* ctx, int purpose);

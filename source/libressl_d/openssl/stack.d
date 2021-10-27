@@ -76,8 +76,23 @@ struct stack_st
 /* Use STACK_OF(...) instead */
 alias _STACK = .stack_st;
 
-//#define M_sk_num(sk) (sk ? sk.num : -1)
-//#define M_sk_value(sk, n) (sk ? sk.data[n] : null)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+int M_sk_num(scope const ._STACK* sk)
+
+	do
+	{
+		return (sk != null) ? (sk.num) : (-1);
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+char* M_sk_value(._STACK* sk, size_t n)
+
+	do
+	{
+		return (sk != null) ? (sk.data[n]) : (null);
+	}
 
 int sk_num(const (._STACK)*);
 void* sk_value(const (._STACK)*, int);

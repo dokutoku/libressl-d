@@ -406,21 +406,95 @@ void BIO_set_flags(.BIO* b, int flags);
 int BIO_test_flags(const (.BIO)* b, int flags);
 void BIO_clear_flags(.BIO* b, int flags);
 
-//#define BIO_get_flags(b) .BIO_test_flags(b, ~0x00)
-//#define BIO_set_retry_special(b) .BIO_set_flags(b, (.BIO_FLAGS_IO_SPECIAL | .BIO_FLAGS_SHOULD_RETRY))
-//#define BIO_set_retry_read(b) .BIO_set_flags(b, (.BIO_FLAGS_READ | .BIO_FLAGS_SHOULD_RETRY))
-//#define BIO_set_retry_write(b) .BIO_set_flags(b, (.BIO_FLAGS_WRITE | .BIO_FLAGS_SHOULD_RETRY))
+pragma(inline, true)
+int BIO_get_flags(const (.BIO)* b)
+
+	do
+	{
+		return .BIO_test_flags(b, ~0x00);
+	}
+
+pragma(inline, true)
+void BIO_set_retry_special(.BIO* b)
+
+	do
+	{
+		.BIO_set_flags(b, .BIO_FLAGS_IO_SPECIAL | .BIO_FLAGS_SHOULD_RETRY);
+	}
+
+pragma(inline, true)
+void BIO_set_retry_read(.BIO* b)
+
+	do
+	{
+		.BIO_set_flags(b, .BIO_FLAGS_READ | .BIO_FLAGS_SHOULD_RETRY);
+	}
+
+pragma(inline, true)
+void BIO_set_retry_write(.BIO* b)
+
+	do
+	{
+		.BIO_set_flags(b, .BIO_FLAGS_WRITE | .BIO_FLAGS_SHOULD_RETRY);
+	}
 
 /* These are normally used internally in BIOs */
-//#define BIO_clear_retry_flags(b) .BIO_clear_flags(b, (.BIO_FLAGS_RWS | .BIO_FLAGS_SHOULD_RETRY))
-//#define BIO_get_retry_flags(b) .BIO_test_flags(b, (.BIO_FLAGS_RWS | .BIO_FLAGS_SHOULD_RETRY))
+pragma(inline, true)
+void BIO_clear_retry_flags(.BIO* b)
+
+	do
+	{
+		.BIO_clear_flags(b, .BIO_FLAGS_RWS | .BIO_FLAGS_SHOULD_RETRY);
+	}
+
+pragma(inline, true)
+int BIO_get_retry_flags(const (.BIO)* b)
+
+	do
+	{
+		return .BIO_test_flags(b, .BIO_FLAGS_RWS | .BIO_FLAGS_SHOULD_RETRY);
+	}
 
 /* These should be used by the application to tell why we should retry */
-//#define BIO_should_read(a) .BIO_test_flags(a, .BIO_FLAGS_READ)
-//#define BIO_should_write(a) .BIO_test_flags(a, .BIO_FLAGS_WRITE)
-//#define BIO_should_io_special(a) .BIO_test_flags(a, .BIO_FLAGS_IO_SPECIAL)
-//#define BIO_retry_type(a) .BIO_test_flags(a, .BIO_FLAGS_RWS)
-//#define BIO_should_retry(a) .BIO_test_flags(a, .BIO_FLAGS_SHOULD_RETRY)
+pragma(inline, true)
+int BIO_should_read(const (.BIO)* a)
+
+	do
+	{
+		return .BIO_test_flags(a, .BIO_FLAGS_READ);
+	}
+
+pragma(inline, true)
+int BIO_should_write(const (.BIO)* a)
+
+	do
+	{
+		return .BIO_test_flags(a, .BIO_FLAGS_WRITE);
+	}
+
+pragma(inline, true)
+int BIO_should_io_special(const (.BIO)* a)
+
+	do
+	{
+		return .BIO_test_flags(a, .BIO_FLAGS_IO_SPECIAL);
+	}
+
+pragma(inline, true)
+int BIO_retry_type(const (.BIO)* a)
+
+	do
+	{
+		return .BIO_test_flags(a, .BIO_FLAGS_RWS);
+	}
+
+pragma(inline, true)
+int BIO_should_retry(const (.BIO)* a)
+
+	do
+	{
+		return .BIO_test_flags(a, .BIO_FLAGS_SHOULD_RETRY);
+	}
 
 /*
  * The next three are used in conjunction with the
@@ -458,9 +532,29 @@ enum BIO_CB_CTRL = 0x06;
  */
 enum BIO_CB_RETURN = 0x80;
 
-//#define BIO_CB_return(a) (a | .BIO_CB_RETURN)
-//#define BIO_cb_pre(a) (!(a & .BIO_CB_RETURN))
-//#define BIO_cb_post(a) (a & .BIO_CB_RETURN)
+pragma(inline, true)
+A BIO_CB_return(A)(A a)
+
+	do
+	{
+		return a | .BIO_CB_RETURN;
+	}
+
+pragma(inline, true)
+A BIO_cb_pre(A)(A a)
+
+	do
+	{
+		return !(a & .BIO_CB_RETURN);
+	}
+
+pragma(inline, true)
+A BIO_cb_post(A)(A a)
+
+	do
+	{
+		return a & .BIO_CB_RETURN;
+	}
 
 //core.stdc.config.c_long (*BIO_get_callback(const (.BIO)* b))(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long);
 void BIO_set_callback(.BIO* b, core.stdc.config.c_long function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long) callback);
@@ -704,70 +798,329 @@ enum BIO_C_GET_SUFFIX = 152;
 enum BIO_C_SET_EX_ARG = 153;
 enum BIO_C_GET_EX_ARG = 154;
 
-//#define BIO_set_app_data(s, arg) .BIO_set_ex_data(s, 0, arg)
-//#define BIO_get_app_data(s) .BIO_get_ex_data(s, 0)
+pragma(inline, true)
+int BIO_set_app_data(.BIO* s, void* arg)
+
+	do
+	{
+		return .BIO_set_ex_data(s, 0, arg);
+	}
+
+pragma(inline, true)
+void* BIO_get_app_data(.BIO* s)
+
+	do
+	{
+		return .BIO_get_ex_data(s, 0);
+	}
 
 /* BIO_s_connect() and BIO_s_socks4a_connect() */
-//#define BIO_set_conn_hostname(b, name) .BIO_ctrl(b, .BIO_C_SET_CONNECT, 0, cast(char*)(name))
-//#define BIO_set_conn_port(b, port) .BIO_ctrl(b, .BIO_C_SET_CONNECT, 1, cast(char*)(port))
-//#define BIO_set_conn_ip(b, ip) .BIO_ctrl(b, .BIO_C_SET_CONNECT, 2, cast(char*)(ip))
-//#define BIO_set_conn_int_port(b, port) .BIO_ctrl(b, .BIO_C_SET_CONNECT, 3, cast(char*)(port))
-//#define BIO_get_conn_hostname(b) .BIO_ptr_ctrl(b, .BIO_C_GET_CONNECT, 0)
-//#define BIO_get_conn_port(b) .BIO_ptr_ctrl(b, .BIO_C_GET_CONNECT, 1)
-//#define BIO_get_conn_ip(b) .BIO_ptr_ctrl(b, .BIO_C_GET_CONNECT, 2)
-//#define BIO_get_conn_int_port(b) .BIO_int_ctrl(b, .BIO_C_GET_CONNECT, 3, 0)
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_conn_hostname(.BIO* b, char* name)
 
-//#define BIO_set_nbio(b, n) .BIO_ctrl(b, .BIO_C_SET_NBIO, n, null)
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_CONNECT, 0, name);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_conn_port(.BIO* b, char* port)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_CONNECT, 1, port);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_conn_ip(.BIO* b, char* ip)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_CONNECT, 2, ip);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_conn_int_port(.BIO* b, char* port)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_CONNECT, 3, port);
+	}
+
+pragma(inline, true)
+char* BIO_get_conn_hostname(.BIO* b)
+
+	do
+	{
+		return .BIO_ptr_ctrl(b, .BIO_C_GET_CONNECT, 0);
+	}
+
+pragma(inline, true)
+char* BIO_get_conn_port(.BIO* b)
+
+	do
+	{
+		return .BIO_ptr_ctrl(b, .BIO_C_GET_CONNECT, 1);
+	}
+
+pragma(inline, true)
+char* BIO_get_conn_ip(.BIO* b)
+
+	do
+	{
+		return .BIO_ptr_ctrl(b, .BIO_C_GET_CONNECT, 2);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_conn_int_port(.BIO* b)
+
+	do
+	{
+		return .BIO_int_ctrl(b, .BIO_C_GET_CONNECT, 3, 0);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_nbio(.BIO* b, core.stdc.config.c_long n)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_NBIO, n, null);
+	}
 
 /* BIO_s_accept_socket() */
-//#define BIO_set_accept_port(b, name) .BIO_ctrl(b, .BIO_C_SET_ACCEPT, 0, cast(char*)(name))
-//#define BIO_get_accept_port(b) .BIO_ptr_ctrl(b, .BIO_C_GET_ACCEPT, 0)
-/* #define BIO_set_nbio(b,n)	.BIO_ctrl(b,.BIO_C_SET_NBIO,n,null) */
-//#define BIO_set_nbio_accept(b, n) .BIO_ctrl(b, .BIO_C_SET_ACCEPT, 1, (n) ? ((void*) "a") : (null))
-//#define BIO_set_accept_bios(b, bio) .BIO_ctrl(b, .BIO_C_SET_ACCEPT, 2, cast(char*)(bio))
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_accept_port(.BIO* b, char* name)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_ACCEPT, 0, name);
+	}
+
+pragma(inline, true)
+char* BIO_get_accept_port(.BIO* b)
+
+	do
+	{
+		return .BIO_ptr_ctrl(b, .BIO_C_GET_ACCEPT, 0);
+	}
+
+/*
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_nbio(.BIO* b, core.stdc.config.c_long n)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_NBIO, n, null);
+	}
+*/
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_nbio_accept(.BIO* b, core.stdc.config.c_long n)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_ACCEPT, 1, (n) ? (cast(void*)(&("a\0"[0]))) : (null));
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_accept_bios(.BIO* b, char* bio)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_ACCEPT, 2, bio);
+	}
 
 enum BIO_BIND_NORMAL = 0;
 enum BIO_BIND_REUSEADDR_IF_UNUSED = 1;
 enum BIO_BIND_REUSEADDR = 2;
-//#define BIO_set_bind_mode(b, mode) .BIO_ctrl(b, .BIO_C_SET_BIND_MODE, mode, null)
-//#define BIO_get_bind_mode(b, mode) .BIO_ctrl(b, .BIO_C_GET_BIND_MODE, 0, null)
 
-//#define BIO_do_connect(b) .BIO_do_handshake(b)
-//#define BIO_do_accept(b) .BIO_do_handshake(b)
-//#define BIO_do_handshake(b) .BIO_ctrl(b, .BIO_C_DO_STATE_MACHINE, 0, null)
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_bind_mode(.BIO* b, core.stdc.config.c_long mode)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_BIND_MODE, mode, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_bind_mode(.BIO* b, core.stdc.config.c_long mode)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_BIND_MODE, 0, null);
+	}
+
+alias BIO_do_connect = .BIO_do_handshake;
+alias BIO_do_accept = .BIO_do_handshake;
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_do_handshake(.BIO* b)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_DO_STATE_MACHINE, 0, null);
+	}
 
 /* BIO_s_proxy_client() */
-//#define BIO_set_url(b, url) .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 0, cast(char*)(url))
-//#define BIO_set_proxies(b, p) .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 1, cast(char*)(p))
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_url(.BIO* b, char* url)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 0, url);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_proxies(.BIO* b, char* p)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 1, p);
+	}
+
 /* BIO_set_nbio(b,n) */
-//#define BIO_set_filter_bio(b, s) .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 2, cast(char*)(s))
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_filter_bio(.BIO* b, char* s)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 2, s);
+	}
+
 /* .BIO* IO_get_filter_bio(.BIO* io); */
 //#define BIO_set_proxy_cb(b, cb) .BIO_callback_ctrl(b, .BIO_C_SET_PROXY_PARAM, 3, (void* function() cb))
-//#define BIO_set_proxy_header(b, sk) .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 4, cast(char*)(sk))
-//#define BIO_set_no_connect_return(b, bool) .BIO_int_ctrl(b, .BIO_C_SET_PROXY_PARAM, 5, bool)
 
-//#define BIO_get_proxy_header(b, skp) .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 0, cast(char*)(skp))
-//#define BIO_get_proxies(b, pxy_p) .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 1, cast(char*)(pxy_p))
-//#define BIO_get_url(b, url) .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 2, cast(char*)(url))
-//#define BIO_get_no_connect_return(b) .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 5, null)
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_proxy_header(.BIO* b, char* sk)
 
-//#define BIO_set_fd(b, fd, c) .BIO_int_ctrl(b, .BIO_C_SET_FD, c, fd)
-//#define BIO_get_fd(b, c) .BIO_ctrl(b, .BIO_C_GET_FD, 0, cast(char*)(c))
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 4, sk);
+	}
 
-//#define BIO_set_fp(b, fp, c) .BIO_ctrl(b, .BIO_C_SET_FILE_PTR, c, cast(char*)(fp))
-//#define BIO_get_fp(b, fpp) .BIO_ctrl(b, .BIO_C_GET_FILE_PTR, 0, cast(char*)(fpp))
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_no_connect_return(.BIO* b, int bool_)
 
-//#define BIO_seek(b, ofs) cast(int)(.BIO_ctrl(b, .BIO_C_FILE_SEEK, ofs, null))
-//#define BIO_tell(b) cast(int)(.BIO_ctrl(b, .BIO_C_FILE_TELL, 0, null))
+	do
+	{
+		return .BIO_int_ctrl(b, .BIO_C_SET_PROXY_PARAM, 5, bool_);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_proxy_header(.BIO* b, char* skp)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 0, skp);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_proxies(.BIO* b, char* pxy_p)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 1, pxy_p);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_url(.BIO* b, char* url)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 2, url);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_no_connect_return(.BIO* b)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_PROXY_PARAM, 5, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_fd(.BIO* b, int fd, core.stdc.config.c_long c)
+
+	do
+	{
+		return .BIO_int_ctrl(b, .BIO_C_SET_FD, c, fd);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_fd(.BIO* b, char* c)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_FD, 0, c);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_fp(.BIO* b, char* fp, core.stdc.config.c_long c)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_FILE_PTR, c, fp);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_fp(.BIO* b, char* fpp)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_FILE_PTR, 0, fpp);
+	}
+
+pragma(inline, true)
+int BIO_seek(.BIO* b, core.stdc.config.c_long ofs)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_C_FILE_SEEK, ofs, null));
+	}
+
+pragma(inline, true)
+int BIO_tell(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_C_FILE_TELL, 0, null));
+	}
 
 /*
  * name is cast to lose const, but might be better to route through a function
  * so we can do it safely
  */
-//#define BIO_read_filename(b, name) .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_READ, cast(char*)(name))
-//#define BIO_write_filename(b, name) .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_WRITE, name)
-//#define BIO_append_filename(b, name) .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_APPEND, name)
-//#define BIO_rw_filename(b, name) .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_READ | .BIO_FP_WRITE, name)
+pragma(inline, true)
+core.stdc.config.c_long BIO_read_filename(.BIO* b, char* name)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_READ, name);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_write_filename(.BIO* b, void* name)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_WRITE, name);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_append_filename(.BIO* b, void* name)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_APPEND, name);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_rw_filename(.BIO* b, void* name)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_FILENAME, .BIO_CLOSE | .BIO_FP_READ | .BIO_FP_WRITE, name);
+	}
 
 /*
  * WARNING WARNING, this ups the reference count on the read bio of the
@@ -775,67 +1128,342 @@ enum BIO_BIND_REUSEADDR = 2;
  * the next_bio field in the bio.  So when you free the BIO, make sure
  * you are doing a BIO_free_all() to catch the underlying BIO.
  */
-//#define BIO_set_ssl(b, ssl, c) .BIO_ctrl(b, .BIO_C_SET_SSL, c, cast(char*)(ssl))
-//#define BIO_get_ssl(b, sslp) .BIO_ctrl(b, .BIO_C_GET_SSL, 0, cast(char*)(sslp))
-//#define BIO_set_ssl_mode(b, client) .BIO_ctrl(b, .BIO_C_SSL_MODE, client, null)
-//#define BIO_set_ssl_renegotiate_bytes(b, num) .BIO_ctrl(b, .BIO_C_SET_SSL_RENEGOTIATE_BYTES, num, null)
-//#define BIO_get_num_renegotiates(b) .BIO_ctrl(b, .BIO_C_GET_SSL_NUM_RENEGOTIATES, 0, null)
-//#define BIO_set_ssl_renegotiate_timeout(b, seconds) .BIO_ctrl(b, .BIO_C_SET_SSL_RENEGOTIATE_TIMEOUT, seconds, null)
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_ssl(.BIO* b, char* ssl, core.stdc.config.c_long c)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_SSL, c, ssl);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_ssl(.BIO* b, char* sslp)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_SSL, 0, sslp);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_ssl_mode(.BIO* b, core.stdc.config.c_long client)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SSL_MODE, client, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_ssl_renegotiate_bytes(.BIO* b, core.stdc.config.c_long num)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_SSL_RENEGOTIATE_BYTES, num, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_num_renegotiates(.BIO* b)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_SSL_NUM_RENEGOTIATES, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_ssl_renegotiate_timeout(.BIO* b, core.stdc.config.c_long seconds)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_SSL_RENEGOTIATE_TIMEOUT, seconds, null);
+	}
 
 /* defined in evp.h */
-/* #define BIO_set_md(b,md)	.BIO_ctrl(b,.BIO_C_SET_MD,1,(char *)md) */
+/*
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_md(.BIO* b, char* md)
 
-//#define BIO_get_mem_data(b, pp) .BIO_ctrl(b, .BIO_CTRL_INFO, 0, cast(char*)(pp))
-//#define BIO_set_mem_buf(b, bm, c) .BIO_ctrl(b, .BIO_C_SET_BUF_MEM, c, cast(char*)(bm))
-//#define BIO_get_mem_ptr(b, pp) .BIO_ctrl(b, .BIO_C_GET_BUF_MEM_PTR, 0, cast(char*)(pp))
-//#define BIO_set_mem_eof_return(b, v) .BIO_ctrl(b, .BIO_C_SET_BUF_MEM_EOF_RETURN, v, null)
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_MD, 1, md);
+	}
+*/
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_mem_data(.BIO* b, char* pp)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_CTRL_INFO, 0, pp);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_mem_buf(.BIO* b, char* bm, core.stdc.config.c_long c)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_BUF_MEM, c, bm);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_mem_ptr(.BIO* b, char* pp)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_BUF_MEM_PTR, 0, pp);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_mem_eof_return(.BIO* b, core.stdc.config.c_long v)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_BUF_MEM_EOF_RETURN, v, null);
+	}
 
 /* For the BIO_f_buffer() type */
-//#define BIO_get_buffer_num_lines(b) .BIO_ctrl(b, .BIO_C_GET_BUFF_NUM_LINES, 0, null)
-//#define BIO_set_buffer_size(b, size) .BIO_ctrl(b, .BIO_C_SET_BUFF_SIZE, size, null)
-//#define BIO_set_read_buffer_size(b, size) .BIO_int_ctrl(b, .BIO_C_SET_BUFF_SIZE, size, 0)
-//#define BIO_set_write_buffer_size(b, size) .BIO_int_ctrl(b, .BIO_C_SET_BUFF_SIZE, size, 1)
-//#define BIO_set_buffer_read_data(b, buf, num) .BIO_ctrl(b, .BIO_C_SET_BUFF_READ_DATA, num, buf)
+pragma(inline, true)
+core.stdc.config.c_long BIO_get_buffer_num_lines(.BIO* b)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_GET_BUFF_NUM_LINES, 0, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_buffer_size(.BIO* b, core.stdc.config.c_long size)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_BUFF_SIZE, size, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_read_buffer_size(.BIO* b, core.stdc.config.c_long size)
+
+	do
+	{
+		return .BIO_int_ctrl(b, .BIO_C_SET_BUFF_SIZE, size, 0);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_write_buffer_size(.BIO* b, core.stdc.config.c_long size)
+
+	do
+	{
+		return .BIO_int_ctrl(b, .BIO_C_SET_BUFF_SIZE, size, 1);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long BIO_set_buffer_read_data(.BIO* b, void* buf, core.stdc.config.c_long num)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_C_SET_BUFF_READ_DATA, num, buf);
+	}
 
 /* Don't use the next one unless you know what you are doing :-) */
-//#define BIO_dup_state(b, ret) .BIO_ctrl(b, .BIO_CTRL_DUP, 0, cast(char*)(ret))
+pragma(inline, true)
+core.stdc.config.c_long BIO_dup_state(.BIO* b, char* ret)
 
-//#define BIO_reset(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_RESET, 0, null))
-//#define BIO_eof(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_EOF, 0, null))
-//#define BIO_set_close(b, c) cast(int)(.BIO_ctrl(b, .BIO_CTRL_SET_CLOSE, c, null))
-//#define BIO_get_close(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_GET_CLOSE, 0, null))
-//#define BIO_pending(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_PENDING, 0, null))
-//#define BIO_wpending(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_WPENDING, 0, null))
+	do
+	{
+		return .BIO_ctrl(b, .BIO_CTRL_DUP, 0, ret);
+	}
+
+pragma(inline, true)
+int BIO_reset(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_RESET, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_eof(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_EOF, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_set_close(.BIO* b, core.stdc.config.c_long c)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_SET_CLOSE, c, null));
+	}
+
+pragma(inline, true)
+int BIO_get_close(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_GET_CLOSE, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_pending(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_PENDING, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_wpending(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_WPENDING, 0, null));
+	}
+
 /* ...pending macros have inappropriate return type */
 size_t BIO_ctrl_pending(.BIO* b);
 size_t BIO_ctrl_wpending(.BIO* b);
-//#define BIO_flush(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_FLUSH, 0, null))
-//#define BIO_get_info_callback(b, cbp) cast(int)(.BIO_ctrl(b, .BIO_CTRL_GET_CALLBACK, 0, cbp))
-//#define BIO_set_info_callback(b, cb) cast(int)(.BIO_callback_ctrl(b, .BIO_CTRL_SET_CALLBACK, cb))
+
+pragma(inline, true)
+int BIO_flush(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_FLUSH, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_get_info_callback(.BIO* b, void* cbp)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_GET_CALLBACK, 0, cbp));
+	}
+
+pragma(inline, true)
+int BIO_set_info_callback(.BIO* b, void function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long) cb)
+
+	do
+	{
+		return cast(int)(.BIO_callback_ctrl(b, .BIO_CTRL_SET_CALLBACK, cb));
+	}
 
 /* For the BIO_f_buffer() type */
-//#define BIO_buffer_get_num_lines(b) .BIO_ctrl(b, .BIO_CTRL_GET, 0, null)
+pragma(inline, true)
+core.stdc.config.c_long BIO_buffer_get_num_lines(.BIO* b)
+
+	do
+	{
+		return .BIO_ctrl(b, .BIO_CTRL_GET, 0, null);
+	}
 
 /* For BIO_s_bio() */
-//#define BIO_set_write_buf_size(b, size) cast(int)(.BIO_ctrl(b, .BIO_C_SET_WRITE_BUF_SIZE, size, null))
-//#define BIO_get_write_buf_size(b, size) cast(size_t)(.BIO_ctrl(b, .BIO_C_GET_WRITE_BUF_SIZE, size, null))
-//#define BIO_make_bio_pair(b1, b2) cast(int)(.BIO_ctrl(b1, .BIO_C_MAKE_BIO_PAIR, 0, b2))
-//#define BIO_destroy_bio_pair(b) cast(int)(.BIO_ctrl(b, .BIO_C_DESTROY_BIO_PAIR, 0, null))
-//#define BIO_shutdown_wr(b) cast(int)(.BIO_ctrl(b, .BIO_C_SHUTDOWN_WR, 0, null))
+pragma(inline, true)
+int BIO_set_write_buf_size(.BIO* b, core.stdc.config.c_long size)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_C_SET_WRITE_BUF_SIZE, size, null));
+	}
+
+pragma(inline, true)
+size_t BIO_get_write_buf_size(.BIO* b, core.stdc.config.c_long size)
+
+	do
+	{
+		return cast(size_t)(.BIO_ctrl(b, .BIO_C_GET_WRITE_BUF_SIZE, size, null));
+	}
+
+pragma(inline, true)
+int BIO_make_bio_pair(.BIO* b1, void* b2)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b1, .BIO_C_MAKE_BIO_PAIR, 0, b2));
+	}
+
+pragma(inline, true)
+int BIO_destroy_bio_pair(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_C_DESTROY_BIO_PAIR, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_shutdown_wr(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_C_SHUTDOWN_WR, 0, null));
+	}
+
 /* macros with inappropriate type -- but ...pending macros use int too: */
-//#define BIO_get_write_guarantee(b) cast(int)(.BIO_ctrl(b, .BIO_C_GET_WRITE_GUARANTEE, 0, null))
-//#define BIO_get_read_request(b) cast(int)(.BIO_ctrl(b, .BIO_C_GET_READ_REQUEST, 0, null))
+pragma(inline, true)
+int BIO_get_write_guarantee(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_C_GET_WRITE_GUARANTEE, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_get_read_request(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_C_GET_READ_REQUEST, 0, null));
+	}
+
 size_t BIO_ctrl_get_write_guarantee(.BIO* b);
 size_t BIO_ctrl_get_read_request(.BIO* b);
 int BIO_ctrl_reset_read_request(.BIO* b);
 
 /* ctrl macros for dgram */
-//#define BIO_ctrl_dgram_connect(b, peer) cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_CONNECT, 0, cast(char*)(peer)))
-//#define BIO_ctrl_set_connected(b, state, peer) cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_SET_CONNECTED, state, cast(char*)(peer)))
-//#define BIO_dgram_recv_timedout(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_GET_RECV_TIMER_EXP, 0, null))
-//#define BIO_dgram_send_timedout(b) cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_GET_SEND_TIMER_EXP, 0, null))
-//#define BIO_dgram_get_peer(b, peer) cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_GET_PEER, 0, cast(char*)(peer)))
-//#define BIO_dgram_set_peer(b, peer) cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_SET_PEER, 0, cast(char*)(peer)))
+pragma(inline, true)
+int BIO_ctrl_dgram_connect(.BIO* b, char* peer)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_CONNECT, 0, peer));
+	}
+
+pragma(inline, true)
+int BIO_ctrl_set_connected(.BIO* b, core.stdc.config.c_long state, char* peer)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_SET_CONNECTED, state, peer));
+	}
+
+pragma(inline, true)
+int BIO_dgram_recv_timedout(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_GET_RECV_TIMER_EXP, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_dgram_send_timedout(.BIO* b)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_GET_SEND_TIMER_EXP, 0, null));
+	}
+
+pragma(inline, true)
+int BIO_dgram_get_peer(.BIO* b, char* peer)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_GET_PEER, 0, peer));
+	}
+
+pragma(inline, true)
+int BIO_dgram_set_peer(.BIO* b, char* peer)
+
+	do
+	{
+		return cast(int)(.BIO_ctrl(b, .BIO_CTRL_DGRAM_SET_PEER, 0, peer));
+	}
 
 /* These two aren't currently implemented */
 /* int BIO_get_ex_num(.BIO* io); */

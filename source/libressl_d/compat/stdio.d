@@ -32,10 +32,10 @@ version (Windows) {
 	//int posix_rename(const (char)* oldpath, const (char)* newpath);
 
 	//#if !defined(NO_REDEF_POSIX_FUNCTIONS)
-		//#define perror(errnum) posix_perror(errnum)
-		//#define fopen(path, mode) posix_fopen(path, mode)
-		//#define fgets(s, size, stream) posix_fgets(s, size, stream)
-		//#define rename(oldpath, newpath) posix_rename(oldpath, newpath)
+		//alias perror = posix_perror;
+		//alias fopen = posix_fopen;
+		//alias fgets = posix_fgets;
+		//alias rename = posix_rename;
 	//#endif
 
 	version (Windows) {

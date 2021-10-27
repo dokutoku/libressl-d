@@ -9,12 +9,12 @@ module libressl_d.compat.sys._null;
 
 //#ifndef NULL
 	//#if !defined(__cplusplus)
-		//#define NULL ((void*) 0)
+		//enum NULL = cast(void*)(0);
 	//#elif __cplusplus >= 201103L
-		//#define NULL nullptr
+		//enum NULL nullptr;
 	//#elif defined(__GNUG__)
-		//#define NULL __null
+		//enum NULL = __null;
 	//#else
-		//#define NULL 0L
+		//enum NULL = 0L;
 	//#endif
 //#endif

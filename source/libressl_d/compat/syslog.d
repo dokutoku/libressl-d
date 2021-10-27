@@ -34,7 +34,22 @@ public import core.sys.posix.syslog;
 		int log_mask;
 	}
 
-	//#define SYSLOG_DATA_INIT { 0, cast(const (char)*)(0), .LOG_USER, 0xFF }
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	.syslog_data SYSLOG_DATA_INIT()
+
+		do
+		{
+			.syslog_data output =
+			{
+				0,
+				cast(const (char)*)(0),
+				.LOG_USER,
+				0xFF,
+			};
+
+			return output;
+		}
 
 	//void syslog_r(int, .syslog_data*, const (char)*, ...);
 	//void vsyslog_r(int, .syslog_data*, const (char)*, core.stdc.stdarg.va_list);

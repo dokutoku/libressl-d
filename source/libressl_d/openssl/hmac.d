@@ -87,7 +87,18 @@ struct hmac_ctx_st
 
 alias HMAC_CTX = .hmac_ctx_st;
 
-//#define HMAC_size(e) (libressl_d.openssl.evp.EVP_MD_size(e.md))
+pragma(inline, true)
+int HMAC_size(E)(E* e)
+
+	in
+	{
+		assert(e != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_MD_size(e.md);
+	}
 
 .HMAC_CTX* HMAC_CTX_new();
 void HMAC_CTX_free(.HMAC_CTX* ctx);

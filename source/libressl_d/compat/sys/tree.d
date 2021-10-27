@@ -59,13 +59,39 @@ nothrow @nogc:
  * The maximum height of a red-black tree is 2lg (n+1).
  */
 
-//#define SPLAY_HEAD(name, type) struct name { struct type* sph_root; /* root of the tree */ }
+template SPLAY_HEAD(string name, string type)
+{
+	enum SPLAY_HEAD = "struct " ~ name ~ " { " ~ type ~ "* sph_root; /* root of the tree */ }";
+}
 
-//#define SPLAY_INITIALIZER(root) { NULL }
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+ROOT SPLAY_INITIALIZER(ROOT)(scope const ROOT* root)
+	if (is(ROOT == struct))
 
-//#define SPLAY_INIT(root) do { (root)->sph_root = NULL; } while (0)
+	do
+	{
+		return ROOT.init;
+	}
 
-//#define SPLAY_ENTRY(type) struct { struct type* spe_left; /* left element */ struct type* spe_right; /* right element */ }
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void SPLAY_INIT(ROOT)(scope ROOT* root)
+
+	in
+	{
+		assert(root != null);
+	}
+
+	do
+	{
+		root.sph_root = null;
+	}
+
+template SPLAY_ENTRY(string type)
+{
+	enum SPLAY_ENTRY = "struct { " ~ type ~ "* spe_left; /* left element */ " ~ type ~ "* spe_right; /* right element */ }";
+}
 
 //#define SPLAY_LEFT(elm, field) (elm)->field.spe_left
 //#define SPLAY_RIGHT(elm, field) (elm)->field.spe_right
@@ -105,15 +131,42 @@ enum SPLAY_INF = 1;
 //#define SPLAY_FOREACH(x, name, head) for ((x) = SPLAY_MIN(name, head); (x) != NULL; (x) = SPLAY_NEXT(name, head, x))
 
 /* Macros that define a red-black tree */
-//#define RB_HEAD(name, type) struct name { struct type* rbh_root; /* root of the tree */ }
+template RB_HEAD(string name, string type)
+{
+	enum RB_HEAD = "struct " ~ name ~ " { " ~ type ~ "* rbh_root; /* root of the tree */ }";
+}
 
-//#define RB_INITIALIZER(root) { NULL }
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+ROOT RB_INITIALIZER(ROOT)(scope const ROOT* root)
+	if (is(ROOT == struct))
 
-//#define RB_INIT(root) do { (root)->rbh_root = NULL; } while (0)
+	do
+	{
+		return ROOT.init;
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void RB_INIT(ROOT)(scope ROOT* root)
+
+	in
+	{
+		assert(root != null);
+	}
+
+	do
+	{
+		root.rbh_root = null;
+	}
 
 enum RB_BLACK = 0;
 enum RB_RED = 1;
-//#define RB_ENTRY(type) struct { struct type* rbe_left; /* left element */ struct type* rbe_right; /* right element */ struct type* rbe_parent; /* parent element */ int rbe_color; /* node color */ }
+
+template RB_ENTRY(string type)
+{
+	enum RB_ENTRY = "struct { " ~ type ~ "* rbe_left; /* left element */ " ~ type ~ "* rbe_right; /* right element */ " ~ type ~ "* rbe_parent; /* parent element */ int rbe_color; /* node color */ }";
+}
 
 //#define RB_LEFT(elm, field) (elm)->field.rbe_left
 //#define RB_RIGHT(elm, field) (elm)->field.rbe_right
@@ -206,7 +259,10 @@ struct rb_entry
 	uint rbt_color;
 }
 
-//#define RBT_HEAD(_name, _type) struct _name { struct rb_tree rbh_root; }
+template RBT_HEAD(string _name, string _type)
+{
+	enum RBT_HEAD = "struct " ~ _name ~ " { libressl_d.compat.sys.tree.rb_tree rbh_root; }";
+}
 
 //#define RBT_ENTRY(_type) struct rb_entry
 
@@ -256,7 +312,15 @@ void _rb_set_parent(const (.rb_type)*, void*, void*);
 void _rb_poison(const (.rb_type)*, void*, core.stdc.config.c_ulong);
 int _rb_check(const (.rb_type)*, void*, core.stdc.config.c_ulong);
 
-//#define RBT_INITIALIZER(_head) { { NULL } }
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+_HEAD RBT_INITIALIZER(_HEAD)(scope const _HAED* _head)
+	if (is(_HAED == struct))
+
+	do
+	{
+		return _HAED.init;
+	}
 
 //#define RBT_PROTOTYPE(_name, _type, _field, _cmp) extern const struct rb_type* const _name##_RBT_TYPE; __unused static inline void _name##_RBT_INIT(struct _name* head) { _rb_init(&head->rbh_root); } __unused static inline struct _type* _name##_RBT_INSERT(struct _name* head, struct _type* elm) { return _rb_insert(_name##_RBT_TYPE, &head->rbh_root, elm); } __unused static inline struct _type* _name##_RBT_REMOVE(struct _name* head, struct _type* elm) { return _rb_remove(_name##_RBT_TYPE, &head->rbh_root, elm); } __unused static inline struct _type* _name##_RBT_FIND(struct _name* head, const struct _type* key) { return _rb_find(_name##_RBT_TYPE, &head->rbh_root, key); } __unused static inline struct _type* _name##_RBT_NFIND(struct _name* head, const struct _type* key) { return _rb_nfind(_name##_RBT_TYPE, &head->rbh_root, key); } __unused static inline struct _type* _name##_RBT_ROOT(struct _name* head) { return _rb_root(_name##_RBT_TYPE, &head->rbh_root); } __unused static inline int _name##_RBT_EMPTY(struct _name* head) { return _rb_empty(&head->rbh_root); } __unused static inline struct _type* _name##_RBT_MIN(struct _name* head) { return _rb_min(_name##_RBT_TYPE, &head->rbh_root); } __unused static inline struct _type* _name##_RBT_MAX(struct _name* head) { return _rb_max(_name##_RBT_TYPE, &head->rbh_root); } __unused static inline struct _type* _name##_RBT_NEXT(struct _type* elm) { return _rb_next(_name##_RBT_TYPE, elm); } __unused static inline struct _type* _name##_RBT_PREV(struct _type* elm) { return _rb_prev(_name##_RBT_TYPE, elm); } __unused static inline struct _type* _name##_RBT_LEFT(struct _type* elm) { return _rb_left(_name##_RBT_TYPE, elm); } __unused static inline struct _type* _name##_RBT_RIGHT(struct _type* elm) { return _rb_right(_name##_RBT_TYPE, elm); } __unused static inline struct _type* _name##_RBT_PARENT(struct _type* elm) { return _rb_parent(_name##_RBT_TYPE, elm); } __unused static inline void _name##_RBT_SET_LEFT(struct _type* elm, struct _type* left) { return _rb_set_left(_name##_RBT_TYPE, elm, left); } __unused static inline void _name##_RBT_SET_RIGHT(struct _type* elm, struct _type* right) { return _rb_set_right(_name##_RBT_TYPE, elm, right); } __unused static inline void _name##_RBT_SET_PARENT(struct _type* elm, struct _type* parent) { return _rb_set_parent(_name##_RBT_TYPE, elm, parent); } __unused static inline void _name##_RBT_POISON(struct _type* elm, unsigned long poison) { return _rb_poison(_name##_RBT_TYPE, elm, poison); } __unused static inline int _name##_RBT_CHECK(struct _type* elm, unsigned long poison) { return _rb_check(_name##_RBT_TYPE, elm, poison); }
 

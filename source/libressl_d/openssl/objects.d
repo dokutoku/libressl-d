@@ -989,7 +989,7 @@ struct obj_name_st
 
 alias OBJ_NAME = .obj_name_st;
 
-//#define OBJ_create_and_add_object(a, b, c) .OBJ_create(a, b, c)
+alias OBJ_create_and_add_object = .OBJ_create;
 
 int OBJ_NAME_init();
 int OBJ_NAME_new_index(core.stdc.config.c_ulong function(const (char)*) hash_func, int function(const (char)*, const (char)*) cmp_func, void function(const (char)*, int, const (char)*) free_func);

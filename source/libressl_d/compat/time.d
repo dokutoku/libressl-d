@@ -10,7 +10,7 @@ public import libressl_d.compat.sys.time;
 
 //#if defined(_WIN32)
 	//core.stdc.time.tm* __gmtime_r(const (core.stdc.time.time_t)* t, core.stdc.time.tm* core.stdc.time.tm);
-	//#define gmtime_r(tp, core.stdc.time.tm) .__gmtime_r(tp, core.stdc.time.tm)
+	//alias gmtime_r = .__gmtime_r;
 //#endif
 
 //#if !defined(HAVE_TIMEGM)

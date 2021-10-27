@@ -130,12 +130,13 @@ struct X509V3_CONF_METHOD_st
 
 alias X509V3_CONF_METHOD = .X509V3_CONF_METHOD_st;
 
+enum CTX_TEST = 0x01;
+
 /**
  * Context specific info
  */
 struct v3_ext_ctx
 {
-	enum CTX_TEST = 0x01;
 	int flags;
 	libressl_d.openssl.ossl_typ.X509* issuer_cert;
 	libressl_d.openssl.ossl_typ.X509* subject_cert;
@@ -541,10 +542,35 @@ enum IDP_INDIRECT = 0x20;
  */
 enum IDP_REASONS = 0x40;
 
-//#define X509V3_conf_err(val) libressl_d.openssl.err.ERR_asprintf_error_data("section:%s,name:%s,value:%s", val.section, val.name, val.value);
+pragma(inline, true)
+void X509V3_conf_err(libressl_d.openssl.conf.CONF_VALUE* val)
 
-//#define X509V3_set_ctx_test(ctx) X509V3_set_ctx(ctx, null, null, null, null, CTX_TEST)
-//#define X509V3_set_ctx_nodb(ctx) ctx.db = null;
+	do
+	{
+		libressl_d.openssl.err.ERR_asprintf_error_data(cast(char*)(&("section:%s,name:%s,value:%s\0"[0])), val.section, val.name, val.value);
+	}
+
+pragma(inline, true)
+void X509V3_set_ctx_test(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx)
+
+	do
+	{
+		.X509V3_set_ctx(ctx, null, null, null, null, .CTX_TEST);
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void X509V3_set_ctx_nodb(scope libressl_d.openssl.ossl_typ.X509V3_CTX* ctx)
+
+	in
+	{
+		assert(ctx != null);
+	}
+
+	do
+	{
+		ctx.db = null;
+	}
 
 //#define EXT_BITSTRING(nid, table) { nid, 0, &ASN1_BIT_STRING_it, 0, 0, 0, 0, 0, 0, cast(.X509V3_EXT_I2V)(.i2v_ASN1_BIT_STRING), cast(.X509V3_EXT_V2I)(.v2i_ASN1_BIT_STRING), null, null, table }
 

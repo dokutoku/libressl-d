@@ -240,8 +240,22 @@ enum UI_CTRL_PRINT_ERRORS = 1;
 enum UI_CTRL_IS_REDOABLE = 2;
 
 /* Some methods may use extra data */
-//#define UI_set_app_data(s, arg) .UI_set_ex_data(s, 0, arg)
-//#define UI_get_app_data(s) .UI_get_ex_data(s, 0)
+pragma(inline, true)
+int UI_set_app_data(libressl_d.openssl.ossl_typ.UI* s, void* arg)
+
+	do
+	{
+		return .UI_set_ex_data(s, 0, arg);
+	}
+
+pragma(inline, true)
+void* UI_get_app_data(libressl_d.openssl.ossl_typ.UI* s)
+
+	do
+	{
+		return .UI_get_ex_data(s, 0);
+	}
+
 int UI_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
 int UI_set_ex_data(libressl_d.openssl.ossl_typ.UI* r, int idx, void* arg);
 void* UI_get_ex_data(libressl_d.openssl.ossl_typ.UI* r, int idx);

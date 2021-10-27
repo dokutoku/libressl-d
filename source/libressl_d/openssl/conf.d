@@ -178,7 +178,7 @@ int NCONF_get_number_e(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (ch
 int NCONF_dump_fp(const (libressl_d.openssl.ossl_typ.CONF)* conf, libressl_d.compat.stdio.FILE* out_);
 int NCONF_dump_bio(const (libressl_d.openssl.ossl_typ.CONF)* conf, libressl_d.openssl.bio.BIO* out_);
 
-//#define NCONF_get_number(c, g, n, r) .NCONF_get_number_e(c, g, n, r)
+alias NCONF_get_number = .NCONF_get_number_e;
 
 /* Module functions */
 

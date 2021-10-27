@@ -199,16 +199,76 @@ alias M_PKCS12_unpack_p7encdata = .PKCS12_unpack_p7encdata;
 alias M_PKCS12_decrypt_skey = .PKCS12_decrypt_skey;
 alias M_PKCS8_decrypt = .PKCS8_decrypt;
 
-//#define M_PKCS12_bag_type(bg) libressl_d.openssl.objects.OBJ_obj2nid(bg.type)
-//#define M_PKCS12_cert_bag_type(bg) libressl_d.openssl.objects.OBJ_obj2nid(bg.value.bag.type)
-//alias M_PKCS12_crl_bag_type = .M_PKCS12_cert_bag_type;
+pragma(inline, true)
+int M_PKCS12_bag_type(BG)(scope const BG* bg)
+
+	in
+	{
+		assert(bg != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(bg.type);
+	}
+
+pragma(inline, true)
+int M_PKCS12_cert_bag_type(scope const .PKCS12_SAFEBAG* bg)
+
+	in
+	{
+		assert(bg != null);
+		assert(bg.value.bag != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(bg.value.bag.type);
+	}
+
+alias M_PKCS12_crl_bag_type = .M_PKCS12_cert_bag_type;
+
 //#endif /* !LIBRESSL_INTERNAL */
 
-//#define PKCS12_get_attr(bag, attr_nid) .PKCS12_get_attr_gen(bag.attrib, attr_nid)
+pragma(inline, true)
+libressl_d.openssl.asn1.ASN1_TYPE* PKCS12_get_attr(BAG)(BAG* bag, int attr_nid)
 
-//#define PKCS8_get_attr(p8, attr_nid) .PKCS12_get_attr_gen(p8.attributes, attr_nid)
+	in
+	{
+		assert(bag != null);
+	}
 
-//#define PKCS12_mac_present(p12) ((p12.mac) ? (1) : (0))
+	do
+	{
+		return .PKCS12_get_attr_gen(bag.attrib, attr_nid);
+	}
+
+pragma(inline, true)
+libressl_d.openssl.asn1.ASN1_TYPE* PKCS8_get_attr(P8)(P8* p8, int attr_nid)
+
+	in
+	{
+		assert(p8 != null);
+	}
+
+	do
+	{
+		return .PKCS12_get_attr_gen(p8.attributes, attr_nid);
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+int PKCS12_mac_present(scope const .PKCS12* p12)
+
+	in
+	{
+		assert(p12 != null);
+	}
+
+	do
+	{
+		return (p12.mac) ? (1) : (0);
+	}
 
 .PKCS12_SAFEBAG* PKCS12_x5092certbag(libressl_d.openssl.ossl_typ.X509* x509);
 .PKCS12_SAFEBAG* PKCS12_x509crl2certbag(libressl_d.openssl.ossl_typ.X509_CRL* crl);

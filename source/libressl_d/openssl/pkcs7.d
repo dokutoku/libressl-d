@@ -361,23 +361,161 @@ struct stack_st_PKCS7
 enum PKCS7_OP_SET_DETACHED_SIGNATURE = 1;
 enum PKCS7_OP_GET_DETACHED_SIGNATURE = 2;
 
-//#define PKCS7_get_signed_attributes(si) (si.auth_attr)
-//#define PKCS7_get_attributes(si) (si.unauth_attr)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_signed_attributes(return scope .PKCS7_SIGNER_INFO* si)
 
-//#define PKCS7_type_is_signed(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_signed)
-//#define PKCS7_type_is_encrypted(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_encrypted)
-//#define PKCS7_type_is_enveloped(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_enveloped)
-//#define PKCS7_type_is_signedAndEnveloped(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_signedAndEnveloped)
-//#define PKCS7_type_is_data(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_data)
-//#define PKCS7_type_is_digest(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_digest)
-//#define PKCS7_type_is_encrypted(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_encrypted)
+	in
+	{
+		assert(si != null);
+	}
 
-//#define PKCS7_type_is_digest(a) (libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_digest)
+	do
+	{
+		return si.auth_attr;
+	}
 
-//#define PKCS7_set_detached(p, v) .PKCS7_ctrl(p, .PKCS7_OP_SET_DETACHED_SIGNATURE, v, null)
-//#define PKCS7_get_detached(p) .PKCS7_ctrl(p, .PKCS7_OP_GET_DETACHED_SIGNATURE, 0, null)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_attributes(return scope .PKCS7_SIGNER_INFO* si)
 
-//#define PKCS7_is_detached(p7) (.PKCS7_type_is_signed(p7) && .PKCS7_get_detached(p7))
+	in
+	{
+		assert(si != null);
+	}
+
+	do
+	{
+		return si.unauth_attr;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_signed(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_signed;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_encrypted(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_encrypted;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_enveloped(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_enveloped;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_signedAndEnveloped(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_signedAndEnveloped;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_data(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_data;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_digest(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_digest;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_encrypted(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_encrypted;
+	}
+
+pragma(inline, true)
+bool PKCS7_type_is_digest(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_digest;
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long PKCS7_set_detached(.PKCS7* p, core.stdc.config.c_long v)
+
+	do
+	{
+		return .PKCS7_ctrl(p, .PKCS7_OP_SET_DETACHED_SIGNATURE, v, null);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long PKCS7_get_detached(.PKCS7* p)
+
+	do
+	{
+		return .PKCS7_ctrl(p, .PKCS7_OP_GET_DETACHED_SIGNATURE, 0, null);
+	}
+
+pragma(inline, true)
+bool PKCS7_is_detached(P7)(P7 p7)
+
+	do
+	{
+		return (.PKCS7_type_is_signed(p7)) && (.PKCS7_get_detached(p7));
+	}
 
 /* S/MIME related flags */
 

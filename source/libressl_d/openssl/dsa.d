@@ -279,7 +279,13 @@ enum DSS_prime_checks = 50;
  * Primality test according to FIPS PUB 186[-1], Appendix 2.1:
  * 50 rounds of Rabin-Miller
  */
-//#define DSA_is_prime(n, callback, cb_arg) libressl_d.openssl.bn.BN_is_prime(n, .DSS_prime_checks, callback, null, cb_arg)
+pragma(inline, true)
+int DSA_is_prime(const (libressl_d.openssl.ossl_typ.BIGNUM)* n, void function(int, int, void*) callback, void* cb_arg)
+
+	do
+	{
+		return libressl_d.openssl.bn.BN_is_prime(n, .DSS_prime_checks, callback, null, cb_arg);
+	}
 
 //#if !defined(OPENSSL_NO_DH)
 /*
@@ -304,7 +310,13 @@ libressl_d.openssl.ossl_typ.DSA_METHOD* DSA_meth_dup(const (libressl_d.openssl.o
 int DSA_meth_set_sign(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, DSA_SIG* function(const (ubyte)*, int, libressl_d.openssl.ossl_typ.DSA*) sign);
 int DSA_meth_set_finish(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, int function(libressl_d.openssl.ossl_typ.DSA*) finish);
 
-//#define EVP_PKEY_CTX_set_dsa_paramgen_bits(ctx, nbits) libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_DSA, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN, libressl_d.openssl.evp.EVP_PKEY_CTRL_DSA_PARAMGEN_BITS, nbits, null)
+pragma(inline, true)
+int EVP_PKEY_CTX_set_dsa_paramgen_bits(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int nbits)
+
+	do
+	{
+		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_DSA, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN, .EVP_PKEY_CTRL_DSA_PARAMGEN_BITS, nbits, null);
+	}
 
 enum EVP_PKEY_CTRL_DSA_PARAMGEN_BITS = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
 enum EVP_PKEY_CTRL_DSA_PARAMGEN_Q_BITS = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;

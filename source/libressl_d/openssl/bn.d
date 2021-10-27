@@ -252,8 +252,33 @@ enum BN_FLG_EXP_CONSTTIME = .BN_FLG_CONSTTIME;
 enum BN_FLG_FREE = 0x8000;
 //#endif
 
-//#define BN_set_flags(b, n) (b.flags |= n)
-//#define BN_get_flags(b, n) (b.flags & n)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void BN_set_flags(B, N)(scope B* b, N n)
+
+	in
+	{
+		assert(b != null);
+	}
+
+	do
+	{
+		b.flags |= n;
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+auto BN_get_flags(B, N)(scope const B* b, N n)
+
+	in
+	{
+		assert(b != null);
+	}
+
+	do
+	{
+		return b.flags & n;
+	}
 
 /**
  * get a clone of a BIGNUM with changed flags, for *temporary* use only
@@ -403,12 +428,32 @@ int BN_GENCB_call(libressl_d.openssl.ossl_typ.BN_GENCB* cb, int a, int b);
 /*
  * Macro to populate a BN_GENCB structure with an "old"-style callback
  */
-//#define BN_GENCB_set_old(gencb, callback, cb_arg) { libressl_d.openssl.ossl_typ.BN_GENCB* tmp_gencb = gencb; tmp_gencb.ver = 1; tmp_gencb.arg = cb_arg; tmp_gencb.cb.cb_1 = callback; }
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void BN_GENCB_set_old(scope libressl_d.openssl.ossl_typ.BN_GENCB* gencb, void function(int, int, void*) callback, void* cb_arg)
+
+	do
+	{
+		libressl_d.openssl.ossl_typ.BN_GENCB* tmp_gencb = gencb;
+		tmp_gencb.ver = 1;
+		tmp_gencb.arg = cb_arg;
+		tmp_gencb.cb.cb_1 = callback;
+	}
 
 /*
  * Macro to populate a BN_GENCB structure with a "new"-style callback
  */
-//#define BN_GENCB_set(gencb, callback, cb_arg) { libressl_d.openssl.ossl_typ.BN_GENCB* tmp_gencb = gencb; tmp_gencb.ver = 2; tmp_gencb.arg = cb_arg; tmp_gencb.cb.cb_2 = callback; }
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void BN_GENCB_set(scope libressl_d.openssl.ossl_typ.BN_GENCB* gencb, int function(int, int, libressl_d.openssl.ossl_typ.BN_GENCB*) callback, void* cb_arg)
+
+	do
+	{
+		libressl_d.openssl.ossl_typ.BN_GENCB* tmp_gencb = gencb;
+		tmp_gencb.ver = 2;
+		tmp_gencb.arg = cb_arg;
+		tmp_gencb.cb.cb_2 = callback;
+	}
 
 /**
  * default: select number of iterations
@@ -480,38 +525,134 @@ enum BN_prime_checks = 0;
  *  (b) >=    6 |     >=    12 |         34 |         64 bit
  */
 
-//#define BN_prime_checks_for_size(b) ((b >= 3747) ? (3) : (b >= 1345) ? (4) : (b >= 476) ? (5) : (b >= 400) ? (6) : (b >= 347) ? (7) : (b >= 308) ? (8) : (b >= 55) ? (27) : (/* b >= 6 */ 34))
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+int BN_prime_checks_for_size(B)(B b)
+	if (B.max > 3747)
 
-//#define BN_num_bytes(a) ((.BN_num_bits(a) + 7) / 8)
+	do
+	{
+		return (b >= 3747) ? (3) : (b >= 1345) ? (4) : (b >= 476) ? (5) : (b >= 400) ? (6) : (b >= 347) ? (7) : (b >= 308) ? (8) : (b >= 55) ? (27) : (/* b >= 6 */ 34);
+	}
+
+pragma(inline, true)
+int BN_num_bytes(const (libressl_d.openssl.ossl_typ.BIGNUM)* a)
+
+	do
+	{
+		return (.BN_num_bits(a) + 7) / 8;
+	}
 
 /* Note that BN_abs_is_word didn't work reliably for w == 0 until 0.9.8 */
-//#define BN_abs_is_word(a, w) (((a.top == 1) && (a.d[0] == (.BN_ULONG)w)) || ((w == 0) && (a.top == 0)))
-//#define BN_is_zero(a) (a.top == 0)
-//#define BN_is_one(a) ((.BN_abs_is_word(a, 1)) && (!a.neg))
-//#define BN_is_word(a, w) (.BN_abs_is_word(a, w) && ((!w) || (!a.neg)))
-//#define BN_is_odd(a) ((a.top > 0) && (a.d[0] & 1))
-
-//#define BN_one(a) (.BN_set_word(a, 1))
-/+
-//macro
 pragma(inline, true)
-void BN_zero_ex(a)
+pure nothrow @trusted @nogc @live
+bool BN_abs_is_word(A, W)(scope const A* a, W w)
 
 	in
 	{
+		assert(a != null);
 	}
 
 	do
 	{
-		libressl_d.openssl.ossl_typ.BIGNUM* _tmp_bn = a; _tmp_bn.top = 0; _tmp_bn.neg = 0;
+		return ((a.top == 1) && (a.d[0] == cast(.BN_ULONG)(w))) || ((w == 0) && (a.top == 0));
 	}
-+/
 
-//#if defined(OPENSSL_NO_DEPRECATED)
-	//#define BN_zero(a) .BN_zero_ex(a)
-//#else
-	//#define BN_zero(a) (.BN_set_word(a, 0))
-//#endif
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+bool BN_is_zero(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return a.top == 0;
+	}
+
+pragma(inline, true)
+bool BN_is_one(A)(A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return (.BN_abs_is_word(a, 1)) && (!a.neg);
+	}
+
+pragma(inline, true)
+bool BN_is_word(A, W)(A* a, W w)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return (.BN_abs_is_word(a, w)) && ((!w) || (!a.neg));
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+bool BN_is_odd(A)(scope const A* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return (a.top > 0) && (a.d[0] & 1);
+	}
+
+pragma(inline, true)
+int BN_one(libressl_d.openssl.ossl_typ.BIGNUM* a)
+
+	do
+	{
+		return .BN_set_word(a, 1);
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void BN_zero_ex(scope libressl_d.openssl.ossl_typ.BIGNUM* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		libressl_d.openssl.ossl_typ.BIGNUM* _tmp_bn = a;
+		_tmp_bn.top = 0;
+		_tmp_bn.neg = 0;
+	}
+
+version (OPENSSL_NO_DEPRECATED) {
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	void BN_zero(scope libressl_d.openssl.ossl_typ.BIGNUM* a)
+		do
+		{
+			.BN_zero_ex(a);
+		}
+} else {
+	pragma(inline, true)
+	int BN_zero(libressl_d.openssl.ossl_typ.BIGNUM* a)
+
+		do
+		{
+			return .BN_set_word(a, 0);
+		}
+}
 
 const (libressl_d.openssl.ossl_typ.BIGNUM)* BN_value_one();
 char* BN_options();
@@ -559,11 +700,30 @@ void BN_set_negative(libressl_d.openssl.ossl_typ.BIGNUM* b, int n);
  * \param  a  pointer to the BIGNUM object
  * \return 1 if a < 0 and 0 otherwise
  */
-//#define BN_is_negative(a) (a.neg != 0)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+bool BN_is_negative(scope const libressl_d.openssl.ossl_typ.BIGNUM* a)
+
+	in
+	{
+		assert(a != null);
+	}
+
+	do
+	{
+		return a.neg != 0;
+	}
 
 //#if !defined(LIBRESSL_INTERNAL)
 int BN_div(libressl_d.openssl.ossl_typ.BIGNUM* dv, libressl_d.openssl.ossl_typ.BIGNUM* rem, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, const (libressl_d.openssl.ossl_typ.BIGNUM)* d, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-//#define BN_mod(rem, m, d, ctx) .BN_div(null, rem, m, d, ctx)
+
+pragma(inline, true)
+int BN_mod(libressl_d.openssl.ossl_typ.BIGNUM* rem, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, const (libressl_d.openssl.ossl_typ.BIGNUM)* d, libressl_d.openssl.ossl_typ.BN_CTX* ctx)
+
+	do
+	{
+		return .BN_div(null, rem, m, d, ctx);
+	}
 //#endif
 
 int BN_nnmod(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, const (libressl_d.openssl.ossl_typ.BIGNUM)* d, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
@@ -657,7 +817,15 @@ int BN_X931_generate_prime_ex(libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.
 libressl_d.openssl.ossl_typ.BN_MONT_CTX* BN_MONT_CTX_new();
 void BN_MONT_CTX_init(libressl_d.openssl.ossl_typ.BN_MONT_CTX* ctx);
 int BN_mod_mul_montgomery(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_MONT_CTX* mont, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-//#define BN_to_montgomery(r, a, mont, ctx) .BN_mod_mul_montgomery(r, a, &(mont.RR), mont, ctx)
+
+pragma(inline, true)
+int BN_to_montgomery(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, libressl_d.openssl.ossl_typ.BN_MONT_CTX* mont, libressl_d.openssl.ossl_typ.BN_CTX* ctx)
+
+	do
+	{
+		return .BN_mod_mul_montgomery(r, a, &(mont.RR), mont, ctx);
+	}
+
 int BN_from_montgomery(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, libressl_d.openssl.ossl_typ.BN_MONT_CTX* mont, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 void BN_MONT_CTX_free(libressl_d.openssl.ossl_typ.BN_MONT_CTX* mont);
 int BN_MONT_CTX_set(libressl_d.openssl.ossl_typ.BN_MONT_CTX* mont, const (libressl_d.openssl.ossl_typ.BIGNUM)* mod, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
@@ -719,7 +887,7 @@ int BN_div_recp(libressl_d.openssl.ossl_typ.BIGNUM* dv, libressl_d.openssl.ossl_
  */
 int BN_GF2m_add(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b);
 
-//#define BN_GF2m_sub(r, a, b) .BN_GF2m_add(r, a, b)
+alias BN_GF2m_sub = .BN_GF2m_add;
 
 /**
  * r=a mod p
@@ -761,7 +929,8 @@ int BN_GF2m_mod_sqrt(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.op
  */
 int BN_GF2m_mod_solve_quad(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-//#define BN_GF2m_cmp(a, b) .BN_ucmp(a, b)
+alias BN_GF2m_cmp = .BN_ucmp;
+
 /*
  * Some functions allow for representation of the irreducible polynomials
  * as an uint[], say p.  The irreducible f(t) is then of the form:

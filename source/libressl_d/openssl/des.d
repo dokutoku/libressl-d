@@ -105,13 +105,37 @@ enum DES_DECRYPT = 0;
 enum DES_CBC_MODE = 0;
 enum DES_PCBC_MODE = 1;
 
-//#define DES_ecb2_encrypt(i, o, k1, k2, e) .DES_ecb3_encrypt(i, o, k1, k2, k1, e)
+pragma(inline, true)
+void DES_ecb2_encrypt(.const_DES_cblock* i, .DES_cblock* o, .DES_key_schedule* k1, .DES_key_schedule* k2, int e)
 
-//#define DES_ede2_cbc_encrypt(i, o, l, k1, k2, iv, e) .DES_ede3_cbc_encrypt(i, o, l, k1, k2, k1, iv, e)
+	do
+	{
+		.DES_ecb3_encrypt(i, o, k1, k2, k1, e);
+	}
 
-//#define DES_ede2_cfb64_encrypt(i, o, l, k1, k2, iv, n, e) .DES_ede3_cfb64_encrypt(i, o, l, k1, k2, k1, iv, n, e)
+pragma(inline, true)
+void DES_ede2_cbc_encrypt(const (ubyte)* i, ubyte* o, core.stdc.config.c_long l, .DES_key_schedule* k1, .DES_key_schedule* k2, .DES_cblock* iv, int e)
 
-//#define DES_ede2_ofb64_encrypt(i, o, l, k1, k2, iv, n) .DES_ede3_ofb64_encrypt(i, o, l, k1, k2, k1, iv, n)
+	do
+	{
+		.DES_ede3_cbc_encrypt(i, o, l, k1, k2, k1, iv, e);
+	}
+
+pragma(inline, true)
+void DES_ede2_cfb64_encrypt(const (ubyte)* i, ubyte* o, core.stdc.config.c_long l, .DES_key_schedule* k1, .DES_key_schedule* k2, .DES_cblock* iv, int* n, int e)
+
+	do
+	{
+		.DES_ede3_cfb64_encrypt(i, o, l, k1, k2, k1, iv, n, e);
+	}
+
+pragma(inline, true)
+void DES_ede2_ofb64_encrypt(const (ubyte)* i, ubyte* o, core.stdc.config.c_long l, .DES_key_schedule* k1, .DES_key_schedule* k2, .DES_cblock* iv, int* n)
+
+	do
+	{
+		.DES_ede3_ofb64_encrypt(i, o, l, k1, k2, k1, iv, n);
+	}
 
 /**
  * defaults to false

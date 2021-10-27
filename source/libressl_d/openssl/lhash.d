@@ -175,7 +175,19 @@ enum LH_LOAD_MULT = 256;
  * Indicates a malloc() error in the last call, this is only bad
  * in lh_insert().
  */
-//#define lh_error(lh) (lh.error)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+int lh_error(scope const ._LHASH* lh)
+
+	in
+	{
+		assert(lh != null);
+	}
+
+	do
+	{
+		return lh.error;
+	}
 
 ._LHASH* lh_new(.LHASH_HASH_FN_TYPE h, .LHASH_COMP_FN_TYPE c);
 void lh_free(._LHASH* lh);

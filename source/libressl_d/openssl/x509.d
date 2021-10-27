@@ -827,10 +827,10 @@ enum X509_EXT_PACK_UNKNOWN = 1;
 enum X509_EXT_PACK_STRING = 2;
 
 /*****/
-//#define X509_extract_key(x) X509_get_pubkey(x)
+alias X509_extract_key = .X509_get_pubkey;
 
-//#define X509_REQ_extract_key(a) .X509_REQ_get_pubkey(a)
-//#define X509_name_cmp(a, b) .X509_NAME_cmp(a, b)
+alias X509_REQ_extract_key = .X509_REQ_get_pubkey;
+alias X509_name_cmp = .X509_NAME_cmp;
 
 int X509_CRL_up_ref(libressl_d.openssl.ossl_typ.X509_CRL* x);
 int X509_CRL_get_signature_nid(const (libressl_d.openssl.ossl_typ.X509_CRL)* crl);
@@ -860,7 +860,20 @@ void* X509_CRL_get_meth_data(libressl_d.openssl.ossl_typ.X509_CRL* crl);
  * This one is only used so that a binary form can output, as in
  * i2d_X509_NAME(X509_get_X509_PUBKEY(x),&buf)
  */
-//#define X509_get_X509_PUBKEY(x) (x.cert_info.key)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+libressl_d.openssl.ossl_typ.X509_PUBKEY* X509_get_X509_PUBKEY(return scope libressl_d.openssl.ossl_typ.X509* x)
+
+	in
+	{
+		assert(x != null);
+		assert(x.cert_info != null);
+	}
+
+	do
+	{
+		return x.cert_info.key;
+	}
 
 const (char)* X509_verify_cert_error_string(core.stdc.config.c_long n);
 
