@@ -1148,7 +1148,7 @@ const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_streebog512();
 //#endif
 
 /**
- * does nothing :-)
+ * does nothing :-\)
  */
 const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_enc_null();
 

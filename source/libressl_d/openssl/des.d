@@ -176,7 +176,7 @@ void DES_encrypt1(libressl_d.openssl.opensslconf.DES_LONG* data, .DES_key_schedu
  * out.  As for DES_encrypt1(), you should not use this function.
  * It is used by the routines in the library that implement triple DES.
  * IP() DES_encrypt2() DES_encrypt2() DES_encrypt2() FP() is the same
- * as DES_encrypt1() DES_encrypt1() DES_encrypt1() except faster :-).
+ * as DES_encrypt1() DES_encrypt1() DES_encrypt1() except faster :-\).
  */
 void DES_encrypt2(libressl_d.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks, int enc);
 

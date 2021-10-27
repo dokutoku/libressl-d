@@ -172,7 +172,7 @@ enum UI_INPUT_FLAG_USER_BASE = 16;
 /**
  * The following function helps construct a prompt.  object_desc is a
  * textual short description of the object, for example "pass phrase",
- * and object_name is the name of the object (might be a card name or
+ * and object_name is the name of the object \(might be a card name or
  * a file name.
  * The returned string shall always be allocated on the heap with
  * malloc(), and need to be free'd with free().

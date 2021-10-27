@@ -423,7 +423,7 @@ enum ASN1_STRING_FLAG_CONT = 0x0020;
 enum ASN1_STRING_FLAG_MSTRING = 0x0040;
 
 /**
- * This is the base type that holds just about everything :-)
+ * This is the base type that holds just about everything :-\)
  */
 struct asn1_string_st
 {

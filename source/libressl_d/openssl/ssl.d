@@ -919,7 +919,7 @@ package alias ssl_aead_ctx_st = void;
 alias SSL_AEAD_CTX = .ssl_aead_ctx_st;
 
 /**
- * 100k max cert list :-)
+ * 100k max cert list :-\)
  */
 enum SSL_MAX_CERT_LIST_DEFAULT = 1024 * 100;
 

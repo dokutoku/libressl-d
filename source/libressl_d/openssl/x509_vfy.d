@@ -369,7 +369,7 @@ struct x509_lookup_st
 
 /**
  * This is a used when verifying cert chains.  Since the
- * gathering of the cert chain can take some time (and have to be
+ * gathering of the cert chain can take some time \(and have to be
  * 'retried', this needs to be kept and passed around.
  */
 struct x509_store_ctx_st
