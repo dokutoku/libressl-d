@@ -285,7 +285,7 @@ auto BN_get_flags(B, N)(scope const B* b, N n)
  * (the two BIGNUMs cannot not be used in parallel!)
  */
 pragma(inline, true)
-pure nothrow @trusted @nogc
+pure nothrow @trusted @nogc @live
 void BN_with_flags(ref libressl_d.openssl.ossl_typ.BIGNUM dest, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, int n)
 
 	in

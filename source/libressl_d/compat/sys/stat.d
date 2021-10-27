@@ -155,7 +155,7 @@ version (Posix) {
 
 	/* Macros for converting between st_mode and d_type */
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	int IFTODT(int mode)
 
 		do
@@ -172,7 +172,7 @@ version (Posix) {
 	 * on Windows.
 	 */
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	bool S_ISFIFO(int mode)
 
 		out(result)
@@ -186,7 +186,7 @@ version (Posix) {
 		}
 
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	bool S_ISDIR(int mode)
 
 		out(result)
@@ -200,7 +200,7 @@ version (Posix) {
 		}
 
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	bool S_ISREG(int mode)
 
 		out(result)
@@ -214,7 +214,7 @@ version (Posix) {
 		}
 
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	bool S_ISLNK(int mode)
 
 		out(result)
@@ -228,7 +228,7 @@ version (Posix) {
 		}
 
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	bool S_ISSOCK(int mode)
 
 		out(result)
@@ -242,7 +242,7 @@ version (Posix) {
 		}
 
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	bool S_ISCHR(int mode)
 
 		out(result)
@@ -256,7 +256,7 @@ version (Posix) {
 		}
 
 	pragma(inline, true)
-	pure nothrow @safe @nogc
+	pure nothrow @safe @nogc @live
 	bool S_ISBLK(int mode)
 
 		out(result)
