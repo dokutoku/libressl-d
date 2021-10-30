@@ -13,6 +13,9 @@ public import core.sys.windows.windows;
 
 package(libressl_d):
 
+extern (C):
+nothrow @nogc:
+
 version (Windows) {
 	private static import core.stdc.errno;
 	public import core.stdc.stdlib;

@@ -76,6 +76,9 @@ private static import libressl_d.openssl.x509_vfy;
 private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.stack;
 
+extern (C):
+nothrow @nogc:
+
 version (CHECKED_PTR_OF) {
 } else {
 	pragma(inline, true)

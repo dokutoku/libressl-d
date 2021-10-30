@@ -8,6 +8,9 @@ module libressl_d.compat.time;
 public import core.stdc.time;
 public import libressl_d.compat.sys.time;
 
+extern (C):
+nothrow @nogc:
+
 //#if defined(_WIN32)
 	//core.stdc.time.tm* __gmtime_r(const (core.stdc.time.time_t)* t, core.stdc.time.tm* core.stdc.time.tm);
 	//alias gmtime_r = .__gmtime_r;

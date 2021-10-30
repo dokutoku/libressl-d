@@ -9,6 +9,9 @@ public import core.stdc.stdint;
 public import core.sys.posix.sys.types;
 public import core.sys.windows.basetsd;
 
+extern (C):
+nothrow @nogc:
+
 version (Windows) {
 	//#if _MSC_VER >= 1900
 		//#include <../ucrt/sys/types.h>

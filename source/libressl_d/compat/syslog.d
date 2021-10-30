@@ -8,6 +8,9 @@ module libressl_d.compat.syslog;
 private static import core.stdc.stdarg;
 public import core.sys.posix.syslog;
 
+extern (C):
+nothrow @nogc:
+
 //#if !defined(HAVE_SYSLOG_R)
 	version (Windows) {
 		/**

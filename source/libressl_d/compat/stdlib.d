@@ -11,6 +11,9 @@ public import core.stdc.stdlib;
 public import core.sys.posix.stdlib;
 public import libressl_d.compat.sys.types;
 
+extern (C):
+nothrow @nogc:
+
 //#if !defined(HAVE_ARC4RANDOM_BUF)
 	//core.stdc.stdint.uint32_t arc4random();
 	//void arc4random_buf(void* _buf, size_t n);

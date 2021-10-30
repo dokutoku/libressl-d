@@ -8,6 +8,9 @@ module libressl_d.compat.sys.socket;
 public import core.sys.posix.sys.socket;
 public import libressl_d.compat.win32netcompat;
 
+extern (C):
+nothrow @nogc:
+
 version (Posix) {
 } else {
 	/**

@@ -10,6 +10,9 @@ public import core.sys.posix.sys.stat;
 public import core.sys.windows.stat;
 public import core.sys.windows.windows;
 
+extern (C):
+nothrow @nogc:
+
 version (Posix) {
 	/* for old MinGW */
 	//enum S_IRWXU = 0;

@@ -15,6 +15,9 @@ version (Windows) {
 	//#include_next <resolv.h>
 }
 
+extern (C):
+nothrow @nogc:
+
 //#if !defined(HAVE_B64_NTOP)
 	//int b64_ntop(ubyte const*, size_t, char*, size_t);
 	//int b64_pton(char const*, ubyte*, size_t);

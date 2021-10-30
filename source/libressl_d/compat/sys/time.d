@@ -8,6 +8,9 @@ module libressl_d.compat.sys.time;
 public import core.sys.posix.sys.time;
 public import core.sys.windows.winsock2;
 
+extern (C):
+nothrow @nogc:
+
 version (Windows) {
 	//extern (C)
 	//nothrow @nogc

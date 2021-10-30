@@ -17,6 +17,9 @@ private static import core.stdc.config;
 public import core.sys.posix.poll;
 public import core.sys.windows.winsock2;
 
+extern (C):
+nothrow @nogc:
+
 version (Windows) {
 	/*
 	 * Type used for the number of file descriptors.

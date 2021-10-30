@@ -36,6 +36,9 @@ module libressl_d.compat.sys.queue;
 
 //#include <sys/_null.h>
 
+extern (C):
+nothrow @nogc:
+
 /*
  * This file defines five types of data structures: singly-linked lists,
  * lists, simple queues, tail queues and XOR simple queues.

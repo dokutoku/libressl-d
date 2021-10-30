@@ -9,6 +9,9 @@ private static import core.sys.windows.winbase;
 private static import libressl_d.compat.sys.types;
 public import core.sys.posix.unistd;
 
+extern (C):
+nothrow @nogc:
+
 version (Posix) {
 	//#if defined(__MINGW32__)
 		//int ftruncate(int fd, off_t length_);

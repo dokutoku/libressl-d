@@ -15,6 +15,9 @@ public import libressl_d.compat.unistd;
 
 version (Windows):
 
+extern (C):
+nothrow @nogc:
+
 /+
 #if !defined(SHUT_RDWR)
 	alias SHUT_RDWR = SD_BOTH;

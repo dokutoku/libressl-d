@@ -16,6 +16,9 @@ version (Windows) {
 	//#endif
 }
 
+extern (C):
+nothrow @nogc:
+
 //#if !defined(HAVE_ASPRINTF)
 	//int vasprintf(char** str, const (char)* fmt, core.stdc.stdarg.va_list ap);
 	//int asprintf(char** str, const (char)* fmt, ...);
