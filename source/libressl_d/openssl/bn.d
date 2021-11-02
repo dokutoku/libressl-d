@@ -290,7 +290,7 @@ void BN_with_flags(scope libressl_d.openssl.ossl_typ.BIGNUM* dest, const (libres
 
 	in
 	{
-		assert(dest != null):
+		assert(dest != null);
 		assert(b != null);
 	}
 
