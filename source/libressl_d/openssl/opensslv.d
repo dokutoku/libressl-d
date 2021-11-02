@@ -5,12 +5,12 @@
 module libressl_d.openssl.opensslv;
 
 
-enum LIBRESSL_VERSION_NUMBER = 0x3030300FL;
+enum LIBRESSL_VERSION_NUMBER = 0x3030500FL;
 
 /**
  * ^ Patch starts here
  */
-enum LIBRESSL_VERSION_TEXT = "LibreSSL 3.3.3";
+enum LIBRESSL_VERSION_TEXT = "LibreSSL 3.3.5";
 
 /* These will never change */
 enum OPENSSL_VERSION_NUMBER = 0x20000000L;
