@@ -367,7 +367,7 @@ version (LIBRESSL_INTERNAL) {
 	 */
 	int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 	//#endif
-//#endif
+}
 
 /**
  * Returns the number of bits needed to represent a field element
