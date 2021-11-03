@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl.h,v 1.186 2021/03/31 16:59:32 tb Exp $ */
+/* $OpenBSD: ssl.h,v 1.209 2021/09/14 23:07:18 inoguchi Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -437,7 +437,16 @@ enum SSL_FILETYPE_PEM = libressl_d.openssl.x509.X509_FILETYPE_PEM;
  */
 alias ssl_crock_st = .ssl_st*;
 
-alias TLS_SESSION_TICKET_EXT = libressl_d.openssl.tls1.tls_session_ticket_ext_st;
+version (LIBRESSL_INTERNAL) {
+	alias TLS_SESSION_TICKET_EXT = libressl_d.openssl.tls1.tls_session_ticket_ext_st;
+}
+
+version (all) {
+	struct ssl_method_st;
+	struct ssl_cipher_st;
+	struct ssl_session_st;
+}
+
 alias SSL_METHOD = .ssl_method_st;
 alias SSL_CIPHER = .ssl_cipher_st;
 alias SSL_SESSION = .ssl_session_st;
@@ -467,190 +476,6 @@ struct stack_st_SRTP_PROTECTION_PROFILE
 
 alias tls_session_ticket_ext_cb_fn = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* s, const (ubyte)* data, int len, void* arg);
 alias tls_session_secret_cb_fn = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* s, void* secret, int* secret_len, .stack_st_SSL_CIPHER * peer_ciphers, .SSL_CIPHER** cipher, void* arg);
-
-//#if !defined(OPENSSL_NO_SSL_INTERN)
-/**
- * used to hold info on the particular ciphers used
- */
-struct ssl_cipher_st
-{
-	int valid;
-
-	/**
-	 * text name
-	 */
-	const (char)* name;
-
-	/**
-	 * id, 4 bytes, first is version
-	 */
-	core.stdc.config.c_ulong id;
-
-	/**
-	 * key exchange algorithm
-	 */
-	core.stdc.config.c_ulong algorithm_mkey;
-
-	/**
-	 * server authentication
-	 */
-	core.stdc.config.c_ulong algorithm_auth;
-
-	/**
-	 * symmetric encryption
-	 */
-	core.stdc.config.c_ulong algorithm_enc;
-
-	/**
-	 * symmetric authentication
-	 */
-	core.stdc.config.c_ulong algorithm_mac;
-
-	/**
-	 * (major) protocol version
-	 */
-	core.stdc.config.c_ulong algorithm_ssl;
-
-	/**
-	 * strength and export flags
-	 */
-	core.stdc.config.c_ulong algo_strength;
-
-	/**
-	 * Extra flags
-	 */
-	core.stdc.config.c_ulong algorithm2;
-
-	/**
-	 * Number of bits really used
-	 */
-	int strength_bits;
-
-	/**
-	 * Number of bits for algorithm
-	 */
-	int alg_bits;
-}
-
-/* Used to hold functions for SSLv3/TLSv1 functions */
-//struct ssl_method_internal_st;
-package alias ssl_method_internal_st = void;
-
-struct ssl_method_st
-{
-	int function(libressl_d.openssl.ossl_typ.SSL* s) ssl_dispatch_alert;
-	int function() num_ciphers;
-	const (.SSL_CIPHER)* function(uint ncipher) get_cipher;
-	const (.SSL_CIPHER)* function(const (ubyte)* ptr_) get_cipher_by_char;
-	int function(const (.SSL_CIPHER)* cipher, ubyte* ptr_) put_cipher_by_char;
-
-	const (.ssl_method_internal_st)* internal;
-}
-
-/*
- * Lets make this into an ASN.1 type structure as follows
- * SSL_SESSION_ID ::= SEQUENCE {
- *     version 		INTEGER,	-- structure version number
- *     SSLversion 		INTEGER,	-- SSL version number
- *     Cipher 			OCTET STRING,	-- the 3 byte cipher ID
- *     Session_ID 		OCTET STRING,	-- the Session ID
- *     Master_key 		OCTET STRING,	-- the master key
- *     KRB5_principal		OCTET STRING	-- optional Kerberos principal
- *     Time [ 1 ] EXPLICIT	INTEGER,	-- optional Start Time
- *     Timeout [ 2 ] EXPLICIT	INTEGER,	-- optional Timeout ins seconds
- *     Peer [ 3 ] EXPLICIT	X509,		-- optional Peer Certificate
- *     Session_ID_context [ 4 ] EXPLICIT OCTET STRING,   -- the Session ID context
- *     Verify_result [ 5 ] EXPLICIT INTEGER,   -- X509_V_... code for `Peer'
- *     HostName [ 6 ] EXPLICIT OCTET STRING,   -- optional HostName from servername TLS extension
- *     PSK_identity_hint [ 7 ] EXPLICIT OCTET STRING, -- optional PSK identity hint
- *     PSK_identity [ 8 ] EXPLICIT OCTET STRING,  -- optional PSK identity
- *     Ticket_lifetime_hint [9] EXPLICIT INTEGER, -- server's lifetime hint for session ticket
- *     Ticket [10]             EXPLICIT OCTET STRING, -- session ticket (clients only)
- *     Compression_meth [11]   EXPLICIT OCTET STRING, -- optional compression method
- *     SRP_username [ 12 ] EXPLICIT OCTET STRING -- optional SRP username
- * }
- * Look in ssl/ssl_asn1.c for more details
- * I'm using EXPLICIT tags so I can read the damn things using asn1parse :-).
- */
-//struct ssl_session_internal_st;
-package alias ssl_session_internal_st = void;
-
-struct ssl_session_st
-{
-	/**
-	 * what ssl version session info is
-	 * being kept in here?
-	 */
-	int ssl_version;
-
-	int master_key_length;
-	ubyte[.SSL_MAX_MASTER_KEY_LENGTH] master_key;
-
-	/* session_id - valid? */
-	uint session_id_length;
-	ubyte[.SSL_MAX_SSL_SESSION_ID_LENGTH] session_id;
-
-	/*
-	 * this is used to determine whether the session is being reused in
-	 * the appropriate context. It is up to the application to set this,
-	 * via SSL_new
-	 */
-	uint sid_ctx_length;
-	ubyte[.SSL_MAX_SID_CTX_LENGTH] sid_ctx;
-
-	/* This is the cert for the other end. */
-	libressl_d.openssl.ossl_typ.X509* peer;
-
-	/*
-	 * when app_verify_callback accepts a session where the peer's certificate
-	 * is not ok, we must remember the error for session reuse:
-	 */
-
-	/**
-	 * only for servers
-	 */
-	core.stdc.config.c_long verify_result;
-
-	core.stdc.config.c_long timeout;
-	libressl_d.compat.time.time_t time;
-	int references;
-
-	const (.SSL_CIPHER)* cipher;
-
-	/**
-	 * when ASN.1 loaded, this
-	 * needs to be used to load
-	 * the 'cipher' structure
-	 */
-	core.stdc.config.c_ulong cipher_id;
-
-	/**
-	 * shared ciphers?
-	 */
-	.stack_st_SSL_CIPHER* ciphers;
-
-	char* tlsext_hostname;
-
-	/* RFC4507 info */
-
-	/**
-	 * Session ticket
-	 */
-	ubyte* tlsext_tick;
-
-	/**
-	 * Session ticket length
-	 */
-	size_t tlsext_ticklen;
-
-	/**
-	 * Session lifetime hint in seconds
-	 */
-	core.stdc.config.c_long tlsext_tick_lifetime_hint;
-
-	.ssl_session_internal_st* internal;
-}
-//#endif
 
 /**
  * Allow initial connection to servers that don't support RI
@@ -913,10 +738,13 @@ core.stdc.config.c_long SSL_set_msg_callback_arg(libressl_d.openssl.ossl_typ.SSL
 		return .SSL_ctrl(ssl, .SSL_CTRL_SET_MSG_CALLBACK_ARG, 0, arg);
 	}
 
-//struct ssl_aead_ctx_st;
-package alias ssl_aead_ctx_st = void;
+version (LIBRESSL_INTERNAL) {
+} else {
+	//struct ssl_aead_ctx_st;
+	package alias ssl_aead_ctx_st = void;
 
-alias SSL_AEAD_CTX = .ssl_aead_ctx_st;
+	alias SSL_AEAD_CTX = .ssl_aead_ctx_st;
+}
 
 /**
  * 100k max cert list :-\)
@@ -944,68 +772,72 @@ alias GEN_SESSION_CB = extern (C) nothrow @nogc int function(const (libressl_d.o
 
 alias SSL_COMP = .ssl_comp_st;
 
-//#if !defined(OPENSSL_NO_SSL_INTERN)
-struct ssl_comp_st
-{
-	int id;
-	const (char)* name;
+version (LIBRESSL_INTERNAL) {
+	struct ssl_comp_st
+	{
+		int id;
+		const (char)* name;
+	}
+
+	//DECLARE_STACK_OF(SSL_COMP)
+	struct stack_st_SSL_COMP
+	{
+		libressl_d.openssl.stack._STACK stack;
+	}
+
+	struct lhash_st_SSL_SESSION
+	{
+		int dummy;
+	}
+
+	//struct ssl_ctx_internal_st;
+	package alias ssl_ctx_internal_st = void;
+
+	struct ssl_ctx_st
+	{
+		const (.SSL_METHOD)* method;
+
+		.stack_st_SSL_CIPHER* cipher_list;
+
+		libressl_d.openssl.x509_vfy.x509_store_st /* X509_STORE */* cert_store;
+
+		/*
+		 * If timeout is not 0, it is the default timeout value set
+		 * when SSL_new() is called.  This has been put in to make
+		 * life easier to set things up
+		 */
+		core.stdc.config.c_long session_timeout;
+
+		int references;
+
+		/* Default values to use in SSL structures follow (these are copied by SSL_new) */
+
+		libressl_d.openssl.x509.stack_st_X509* extra_certs;
+
+		int verify_mode;
+		uint sid_ctx_length;
+		ubyte[.SSL_MAX_SID_CTX_LENGTH] sid_ctx;
+
+		libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* param;
+
+		/*
+		 * XXX
+		 * default_passwd_cb used by python and openvpn, need to keep it until we
+		 * add an accessor
+		 */
+		/* Default password callback. */
+		libressl_d.openssl.pem.pem_password_cb* default_passwd_callback;
+
+		/* Default password callback user data. */
+		void* default_passwd_callback_userdata;
+
+		.ssl_ctx_internal_st* internal;
+	}
+} else {
+	struct ssl_comp_st;
+	struct lhash_st_SSL_SESSION;
+	struct ssl_ctx_st;
 }
-
-//DECLARE_STACK_OF(SSL_COMP)
-struct stack_st_SSL_COMP
-{
-	libressl_d.openssl.stack._STACK stack;
-}
-
-struct lhash_st_SSL_SESSION
-{
-	int dummy;
-}
-
-//struct ssl_ctx_internal_st;
-package alias ssl_ctx_internal_st = void;
-
-struct ssl_ctx_st
-{
-	const (.SSL_METHOD)* method;
-
-	.stack_st_SSL_CIPHER* cipher_list;
-
-	libressl_d.openssl.x509_vfy.x509_store_st /* X509_STORE */* cert_store;
-
-	/*
-	 * If timeout is not 0, it is the default timeout value set
-	 * when SSL_new() is called.  This has been put in to make
-	 * life easier to set things up
-	 */
-	core.stdc.config.c_long session_timeout;
-
-	int references;
-
-	/* Default values to use in SSL structures follow (these are copied by SSL_new) */
-
-	libressl_d.openssl.x509.stack_st_X509* extra_certs;
-
-	int verify_mode;
-	uint sid_ctx_length;
-	ubyte[.SSL_MAX_SID_CTX_LENGTH] sid_ctx;
-
-	libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* param;
-
-	/*
-	 * XXX
-	 * default_passwd_cb used by python and openvpn, need to keep it until we
-	 * add an accessor
-	 */
-	/* Default password callback. */
-	libressl_d.openssl.pem.pem_password_cb* default_passwd_callback;
-
-	/* Default password callback user data. */
-	void* default_passwd_callback_userdata;
-
-	.ssl_ctx_internal_st* internal;
-}
-//#endif
 
 enum SSL_SESS_CACHE_OFF = 0x0000;
 enum SSL_SESS_CACHE_CLIENT = 0x0001;
@@ -1147,6 +979,11 @@ int SSL_set_alpn_protos(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)* pro
 void SSL_CTX_set_alpn_select_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)** out_, ubyte* outlen, const (ubyte)* in_, uint inlen, void* arg) cb, void* arg);
 void SSL_get0_alpn_selected(const (libressl_d.openssl.ossl_typ.SSL)* ssl, const (ubyte)** data, uint* len);
 
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+alias SSL_psk_use_session_cb_func = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, const (ubyte)** id, size_t* idlen, .SSL_SESSION** sess);
+void SSL_set_psk_use_session_callback(libressl_d.openssl.ossl_typ.SSL* s, .SSL_psk_use_session_cb_func cb);
+//#endif
+
 enum SSL_NOTHING = 1;
 enum SSL_WRITING = 2;
 enum SSL_READING = 3;
@@ -1188,145 +1025,152 @@ bool SSL_want_x509_lookup(const (libressl_d.openssl.ossl_typ.SSL)* s)
 enum SSL_MAC_FLAG_READ_MAC_STREAM = 1;
 enum SSL_MAC_FLAG_WRITE_MAC_STREAM = 2;
 
-//#if !defined(OPENSSL_NO_SSL_INTERN)
-//struct ssl_internal_st;
-package alias ssl_internal_st = void;
-package alias cert_st = void;
+version (LIBRESSL_INTERNAL) {
+	//struct ssl_internal_st;
+	package alias ssl_internal_st = void;
+	package alias cert_st = void;
 
-struct ssl_st
-{
-	/*
-	 * protocol version
-	 * (one of SSL2_VERSION, SSL3_VERSION, TLS1_VERSION, DTLS1_VERSION)
-	 */
-	int version_;
+	version (all) {
+		struct dtls1_state_st;
+		struct ssl3_state_st;
+	}
 
-	/**
-	 * SSLv3
-	 */
-	const (.SSL_METHOD)* method;
+	struct ssl_st
+	{
+		/*
+		 * protocol version
+		 * (one of SSL2_VERSION, SSL3_VERSION, TLS1_VERSION, DTLS1_VERSION)
+		 */
+		int version_;
 
-	/*
-	 * There are 2 BIO's even though they are normally both the
-	 * same.  This is so data can be read and written to different
-	 * handlers
-	 */
+		/**
+		 * SSLv3
+		 */
+		const (.SSL_METHOD)* method;
 
-	/**
-	 * used by SSL_read
-	 */
-	libressl_d.openssl.bio.BIO* rbio;
+		/*
+		 * There are 2 BIO's even though they are normally both the
+		 * same.  This is so data can be read and written to different
+		 * handlers
+		 */
 
-	/**
-	 * used by SSL_write
-	 */
-	libressl_d.openssl.bio.BIO* wbio;
+		/**
+		 * used by SSL_read
+		 */
+		libressl_d.openssl.bio.BIO* rbio;
 
-	/**
-	 * used during session-id reuse to concatenate
-	 * messages
-	 */
-	libressl_d.openssl.bio.BIO* bbio;
+		/**
+		 * used by SSL_write
+		 */
+		libressl_d.openssl.bio.BIO* wbio;
 
-	/**
-	 * are we the server side? - mostly used by SSL_clear
-	 */
-	int server;
+		/**
+		 * used during session-id reuse to concatenate
+		 * messages
+		 */
+		libressl_d.openssl.bio.BIO* bbio;
 
-	/**
-	 * SSLv3 variables
-	 */
-	libressl_d.openssl.ssl3.ssl3_state_st* s3;
+		/**
+		 * are we the server side? - mostly used by SSL_clear
+		 */
+		int server;
 
-	/**
-	 * DTLSv1 variables
-	 */
-	libressl_d.openssl.dtls1.dtls1_state_st* d1;
+		/**
+		 * SSLv3 variables
+		 */
+		ssl3_state_st* s3;
 
-	libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* param;
+		/**
+		 * DTLSv1 variables
+		 */
+		.dtls1_state_st* d1;
 
-	/* crypto */
-	.stack_st_SSL_CIPHER* cipher_list;
+		libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* param;
 
-	/* This is used to hold the server certificate used */
-	cert_st /* CERT */* cert;
+		/* crypto */
+		.stack_st_SSL_CIPHER* cipher_list;
 
-	/*
-	 * the session_id_context is used to ensure sessions are only reused
-	 * in the appropriate context
-	 */
-	uint sid_ctx_length;
-	ubyte[.SSL_MAX_SID_CTX_LENGTH] sid_ctx;
+		/* This is used to hold the server certificate used */
+		cert_st /* CERT */* cert;
 
-	/* This can also be in the session once a session is established */
-	.SSL_SESSION* session;
+		/*
+		 * the session_id_context is used to ensure sessions are only reused
+		 * in the appropriate context
+		 */
+		uint sid_ctx_length;
+		ubyte[.SSL_MAX_SID_CTX_LENGTH] sid_ctx;
 
-	/* Used in SSL2 and SSL3 */
+		/* This can also be in the session once a session is established */
+		.SSL_SESSION* session;
 
-	/**
-	 * 0 don't care about verify failure.
-	 * 1 fail if verify fails
-	 */
-	int verify_mode;
+		/* Used in SSL2 and SSL3 */
 
-	/**
-	 * error bytes to be written
-	 */
-	int error;
+		/**
+		 * 0 don't care about verify failure.
+		 * 1 fail if verify fails
+		 */
+		int verify_mode;
 
-	/**
-	 * actual code
-	 */
-	int error_code;
+		/**
+		 * error bytes to be written
+		 */
+		int error;
 
-	libressl_d.openssl.ossl_typ.SSL_CTX* ctx;
+		/**
+		 * actual code
+		 */
+		int error_code;
 
-	core.stdc.config.c_long verify_result;
+		libressl_d.openssl.ossl_typ.SSL_CTX* ctx;
 
-	int references;
+		core.stdc.config.c_long verify_result;
 
-	/**
-	 * what was passed, used for
-	 * SSLv3/TLS rollback check
-	 */
-	int client_version;
+		int references;
 
-	uint max_send_fragment;
+		/**
+		 * what was passed, used for
+		 * SSLv3/TLS rollback check
+		 */
+		int client_version;
 
-	char* tlsext_hostname;
+		uint max_send_fragment;
 
-	/* certificate status request info */
-	/**
-	 * Status type or -1 if no status type
-	 */
-	int tlsext_status_type;
+		char* tlsext_hostname;
 
-	/**
-	 * initial ctx, used to store sessions
-	 */
-	libressl_d.openssl.ossl_typ.SSL_CTX* initial_ctx;
+		/* certificate status request info */
+		/**
+		 * Status type or -1 if no status type
+		 */
+		int tlsext_status_type;
 
-	alias session_ctx = initial_ctx;
+		/**
+		 * initial ctx, used to store sessions
+		 */
+		libressl_d.openssl.ossl_typ.SSL_CTX* initial_ctx;
 
-	/*
-	 * XXX really should be internal, but is
-	 * touched unnaturally by wpa-supplicant
-	 * and freeradius and other perversions
-	 */
+		alias session_ctx = initial_ctx;
 
-	/**
-	 * cryptographic state
-	 */
-	libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* enc_read_ctx;
+		/*
+		 * XXX really should be internal, but is
+		 * touched unnaturally by wpa-supplicant
+		 * and freeradius and other perversions
+		 */
 
-	/**
-	 * used for mac generation
-	 */
-	libressl_d.openssl.ossl_typ.EVP_MD_CTX* read_hash;
+		/**
+		 * cryptographic state
+		 */
+		libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* enc_read_ctx;
 
-	.ssl_internal_st* internal;
+		/**
+		 * used for mac generation
+		 */
+		libressl_d.openssl.ossl_typ.EVP_MD_CTX* read_hash;
+
+		.ssl_internal_st* internal;
+	}
+} else {
+	struct ssl_st;
 }
-//#endif
 
 /* compatibility */
 
@@ -1483,6 +1327,14 @@ enum SSL_VERIFY_PEER = 0x01;
 enum SSL_VERIFY_FAIL_IF_NO_PEER_CERT = 0x02;
 enum SSL_VERIFY_CLIENT_ONCE = 0x04;
 
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+enum SSL_VERIFY_POST_HANDSHAKE = 0x08;
+
+int SSL_verify_client_post_handshake(libressl_d.openssl.ossl_typ.SSL* s);
+void SSL_CTX_set_post_handshake_auth(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int val);
+void SSL_set_post_handshake_auth(libressl_d.openssl.ossl_typ.SSL* s, int val);
+//#endif
+
 alias OpenSSL_add_ssl_algorithms = .SSL_library_init;
 alias SSLeay_add_ssl_algorithms = .SSL_library_init;
 
@@ -1532,107 +1384,73 @@ alias SSL_set_timeout = .SSL_SESSION_set_timeout;
 int PEM_write_bio_SSL_SESSION(libressl_d.openssl.bio.BIO* bp, .SSL_SESSION* x);
 int PEM_write_SSL_SESSION(libressl_d.compat.stdio.FILE* fp, .SSL_SESSION* x);
 
-/**
- *  offset to get SSL_R_... value from SSL_AD_...
+/*
+ * TLS Alerts.
+ *
+ * https://www.iana.org/assignments/tls-parameters/#tls-parameters-6
  */
+
+/* Obsolete alerts. */
+version (LIBRESSL_INTERNAL) {
+} else {
+	/* Removed in TLSv1.1 */
+	enum SSL_AD_DECRYPTION_FAILED = 21;
+
+	/* Removed in TLSv1.0 */
+	enum SSL_AD_NO_CERTIFICATE = 41;
+
+	/* Removed in TLSv1.1 */
+	enum SSL_AD_EXPORT_RESTRICTION = 60;
+}
+
+enum SSL_AD_CLOSE_NOTIFY = 0;
+enum SSL_AD_UNEXPECTED_MESSAGE = 10;
+enum SSL_AD_BAD_RECORD_MAC = 20;
+enum SSL_AD_RECORD_OVERFLOW = 22;
+
+/* Removed in TLSv1.3 */
+enum SSL_AD_DECOMPRESSION_FAILURE = 30;
+
+enum SSL_AD_HANDSHAKE_FAILURE = 40;
+enum SSL_AD_BAD_CERTIFICATE = 42;
+enum SSL_AD_UNSUPPORTED_CERTIFICATE = 43;
+enum SSL_AD_CERTIFICATE_REVOKED = 44;
+enum SSL_AD_CERTIFICATE_EXPIRED = 45;
+enum SSL_AD_CERTIFICATE_UNKNOWN = 46;
+enum SSL_AD_ILLEGAL_PARAMETER = 47;
+enum SSL_AD_UNKNOWN_CA = 48;
+enum SSL_AD_ACCESS_DENIED = 49;
+enum SSL_AD_DECODE_ERROR = 50;
+enum SSL_AD_DECRYPT_ERROR = 51;
+enum SSL_AD_PROTOCOL_VERSION = 70;
+enum SSL_AD_INSUFFICIENT_SECURITY = 71;
+enum SSL_AD_INTERNAL_ERROR = 80;
+enum SSL_AD_INAPPROPRIATE_FALLBACK = 86;
+enum SSL_AD_USER_CANCELLED = 90;
+
+/* Removed in TLSv1.3 */
+enum SSL_AD_NO_RENEGOTIATION = 100;
+
+/* Added in TLSv1.3. */
+enum SSL_AD_MISSING_EXTENSION = 109;
+
+enum SSL_AD_UNSUPPORTED_EXTENSION = 110;
+
+/* Removed in TLSv1.3 */
+enum SSL_AD_CERTIFICATE_UNOBTAINABLE = 111;
+
+enum SSL_AD_UNRECOGNIZED_NAME = 112;
+enum SSL_AD_BAD_CERTIFICATE_STATUS_RESPONSE = 113;
+
+/* Removed in TLSv1.3 */
+enum SSL_AD_BAD_CERTIFICATE_HASH_VALUE = 114;
+
+enum SSL_AD_UNKNOWN_PSK_IDENTITY = 115;
+enum SSL_AD_CERTIFICATE_REQUIRED = 116;
+enum SSL_AD_NO_APPLICATION_PROTOCOL = 120;
+
+/* Offset to get an SSL_R_... value from an SSL_AD_... value. */
 enum SSL_AD_REASON_OFFSET = 1000;
-
-/* These alert types are for SSLv3 and TLSv1 */
-enum SSL_AD_CLOSE_NOTIFY = libressl_d.openssl.ssl3.SSL3_AD_CLOSE_NOTIFY;
-
-/**
- * fatal
- */
-enum SSL_AD_UNEXPECTED_MESSAGE = libressl_d.openssl.ssl3.SSL3_AD_UNEXPECTED_MESSAGE;
-
-/**
- * fatal
- */
-enum SSL_AD_BAD_RECORD_MAC = libressl_d.openssl.ssl3.SSL3_AD_BAD_RECORD_MAC;
-
-enum SSL_AD_DECRYPTION_FAILED = libressl_d.openssl.tls1.TLS1_AD_DECRYPTION_FAILED;
-enum SSL_AD_RECORD_OVERFLOW = libressl_d.openssl.tls1.TLS1_AD_RECORD_OVERFLOW;
-
-/**
- * fatal
- */
-enum SSL_AD_DECOMPRESSION_FAILURE = libressl_d.openssl.ssl3.SSL3_AD_DECOMPRESSION_FAILURE;
-
-/**
- * fatal
- */
-enum SSL_AD_HANDSHAKE_FAILURE = libressl_d.openssl.ssl3.SSL3_AD_HANDSHAKE_FAILURE;
-
-/**
- * Not for TLS
- */
-enum SSL_AD_NO_CERTIFICATE = libressl_d.openssl.ssl3.SSL3_AD_NO_CERTIFICATE;
-
-enum SSL_AD_BAD_CERTIFICATE = libressl_d.openssl.ssl3.SSL3_AD_BAD_CERTIFICATE;
-enum SSL_AD_UNSUPPORTED_CERTIFICATE = libressl_d.openssl.ssl3.SSL3_AD_UNSUPPORTED_CERTIFICATE;
-enum SSL_AD_CERTIFICATE_REVOKED = libressl_d.openssl.ssl3.SSL3_AD_CERTIFICATE_REVOKED;
-enum SSL_AD_CERTIFICATE_EXPIRED = libressl_d.openssl.ssl3.SSL3_AD_CERTIFICATE_EXPIRED;
-enum SSL_AD_CERTIFICATE_UNKNOWN = libressl_d.openssl.ssl3.SSL3_AD_CERTIFICATE_UNKNOWN;
-
-/**
- * fatal
- */
-enum SSL_AD_ILLEGAL_PARAMETER = libressl_d.openssl.ssl3.SSL3_AD_ILLEGAL_PARAMETER;
-
-/**
- * fatal
- */
-enum SSL_AD_UNKNOWN_CA = libressl_d.openssl.tls1.TLS1_AD_UNKNOWN_CA;
-
-/**
- * fatal
- */
-enum SSL_AD_ACCESS_DENIED = libressl_d.openssl.tls1.TLS1_AD_ACCESS_DENIED;
-
-/**
- * fatal
- */
-enum SSL_AD_DECODE_ERROR = libressl_d.openssl.tls1.TLS1_AD_DECODE_ERROR;
-
-enum SSL_AD_DECRYPT_ERROR = libressl_d.openssl.tls1.TLS1_AD_DECRYPT_ERROR;
-
-/**
- * fatal
- */
-enum SSL_AD_EXPORT_RESTRICTION = libressl_d.openssl.tls1.TLS1_AD_EXPORT_RESTRICTION;
-
-/**
- * fatal
- */
-enum SSL_AD_PROTOCOL_VERSION = libressl_d.openssl.tls1.TLS1_AD_PROTOCOL_VERSION;
-
-/**
- * fatal
- */
-enum SSL_AD_INSUFFICIENT_SECURITY = libressl_d.openssl.tls1.TLS1_AD_INSUFFICIENT_SECURITY;
-
-/**
- * fatal
- */
-enum SSL_AD_INTERNAL_ERROR = libressl_d.openssl.tls1.TLS1_AD_INTERNAL_ERROR;
-
-/**
- * fatal
- */
-enum SSL_AD_INAPPROPRIATE_FALLBACK = libressl_d.openssl.tls1.TLS1_AD_INAPPROPRIATE_FALLBACK;
-
-enum SSL_AD_USER_CANCELLED = libressl_d.openssl.tls1.TLS1_AD_USER_CANCELLED;
-enum SSL_AD_NO_RENEGOTIATION = libressl_d.openssl.tls1.TLS1_AD_NO_RENEGOTIATION;
-enum SSL_AD_UNSUPPORTED_EXTENSION = libressl_d.openssl.tls1.TLS1_AD_UNSUPPORTED_EXTENSION;
-enum SSL_AD_CERTIFICATE_UNOBTAINABLE = libressl_d.openssl.tls1.TLS1_AD_CERTIFICATE_UNOBTAINABLE;
-enum SSL_AD_UNRECOGNIZED_NAME = libressl_d.openssl.tls1.TLS1_AD_UNRECOGNIZED_NAME;
-enum SSL_AD_BAD_CERTIFICATE_STATUS_RESPONSE = libressl_d.openssl.tls1.TLS1_AD_BAD_CERTIFICATE_STATUS_RESPONSE;
-enum SSL_AD_BAD_CERTIFICATE_HASH_VALUE = libressl_d.openssl.tls1.TLS1_AD_BAD_CERTIFICATE_HASH_VALUE;
-
-/**
- * fatal
- */
-enum SSL_AD_UNKNOWN_PSK_IDENTITY = libressl_d.openssl.tls1.TLS1_AD_UNKNOWN_PSK_IDENTITY;
 
 enum SSL_ERROR_NONE = 0;
 enum SSL_ERROR_SSL = 1;
@@ -1710,6 +1528,7 @@ enum SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB = 128;
 enum SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB = 63;
 enum SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB_ARG = 129;
 enum SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB_ARG = 64;
+enum SSL_CTRL_GET_TLSEXT_STATUS_REQ_TYPE = 127;
 enum SSL_CTRL_SET_TLSEXT_STATUS_REQ_TYPE = 65;
 enum SSL_CTRL_GET_TLSEXT_STATUS_REQ_EXTS = 66;
 enum SSL_CTRL_SET_TLSEXT_STATUS_REQ_EXTS = 67;
@@ -1750,6 +1569,7 @@ enum SSL_CTRL_SET_ECDH_AUTO = 94;
 
 //#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
 version (all) {
+	enum SSL_CTRL_GET_PEER_SIGNATURE_NID = 108;
 	enum SSL_CTRL_GET_PEER_TMP_KEY = 109;
 	enum SSL_CTRL_GET_SERVER_TMP_KEY = .SSL_CTRL_GET_PEER_TMP_KEY;
 } else {
@@ -1764,6 +1584,10 @@ enum SSL_CTRL_SET_MIN_PROTO_VERSION = 123;
 enum SSL_CTRL_SET_MAX_PROTO_VERSION = 124;
 enum SSL_CTRL_GET_MIN_PROTO_VERSION = 130;
 enum SSL_CTRL_GET_MAX_PROTO_VERSION = 131;
+
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+enum SSL_CTRL_GET_SIGNATURE_NID = 132;
+//#endif
 
 pragma(inline, true)
 core.stdc.config.c_long DTLSv1_get_timeout(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
@@ -1947,6 +1771,8 @@ int SSL_get_max_proto_version(libressl_d.openssl.ossl_typ.SSL* ssl);
 int SSL_set_min_proto_version(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.stdint.uint16_t version_);
 int SSL_set_max_proto_version(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.stdint.uint16_t version_);
 
+const (.SSL_METHOD)* SSL_CTX_get_ssl_method(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
+
 //#if !defined(LIBRESSL_INTERNAL)
 enum SSL_CTRL_SET_CURVES = .SSL_CTRL_SET_GROUPS;
 enum SSL_CTRL_SET_CURVES_LIST = .SSL_CTRL_SET_GROUPS_LIST;
@@ -1999,12 +1825,31 @@ core.stdc.config.c_long SSL_get_server_tmp_key(libressl_d.openssl.ossl_typ.SSL* 
 
 //#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
 	pragma(inline, true)
+	core.stdc.config.c_long SSL_get_signature_nid(libressl_d.openssl.ossl_typ.SSL* s, void* pn)
+
+		do
+		{
+			return .SSL_ctrl(s, .SSL_CTRL_GET_SIGNATURE_NID, 0, pn);
+		}
+
+	pragma(inline, true)
+	core.stdc.config.c_long SSL_get_peer_signature_nid(libressl_d.openssl.ossl_typ.SSL* s, void* pn)
+
+		do
+		{
+			return .SSL_ctrl(s, .SSL_CTRL_GET_PEER_SIGNATURE_NID, 0, pn);
+		}
+
+	pragma(inline, true)
 	core.stdc.config.c_long SSL_get_peer_tmp_key(libressl_d.openssl.ossl_typ.SSL* s, void* pk)
 
 		do
 		{
 			return .SSL_ctrl(s, .SSL_CTRL_GET_PEER_TMP_KEY, 0, pk);
 		}
+
+	int SSL_get_signature_type_nid(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int* nid);
+	int SSL_get_peer_signature_type_nid(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int* nid);
 //#endif
 
 //#if !defined(LIBRESSL_INTERNAL)
@@ -2064,6 +1909,7 @@ core.stdc.config.c_long SSL_CTX_get_timeout(const (libressl_d.openssl.ossl_typ.S
 libressl_d.openssl.ossl_typ.X509_STORE* SSL_CTX_get_cert_store(const (libressl_d.openssl.ossl_typ.SSL_CTX)*);
 void SSL_CTX_set_cert_store(libressl_d.openssl.ossl_typ.SSL_CTX*, libressl_d.openssl.ossl_typ.X509_STORE*);
 libressl_d.openssl.ossl_typ.X509* SSL_CTX_get0_certificate(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
+libressl_d.openssl.ossl_typ.EVP_PKEY* SSL_CTX_get0_privatekey(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
 int SSL_want(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_clear(libressl_d.openssl.ossl_typ.SSL* s);
 
@@ -2077,6 +1923,7 @@ const (char)* SSL_CIPHER_get_version(const (.SSL_CIPHER)* c);
 const (char)* SSL_CIPHER_get_name(const (.SSL_CIPHER)* c);
 core.stdc.config.c_ulong SSL_CIPHER_get_id(const (.SSL_CIPHER)* c);
 core.stdc.stdint.uint16_t SSL_CIPHER_get_value(const (.SSL_CIPHER)* c);
+const (.SSL_CIPHER)* SSL_CIPHER_find(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)* ptr);
 int SSL_CIPHER_get_cipher_nid(const (.SSL_CIPHER)* c);
 int SSL_CIPHER_get_digest_nid(const (.SSL_CIPHER)* c);
 int SSL_CIPHER_get_kx_nid(const (.SSL_CIPHER)* c);
@@ -2095,6 +1942,7 @@ int SSL_set_rfd(libressl_d.openssl.ossl_typ.SSL* s, int fd);
 int SSL_set_wfd(libressl_d.openssl.ossl_typ.SSL* s, int fd);
 void SSL_set_bio(libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.bio.BIO* rbio, libressl_d.openssl.bio.BIO* wbio);
 libressl_d.openssl.bio.BIO* SSL_get_rbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
+void SSL_set0_rbio(libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.bio.BIO* rbio);
 libressl_d.openssl.bio.BIO* SSL_get_wbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_set_cipher_list(libressl_d.openssl.ossl_typ.SSL* s, const (char)* str);
 
@@ -2138,6 +1986,7 @@ const (char)* SSL_state_string(const (libressl_d.openssl.ossl_typ.SSL)* s);
 const (char)* SSL_rstate_string(const (libressl_d.openssl.ossl_typ.SSL)* s);
 const (char)* SSL_state_string_long(const (libressl_d.openssl.ossl_typ.SSL)* s);
 const (char)* SSL_rstate_string_long(const (libressl_d.openssl.ossl_typ.SSL)* s);
+const (.SSL_CIPHER)* SSL_SESSION_get0_cipher(const (.SSL_SESSION)* ss);
 size_t SSL_SESSION_get_master_key(const (.SSL_SESSION)* ss, ubyte* out_, size_t max_out);
 int SSL_SESSION_get_protocol_version(const (.SSL_SESSION)* s);
 core.stdc.config.c_long SSL_SESSION_get_time(const (.SSL_SESSION)* s);
@@ -2148,6 +1997,10 @@ int SSL_copy_session_id(libressl_d.openssl.ossl_typ.SSL* to, const (libressl_d.o
 libressl_d.openssl.ossl_typ.X509* SSL_SESSION_get0_peer(.SSL_SESSION* s);
 int SSL_SESSION_set1_id(.SSL_SESSION* s, const (ubyte)* sid, uint sid_len);
 int SSL_SESSION_set1_id_context(.SSL_SESSION* s, const (ubyte)* sid_ctx, uint sid_ctx_len);
+
+//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
+int SSL_SESSION_is_resumable(const (.SSL_SESSION)* s);
+//#endif
 
 .SSL_SESSION* SSL_SESSION_new();
 void SSL_SESSION_free(.SSL_SESSION* ses);
@@ -2963,6 +2816,7 @@ enum SSL_R_MISSING_TMP_RSA_PKEY = 173;
 enum SSL_R_MISSING_VERIFY_MESSAGE = 174;
 enum SSL_R_MULTIPLE_SGC_RESTARTS = 346;
 enum SSL_R_NON_SSLV2_INITIAL_PACKET = 175;
+enum SSL_R_NO_APPLICATION_PROTOCOL = 235;
 enum SSL_R_NO_CERTIFICATES_RETURNED = 176;
 enum SSL_R_NO_CERTIFICATE_ASSIGNED = 177;
 enum SSL_R_NO_CERTIFICATE_RETURNED = 178;

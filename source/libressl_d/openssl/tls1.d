@@ -1,4 +1,4 @@
-/* $OpenBSD: tls1.h,v 1.42 2021/03/10 18:32:38 jsing Exp $ */
+/* $OpenBSD: tls1.h,v 1.49 2021/09/10 14:57:31 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -179,102 +179,68 @@ enum TLS1_VERSION_MINOR = 0x01;
 
 version (LIBRESSL_INTERNAL) {
 } else {
-	pragma(inline, true)
-	pure nothrow @safe @nogc @live
-	int TLS1_get_version(scope const libressl_d.openssl.ossl_typ.SSL* s)
+	enum TLS1_AD_DECRYPTION_FAILED = 21;
+	enum TLS1_AD_RECORD_OVERFLOW = 22;
 
-		in
-		{
-			assert(s != null);
-		}
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_UNKNOWN_CA = 48;
 
-		do
-		{
-			return ((s.version_ >> 8) == .TLS1_VERSION_MAJOR) ? (s.version_) : (0);
-		}
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_ACCESS_DENIED = 49;
 
-	pragma(inline, true)
-	pure nothrow @safe @nogc @live
-	int TLS1_get_client_version(scope const libressl_d.openssl.ossl_typ.SSL* s)
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_DECODE_ERROR = 50;
 
-		in
-		{
-			assert(s != null);
-		}
+	enum TLS1_AD_DECRYPT_ERROR = 51;
 
-		do
-		{
-			return ((s.client_version >> 8) == .TLS1_VERSION_MAJOR) ? (s.client_version) : (0);
-		}
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_EXPORT_RESTRICTION = 60;
+
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_PROTOCOL_VERSION = 70;
+
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_INSUFFICIENT_SECURITY = 71;
+
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_INTERNAL_ERROR = 80;
+
+	/* Code 86 from RFC 7507. */
+
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_INAPPROPRIATE_FALLBACK = 86;
+
+	enum TLS1_AD_USER_CANCELLED = 90;
+	enum TLS1_AD_NO_RENEGOTIATION = 100;
+	/* Codes 110-114 from RFC 3546. */
+	enum TLS1_AD_UNSUPPORTED_EXTENSION = 110;
+	enum TLS1_AD_CERTIFICATE_UNOBTAINABLE = 111;
+	enum TLS1_AD_UNRECOGNIZED_NAME = 112;
+	enum TLS1_AD_BAD_CERTIFICATE_STATUS_RESPONSE = 113;
+	enum TLS1_AD_BAD_CERTIFICATE_HASH_VALUE = 114;
+	/* Code 115 from RFC 4279. */
+
+	/**
+	 *  fatal
+	 */
+	enum TLS1_AD_UNKNOWN_PSK_IDENTITY = 115;
 }
-
-/*
- * TLS Alert codes.
- *
- * https://www.iana.org/assignments/tls-parameters/#tls-parameters-6
- */
-
-enum TLS1_AD_DECRYPTION_FAILED = 21;
-enum TLS1_AD_RECORD_OVERFLOW = 22;
-
-/**
- *  fatal
- */
-enum TLS1_AD_UNKNOWN_CA = 48;
-
-/**
- *  fatal
- */
-enum TLS1_AD_ACCESS_DENIED = 49;
-
-/**
- *  fatal
- */
-enum TLS1_AD_DECODE_ERROR = 50;
-
-enum TLS1_AD_DECRYPT_ERROR = 51;
-
-/**
- *  fatal
- */
-enum TLS1_AD_EXPORT_RESTRICTION = 60;
-
-/**
- *  fatal
- */
-enum TLS1_AD_PROTOCOL_VERSION = 70;
-
-/**
- *  fatal
- */
-enum TLS1_AD_INSUFFICIENT_SECURITY = 71;
-
-/**
- *  fatal
- */
-enum TLS1_AD_INTERNAL_ERROR = 80;
-
-/* Code 86 from RFC 7507. */
-
-/**
- *  fatal
- */
-enum TLS1_AD_INAPPROPRIATE_FALLBACK = 86;
-
-enum TLS1_AD_USER_CANCELLED = 90;
-enum TLS1_AD_NO_RENEGOTIATION = 100;
-/* Codes 110-114 from RFC 3546. */
-enum TLS1_AD_UNSUPPORTED_EXTENSION = 110;
-enum TLS1_AD_CERTIFICATE_UNOBTAINABLE = 111;
-enum TLS1_AD_UNRECOGNIZED_NAME = 112;
-enum TLS1_AD_BAD_CERTIFICATE_STATUS_RESPONSE = 113;
-enum TLS1_AD_BAD_CERTIFICATE_HASH_VALUE = 114;
-/* Code 115 from RFC 4279. */
-
-/**
- *  fatal
- */
-enum TLS1_AD_UNKNOWN_PSK_IDENTITY = 115;
 
 /*
  * TLS ExtensionType values.
@@ -433,6 +399,14 @@ core.stdc.config.c_long SSL_set_tlsext_debug_arg(libressl_d.openssl.ossl_typ.SSL
 	do
 	{
 		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_DEBUG_ARG, 0, arg);
+	}
+
+pragma(inline, true)
+core.stdc.config.c_long SSL_get_tlsext_status_type(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+
+	do
+	{
+		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_TYPE, 0, null);
 	}
 
 pragma(inline, true)
@@ -980,11 +954,13 @@ enum TLS_MD_IV_BLOCK_CONST_SIZE = 8;
 enum TLS_MD_MASTER_SECRET_CONST = "master secret";
 enum TLS_MD_MASTER_SECRET_CONST_SIZE = 13;
 
-/**
- * TLS Session Ticket extension struct.
- */
-struct tls_session_ticket_ext_st
-{
-	ushort length_;
-	void* data;
+version (LIBRESSL_INTERNAL) {
+	/**
+	 * TLS Session Ticket extension struct.
+	 */
+	struct tls_session_ticket_ext_st
+	{
+		ushort length_;
+		void* data;
+	}
 }

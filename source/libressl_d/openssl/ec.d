@@ -1,4 +1,4 @@
-/* $OpenBSD: ec.h,v 1.18 2019/09/29 10:09:09 tb Exp $ */
+/* $OpenBSD: ec.h,v 1.27 2021/09/12 16:23:19 tb Exp $ */
 /*
  * Originally written by Bodo Moeller for the OpenSSL project.
  */
@@ -282,6 +282,8 @@ const (.EC_POINT)* EC_GROUP_get0_generator(const (.EC_GROUP)* group);
  */
 int EC_GROUP_get_order(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* order, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
+int EC_GROUP_order_bits(const (.EC_GROUP)* group);
+
 /**
  * Gets the cofactor of a EC_GROUP
  *  \param  group     EC_GROUP object
@@ -315,50 +317,56 @@ ubyte* EC_GROUP_get0_seed(const (.EC_GROUP)* x);
 size_t EC_GROUP_get_seed_len(const (.EC_GROUP)*);
 size_t EC_GROUP_set_seed(.EC_GROUP*, const (ubyte)*, size_t len);
 
-/**
- * Sets the parameter of a ec over GFp defined by y^2 = x^3 + a*x + b
- *  \param  group  EC_GROUP object
- *  \param  p      BIGNUM with the prime number
- *  \param  a      BIGNUM with parameter a of the equation
- *  \param  b      BIGNUM with parameter b of the equation
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_GROUP_set_curve_GFp(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_set_curve(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_get_curve(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Gets the parameter of the ec over GFp defined by y^2 = x^3 + a*x + b
- *  \param  group  EC_GROUP object
- *  \param  p      BIGNUM for the prime number
- *  \param  a      BIGNUM for parameter a of the equation
- *  \param  b      BIGNUM for parameter b of the equation
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_GROUP_get_curve_GFp(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+version (LIBRESSL_INTERNAL) {
+} else {
+	/**
+	 * Sets the parameter of a ec over GFp defined by y^2 = x^3 + a*x + b
+	 *  \param  group  EC_GROUP object
+	 *  \param  p      BIGNUM with the prime number
+	 *  \param  a      BIGNUM with parameter a of the equation
+	 *  \param  b      BIGNUM with parameter b of the equation
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_GROUP_set_curve_GFp(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-//#if !defined(OPENSSL_NO_EC2M)
-/**
- * Sets the parameter of a ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
- *  \param  group  EC_GROUP object
- *  \param  p      BIGNUM with the polynomial defining the underlying field
- *  \param  a      BIGNUM with parameter a of the equation
- *  \param  b      BIGNUM with parameter b of the equation
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_GROUP_set_curve_GF2m(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	/**
+	 * Gets the parameter of the ec over GFp defined by y^2 = x^3 + a*x + b
+	 *  \param  group  EC_GROUP object
+	 *  \param  p      BIGNUM for the prime number
+	 *  \param  a      BIGNUM for parameter a of the equation
+	 *  \param  b      BIGNUM for parameter b of the equation
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_GROUP_get_curve_GFp(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Gets the parameter of the ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
- *  \param  group  EC_GROUP object
- *  \param  p      BIGNUM for the polynomial defining the underlying field
- *  \param  a      BIGNUM for parameter a of the equation
- *  \param  b      BIGNUM for parameter b of the equation
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	//#if !defined(OPENSSL_NO_EC2M)
+	/**
+	 * Sets the parameter of a ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
+	 *  \param  group  EC_GROUP object
+	 *  \param  p      BIGNUM with the polynomial defining the underlying field
+	 *  \param  a      BIGNUM with parameter a of the equation
+	 *  \param  b      BIGNUM with parameter b of the equation
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_GROUP_set_curve_GF2m(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+
+	/**
+	 * Gets the parameter of the ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
+	 *  \param  group  EC_GROUP object
+	 *  \param  p      BIGNUM for the polynomial defining the underlying field
+	 *  \param  a      BIGNUM for parameter a of the equation
+	 *  \param  b      BIGNUM for parameter b of the equation
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	//#endif
 //#endif
 
 /**
@@ -506,97 +514,106 @@ const (.EC_METHOD)* EC_POINT_method_of(const (.EC_POINT)* point);
  */
 int EC_POINT_set_to_infinity(const (.EC_GROUP)* group, .EC_POINT* point);
 
-/**
- * Sets the jacobian projective coordinates of a EC_POINT over GFp
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM with the x-coordinate
- *  \param  y      BIGNUM with the y-coordinate
- *  \param  z      BIGNUM with the z-coordinate
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_set_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, const (libressl_d.openssl.ossl_typ.BIGNUM)* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_set_affine_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_get_affine_coordinates(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_set_compressed_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Gets the jacobian projective coordinates of a EC_POINT over GFp
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM for the x-coordinate
- *  \param  y      BIGNUM for the y-coordinate
- *  \param  z      BIGNUM for the z-coordinate
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_get_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BIGNUM* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+version (LIBRESSL_INTERNAL) {
+	int EC_POINT_set_Jprojective_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, const (libressl_d.openssl.ossl_typ.BIGNUM)* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_get_Jprojective_coordinates(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BIGNUM* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+} else {
+	/**
+	 * Sets the jacobian projective coordinates of a EC_POINT over GFp
+	 *  \param  group  underlying EC_GROUP object
+	 *  \param  p      EC_POINT object
+	 *  \param  x      BIGNUM with the x-coordinate
+	 *  \param  y      BIGNUM with the y-coordinate
+	 *  \param  z      BIGNUM with the z-coordinate
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_POINT_set_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, const (libressl_d.openssl.ossl_typ.BIGNUM)* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Sets the affine coordinates of a EC_POINT over GFp
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM with the x-coordinate
- *  \param  y      BIGNUM with the y-coordinate
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_set_affine_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	/**
+	 * Gets the jacobian projective coordinates of a EC_POINT over GFp
+	 *  \param  group  underlying EC_GROUP object
+	 *  \param  p      EC_POINT object
+	 *  \param  x      BIGNUM for the x-coordinate
+	 *  \param  y      BIGNUM for the y-coordinate
+	 *  \param  z      BIGNUM for the z-coordinate
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_POINT_get_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BIGNUM* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Gets the affine coordinates of a EC_POINT over GFp
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM for the x-coordinate
- *  \param  y      BIGNUM for the y-coordinate
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_get_affine_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	/**
+	 * Sets the affine coordinates of a EC_POINT over GFp
+	 *  \param  group  underlying EC_GROUP object
+	 *  \param  p      EC_POINT object
+	 *  \param  x      BIGNUM with the x-coordinate
+	 *  \param  y      BIGNUM with the y-coordinate
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_POINT_set_affine_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Sets the x9.62 compressed coordinates of a EC_POINT over GFp
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM with x-coordinate
- *  \param  y_bit  integer with the y-Bit (either 0 or 1)
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_set_compressed_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	/**
+	 * Gets the affine coordinates of a EC_POINT over GFp
+	 *  \param  group  underlying EC_GROUP object
+	 *  \param  p      EC_POINT object
+	 *  \param  x      BIGNUM for the x-coordinate
+	 *  \param  y      BIGNUM for the y-coordinate
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_POINT_get_affine_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-//#if !defined(OPENSSL_NO_EC2M)
-/**
- * Sets the affine coordinates of a EC_POINT over GF2m
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM with the x-coordinate
- *  \param  y      BIGNUM with the y-coordinate
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_set_affine_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	/**
+	 * Sets the x9.62 compressed coordinates of a EC_POINT over GFp
+	 *  \param  group  underlying EC_GROUP object
+	 *  \param  p      EC_POINT object
+	 *  \param  x      BIGNUM with x-coordinate
+	 *  \param  y_bit  integer with the y-Bit (either 0 or 1)
+	 *  \param  ctx    BN_CTX object (optional)
+	 *  \return 1 on success and 0 if an error occured
+	 */
+	int EC_POINT_set_compressed_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Gets the affine coordinates of a EC_POINT over GF2m
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM for the x-coordinate
- *  \param  y      BIGNUM for the y-coordinate
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_get_affine_coordinates_GF2m(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	//#if !defined(OPENSSL_NO_EC2M)
+		/**
+		 * Sets the affine coordinates of a EC_POINT over GF2m
+		 *  \param  group  underlying EC_GROUP object
+		 *  \param  p      EC_POINT object
+		 *  \param  x      BIGNUM with the x-coordinate
+		 *  \param  y      BIGNUM with the y-coordinate
+		 *  \param  ctx    BN_CTX object (optional)
+		 *  \return 1 on success and 0 if an error occured
+		 */
+		int EC_POINT_set_affine_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-/**
- * Sets the x9.62 compressed coordinates of a EC_POINT over GF2m
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  x      BIGNUM with x-coordinate
- *  \param  y_bit  integer with the y-Bit (either 0 or 1)
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
- */
-int EC_POINT_set_compressed_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-//#endif
+		/**
+		 * Gets the affine coordinates of a EC_POINT over GF2m
+		 *  \param  group  underlying EC_GROUP object
+		 *  \param  p      EC_POINT object
+		 *  \param  x      BIGNUM for the x-coordinate
+		 *  \param  y      BIGNUM for the y-coordinate
+		 *  \param  ctx    BN_CTX object (optional)
+		 *  \return 1 on success and 0 if an error occured
+		 */
+		int EC_POINT_get_affine_coordinates_GF2m(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+
+		/**
+		 * Sets the x9.62 compressed coordinates of a EC_POINT over GF2m
+		 *  \param  group  underlying EC_GROUP object
+		 *  \param  p      EC_POINT object
+		 *  \param  x      BIGNUM with x-coordinate
+		 *  \param  y_bit  integer with the y-Bit (either 0 or 1)
+		 *  \param  ctx    BN_CTX object (optional)
+		 *  \return 1 on success and 0 if an error occured
+		 */
+		int EC_POINT_set_compressed_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	//#endif
+}
 
 /**
  * Encodes a EC_POINT object to a octet string
@@ -747,6 +764,7 @@ int EC_GROUP_get_trinomial_basis(const (.EC_GROUP)*, uint* k);
 int EC_GROUP_get_pentanomial_basis(const (.EC_GROUP)*, uint* k1, uint* k2, uint* k3);
 //#endif
 
+enum OPENSSL_EC_EXPLICIT_CURVE = 0x0000;
 enum OPENSSL_EC_NAMED_CURVE = 0x0001;
 
 package alias ecpk_parameters_st = void;

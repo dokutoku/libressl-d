@@ -1,16 +1,16 @@
-/* $OpenBSD: opensslv.h,v 1.61 2020/09/25 11:31:39 bcook Exp $ */
+/* $OpenBSD: opensslv.h,v 1.66 2021/09/15 17:14:26 tb Exp $ */
 /**
  * These will change with each release of LibreSSL-portable
  */
 module libressl_d.openssl.opensslv;
 
 
-enum LIBRESSL_VERSION_NUMBER = 0x3030500FL;
+enum LIBRESSL_VERSION_NUMBER = 0x3040100FL;
 
 /**
  * ^ Patch starts here
  */
-enum LIBRESSL_VERSION_TEXT = "LibreSSL 3.3.5";
+enum LIBRESSL_VERSION_TEXT = "LibreSSL 3.4.1";
 
 /* These will never change */
 enum OPENSSL_VERSION_NUMBER = 0x20000000L;

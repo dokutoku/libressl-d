@@ -1,4 +1,4 @@
-/* $OpenBSD: srtp.h,v 1.6 2015/09/01 15:18:23 jsing Exp $ */
+/* $OpenBSD: srtp.h,v 1.7 2021/06/11 15:28:13 landry Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -130,6 +130,14 @@ enum SRTP_AES128_F8_SHA1_80 = 0x0003;
 enum SRTP_AES128_F8_SHA1_32 = 0x0004;
 enum SRTP_NULL_SHA1_80 = 0x0005;
 enum SRTP_NULL_SHA1_32 = 0x0006;
+
+/**
+ * AEAD SRTP protection profiles from RFC 7714
+ */
+enum SRTP_AEAD_AES_128_GCM = 0x0007;
+
+///Ditto
+enum SRTP_AEAD_AES_256_GCM = 0x0008;
 
 int SSL_CTX_set_tlsext_use_srtp(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (char)* profiles);
 int SSL_set_tlsext_use_srtp(libressl_d.openssl.ossl_typ.SSL* ctx, const (char)* profiles);

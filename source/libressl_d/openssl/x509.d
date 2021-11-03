@@ -1,4 +1,4 @@
-/* $OpenBSD: x509.h,v 1.75 2021/03/31 16:51:06 tb Exp $ */
+/* $OpenBSD: x509.h,v 1.76 2021/09/02 12:41:44 job Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -401,6 +401,12 @@ struct x509_cert_aux_st
 
 alias X509_CERT_AUX = .x509_cert_aux_st;
 
+version (OPENSSL_NO_RFC3779) {
+} else {
+	struct stack_st_IPAddressFamily;
+	struct ASIdentifiers_st;
+}
+
 struct x509_st
 {
 	.X509_CINF* cert_info;
@@ -423,6 +429,12 @@ struct x509_st
 	libressl_d.openssl.x509v3.stack_st_DIST_POINT* crldp;
 	libressl_d.openssl.x509v3.stack_st_GENERAL_NAME* altname;
 	libressl_d.openssl.ossl_typ.NAME_CONSTRAINTS* nc;
+
+	version (OPENSSL_NO_RFC3779) {
+	} else {
+		.stack_st_IPAddressFamily* rfc3779_addr;
+		.ASIdentifiers_st* rfc3779_asid;
+	}
 
 	version (OPENSSL_NO_SHA) {
 	} else {

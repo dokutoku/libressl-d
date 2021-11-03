@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl3.h,v 1.51 2020/06/05 18:14:05 jsing Exp $ */
+/* $OpenBSD: ssl3.h,v 1.57 2021/09/10 14:49:13 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -300,125 +300,49 @@ enum SSL3_RT_CHANGE_CIPHER_SPEC = 20;
 enum SSL3_RT_ALERT = 21;
 enum SSL3_RT_HANDSHAKE = 22;
 enum SSL3_RT_APPLICATION_DATA = 23;
-enum TLS1_RT_HEARTBEAT = 24;
 
 enum SSL3_AL_WARNING = 1;
 enum SSL3_AL_FATAL = 2;
 
-enum SSL3_AD_CLOSE_NOTIFY = 0;
+version (LIBRESSL_INTERNAL) {
+} else {
+	enum SSL3_AD_CLOSE_NOTIFY = 0;
 
-/**
- *  fatal
- */
-enum SSL3_AD_UNEXPECTED_MESSAGE = 10;
+	/**
+	 *  fatal
+	 */
+	enum SSL3_AD_UNEXPECTED_MESSAGE = 10;
 
-/**
- *  fatal
- */
-enum SSL3_AD_BAD_RECORD_MAC = 20;
+	/**
+	 *  fatal
+	 */
+	enum SSL3_AD_BAD_RECORD_MAC = 20;
 
-/**
- *  fatal
- */
-enum SSL3_AD_DECOMPRESSION_FAILURE = 30;
+	/**
+	 *  fatal
+	 */
+	enum SSL3_AD_DECOMPRESSION_FAILURE = 30;
 
-/**
- *  fatal
- */
-enum SSL3_AD_HANDSHAKE_FAILURE = 40;
+	/**
+	 *  fatal
+	 */
+	enum SSL3_AD_HANDSHAKE_FAILURE = 40;
 
-enum SSL3_AD_NO_CERTIFICATE = 41;
-enum SSL3_AD_BAD_CERTIFICATE = 42;
-enum SSL3_AD_UNSUPPORTED_CERTIFICATE = 43;
-enum SSL3_AD_CERTIFICATE_REVOKED = 44;
-enum SSL3_AD_CERTIFICATE_EXPIRED = 45;
-enum SSL3_AD_CERTIFICATE_UNKNOWN = 46;
+	enum SSL3_AD_NO_CERTIFICATE = 41;
+	enum SSL3_AD_BAD_CERTIFICATE = 42;
+	enum SSL3_AD_UNSUPPORTED_CERTIFICATE = 43;
+	enum SSL3_AD_CERTIFICATE_REVOKED = 44;
+	enum SSL3_AD_CERTIFICATE_EXPIRED = 45;
+	enum SSL3_AD_CERTIFICATE_UNKNOWN = 46;
 
-/**
- *  fatal
- */
-enum SSL3_AD_ILLEGAL_PARAMETER = 47;
+	/**
+	 *  fatal
+	 */
+	enum SSL3_AD_ILLEGAL_PARAMETER = 47;
+}
 
 enum TLS1_HB_REQUEST = 1;
 enum TLS1_HB_RESPONSE = 2;
-
-//#if !defined(OPENSSL_NO_SSL_INTERN)
-version (LIBRESSL_INTERNAL) {
-} else {
-	struct ssl3_record_st
-	{
-		/**
-		 * type of record
-		 */
-		/*r */
-		int type;
-
-		/**
-		 * How many bytes available
-		 */
-		/* rw */
-		uint length_;
-
-		/**
-		 * read/write offset into 'buf'
-		 */
-		/* r */
-		uint off;
-
-		/**
-		 * pointer to the record data
-		 */
-		/* rw */
-		ubyte* data;
-
-		/**
-		 * where the decode bytes are
-		 */
-		/* rw */
-		ubyte* input;
-
-		/**
-		 * epoch number, needed by DTLS1
-		 */
-		/* r */
-		core.stdc.config.c_ulong epoch;
-
-		/**
-		 * sequence number, needed by DTLS1
-		 */
-		/* r */
-		ubyte[8] seq_num;
-	}
-
-	alias SSL3_RECORD = .ssl3_record_st;
-
-	struct ssl3_buffer_st
-	{
-		/**
-		 * at least SSL3_RT_MAX_PACKET_SIZE bytes,
-		 * see ssl3_setup_buffers()
-		 */
-		ubyte* buf;
-
-		/**
-		 * buffer size
-		 */
-		size_t len;
-
-		/**
-		 * where to 'copy from'
-		 */
-		int offset;
-
-		/**
-		 * how many bytes left
-		 */
-		int left;
-	}
-
-	alias SSL3_BUFFER = .ssl3_buffer_st;
-}
-//#endif
 
 enum SSL3_CT_RSA_SIGN = 1;
 enum SSL3_CT_DSS_SIGN = 2;
@@ -439,23 +363,6 @@ enum SSL3_FLAGS_NO_RENEGOTIATE_CIPHERS = 0x0001;
 enum TLS1_FLAGS_SKIP_CERT_VERIFY = 0x0010;
 enum TLS1_FLAGS_FREEZE_TRANSCRIPT = 0x0020;
 enum SSL3_FLAGS_CCS_OK = 0x0080;
-
-//#if !defined(OPENSSL_NO_SSL_INTERN)
-//struct ssl3_state_internal_st;
-package alias ssl3_state_internal_st = void;
-
-struct ssl3_state_st
-{
-	core.stdc.config.c_long flags;
-
-	ubyte[.SSL3_RANDOM_SIZE] server_random;
-	ubyte[.SSL3_RANDOM_SIZE] client_random;
-
-	.ssl3_state_internal_st* internal;
-}
-
-alias SSL3_STATE = .ssl3_state_st;
-//#endif
 
 /* SSLv3 */
 /*client */
@@ -562,12 +469,15 @@ enum DTLS1_MT_HELLO_VERIFY_REQUEST = 3;
 
 enum SSL3_MT_CCS = 1;
 
-/* These are used when changing over to a new cipher */
-enum SSL3_CC_READ = 0x01;
-enum SSL3_CC_WRITE = 0x02;
-enum SSL3_CC_CLIENT = 0x10;
-enum SSL3_CC_SERVER = 0x20;
-enum SSL3_CHANGE_CIPHER_CLIENT_WRITE = .SSL3_CC_CLIENT | .SSL3_CC_WRITE;
-enum SSL3_CHANGE_CIPHER_SERVER_READ = .SSL3_CC_SERVER | .SSL3_CC_READ;
-enum SSL3_CHANGE_CIPHER_CLIENT_READ = .SSL3_CC_CLIENT | .SSL3_CC_READ;
-enum SSL3_CHANGE_CIPHER_SERVER_WRITE = .SSL3_CC_SERVER | .SSL3_CC_WRITE;
+version (LIBRESSL_INTERNAL) {
+} else {
+	/* These are used when changing over to a new cipher */
+	enum SSL3_CC_READ = 0x01;
+	enum SSL3_CC_WRITE = 0x02;
+	enum SSL3_CC_CLIENT = 0x10;
+	enum SSL3_CC_SERVER = 0x20;
+	enum SSL3_CHANGE_CIPHER_CLIENT_WRITE = .SSL3_CC_CLIENT | .SSL3_CC_WRITE;
+	enum SSL3_CHANGE_CIPHER_SERVER_READ = .SSL3_CC_SERVER | .SSL3_CC_READ;
+	enum SSL3_CHANGE_CIPHER_CLIENT_READ = .SSL3_CC_CLIENT | .SSL3_CC_READ;
+	enum SSL3_CHANGE_CIPHER_SERVER_WRITE = .SSL3_CC_SERVER | .SSL3_CC_WRITE;
+}

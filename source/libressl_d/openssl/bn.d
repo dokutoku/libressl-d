@@ -1,4 +1,4 @@
-/* $OpenBSD: bn.h,v 1.39 2019/08/25 19:23:59 schwarze Exp $ */
+/* $OpenBSD: bn.h,v 1.43 2021/09/10 14:33:44 tb Exp $ */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -279,6 +279,25 @@ auto BN_get_flags(B, N)(scope const B* b, N n)
 	{
 		return b.flags & n;
 	}
+
+/**
+ * Values for |top| in BN_rand()
+ */
+enum BN_RAND_TOP_ANY = -1;
+
+///Ditto
+enum BN_RAND_TOP_ONE = 0;
+
+///Ditto
+enum BN_RAND_TOP_TWO = 1;
+
+/**
+ * Values for |bottom| in BN_rand()
+ */
+enum BN_RAND_BOTTOM_ANY = 0;
+
+///Ditto
+enum BN_RAND_BOTTOM_ODD = 1;
 
 /**
  * get a clone of a BIGNUM with changed flags, for *temporary* use only
@@ -680,6 +699,9 @@ libressl_d.openssl.ossl_typ.BIGNUM* BN_copy(libressl_d.openssl.ossl_typ.BIGNUM* 
 void BN_swap(libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b);
 libressl_d.openssl.ossl_typ.BIGNUM* BN_bin2bn(const (ubyte)* s, int len, libressl_d.openssl.ossl_typ.BIGNUM* ret);
 int BN_bn2bin(const (libressl_d.openssl.ossl_typ.BIGNUM)* a, ubyte* to);
+int BN_bn2binpad(const (libressl_d.openssl.ossl_typ.BIGNUM)* a, ubyte* to, int tolen);
+libressl_d.openssl.ossl_typ.BIGNUM* BN_lebin2bn(const (ubyte)* s, int len, libressl_d.openssl.ossl_typ.BIGNUM* ret);
+int BN_bn2lebinpad(const (libressl_d.openssl.ossl_typ.BIGNUM)* a, ubyte* to, int tolen);
 libressl_d.openssl.ossl_typ.BIGNUM* BN_mpi2bn(const (ubyte)* s, int len, libressl_d.openssl.ossl_typ.BIGNUM* ret);
 int BN_bn2mpi(const (libressl_d.openssl.ossl_typ.BIGNUM)* a, ubyte* to);
 int BN_sub(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b);

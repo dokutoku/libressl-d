@@ -881,6 +881,10 @@ enum SN_id_ct_geofeedCSVwithCRLF = "id-ct-geofeedCSVwithCRLF";
 enum NID_id_ct_geofeedCSVwithCRLF = 1013;
 //#define OBJ_id_ct_geofeedCSVwithCRLF OBJ_id_smime_ct, 47L
 
+enum SN_id_ct_signedChecklist = "id-ct-signedChecklist";
+enum NID_id_ct_signedChecklist = 1014;
+//#define OBJ_id_ct_signedChecklist OBJ_id_smime_ct, 48L
+
 enum SN_id_smime_aa_receiptRequest = "id-smime-aa-receiptRequest";
 enum NID_id_smime_aa_receiptRequest = 212;
 //#define OBJ_id_smime_aa_receiptRequest OBJ_id_smime_aa, 1L
@@ -1589,6 +1593,11 @@ enum SN_dvcs = "DVCS";
 enum LN_dvcs = "dvcs";
 enum NID_dvcs = 297;
 //#define OBJ_dvcs .OBJ_id_kp, 10L
+
+enum SN_id_kp_bgpsec_router = "id-kp-bgpsec-router";
+enum LN_id_kp_bgpsec_router = "BGPsec Router";
+enum NID_id_kp_bgpsec_router = 1015;
+//#define OBJ_id_kp_bgpsec_router OBJ_id_kp, 30L
 
 enum SN_id_it_caProtEncCert = "id-it-caProtEncCert";
 enum NID_id_it_caProtEncCert = 298;

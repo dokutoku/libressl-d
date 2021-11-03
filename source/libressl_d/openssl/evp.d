@@ -1,4 +1,4 @@
-/* $OpenBSD: evp.h,v 1.81 2021/03/31 16:47:01 tb Exp $ */
+/* $OpenBSD: evp.h,v 1.83 2021/05/10 17:00:32 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -1062,8 +1062,12 @@ int EVP_VerifyFinal(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, const (ubyte)* 
 int EVP_DigestSignInit(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY_CTX** pctx, const (libressl_d.openssl.ossl_typ.EVP_MD)* type, libressl_d.openssl.ossl_typ.ENGINE* e, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 int EVP_DigestSignFinal(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, ubyte* sigret, size_t* siglen);
 
+int EVP_DigestSign(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, ubyte* sigret, size_t* siglen, const (ubyte)* tbs, size_t tbslen);
+
 int EVP_DigestVerifyInit(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY_CTX** pctx, const (libressl_d.openssl.ossl_typ.EVP_MD)* type, libressl_d.openssl.ossl_typ.ENGINE* e, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 int EVP_DigestVerifyFinal(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, const (ubyte)* sig, size_t siglen);
+
+int EVP_DigestVerify(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, const (ubyte)* sigret, size_t siglen, const (ubyte)* tbs, size_t tbslen);
 
 int EVP_OpenInit(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* type, const (ubyte)* ek, int ekl, const (ubyte)* iv, libressl_d.openssl.ossl_typ.EVP_PKEY* priv);
 int EVP_OpenFinal(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* out_, int* outl);
