@@ -5,5 +5,46 @@
 	"license": "proprietary",
 	"copyright": "Copyright © 2020, dokutoku",
 	"homepage": "https://gitlab.com/dokutoku/libressl-d",
-	"targetType": "sourceLibrary"
+	"configurations":
+	[
+		{
+			"name": "library",
+			"targetType": "sourceLibrary",
+			"versions":
+			[
+				"LIBRESSL_HAS_DTLS1_2",
+				"LIBRESSL_HAS_TLS1_3",
+				"OPENSSL_NO_ASYNC",
+				"OPENSSL_NO_BUF_FREELISTS",
+				"OPENSSL_NO_COMP",
+				"OPENSSL_NO_DYNAMIC_ENGINE",
+				"OPENSSL_NO_EC_NISTP_64_GCC_128",
+				"OPENSSL_NO_EGD",
+				"OPENSSL_NO_GMP",
+				"OPENSSL_NO_HEARTBEATS",
+				"OPENSSL_NO_JPAKE",
+				"OPENSSL_NO_KRB5",
+				"OPENSSL_NO_MD2",
+				"OPENSSL_NO_MDC2",
+				"OPENSSL_NO_PSK",
+				"OPENSSL_NO_RC5",
+				"OPENSSL_NO_RFC3779",
+				"OPENSSL_NO_RSAX",
+				"OPENSSL_NO_SCTP",
+				"OPENSSL_NO_SEED",
+				"OPENSSL_NO_SHA0",
+				"OPENSSL_NO_SRP",
+				"OPENSSL_NO_SSL2",
+				"OPENSSL_NO_SSL3",
+				"OPENSSL_NO_SSL3_METHOD",
+				"OPENSSL_NO_SSL_TRACE",
+				"OPENSSL_NO_STORE",
+				"OPENSSL_THREADS"
+			]
+		},
+		{
+			"name": "sourceLibrary",
+			"targetType": "sourceLibrary"
+		}
+	]
 }
