@@ -6,39 +6,41 @@ module libressl_d.compat.time;
 
 
 public import core.stdc.time;
+public import core.sys.posix.time;
 public import libressl_d.compat.sys.time;
 
 extern (C):
 nothrow @nogc:
 
-//#if defined(_WIN32)
-	//core.stdc.time.tm* __gmtime_r(const (core.stdc.time.time_t)* t, core.stdc.time.tm* core.stdc.time.tm);
-	//alias gmtime_r = .__gmtime_r;
-//#endif
+version (Windows) {
+	core.stdc.time.tm* __gmtime_r(const (core.stdc.time.time_t)* t, core.stdc.time.tm* tm);
+	alias gmtime_r = .__gmtime_r;
+}
 
-//#if !defined(HAVE_TIMEGM)
-	//core.stdc.time.time_t timegm(core.stdc.time.tm* core.stdc.time.tm);
-//#endif
+static if (!__traits(compiles, timegm)) {
+	core.stdc.time.time_t timegm(core.stdc.time.tm* tm);
+}
 
-//#if !defined(CLOCK_MONOTONIC)
-	//alias CLOCK_MONOTONIC = libressl_d.compat.sys.time.CLOCK_REALTIME;
-//#endif
+static if (!__traits(compiles, CLOCK_REALTIME)) {
+	enum CLOCK_REALTIME = 0;
+}
 
-//#if !defined(CLOCK_REALTIME)
-	//enum CLOCK_REALTIME = 0;
-//#endif
+static if (!__traits(compiles, CLOCK_MONOTONIC)) {
+	alias CLOCK_MONOTONIC = .CLOCK_REALTIME;
+}
 
 version (Posix) {
-	//#if !defined(HAVE_CLOCK_GETTIME)
+	static if (!__traits(compiles, clock_gettime)) {
 		alias clockid_t = int;
-		//int clock_gettime(.clockid_t clock_id, timespec* tp);
-	//#endif
+		int clock_gettime(.clockid_t clock_id, libressl_d.compat.sys.time.timespec* tp);
+	}
 
 	//#if defined(timespecsub)
 		//version = HAVE_TIMESPECSUB;
 	//#endif
 
 	//#if !defined(HAVE_TIMESPECSUB)
+	static if (!__traits(compiles, timespecsub)) {
 		pragma(inline, true)
 		pure nothrow @trusted @nogc @live
 		void timespecsub(scope const libressl_d.compat.sys.time.timespec* tsp, scope const libressl_d.compat.sys.time.timespec* usp, scope libressl_d.compat.sys.time.timespec* vsp)
@@ -60,5 +62,5 @@ version (Posix) {
 					vsp.tv_nsec += 1000000000L;
 				}
 			}
-	//#endif
+	}
 }

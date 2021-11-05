@@ -21,7 +21,7 @@ public import core.stdc.stddef;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_POLY1305) {
-	//static assert(false, "Poly1305 is disabled.");
+	static assert(false, "Poly1305 is disabled.");
 }
 
 extern (C):

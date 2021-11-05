@@ -6,6 +6,18 @@
 module libressl_d.openssl.opensslfeatures;
 
 
+version (LIBRESSL_INTERNAL) {
+	enum LIBRESSL_INTERNAL = true;
+} else {
+	enum LIBRESSL_INTERNAL = false;
+}
+
+version (LIBRESSL_HAS_TLS1_3) {
+	enum LIBRESSL_HAS_TLS1_3 = true;
+} else {
+	enum LIBRESSL_HAS_TLS1_3 = false;
+}
+
 version (none):
 
 version = LIBRESSL_HAS_TLS1_3;

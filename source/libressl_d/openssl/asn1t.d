@@ -71,219 +71,220 @@ public import core.stdc.stddef;
 extern (C):
 nothrow @nogc:
 
-//#if !defined(LIBRESSL_INTERNAL)
-/*
- * Macro to obtain ASN1_ADB pointer from a type (only used internally)
- */
-//#define ASN1_ADB_ptr(iptr) ((const (.ASN1_ADB)*) (iptr))
+version (LIBRESSL_INTERNAL) {
+} else {
+	/*
+	 * Macro to obtain ASN1_ADB pointer from a type (only used internally)
+	 */
+	//#define ASN1_ADB_ptr(iptr) ((const (.ASN1_ADB)*) (iptr))
 
-/* Macros for start and end of ASN1_ITEM definition */
+	/* Macros for start and end of ASN1_ITEM definition */
 
-//#define ASN1_ITEM_start(itname) const libressl_d.openssl.ossl_typ.ASN1_ITEM itname##_it = {
-//#define static_ASN1_ITEM_start(itname) static const libressl_d.openssl.ossl_typ.ASN1_ITEM itname##_it = {
-//#define ASN1_ITEM_end(itname) } ;
+	//#define ASN1_ITEM_start(itname) const libressl_d.openssl.ossl_typ.ASN1_ITEM itname##_it = {
+	//#define static_ASN1_ITEM_start(itname) static const libressl_d.openssl.ossl_typ.ASN1_ITEM itname##_it = {
+	//#define ASN1_ITEM_end(itname) } ;
 
-/* Macros to aid ASN1 template writing */
+	/* Macros to aid ASN1 template writing */
 
-//#define ASN1_ITEM_TEMPLATE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_item_tt
+	//#define ASN1_ITEM_TEMPLATE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_item_tt
 
-//#define ASN1_ITEM_TEMPLATE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_PRIMITIVE, -1, &tname##_item_tt, 0, null, 0, #tname .ASN1_ITEM_end(tname)
+	//#define ASN1_ITEM_TEMPLATE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_PRIMITIVE, -1, &tname##_item_tt, 0, null, 0, #tname .ASN1_ITEM_end(tname)
 
-//#define static_ASN1_ITEM_TEMPLATE_END(tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_PRIMITIVE, -1, &tname##_item_tt, 0, null, 0, #tname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_ITEM_TEMPLATE_END(tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_PRIMITIVE, -1, &tname##_item_tt, 0, null, 0, #tname .ASN1_ITEM_end(tname)
 
-/* This is a ASN1 type which just embeds a template */
+	/* This is a ASN1 type which just embeds a template */
 
-/*
- * This pair helps declare a SEQUENCE. We can do:
- *
- *     ASN1_SEQUENCE(stname) = {
- *         ... SEQUENCE components ...
- *     } ASN1_SEQUENCE_END(stname)
- *
- *     This will produce an ASN1_ITEM called stname_it
- *     for a structure called stname.
- *
- *     If you want the same structure but a different
- *     name then use:
- *
- *     ASN1_SEQUENCE(itname) = {
- *         ... SEQUENCE components ...
- *     } ASN1_SEQUENCE_END_name(stname, itname)
- *
- *     This will create an item called itname_it using
- *     a structure called stname.
- */
+	/*
+	 * This pair helps declare a SEQUENCE. We can do:
+	 *
+	 *     ASN1_SEQUENCE(stname) = {
+	 *         ... SEQUENCE components ...
+	 *     } ASN1_SEQUENCE_END(stname)
+	 *
+	 *     This will produce an ASN1_ITEM called stname_it
+	 *     for a structure called stname.
+	 *
+	 *     If you want the same structure but a different
+	 *     name then use:
+	 *
+	 *     ASN1_SEQUENCE(itname) = {
+	 *         ... SEQUENCE components ...
+	 *     } ASN1_SEQUENCE_END_name(stname, itname)
+	 *
+	 *     This will create an item called itname_it using
+	 *     a structure called stname.
+	 */
 
-//#define ASN1_SEQUENCE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_seq_tt[]
+	//#define ASN1_SEQUENCE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_seq_tt[]
 
-//#define ASN1_SEQUENCE_END(stname) .ASN1_SEQUENCE_END_name(stname, stname)
+	//#define ASN1_SEQUENCE_END(stname) .ASN1_SEQUENCE_END_name(stname, stname)
 
-//#define static_ASN1_SEQUENCE_END(stname) .static_ASN1_SEQUENCE_END_name(stname, stname)
+	//#define static_ASN1_SEQUENCE_END(stname) .static_ASN1_SEQUENCE_END_name(stname, stname)
 
-//#define ASN1_SEQUENCE_END_name(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_SEQUENCE_END_name(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-//#define static_ASN1_SEQUENCE_END_name(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_SEQUENCE_END_name(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-//#define ASN1_NDEF_SEQUENCE(tname) .ASN1_SEQUENCE(tname)
+	//#define ASN1_NDEF_SEQUENCE(tname) .ASN1_SEQUENCE(tname)
 
-//#define ASN1_NDEF_SEQUENCE_cb(tname, cb) .ASN1_SEQUENCE_cb(tname, cb)
+	//#define ASN1_NDEF_SEQUENCE_cb(tname, cb) .ASN1_SEQUENCE_cb(tname, cb)
 
-//#define ASN1_SEQUENCE_cb(tname, cb) static const .ASN1_AUX tname##_aux = {null, 0, 0, 0, cb, 0}; .ASN1_SEQUENCE(tname)
+	//#define ASN1_SEQUENCE_cb(tname, cb) static const .ASN1_AUX tname##_aux = {null, 0, 0, 0, cb, 0}; .ASN1_SEQUENCE(tname)
 
-//#define ASN1_BROKEN_SEQUENCE(tname) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_BROKEN, 0, 0, 0, 0}; .ASN1_SEQUENCE(tname)
+	//#define ASN1_BROKEN_SEQUENCE(tname) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_BROKEN, 0, 0, 0, 0}; .ASN1_SEQUENCE(tname)
 
-//#define ASN1_SEQUENCE_ref(tname, cb, lck) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_REFCOUNT, offsetof(tname, references), lck, cb, 0}; .ASN1_SEQUENCE(tname)
+	//#define ASN1_SEQUENCE_ref(tname, cb, lck) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_REFCOUNT, offsetof(tname, references), lck, cb, 0}; .ASN1_SEQUENCE(tname)
 
-//#define ASN1_SEQUENCE_enc(tname, enc, cb) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_ENCODING, 0, 0, cb, offsetof(tname, enc)}; .ASN1_SEQUENCE(tname)
+	//#define ASN1_SEQUENCE_enc(tname, enc, cb) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_ENCODING, 0, 0, cb, offsetof(tname, enc)}; .ASN1_SEQUENCE(tname)
 
-//#define ASN1_NDEF_SEQUENCE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
+	//#define ASN1_NDEF_SEQUENCE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
 
-//#define static_ASN1_NDEF_SEQUENCE_END(tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_NDEF_SEQUENCE_END(tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
 
-//#define ASN1_BROKEN_SEQUENCE_END(stname) .ASN1_SEQUENCE_END_ref(stname, stname)
+	//#define ASN1_BROKEN_SEQUENCE_END(stname) .ASN1_SEQUENCE_END_ref(stname, stname)
 
-//#define ASN1_SEQUENCE_END_enc(stname, tname) .ASN1_SEQUENCE_END_ref(stname, tname)
+	//#define ASN1_SEQUENCE_END_enc(stname, tname) .ASN1_SEQUENCE_END_ref(stname, tname)
 
-//#define ASN1_SEQUENCE_END_cb(stname, tname) .ASN1_SEQUENCE_END_ref(stname, tname)
+	//#define ASN1_SEQUENCE_END_cb(stname, tname) .ASN1_SEQUENCE_END_ref(stname, tname)
 
-//#define static_ASN1_SEQUENCE_END_cb(stname, tname) .static_ASN1_SEQUENCE_END_ref(stname, tname)
+	//#define static_ASN1_SEQUENCE_END_cb(stname, tname) .static_ASN1_SEQUENCE_END_ref(stname, tname)
 
-//#define ASN1_SEQUENCE_END_ref(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_SEQUENCE_END_ref(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-//#define static_ASN1_SEQUENCE_END_ref(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_SEQUENCE_END_ref(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-//#define ASN1_NDEF_SEQUENCE_END_cb(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_NDEF_SEQUENCE_END_cb(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-/*
- * This pair helps declare a CHOICE type. We can do:
- *
- *     ASN1_CHOICE(chname) = {
- *         ... CHOICE options ...
- *     ASN1_CHOICE_END(chname)
- *
- *     This will produce an ASN1_ITEM called chname_it
- *     for a structure called chname. The structure
- *     definition must look like this:
- *     typedef struct {
- *         int type;
- *
- *         union value
- *         {
- *             ASN1_SOMETHING* pt1;
- *             ASN1_SOMEOTHER* pt2;
- *         }
- *     } chname;
- *
- *     the name of the selector must be 'type'.
- *     to use an alternative selector name use the
- *      ASN1_CHOICE_END_selector() version.
- */
+	/*
+	 * This pair helps declare a CHOICE type. We can do:
+	 *
+	 *     ASN1_CHOICE(chname) = {
+	 *         ... CHOICE options ...
+	 *     ASN1_CHOICE_END(chname)
+	 *
+	 *     This will produce an ASN1_ITEM called chname_it
+	 *     for a structure called chname. The structure
+	 *     definition must look like this:
+	 *     typedef struct {
+	 *         int type;
+	 *
+	 *         union value
+	 *         {
+	 *             ASN1_SOMETHING* pt1;
+	 *             ASN1_SOMEOTHER* pt2;
+	 *         }
+	 *     } chname;
+	 *
+	 *     the name of the selector must be 'type'.
+	 *     to use an alternative selector name use the
+	 *      ASN1_CHOICE_END_selector() version.
+	 */
 
-//#define ASN1_CHOICE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_ch_tt[]
+	//#define ASN1_CHOICE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_ch_tt[]
 
-//#define ASN1_CHOICE_cb(tname, cb) static const .ASN1_AUX tname##_aux = {null, 0, 0, 0, cb, 0}; .ASN1_CHOICE(tname)
+	//#define ASN1_CHOICE_cb(tname, cb) static const .ASN1_AUX tname##_aux = {null, 0, 0, 0, cb, 0}; .ASN1_CHOICE(tname)
 
-//#define ASN1_CHOICE_END(stname) .ASN1_CHOICE_END_name(stname, stname)
+	//#define ASN1_CHOICE_END(stname) .ASN1_CHOICE_END_name(stname, stname)
 
-//#define static_ASN1_CHOICE_END(stname) .static_ASN1_CHOICE_END_name(stname, stname)
+	//#define static_ASN1_CHOICE_END(stname) .static_ASN1_CHOICE_END_name(stname, stname)
 
-//#define ASN1_CHOICE_END_name(stname, tname) .ASN1_CHOICE_END_selector(stname, tname, type)
+	//#define ASN1_CHOICE_END_name(stname, tname) .ASN1_CHOICE_END_selector(stname, tname, type)
 
-//#define static_ASN1_CHOICE_END_name(stname, tname) .static_ASN1_CHOICE_END_selector(stname, tname, type)
+	//#define static_ASN1_CHOICE_END_name(stname, tname) .static_ASN1_CHOICE_END_selector(stname, tname, type)
 
-//#define ASN1_CHOICE_END_selector(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_CHOICE_END_selector(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-//#define static_ASN1_CHOICE_END_selector(stname, tname, selname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_CHOICE_END_selector(stname, tname, selname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-//#define ASN1_CHOICE_END_cb(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_CHOICE_END_cb(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-/* This helps with the template wrapper form of ASN1_ITEM */
+	/* This helps with the template wrapper form of ASN1_ITEM */
 
-//#define ASN1_EX_TEMPLATE_TYPE(flags, tag, name, type) { (flags), (tag), 0, #name, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
+	//#define ASN1_EX_TEMPLATE_TYPE(flags, tag, name, type) { (flags), (tag), 0, #name, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
 
-/* These help with SEQUENCE or CHOICE components */
+	/* These help with SEQUENCE or CHOICE components */
 
-/* used to declare other types */
+	/* used to declare other types */
 
-//#define ASN1_EX_TYPE(flags, tag, stname, field, type) { (flags), (tag), offsetof(stname, field), #field, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
+	//#define ASN1_EX_TYPE(flags, tag, stname, field, type) { (flags), (tag), offsetof(stname, field), #field, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
 
-/* used when the structure is combined with the parent */
+	/* used when the structure is combined with the parent */
 
-//#define ASN1_EX_COMBINE(flags, tag, type) { (flags) | .ASN1_TFLG_COMBINE, (tag), 0, null, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
+	//#define ASN1_EX_COMBINE(flags, tag, type) { (flags) | .ASN1_TFLG_COMBINE, (tag), 0, null, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
 
-/* implicit and explicit helper macros */
+	/* implicit and explicit helper macros */
 
-//#define ASN1_IMP_EX(stname, field, type, tag, ex) .ASN1_EX_TYPE(.ASN1_TFLG_IMPLICIT | ex, tag, stname, field, type)
+	//#define ASN1_IMP_EX(stname, field, type, tag, ex) .ASN1_EX_TYPE(.ASN1_TFLG_IMPLICIT | ex, tag, stname, field, type)
 
-//#define ASN1_EXP_EX(stname, field, type, tag, ex) .ASN1_EX_TYPE(.ASN1_TFLG_EXPLICIT | ex, tag, stname, field, type)
+	//#define ASN1_EXP_EX(stname, field, type, tag, ex) .ASN1_EX_TYPE(.ASN1_TFLG_EXPLICIT | ex, tag, stname, field, type)
 
-/* Any defined by macros: the field used is in the table itself */
+	/* Any defined by macros: the field used is in the table itself */
 
-//#define ASN1_ADB_OBJECT(tblname) { .ASN1_TFLG_ADB_OID, -1, 0, #tblname, (const (libressl_d.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
-//#define ASN1_ADB_INTEGER(tblname) { .ASN1_TFLG_ADB_INT, -1, 0, #tblname, (const (libressl_d.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
-/* Plain simple type */
-//#define ASN1_SIMPLE(stname, field, type) .ASN1_EX_TYPE(0, 0, stname, field, type)
+	//#define ASN1_ADB_OBJECT(tblname) { .ASN1_TFLG_ADB_OID, -1, 0, #tblname, (const (libressl_d.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
+	//#define ASN1_ADB_INTEGER(tblname) { .ASN1_TFLG_ADB_INT, -1, 0, #tblname, (const (libressl_d.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
+	/* Plain simple type */
+	//#define ASN1_SIMPLE(stname, field, type) .ASN1_EX_TYPE(0, 0, stname, field, type)
 
-/* OPTIONAL simple type */
-//#define ASN1_OPT(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_OPTIONAL, 0, stname, field, type)
+	/* OPTIONAL simple type */
+	//#define ASN1_OPT(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_OPTIONAL, 0, stname, field, type)
 
-/* IMPLICIT tagged simple type */
-//#define ASN1_IMP(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, 0)
+	/* IMPLICIT tagged simple type */
+	//#define ASN1_IMP(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, 0)
 
-/* IMPLICIT tagged OPTIONAL simple type */
-//#define ASN1_IMP_OPT(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_OPTIONAL)
+	/* IMPLICIT tagged OPTIONAL simple type */
+	//#define ASN1_IMP_OPT(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_OPTIONAL)
 
-/* Same as above but EXPLICIT */
+	/* Same as above but EXPLICIT */
 
-//#define ASN1_EXP(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, 0)
-//#define ASN1_EXP_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_OPTIONAL)
+	//#define ASN1_EXP(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, 0)
+	//#define ASN1_EXP_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_OPTIONAL)
 
-/* SEQUENCE OF type */
-//#define ASN1_SEQUENCE_OF(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SEQUENCE_OF, 0, stname, field, type)
+	/* SEQUENCE OF type */
+	//#define ASN1_SEQUENCE_OF(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SEQUENCE_OF, 0, stname, field, type)
 
-/* OPTIONAL SEQUENCE OF */
-//#define ASN1_SEQUENCE_OF_OPT(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SEQUENCE_OF | .ASN1_TFLG_OPTIONAL, 0, stname, field, type)
+	/* OPTIONAL SEQUENCE OF */
+	//#define ASN1_SEQUENCE_OF_OPT(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SEQUENCE_OF | .ASN1_TFLG_OPTIONAL, 0, stname, field, type)
 
-/* Same as above but for SET OF */
+	/* Same as above but for SET OF */
 
-//#define ASN1_SET_OF(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SET_OF, 0, stname, field, type)
+	//#define ASN1_SET_OF(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SET_OF, 0, stname, field, type)
 
-//#define ASN1_SET_OF_OPT(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SET_OF | .ASN1_TFLG_OPTIONAL, 0, stname, field, type)
+	//#define ASN1_SET_OF_OPT(stname, field, type) .ASN1_EX_TYPE(.ASN1_TFLG_SET_OF | .ASN1_TFLG_OPTIONAL, 0, stname, field, type)
 
-/* Finally compound types of SEQUENCE, SET, IMPLICIT, EXPLICIT and OPTIONAL */
+	/* Finally compound types of SEQUENCE, SET, IMPLICIT, EXPLICIT and OPTIONAL */
 
-//#define ASN1_IMP_SET_OF(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF)
+	//#define ASN1_IMP_SET_OF(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF)
 
-//#define ASN1_EXP_SET_OF(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF)
+	//#define ASN1_EXP_SET_OF(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF)
 
-//#define ASN1_IMP_SET_OF_OPT(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF | .ASN1_TFLG_OPTIONAL)
+	//#define ASN1_IMP_SET_OF_OPT(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF | .ASN1_TFLG_OPTIONAL)
 
-//#define ASN1_EXP_SET_OF_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF | .ASN1_TFLG_OPTIONAL)
+	//#define ASN1_EXP_SET_OF_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SET_OF | .ASN1_TFLG_OPTIONAL)
 
-//#define ASN1_IMP_SEQUENCE_OF(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF)
+	//#define ASN1_IMP_SEQUENCE_OF(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF)
 
-//#define ASN1_IMP_SEQUENCE_OF_OPT(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF | .ASN1_TFLG_OPTIONAL)
+	//#define ASN1_IMP_SEQUENCE_OF_OPT(stname, field, type, tag) .ASN1_IMP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF | .ASN1_TFLG_OPTIONAL)
 
-//#define ASN1_EXP_SEQUENCE_OF(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF)
+	//#define ASN1_EXP_SEQUENCE_OF(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF)
 
-//#define ASN1_EXP_SEQUENCE_OF_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF | .ASN1_TFLG_OPTIONAL)
+	//#define ASN1_EXP_SEQUENCE_OF_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_SEQUENCE_OF | .ASN1_TFLG_OPTIONAL)
 
-/* EXPLICIT using indefinite length constructed form */
-//#define ASN1_NDEF_EXP(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_NDEF)
+	/* EXPLICIT using indefinite length constructed form */
+	//#define ASN1_NDEF_EXP(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_NDEF)
 
-/* EXPLICIT OPTIONAL using indefinite length constructed form */
-//#define ASN1_NDEF_EXP_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_OPTIONAL | .ASN1_TFLG_NDEF)
+	/* EXPLICIT OPTIONAL using indefinite length constructed form */
+	//#define ASN1_NDEF_EXP_OPT(stname, field, type, tag) .ASN1_EXP_EX(stname, field, type, tag, .ASN1_TFLG_OPTIONAL | .ASN1_TFLG_NDEF)
 
-/* Macros for the ASN1_ADB structure */
+	/* Macros for the ASN1_ADB structure */
 
-//#define ASN1_ADB(name) static const .ASN1_ADB_TABLE name##_adbtbl[]
+	//#define ASN1_ADB(name) static const .ASN1_ADB_TABLE name##_adbtbl[]
 
-//#define ASN1_ADB_END(name, flags, field, app_table, def, none) ; static const .ASN1_ADB name##_adb = {flags, offsetof(name, field), app_table, name##_adbtbl, (name##_adbtbl).sizeof / .ASN1_ADB_TABLE.sizeof, def, none}
+	//#define ASN1_ADB_END(name, flags, field, app_table, def, none) ; static const .ASN1_ADB name##_adb = {flags, offsetof(name, field), app_table, name##_adbtbl, (name##_adbtbl).sizeof / .ASN1_ADB_TABLE.sizeof, def, none}
 
-//#define ADB_ENTRY(val, template) { val, template }
+	//#define ADB_ENTRY(val, template) { val, template }
 
-//#define ASN1_ADB_TEMPLATE(name) static const libressl_d.openssl.asn1.ASN1_TEMPLATE name##_tt
-//#endif /* !LIBRESSL_INTERNAL */
+	//#define ASN1_ADB_TEMPLATE(name) static const libressl_d.openssl.asn1.ASN1_TEMPLATE name##_tt
+}
 
 /**
  * This is the ASN1 template structure that defines
@@ -791,53 +792,54 @@ enum ASN1_OP_STREAM_POST = 11;
 enum ASN1_OP_DETACHED_PRE = 12;
 enum ASN1_OP_DETACHED_POST = 13;
 
-//#if !defined(LIBRESSL_INTERNAL)
-/* Macro to implement a primitive type */
-//#define IMPLEMENT_ASN1_TYPE(stname) .IMPLEMENT_ASN1_TYPE_ex(stname, stname, 0)
-//#define IMPLEMENT_ASN1_TYPE_ex(itname, vname, ex) .ASN1_ITEM_start(itname) .ASN1_ITYPE_PRIMITIVE, V_##vname, null, 0, null, ex, #itname .ASN1_ITEM_end(itname)
+version (LIBRESSL_INTERNAL) {
+} else {
+	/* Macro to implement a primitive type */
+	//#define IMPLEMENT_ASN1_TYPE(stname) .IMPLEMENT_ASN1_TYPE_ex(stname, stname, 0)
+	//#define IMPLEMENT_ASN1_TYPE_ex(itname, vname, ex) .ASN1_ITEM_start(itname) .ASN1_ITYPE_PRIMITIVE, V_##vname, null, 0, null, ex, #itname .ASN1_ITEM_end(itname)
 
-/* Macro to implement a multi string type */
-//#define IMPLEMENT_ASN1_MSTRING(itname, mask) .ASN1_ITEM_start(itname) .ASN1_ITYPE_MSTRING, mask, null, 0, null, libressl_d.openssl.ossl_typ.ASN1_STRING.sizeof, #itname .ASN1_ITEM_end(itname)
-//#define IMPLEMENT_EXTERN_ASN1(sname, tag, fptrs) .ASN1_ITEM_start(sname) .ASN1_ITYPE_EXTERN, tag, null, 0, &fptrs, 0, #sname .ASN1_ITEM_end(sname)
+	/* Macro to implement a multi string type */
+	//#define IMPLEMENT_ASN1_MSTRING(itname, mask) .ASN1_ITEM_start(itname) .ASN1_ITYPE_MSTRING, mask, null, 0, null, libressl_d.openssl.ossl_typ.ASN1_STRING.sizeof, #itname .ASN1_ITEM_end(itname)
+	//#define IMPLEMENT_EXTERN_ASN1(sname, tag, fptrs) .ASN1_ITEM_start(sname) .ASN1_ITYPE_EXTERN, tag, null, 0, &fptrs, 0, #sname .ASN1_ITEM_end(sname)
 
-/* Macro to implement standard functions in terms of ASN1_ITEM structures */
+	/* Macro to implement standard functions in terms of ASN1_ITEM structures */
 
-//#define IMPLEMENT_ASN1_FUNCTIONS(stname) .IMPLEMENT_ASN1_FUNCTIONS_fname(stname, stname, stname)
+	//#define IMPLEMENT_ASN1_FUNCTIONS(stname) .IMPLEMENT_ASN1_FUNCTIONS_fname(stname, stname, stname)
 
-//#define IMPLEMENT_ASN1_FUNCTIONS_name(stname, itname) .IMPLEMENT_ASN1_FUNCTIONS_fname(stname, itname, itname)
+	//#define IMPLEMENT_ASN1_FUNCTIONS_name(stname, itname) .IMPLEMENT_ASN1_FUNCTIONS_fname(stname, itname, itname)
 
-//#define IMPLEMENT_ASN1_FUNCTIONS_ENCODE_name(stname, itname) IMPLEMENT_ASN1_FUNCTIONS_ENCODE_fname(stname, itname, itname)
+	//#define IMPLEMENT_ASN1_FUNCTIONS_ENCODE_name(stname, itname) IMPLEMENT_ASN1_FUNCTIONS_ENCODE_fname(stname, itname, itname)
 
-//#define IMPLEMENT_STATIC_ASN1_ALLOC_FUNCTIONS(stname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_pfname(static, stname, stname, stname)
+	//#define IMPLEMENT_STATIC_ASN1_ALLOC_FUNCTIONS(stname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_pfname(static, stname, stname, stname)
 
-//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS(stname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, stname, stname)
+	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS(stname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, stname, stname)
 
-//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_pfname(pre, stname, itname, fname) pre stname* fname##_new(void) { return (stname*) libressl_d.openssl.asn1.ASN1_item_new(libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } pre void fname##_free(stname* a) { libressl_d.openssl.asn1.ASN1_item_free(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_pfname(pre, stname, itname, fname) pre stname* fname##_new(void) { return (stname*) libressl_d.openssl.asn1.ASN1_item_new(libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } pre void fname##_free(stname* a) { libressl_d.openssl.asn1.ASN1_item_free(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
-//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname) stname* fname##_new(void) { return (stname*) libressl_d.openssl.asn1.ASN1_item_new(libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } void fname##_free(stname* a) { libressl_d.openssl.asn1.ASN1_item_free(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname) stname* fname##_new(void) { return (stname*) libressl_d.openssl.asn1.ASN1_item_new(libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } void fname##_free(stname* a) { libressl_d.openssl.asn1.ASN1_item_free(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
-//#define IMPLEMENT_ASN1_FUNCTIONS_fname(stname, itname, fname) .IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(stname, itname, fname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname)
+	//#define IMPLEMENT_ASN1_FUNCTIONS_fname(stname, itname, fname) .IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(stname, itname, fname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname)
 
-//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl_d.openssl.asn1.ASN1_item_d2i(cast(libressl_d.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(stname* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl_d.openssl.asn1.ASN1_item_d2i(cast(libressl_d.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(stname* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
-//#define IMPLEMENT_ASN1_NDEF_FUNCTION(stname) int i2d_##stname##_NDEF(stname* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_ndef_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(stname)); }
+	//#define IMPLEMENT_ASN1_NDEF_FUNCTION(stname) int i2d_##stname##_NDEF(stname* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_ndef_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(stname)); }
 
-/*
- * This includes evil casts to remove const: they will go away when full
- * ASN1 constification is done.
- */
-//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl_d.openssl.asn1.ASN1_item_d2i(cast(libressl_d.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(const (stname)* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	/*
+	 * This includes evil casts to remove const: they will go away when full
+	 * ASN1 constification is done.
+	 */
+	//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl_d.openssl.asn1.ASN1_item_d2i(cast(libressl_d.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(const (stname)* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
-//#define IMPLEMENT_ASN1_DUP_FUNCTION(stname) stname* stname##_dup(stname* x) { return libressl_d.openssl.asn1.ASN1_item_dup(libressl_d.openssl.asn1.ASN1_ITEM_rptr(stname), x); }
+	//#define IMPLEMENT_ASN1_DUP_FUNCTION(stname) stname* stname##_dup(stname* x) { return libressl_d.openssl.asn1.ASN1_item_dup(libressl_d.openssl.asn1.ASN1_ITEM_rptr(stname), x); }
 
-//#define IMPLEMENT_ASN1_PRINT_FUNCTION(stname) .IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, stname, stname)
+	//#define IMPLEMENT_ASN1_PRINT_FUNCTION(stname) .IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, stname, stname)
 
-//#define IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, itname, fname) int fname##_print_ctx(libressl_d.openssl.bio.BIO* out_, stname* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx) { return libressl_d.openssl.asn1.ASN1_item_print(out_, cast(libressl_d.openssl.asn1.ASN1_VALUE*)(x), indent, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname), pctx); }
+	//#define IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, itname, fname) int fname##_print_ctx(libressl_d.openssl.bio.BIO* out_, stname* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx) { return libressl_d.openssl.asn1.ASN1_item_print(out_, cast(libressl_d.openssl.asn1.ASN1_VALUE*)(x), indent, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname), pctx); }
 
-//#define IMPLEMENT_ASN1_FUNCTIONS_const(name) .IMPLEMENT_ASN1_FUNCTIONS_const_fname(name, name, name)
+	//#define IMPLEMENT_ASN1_FUNCTIONS_const(name) .IMPLEMENT_ASN1_FUNCTIONS_const_fname(name, name, name)
 
-//#define IMPLEMENT_ASN1_FUNCTIONS_const_fname(stname, itname, fname) .IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname)
-//#endif /* !LIBRESSL_INTERNAL */
+	//#define IMPLEMENT_ASN1_FUNCTIONS_const_fname(stname, itname, fname) .IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname)
+}
 
 /* external definitions for primitive types */
 

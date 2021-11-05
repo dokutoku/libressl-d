@@ -12,6 +12,8 @@ extern (C):
 nothrow @nogc:
 
 //#if !defined(HAVE_SYSLOG_R)
+version (Posix) {
+} else {
 	version (Windows) {
 		/**
 		 *  informational
@@ -54,6 +56,6 @@ nothrow @nogc:
 			return output;
 		}
 
-	//void syslog_r(int, .syslog_data*, const (char)*, ...);
-	//void vsyslog_r(int, .syslog_data*, const (char)*, core.stdc.stdarg.va_list);
-//#endif
+	void syslog_r(int, .syslog_data*, const (char)*, ...);
+	void vsyslog_r(int, .syslog_data*, const (char)*, core.stdc.stdarg.va_list);
+}

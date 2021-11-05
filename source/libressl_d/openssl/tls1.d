@@ -151,6 +151,7 @@ module libressl_d.openssl.tls1;
 
 
 private static import core.stdc.config;
+private static import libressl_d.openssl.opensslfeatures;
 private static import libressl_d.openssl.ossl_typ;
 private static import libressl_d.openssl.ssl;
 public import libressl_d.openssl.buffer;
@@ -161,9 +162,9 @@ nothrow @nogc:
 
 enum TLS1_ALLOW_EXPERIMENTAL_CIPHERSUITES = 0;
 
-//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
-enum TLS1_3_VERSION = 0x0304;
-//#endif
+static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+	enum TLS1_3_VERSION = 0x0304;
+}
 
 enum TLS1_2_VERSION = 0x0303;
 enum TLS1_2_VERSION_MAJOR = 0x03;
@@ -276,9 +277,10 @@ enum TLSEXT_TYPE_cert_type = 9;
 enum TLSEXT_TYPE_supported_groups = 10;
 
 /* ExtensionType values from RFC 4492. */
-//#if !defined(LIBRESSL_INTERNAL)
-alias TLSEXT_TYPE_elliptic_curves = .TLSEXT_TYPE_supported_groups;
-//#endif
+version (LIBRESSL_INTERNAL) {
+} else {
+	alias TLSEXT_TYPE_elliptic_curves = .TLSEXT_TYPE_supported_groups;
+}
 
 enum TLSEXT_TYPE_ec_point_formats = 11;
 
@@ -318,18 +320,18 @@ enum TLSEXT_TYPE_padding = 21;
 enum TLSEXT_TYPE_session_ticket = 35;
 
 /* ExtensionType values from RFC 8446 section 4.2 */
-//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
-enum TLSEXT_TYPE_pre_shared_key = 41;
-enum TLSEXT_TYPE_early_data = 42;
-enum TLSEXT_TYPE_supported_versions = 43;
-enum TLSEXT_TYPE_cookie = 44;
-enum TLSEXT_TYPE_psk_key_exchange_modes = 45;
-enum TLSEXT_TYPE_certificate_authorities = 47;
-enum TLSEXT_TYPE_oid_filters = 48;
-enum TLSEXT_TYPE_post_handshake_auth = 49;
-enum TLSEXT_TYPE_signature_algorithms_cert = 50;
-enum TLSEXT_TYPE_key_share = 51;
-//#endif
+static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+	enum TLSEXT_TYPE_pre_shared_key = 41;
+	enum TLSEXT_TYPE_early_data = 42;
+	enum TLSEXT_TYPE_supported_versions = 43;
+	enum TLSEXT_TYPE_cookie = 44;
+	enum TLSEXT_TYPE_psk_key_exchange_modes = 45;
+	enum TLSEXT_TYPE_certificate_authorities = 47;
+	enum TLSEXT_TYPE_oid_filters = 48;
+	enum TLSEXT_TYPE_post_handshake_auth = 49;
+	enum TLSEXT_TYPE_signature_algorithms_cert = 50;
+	enum TLSEXT_TYPE_key_share = 51;
+}
 
 /*
  * TLS 1.3 extension names from OpenSSL, where they decided to use a different
@@ -659,13 +661,13 @@ enum TLS1_CK_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256 = 0x030000C4;
 enum TLS1_CK_ADH_WITH_CAMELLIA_256_CBC_SHA256 = 0x030000C5;
 
 /* TLS 1.3 cipher suites from RFC 8446 appendix B.4. */
-//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
-enum TLS1_3_CK_AES_128_GCM_SHA256 = 0x03001301;
-enum TLS1_3_CK_AES_256_GCM_SHA384 = 0x03001302;
-enum TLS1_3_CK_CHACHA20_POLY1305_SHA256 = 0x03001303;
-enum TLS1_3_CK_AES_128_CCM_SHA256 = 0x03001304;
-enum TLS1_3_CK_AES_128_CCM_8_SHA256 = 0x03001305;
-//#endif
+static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+	enum TLS1_3_CK_AES_128_GCM_SHA256 = 0x03001301;
+	enum TLS1_3_CK_AES_256_GCM_SHA384 = 0x03001302;
+	enum TLS1_3_CK_CHACHA20_POLY1305_SHA256 = 0x03001303;
+	enum TLS1_3_CK_AES_128_CCM_SHA256 = 0x03001304;
+	enum TLS1_3_CK_AES_128_CCM_8_SHA256 = 0x03001305;
+}
 
 /* ECC ciphersuites from RFC 4492. */
 enum TLS1_CK_ECDH_ECDSA_WITH_NULL_SHA = 0x0300C001;
@@ -898,13 +900,13 @@ enum TLS1_TXT_ECDHE_ECDSA_WITH_CHACHA20_POLY1305 = "ECDHE-ECDSA-CHACHA20-POLY130
 enum TLS1_TXT_DHE_RSA_WITH_CHACHA20_POLY1305 = "DHE-RSA-CHACHA20-POLY1305";
 
 /* TLS 1.3 cipher suites from RFC 8446 appendix B.4. */
-//#if defined(LIBRESSL_HAS_TLS1_3) || defined(LIBRESSL_INTERNAL)
-enum TLS1_3_TXT_AES_128_GCM_SHA256 = "AEAD-AES128-GCM-SHA256";
-enum TLS1_3_TXT_AES_256_GCM_SHA384 = "AEAD-AES256-GCM-SHA384";
-enum TLS1_3_TXT_CHACHA20_POLY1305_SHA256 = "AEAD-CHACHA20-POLY1305-SHA256";
-enum TLS1_3_TXT_AES_128_CCM_SHA256 = "AEAD-AES128-CCM-SHA256";
-enum TLS1_3_TXT_AES_128_CCM_8_SHA256 = "AEAD-AES128-CCM-8-SHA256";
-//#endif
+static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+	enum TLS1_3_TXT_AES_128_GCM_SHA256 = "AEAD-AES128-GCM-SHA256";
+	enum TLS1_3_TXT_AES_256_GCM_SHA384 = "AEAD-AES256-GCM-SHA384";
+	enum TLS1_3_TXT_CHACHA20_POLY1305_SHA256 = "AEAD-CHACHA20-POLY1305-SHA256";
+	enum TLS1_3_TXT_AES_128_CCM_SHA256 = "AEAD-AES128-CCM-SHA256";
+	enum TLS1_3_TXT_AES_128_CCM_8_SHA256 = "AEAD-AES128-CCM-8-SHA256";
+}
 
 enum TLS_CT_RSA_SIGN = 1;
 enum TLS_CT_DSS_SIGN = 2;
@@ -947,8 +949,12 @@ enum TLS_MD_KEY_EXPANSION_CONST = "key expansion";
 enum TLS_MD_KEY_EXPANSION_CONST_SIZE = 13;
 enum TLS_MD_CLIENT_WRITE_KEY_CONST = "client write key";
 enum TLS_MD_CLIENT_WRITE_KEY_CONST_SIZE = 16;
-//enum TLS_MD_SERVER_WRITE_KEY_CONST = "server write key";
-//enum TLS_MD_SERVER_WRITE_KEY_CONST_SIZE = 16;
+
+version (none) {
+	enum TLS_MD_SERVER_WRITE_KEY_CONST = "server write key";
+	enum TLS_MD_SERVER_WRITE_KEY_CONST_SIZE = 16;
+}
+
 enum TLS_MD_IV_BLOCK_CONST = "IV block";
 enum TLS_MD_IV_BLOCK_CONST_SIZE = 8;
 enum TLS_MD_MASTER_SECRET_CONST = "master secret";

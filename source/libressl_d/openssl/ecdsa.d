@@ -60,18 +60,18 @@ module libressl_d.openssl.ecdsa;
 
 
 private static import core.stdc.config;
-public import libressl_d.openssl.bn;
 public import libressl_d.openssl.ec;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 
 version (OPENSSL_NO_ECDSA) {
-	//static assert(false, "ECDSA is disabled.");
+	static assert(false, "ECDSA is disabled.");
 }
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-	//public import libressl_d.openssl.bn;
-//#endif
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	public import libressl_d.openssl.bn;
+}
 
 extern (C):
 nothrow @nogc:

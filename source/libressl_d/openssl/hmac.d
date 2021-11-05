@@ -64,7 +64,7 @@ public import libressl_d.openssl.evp;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_HMAC) {
-	//static assert(false, "HMAC is disabled.");
+	static assert(false, "HMAC is disabled.");
 }
 
 /**

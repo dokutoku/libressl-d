@@ -24,7 +24,7 @@ extern (C):
 nothrow @nogc:
 
 version (OPENSSL_NO_SM3) {
-	//static assert(false, "SM3 is disabled.");
+	static assert(false, "SM3 is disabled.");
 }
 
 enum SM3_DIGEST_LENGTH = 32;

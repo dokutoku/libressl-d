@@ -66,7 +66,7 @@ extern (C):
 nothrow @nogc:
 
 version (OPENSSL_NO_MD4) {
-	//static assert(false, "MD4 is disabled.");
+	static assert(false, "MD4 is disabled.");
 }
 
 /*

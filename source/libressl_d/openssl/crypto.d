@@ -388,87 +388,89 @@ enum CRYPTO_EX_INDEX_EC_KEY = 16;
  */
 enum CRYPTO_EX_INDEX_USER = 100;
 
-//#if !defined(LIBRESSL_INTERNAL)
-pragma(inline, true)
-pure nothrow @safe @nogc @live
-int CRYPTO_malloc_init()
+version (LIBRESSL_INTERNAL) {
+} else {
+	pragma(inline, true)
+	pure nothrow @safe @nogc @live
+	int CRYPTO_malloc_init()
 
-	do
-	{
-		return 0;
-	}
+		do
+		{
+			return 0;
+		}
 
-pragma(inline, true)
-pure nothrow @safe @nogc @live
-int CRYPTO_malloc_debug_init()
+	pragma(inline, true)
+	pure nothrow @safe @nogc @live
+	int CRYPTO_malloc_debug_init()
 
-	do
-	{
-		return 0;
-	}
+		do
+		{
+			return 0;
+		}
 
-//#if defined(CRYPTO_MDEBUG_ALL) || defined(CRYPTO_MDEBUG_TIME) || defined(CRYPTO_MDEBUG_THREAD)
-	/* avoid duplicate #define */
-	//#if !defined(CRYPTO_MDEBUG)
-		//#define CRYPTO_MDEBUG
+	//#if defined(CRYPTO_MDEBUG_ALL) || defined(CRYPTO_MDEBUG_TIME) || defined(CRYPTO_MDEBUG_THREAD)
+		/* avoid duplicate #define */
+		version (CRYPTO_MDEBUG) {
+		} else {
+			//#define CRYPTO_MDEBUG
+		}
 	//#endif
-//#endif
 
-int CRYPTO_mem_ctrl(int mode);
-int CRYPTO_is_mem_check_on();
+	int CRYPTO_mem_ctrl(int mode);
+	int CRYPTO_is_mem_check_on();
 
-/* for applications */
-pragma(inline, true)
-int MemCheck_start()
+	/* for applications */
+	pragma(inline, true)
+	int MemCheck_start()
 
-	do
+		do
+		{
+			return .CRYPTO_mem_ctrl(.CRYPTO_MEM_CHECK_ON);
+		}
+
+	pragma(inline, true)
+	int MemCheck_stop()
+
+		do
+		{
+			return .CRYPTO_mem_ctrl(.CRYPTO_MEM_CHECK_OFF);
+		}
+
+	template OPENSSL_malloc(string num)
 	{
-		return .CRYPTO_mem_ctrl(.CRYPTO_MEM_CHECK_ON);
+		enum OPENSSL_malloc = "libressl_d.openssl.crypto.CRYPTO_malloc(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
 	}
 
-pragma(inline, true)
-int MemCheck_stop()
-
-	do
+	template OPENSSL_strdup(string str)
 	{
-		return .CRYPTO_mem_ctrl(.CRYPTO_MEM_CHECK_OFF);
+		enum OPENSSL_strdup = "libressl_d.openssl.crypto.CRYPTO_strdup(" ~ str ~ ", __FILE__, __LINE__)";
 	}
 
-template OPENSSL_malloc(string num)
-{
-	enum OPENSSL_malloc = "libressl_d.openssl.crypto.CRYPTO_malloc(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+	template OPENSSL_realloc(string addr, string num)
+	{
+		enum OPENSSL_realloc = "libressl_d.openssl.crypto.CRYPTO_realloc(cast(char*)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+	}
+
+	template OPENSSL_realloc_clean(string addr, string old_num, string num)
+	{
+		enum OPENSSL_realloc_clean = "libressl_d.openssl.crypto.CRYPTO_realloc_clean(" ~ addr ~ ", " ~ old_num ~ ", " ~ num ~ ", __FILE__, __LINE__)";
+	}
+
+	template OPENSSL_remalloc(string addr, string num)
+	{
+		enum OPENSSL_remalloc = "libressl_d.openssl.crypto.CRYPTO_remalloc(cast(char**)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+	}
+
+	alias OPENSSL_freeFunc = .CRYPTO_free;
+	alias OPENSSL_free = .CRYPTO_free;
+
+	template OPENSSL_malloc_locked(num)
+	{
+		enum OPENSSL_malloc_locked = "libressl_d.openssl.crypto.CRYPTO_malloc_locked(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+	}
+
+	alias OPENSSL_free_locked = .CRYPTO_free_locked;
 }
-
-template OPENSSL_strdup(string str)
-{
-	enum OPENSSL_strdup = "libressl_d.openssl.crypto.CRYPTO_strdup(" ~ str ~ ", __FILE__, __LINE__)";
-}
-
-template OPENSSL_realloc(string addr, string num)
-{
-	enum OPENSSL_realloc = "libressl_d.openssl.crypto.CRYPTO_realloc(cast(char*)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
-}
-
-template OPENSSL_realloc_clean(string addr, string old_num, string num)
-{
-	enum OPENSSL_realloc_clean = "libressl_d.openssl.crypto.CRYPTO_realloc_clean(" ~ addr ~ ", " ~ old_num ~ ", " ~ num ~ ", __FILE__, __LINE__)";
-}
-
-template OPENSSL_remalloc(string addr, string num)
-{
-	enum OPENSSL_remalloc = "libressl_d.openssl.crypto.CRYPTO_remalloc(cast(char**)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
-}
-
-alias OPENSSL_freeFunc = .CRYPTO_free;
-alias OPENSSL_free = .CRYPTO_free;
-
-template OPENSSL_malloc_locked(num)
-{
-	enum OPENSSL_malloc_locked = "libressl_d.openssl.crypto.CRYPTO_malloc_locked(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
-}
-
-alias OPENSSL_free_locked = .CRYPTO_free_locked;
-//#endif
 
 const (char)* OpenSSL_version(int type);
 enum OPENSSL_VERSION = 0;
@@ -545,36 +547,37 @@ int CRYPTO_THREADID_cmp(const (.CRYPTO_THREADID)* a, const (.CRYPTO_THREADID)* b
 void CRYPTO_THREADID_cpy(.CRYPTO_THREADID* dest, const (.CRYPTO_THREADID)* src);
 core.stdc.config.c_ulong CRYPTO_THREADID_hash(const (.CRYPTO_THREADID)* id);
 
-//#if !defined(LIBRESSL_INTERNAL)
-/* These functions are deprecated no-op stubs */
-void CRYPTO_set_id_callback(core.stdc.config.c_ulong function() func);
-//core.stdc.config.c_ulong (*CRYPTO_get_id_callback(void))();
-core.stdc.config.c_ulong CRYPTO_thread_id();
+version (LIBRESSL_INTERNAL) {
+} else {
+	/* These functions are deprecated no-op stubs */
+	void CRYPTO_set_id_callback(core.stdc.config.c_ulong function() func);
+	//core.stdc.config.c_ulong (*CRYPTO_get_id_callback(void))();
+	core.stdc.config.c_ulong CRYPTO_thread_id();
 
-int CRYPTO_get_new_lockid(char* name);
-const (char)* CRYPTO_get_lock_name(int type);
+	int CRYPTO_get_new_lockid(char* name);
+	const (char)* CRYPTO_get_lock_name(int type);
 
-int CRYPTO_num_locks();
-void CRYPTO_set_locking_callback(void function(int mode, int type, const (char)* file, int line) func);
-//void (*CRYPTO_get_locking_callback(void))(int mode, int type, const (char)* file, int line);
-void CRYPTO_set_add_lock_callback(int function(int* num, int mount, int type, const (char)* file, int line) func);
-//int (*CRYPTO_get_add_lock_callback(void))(int* num, int mount, int type, const (char)* file, int line);
+	int CRYPTO_num_locks();
+	void CRYPTO_set_locking_callback(void function(int mode, int type, const (char)* file, int line) func);
+	//void (*CRYPTO_get_locking_callback(void))(int mode, int type, const (char)* file, int line);
+	void CRYPTO_set_add_lock_callback(int function(int* num, int mount, int type, const (char)* file, int line) func);
+	//int (*CRYPTO_get_add_lock_callback(void))(int* num, int mount, int type, const (char)* file, int line);
 
-void CRYPTO_THREADID_set_numeric(.CRYPTO_THREADID* id, core.stdc.config.c_ulong val);
-void CRYPTO_THREADID_set_pointer(.CRYPTO_THREADID* id, void* ptr_);
-int CRYPTO_THREADID_set_callback(void function(.CRYPTO_THREADID*) threadid_func);
-//void (*CRYPTO_THREADID_get_callback(void))(.CRYPTO_THREADID*);
+	void CRYPTO_THREADID_set_numeric(.CRYPTO_THREADID* id, core.stdc.config.c_ulong val);
+	void CRYPTO_THREADID_set_pointer(.CRYPTO_THREADID* id, void* ptr_);
+	int CRYPTO_THREADID_set_callback(void function(.CRYPTO_THREADID*) threadid_func);
+	//void (*CRYPTO_THREADID_get_callback(void))(.CRYPTO_THREADID*);
 
-int CRYPTO_get_new_dynlockid();
-void CRYPTO_destroy_dynlockid(int i);
-.CRYPTO_dynlock_value* CRYPTO_get_dynlock_value(int i);
-void CRYPTO_set_dynlock_create_callback(.CRYPTO_dynlock_value * function(const (char)* file, int line) dyn_create_function);
-void CRYPTO_set_dynlock_lock_callback(void function(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_lock_function);
-void CRYPTO_set_dynlock_destroy_callback(void function(.CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_destroy_function);
-//.CRYPTO_dynlock_value* (*CRYPTO_get_dynlock_create_callback(void))(const (char)* file, int line);
-//void (*CRYPTO_get_dynlock_lock_callback(void))(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line);
-//void (*CRYPTO_get_dynlock_destroy_callback(void))(.CRYPTO_dynlock_value* l, const (char)* file, int line);
-//#endif
+	int CRYPTO_get_new_dynlockid();
+	void CRYPTO_destroy_dynlockid(int i);
+	.CRYPTO_dynlock_value* CRYPTO_get_dynlock_value(int i);
+	void CRYPTO_set_dynlock_create_callback(.CRYPTO_dynlock_value * function(const (char)* file, int line) dyn_create_function);
+	void CRYPTO_set_dynlock_lock_callback(void function(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_lock_function);
+	void CRYPTO_set_dynlock_destroy_callback(void function(.CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_destroy_function);
+	//.CRYPTO_dynlock_value* (*CRYPTO_get_dynlock_create_callback(void))(const (char)* file, int line);
+	//void (*CRYPTO_get_dynlock_lock_callback(void))(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line);
+	//void (*CRYPTO_get_dynlock_destroy_callback(void))(.CRYPTO_dynlock_value* l, const (char)* file, int line);
+}
 
 /*
  * CRYPTO_set_mem_functions includes CRYPTO_set_locked_mem_functions --
@@ -591,21 +594,23 @@ void CRYPTO_get_mem_ex_functions(void* function(size_t, const (char)*, int)* m, 
 void CRYPTO_get_locked_mem_ex_functions(void* function(size_t, const (char)*, int)* m, void function(void*)* f);
 void CRYPTO_get_mem_debug_functions(void function(void*, int, const (char)*, int, int)* m, void function(void*, void*, int, const (char)*, int, int)* r, void function(void*, int)* f, void function(core.stdc.config.c_long)* so, core.stdc.config.c_long function()* go);
 
-//#if !defined(LIBRESSL_INTERNAL)
-void* CRYPTO_malloc_locked(int num, const (char)* file, int line);
-void CRYPTO_free_locked(void* ptr_);
-void* CRYPTO_malloc(int num, const (char)* file, int line);
-char* CRYPTO_strdup(const (char)* str, const (char)* file, int line);
-void CRYPTO_free(void* ptr_);
-void* CRYPTO_realloc(void* addr, int num, const (char)* file, int line);
-//#endif
+version (LIBRESSL_INTERNAL) {
+} else {
+	void* CRYPTO_malloc_locked(int num, const (char)* file, int line);
+	void CRYPTO_free_locked(void* ptr_);
+	void* CRYPTO_malloc(int num, const (char)* file, int line);
+	char* CRYPTO_strdup(const (char)* str, const (char)* file, int line);
+	void CRYPTO_free(void* ptr_);
+	void* CRYPTO_realloc(void* addr, int num, const (char)* file, int line);
+}
 
 void* CRYPTO_realloc_clean(void* addr, int old_num, int num, const (char)* file, int line);
 void* CRYPTO_remalloc(void* addr, int num, const (char)* file, int line);
 
-//#if !defined(LIBRESSL_INTERNAL)
-void OPENSSL_cleanse(void* ptr_, size_t len);
-//#endif
+version (LIBRESSL_INTERNAL) {
+} else {
+	void OPENSSL_cleanse(void* ptr_, size_t len);
+}
 
 void CRYPTO_set_mem_debug_options(core.stdc.config.c_long bits);
 core.stdc.config.c_long CRYPTO_get_mem_debug_options();
@@ -669,18 +674,19 @@ core.stdc.stdint.uint64_t OPENSSL_cpu_caps();
 
 int OPENSSL_isservice();
 
-//#if !defined(LIBRESSL_INTERNAL)
-void OPENSSL_init();
+version (LIBRESSL_INTERNAL) {
+} else {
+	void OPENSSL_init();
 
-/**
- * CRYPTO_memcmp returns zero iff the |len| bytes at |a| and |b| are equal. It
- * takes an amount of time dependent on |len|, but independent of the contents
- * of |a| and |b|. Unlike memcmp, it cannot be used to put elements into a
- * defined order as the return value when a != b is undefined, other than to be
- * non-zero.
- */
-int CRYPTO_memcmp(const (void)* a, const (void)* b, size_t len);
-//#endif
+	/**
+	 * CRYPTO_memcmp returns zero iff the |len| bytes at |a| and |b| are equal. It
+	 * takes an amount of time dependent on |len|, but independent of the contents
+	 * of |a| and |b|. Unlike memcmp, it cannot be used to put elements into a
+	 * defined order as the return value when a != b is undefined, other than to be
+	 * non-zero.
+	 */
+	int CRYPTO_memcmp(const (void)* a, const (void)* b, size_t len);
+}
 
 /* BEGIN ERROR CODES */
 /**

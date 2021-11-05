@@ -14,10 +14,10 @@ nothrow @nogc:
 
 version (Posix) {
 	//#if defined(__MINGW32__)
-		//int ftruncate(int fd, off_t length_);
+		//int ftruncate(int fd, libressl_d.compat.sys.types.off_t length_);
 		//libressl_d.compat.sys.types.uid_t getuid();
-		//libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, off_t offset);
-		//libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, off_t offset);
+		//libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
+		//libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
 	//#endif
 } else {
 	public import libressl_d.compat.stdlib;
@@ -36,10 +36,12 @@ version (Posix) {
 	enum SEEK_CUR = 1;
 	enum SEEK_END = 2;
 
-	//alias access = _access;
-
 	version (Windows) {
 		public import core.sys.windows.windows;
+
+		int _access(const char* path, const int access_mode);
+
+		alias access = ._access;
 
 		pragma(inline, true)
 		nothrow @nogc
@@ -52,30 +54,30 @@ version (Posix) {
 
 				return seconds;
 			}
+	} else {
+		//alias access = ._access;
 	}
 
-	//uint sleep(uint seconds);
-
-	//int ftruncate(int fd, off_t length_);
-	//libressl_d.compat.sys.types.uid_t getuid();
-	//libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, off_t offset);
-	//libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, off_t offset);
+	int ftruncate(int fd, libressl_d.compat.sys.types.off_t length_);
+	libressl_d.compat.sys.types.uid_t getuid();
+	libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
+	libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
 }
 
-//#if !defined(HAVE_GETENTROPY)
-	//int getentropy(void* buf, size_t buflen);
-//#else
+static if (!__traits(compiles, getentropy)) {
+	int getentropy(void* buf, size_t buflen);
+} else {
 	/*
 	 * Solaris 11.3 adds getentropy(2), but defines the function in sys/random.h
 	 */
 	//#if defined(__sun)
 		//public import core.sys.posix.sys.random;
 	//#endif
-//#endif
+}
 
-//#if !defined(HAVE_GETPAGESIZE)
-	//int getpagesize();
-//#endif
+static if (!__traits(compiles, getpagesize)) {
+	int getpagesize();
+}
 
 pragma(inline, true)
 pure nothrow @safe @nogc @live

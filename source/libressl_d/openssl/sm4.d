@@ -24,7 +24,7 @@ extern (C):
 nothrow @nogc:
 
 version (OPENSSL_NO_SM4) {
-	//static assert(false, "SM4 is disabled.");
+	static assert(false, "SM4 is disabled.");
 }
 
 enum SM4_DECRYPT = 0;

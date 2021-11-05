@@ -65,53 +65,53 @@ module libressl_d.openssl.engine;
 
 private static import core.stdc.config;
 private static import libressl_d.openssl.crypto;
-public import libressl_d.openssl.bn;
-public import libressl_d.openssl.dh;
-public import libressl_d.openssl.dsa;
 public import libressl_d.openssl.ec;
-public import libressl_d.openssl.ecdh;
-public import libressl_d.openssl.ecdsa;
 public import libressl_d.openssl.err;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.rsa;
-public import libressl_d.openssl.ui;
 public import libressl_d.openssl.x509;
 
 version (OPENSSL_NO_ENGINE) {
-	//static assert(false, "ENGINE is disabled.");
+	static assert(false, "ENGINE is disabled.");
 }
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-	//public import libressl_d.openssl.bn;
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	public import libressl_d.openssl.bn;
 
-	//#if !defined(OPENSSL_NO_RSA)
-		//public import libressl_d.openssl.rsa;
-	//#endif
+	version (OPENSSL_NO_RSA) {
+	} else {
+		public import libressl_d.openssl.rsa;
+	}
 
-	//#if !defined(OPENSSL_NO_DSA)
-		//public import libressl_d.openssl.dsa;
-	//#endif
+	version (OPENSSL_NO_DSA) {
+	} else {
+		public import libressl_d.openssl.dsa;
+	}
 
-	//#if !defined(OPENSSL_NO_DH)
-		//public import libressl_d.openssl.dh;
-	//#endif
+	version (OPENSSL_NO_DH) {
+	} else {
+		public import libressl_d.openssl.dh;
+	}
 
-	//#if !defined(OPENSSL_NO_ECDH)
-		//public import libressl_d.openssl.ecdh;
-	//#endif
+	version (OPENSSL_NO_ECDH) {
+	} else {
+		public import libressl_d.openssl.ecdh;
+	}
 
-	//#if !defined(OPENSSL_NO_ECDSA)
-		//public import libressl_d.openssl.ecdsa;
-	//#endif
+	version (OPENSSL_NO_ECDSA) {
+	} else {
+		public import libressl_d.openssl.ecdsa;
+	}
 
-	//#if !defined(OPENSSL_NO_EC)
-		//public import libressl_d.openssl.ec;
-	//#endif
+	version (OPENSSL_NO_EC) {
+	} else {
+		public import libressl_d.openssl.ec;
+	}
 
-	//public import libressl_d.openssl.err;
-	//public import libressl_d.openssl.ui;
-//#endif
+	public import libressl_d.openssl.err;
+	public import libressl_d.openssl.ui;
+}
 
 extern (C):
 nothrow @nogc:
@@ -444,9 +444,10 @@ libressl_d.openssl.ossl_typ.ENGINE* ENGINE_by_id(const (char)* id);
 void ENGINE_load_openssl();
 void ENGINE_load_dynamic();
 
-//#if !defined(OPENSSL_NO_STATIC_ENGINE)
-void ENGINE_load_padlock();
-//#endif
+version (OPENSSL_NO_STATIC_ENGINE) {
+} else {
+	void ENGINE_load_padlock();
+}
 
 void ENGINE_load_builtin_engines();
 

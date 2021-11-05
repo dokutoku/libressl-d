@@ -65,40 +65,41 @@ private static import libressl_d.openssl.ossl_typ;
 private static import libressl_d.openssl.pkcs7;
 public import libressl_d.openssl.asn1;
 public import libressl_d.openssl.bio;
-public import libressl_d.openssl.buffer;
-public import libressl_d.openssl.dh;
-public import libressl_d.openssl.dsa;
-public import libressl_d.openssl.evp;
 public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.rsa;
 public import libressl_d.openssl.safestack;
 public import libressl_d.openssl.stack;
 public import libressl_d.openssl.x509;
 public import libressl_d.openssl.x509v3;
 
-//if !defined(OPENSSL_NO_BUFFER)
-	//public import libressl_d.openssl.buffer;
-//endif
+version (OPENSSL_NO_BUFFER) {
+} else {
+	public import libressl_d.openssl.buffer;
+}
 
-//if !defined(OPENSSL_NO_EVP)
-	//public import libressl_d.openssl.evp;
-//endif
+version (OPENSSL_NO_EVP) {
+} else {
+	public import libressl_d.openssl.evp;
+}
 
-//if !defined(OPENSSL_NO_BIO)
-	//public import libressl_d.openssl.bio;
-//endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
-//if !defined(OPENSSL_NO_RSA)
-	//public import libressl_d.openssl.rsa;
-//endif
+version (OPENSSL_NO_RSA) {
+} else {
+	public import libressl_d.openssl.rsa;
+}
 
-//if !defined(OPENSSL_NO_DSA)
-	//public import libressl_d.openssl.dsa;
-//endif
+version (OPENSSL_NO_DSA) {
+} else {
+	public import libressl_d.openssl.dsa;
+}
 
-//if !defined(OPENSSL_NO_DH)
-	//public import libressl_d.openssl.dh;
-//endif
+version (OPENSSL_NO_DH) {
+} else {
+	public import libressl_d.openssl.dh;
+}
 
 extern (C):
 nothrow @nogc:

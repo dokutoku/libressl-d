@@ -18,18 +18,9 @@ version (Windows):
 extern (C):
 nothrow @nogc:
 
-/+
-#if !defined(SHUT_RDWR)
-	alias SHUT_RDWR = SD_BOTH;
-#endif
-
-#if !defined(SHUT_RD)
-	alias SHUT_RD = SD_RECEIVE;
-#endif
-
-#if !defined(SHUT_WR)
-	alias SHUT_WR = SD_SEND;
-#endif
+enum SHUT_RDWR = core.sys.windows.winsock2.SD_BOTH;
+enum SHUT_RD = core.sys.windows.winsock2.SD_RECEIVE;
+enum SHUT_WR = core.sys.windows.winsock2.SD_SEND;
 
 int posix_connect(int sockfd, const (sockaddr)* addr, socklen_t addrlen);
 
@@ -45,13 +36,13 @@ int posix_getsockopt(int sockfd, int level, int optname, void* optval, socklen_t
 
 int posix_setsockopt(int sockfd, int level, int optname, const (void)* optval, socklen_t optlen);
 
-#if !defined(NO_REDEF_POSIX_FUNCTIONS)
-	#define connect(sockfd, addr, addrlen) .posix_connect(sockfd, addr, addrlen)
-	#define open(path, ...) .posix_open(path, __VA_ARGS__)
-	#define close(fd) .posix_close(fd)
-	#define read(fd, buf, count) .posix_read(fd, buf, count)
-	#define write(fd, buf, count) .posix_write(fd, buf, count)
-	#define getsockopt(sockfd, level, optname, optval, optlen) .posix_getsockopt(sockfd, level, optname, optval, optlen)
-	#define setsockopt(sockfd, level, optname, optval, optlen) .posix_setsockopt(sockfd, level, optname, optval, optlen)
-#endif
-+/
+version (NO_REDEF_POSIX_FUNCTIONS) {
+} else {
+	alias connect = .posix_connect;
+	alias open = .posix_open;
+	alias close = .posix_close;
+	alias read = .posix_read;
+	alias write = .posix_write;
+	alias getsockopt = .posix_getsockopt;
+	alias setsockopt = .posix_setsockopt;
+}

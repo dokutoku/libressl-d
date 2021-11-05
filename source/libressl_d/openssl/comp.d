@@ -54,11 +54,11 @@ int COMP_expand_block(.COMP_CTX* ctx, ubyte* out_, int olen, ubyte* in_, int ile
 .COMP_METHOD* COMP_zlib();
 void COMP_zlib_cleanup();
 
-//#if defined(HEADER_BIO_H)
-//	#if defined(ZLIB)
-//		libressl_d.openssl.bio.BIO_METHOD* BIO_f_zlib();
-//	#endif
-//#endif
+static assert(libressl_d.openssl.bio.HEADER_BIO_H);
+
+version (ZLIB) {
+	libressl_d.openssl.bio.BIO_METHOD* BIO_f_zlib();
+}
 
 void ERR_load_COMP_strings();
 

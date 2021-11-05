@@ -14,6 +14,8 @@ module libressl_d.compat.poll;
 
 
 private static import core.stdc.config;
+private static import core.sys.windows.sdkddkver;
+private static import core.sys.windows.winnt;
 public import core.sys.posix.poll;
 public import core.sys.windows.winsock2;
 
@@ -26,7 +28,7 @@ version (Windows) {
 	 */
 	alias nfds_t = core.stdc.config.c_ulong;
 
-	//#if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0600)
+	static if ((!__traits(compiles, core.sys.windows.sdkddkver._WIN32_WINNT)) || (core.sys.windows.sdkddkver._WIN32_WINNT < 0x0600)) {
 		/**
 		 * Data structure describing a polling request.
 		 */
@@ -101,7 +103,82 @@ version (Windows) {
 		 *  Invalid polling request.
 		 */
 		enum POLLNVAL = 0x0020;
-	//#endif
+	} else {
+		/**
+		 * Data structure describing a polling request.
+		 */
+		struct pollfd
+		{
+			/**
+			 * file descriptor
+			 */
+			core.sys.windows.winsock2.SOCKET fd;
+
+			/**
+			 * requested events
+			 */
+			core.sys.windows.winnt.SHORT events;
+
+			/**
+			 * returned events
+			 */
+			core.sys.windows.winnt.SHORT revents;
+		}
+
+		/* Event types that can be polled */
+
+		/**
+		 *  There is data to read.
+		 */
+		enum POLLIN = .POLLRDNORM | .POLLRDBAND;
+
+		/**
+		 *  There is urgent data to read.
+		 */
+		enum POLLPRI = 0x0400;
+
+		/**
+		 *  Writing now will not block.
+		 */
+		enum POLLOUT = POLLWRNORM;
+
+		/**
+		 *  Normal data may be read.
+		 */
+		enum POLLRDNORM = 0x0100;
+
+		/**
+		 *  Priority data may be read.
+		 */
+		enum POLLRDBAND = 0x0200;
+
+		/**
+		 *  Writing now will not block.
+		 */
+		enum POLLWRNORM = 0x0010;
+
+		/**
+		 *  Priority data may be written.
+		 */
+		enum POLLWRBAND = 0x0020;
+
+		/* Event types always implicitly polled. */
+
+		/**
+		 *  Error condition.
+		 */
+		enum POLLERR = 0x0001;
+
+		/**
+		 *  Hung up.
+		 */
+		enum POLLHUP = 0x0002;
+
+		/**
+		 *  Invalid polling request.
+		 */
+		enum POLLNVAL = 0x0004;
+	}
 
 	extern (C)
 	nothrow @nogc

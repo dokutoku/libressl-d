@@ -6,7 +6,7 @@ module libressl_d.compat.netinet.ip;
 
 
 //#if defined(__hpux)
-//	public import core.sys.posix.netinet.in_systm;
+	//public import core.sys.posix.netinet.in_systm;
 //#endif
 
 //public import core.sys.posix.netinet.ip;

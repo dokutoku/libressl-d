@@ -67,7 +67,7 @@ public import libressl_d.compat.stdio;
 public import libressl_d.openssl.crypto;
 public import libressl_d.openssl.opensslconf;
 
-//version = HEADER_BIO_H;
+enum HEADER_BIO_H = true;
 
 //#if !defined(HAVE_ATTRIBUTE__BOUNDED__) && !defined(__OpenBSD__)
 //	#define __bounded__(x, y, z)
@@ -313,12 +313,10 @@ enum BIO_CTRL_DGRAM_GET_RECV_TIMER_EXP = 37;
 enum BIO_CTRL_DGRAM_GET_SEND_TIMER_EXP = 38;
 
 /* #ifdef IP_MTU_DISCOVER */
-
-/**
- *  set DF bit on egress packets
- */
-enum BIO_CTRL_DGRAM_MTU_DISCOVER = 39;
-
+	/**
+	 *  set DF bit on egress packets
+	 */
+	enum BIO_CTRL_DGRAM_MTU_DISCOVER = 39;
 /* #endif */
 
 /**
@@ -1540,9 +1538,10 @@ const (.BIO_METHOD)* BIO_f_null();
 const (.BIO_METHOD)* BIO_f_buffer();
 const (.BIO_METHOD)* BIO_f_nbio_test();
 
-//#if !defined(OPENSSL_NO_DGRAM)
-const (.BIO_METHOD)* BIO_s_datagram();
-//#endif
+version (OPENSSL_NO_DGRAM) {
+} else {
+	const (.BIO_METHOD)* BIO_s_datagram();
+}
 
 /* BIO_METHOD* IO_f_ber(); */
 
@@ -1595,7 +1594,7 @@ void BIO_copy_next_retry(.BIO* b);
 
 /*core.stdc.config.c_long BIO_ghbn_ctrl(int cmd, int iarg, char* arg); */
 
-//#if defined(__MINGW_PRINTF_FORMAT)
+version (__MINGW_PRINTF_FORMAT) {
 	//__attribute__((__format__(__MINGW_PRINTF_FORMAT, 2, 3), __nonnull__(2)));
 	int BIO_printf(.BIO* bio, const (char)* format, ...);
 
@@ -1607,7 +1606,7 @@ void BIO_copy_next_retry(.BIO* b);
 
 	//__attribute__((__deprecated__, __format__(__MINGW_PRINTF_FORMAT, 3, 0), __nonnull__(3)));
 	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args);
-//#else
+} else {
 	//__attribute__((__format__(__printf__, 2, 3), __nonnull__(2)));
 	int BIO_printf(.BIO* bio, const (char)* format, ...);
 
@@ -1619,7 +1618,7 @@ void BIO_copy_next_retry(.BIO* b);
 
 	//__attribute__((__deprecated__, __format__(__printf__, 3, 0), __nonnull__(3)));
 	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args);
-//#endif
+}
 
 /* BEGIN ERROR CODES */
 /**

@@ -70,9 +70,10 @@ public import libressl_d.compat.stdio;
 public import libressl_d.openssl.bio;
 public import libressl_d.openssl.opensslconf;
 
-//#if !defined(OPENSSL_NO_BIO)
-	//public import libressl_d.openssl.bio;
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
 extern (C):
 nothrow @nogc:
@@ -203,11 +204,12 @@ void lh_stats(const (._LHASH)* lh, libressl_d.compat.stdio.FILE* out_);
 void lh_node_stats(const (._LHASH)* lh, libressl_d.compat.stdio.FILE* out_);
 void lh_node_usage_stats(const (._LHASH)* lh, libressl_d.compat.stdio.FILE* out_);
 
-//#if !defined(OPENSSL_NO_BIO)
-void lh_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
-void lh_node_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
-void lh_node_usage_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	void lh_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
+	void lh_node_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
+	void lh_node_usage_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
+}
 
 /* Type checking... */
 

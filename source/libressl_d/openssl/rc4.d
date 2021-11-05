@@ -62,10 +62,10 @@ private static import core.stdc.config;
 public import core.stdc.stddef;
 public import libressl_d.openssl.opensslconf;
 
-//version = HEADER_RC4_H;
+enum HEADER_RC4_H = true;
 
 version (OPENSSL_NO_RC4) {
-	//static assert(false, "RC4 is disabled.");
+	static assert(false, "RC4 is disabled.");
 }
 
 extern (C):

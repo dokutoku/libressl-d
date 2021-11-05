@@ -7,14 +7,4 @@
 module libressl_d.compat.sys._null;
 
 
-//#ifndef NULL
-	//#if !defined(__cplusplus)
-		//enum NULL = cast(void*)(0);
-	//#elif __cplusplus >= 201103L
-		//enum NULL nullptr;
-	//#elif defined(__GNUG__)
-		//enum NULL = __null;
-	//#else
-		//enum NULL = 0L;
-	//#endif
-//#endif
+enum NULL = cast(void*)(0);

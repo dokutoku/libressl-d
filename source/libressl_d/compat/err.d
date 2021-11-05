@@ -8,6 +8,14 @@ module libressl_d.compat.err;
 
 public import core.stdc.errno;
 public import core.stdc.stdarg;
+public import core.sys.bionic.err;
+public import core.sys.darwin.err;
+public import core.sys.dragonflybsd.err;
+public import core.sys.freebsd.err;
+public import core.sys.linux.err;
+public import core.sys.netbsd.err;
+public import core.sys.openbsd.err;
+public import core.sys.solaris.err;
 public import libressl_d.compat.stdio;
 public import libressl_d.compat.stdlib;
 public import libressl_d.compat.string;
@@ -15,16 +23,11 @@ public import libressl_d.compat.string;
 extern (C):
 package(libressl_d):
 
-//#if defined(HAVE_ERR_H)
-	//#include_next <err.h>
-//#else
+version (Posix) {
+} else {
 	version (D_BetterC) {
 	} else {
-		//#if defined(_MSC_VER)
-			//__declspec(noreturn)
-		//#else
-			//__attribute__((noreturn))
-		//#endif
+		//noreturn
 		pragma(inline, true)
 		nothrow
 		void err(int eval, const (char)* fmt, ...)
@@ -46,11 +49,7 @@ package(libressl_d):
 				libressl_d.compat.stdlib.exit(eval);
 			}
 
-		//#if defined(_MSC_VER)
-			//__declspec(noreturn)
-		//#else
-			//__attribute__((noreturn))
-		//#endif
+		//noreturn
 		pragma(inline, true)
 		nothrow
 		void errx(int eval, const (char)* fmt, ...)
@@ -108,4 +107,4 @@ package(libressl_d):
 				libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, "\n");
 			}
 	}
-//#endif
+}

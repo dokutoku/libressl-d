@@ -63,14 +63,14 @@ public import core.stdc.stddef;
 public import libressl_d.openssl.opensslconf;
 
 //#if !defined(HAVE_ATTRIBUTE__BOUNDED__) && !defined(__OpenBSD__)
-//	#define __bounded__(x, y, z)
+	//#define __bounded__(x, y, z)
 //#endif
 
 extern (C):
 nothrow @nogc:
 
 version (OPENSSL_NO_MD5) {
-	//static assert(false, "MD5 is disabled.");
+	static assert(false, "MD5 is disabled.");
 }
 
 /*

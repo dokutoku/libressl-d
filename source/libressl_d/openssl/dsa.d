@@ -71,29 +71,32 @@ private static import libressl_d.openssl.evp;
 public import libressl_d.openssl.bio;
 public import libressl_d.openssl.bn;
 public import libressl_d.openssl.crypto;
-public import libressl_d.openssl.dh;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 
 version (OPENSSL_NO_DSA) {
-	//static assert(false, "DSA is disabled.");
+	static assert(false, "DSA is disabled.");
 }
 
-//#if !defined(OPENSSL_NO_BIO)
-	//public import libressl_d.openssl.bio;
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-	//public import libressl_d.openssl.bn;
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	public import libressl_d.openssl.bn;
 
-	//#if !defined(OPENSSL_NO_DH)
-		//public import libressl_d.openssl.dh;
-	//#endif
-//#endif
+	version (OPENSSL_NO_DH) {
+	} else {
+		public import libressl_d.openssl.dh;
+	}
+}
 
-//#if !defined(OPENSSL_DSA_MAX_MODULUS_BITS)
+version (OPENSSL_DSA_MAX_MODULUS_BITS) {
+} else {
 	enum OPENSSL_DSA_MAX_MODULUS_BITS = 10000;
-//#endif
+}
 
 enum DSA_FLAG_CACHE_MONT_P = 0x01;
 
@@ -257,19 +260,21 @@ int i2d_DSAparams(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
 extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAparams_it;
 
 /* Deprecated version */
-//#if !defined(OPENSSL_NO_DEPRECATED)
-libressl_d.openssl.ossl_typ.DSA* DSA_generate_parameters(int bits, ubyte* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, void function(int, int, void*) callback, void* cb_arg);
-//#endif /* !defined(OPENSSL_NO_DEPRECATED) */
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	libressl_d.openssl.ossl_typ.DSA* DSA_generate_parameters(int bits, ubyte* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, void function(int, int, void*) callback, void* cb_arg);
+}
 
 /* New version */
 int DSA_generate_parameters_ex(libressl_d.openssl.ossl_typ.DSA* dsa, int bits, const (ubyte)* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, libressl_d.openssl.ossl_typ.BN_GENCB* cb);
 
 int DSA_generate_key(libressl_d.openssl.ossl_typ.DSA* a);
 
-//#if !defined(OPENSSL_NO_BIO)
-int DSAparams_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x);
-int DSA_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	int DSAparams_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x);
+	int DSA_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
+}
 
 int DSAparams_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.DSA)* x);
 int DSA_print_fp(libressl_d.compat.stdio.FILE* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
@@ -287,13 +292,14 @@ int DSA_is_prime(const (libressl_d.openssl.ossl_typ.BIGNUM)* n, void function(in
 		return libressl_d.openssl.bn.BN_is_prime(n, .DSS_prime_checks, callback, null, cb_arg);
 	}
 
-//#if !defined(OPENSSL_NO_DH)
-/*
- * Convert DSA structure (key or just parameters) into DH structure
- * (be careful to avoid small subgroup attacks when using this!)
- */
-libressl_d.openssl.ossl_typ.DH* DSA_dup_DH(const (libressl_d.openssl.ossl_typ.DSA)* r);
-//#endif
+version (OPENSSL_NO_DH) {
+} else {
+	/*
+	 * Convert DSA structure (key or just parameters) into DH structure
+	 * (be careful to avoid small subgroup attacks when using this!)
+	 */
+	libressl_d.openssl.ossl_typ.DH* DSA_dup_DH(const (libressl_d.openssl.ossl_typ.DSA)* r);
+}
 
 void DSA_get0_pqg(const (libressl_d.openssl.ossl_typ.DSA)* d, const (libressl_d.openssl.ossl_typ.BIGNUM)** p, const (libressl_d.openssl.ossl_typ.BIGNUM)** q, const (libressl_d.openssl.ossl_typ.BIGNUM)** g);
 int DSA_set0_pqg(libressl_d.openssl.ossl_typ.DSA* d, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* q, libressl_d.openssl.ossl_typ.BIGNUM* g);

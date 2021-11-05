@@ -1019,47 +1019,48 @@ int OBJ_cmp(const (libressl_d.openssl.asn1.ASN1_OBJECT)* a, const (libressl_d.op
 const (void)* OBJ_bsearch_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) cmp);
 const (void)* OBJ_bsearch_ex_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) cmp, int flags);
 
-//#if !defined(LIBRESSL_INTERNAL)
-//#define _DECLARE_OBJ_BSEARCH_CMP_FN(scope, type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)*, const (void)*); static int nm##_cmp(type1 const*, type2 const*); scope type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num)
+version (LIBRESSL_INTERNAL) {
+} else {
+	//#define _DECLARE_OBJ_BSEARCH_CMP_FN(scope, type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)*, const (void)*); static int nm##_cmp(type1 const*, type2 const*); scope type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num)
 
-//#define DECLARE_OBJ_BSEARCH_CMP_FN(type1, type2, cmp) ._DECLARE_OBJ_BSEARCH_CMP_FN(static, type1, type2, cmp)
-//#define DECLARE_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm) type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num)
+	//#define DECLARE_OBJ_BSEARCH_CMP_FN(type1, type2, cmp) ._DECLARE_OBJ_BSEARCH_CMP_FN(static, type1, type2, cmp)
+	//#define DECLARE_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm) type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num)
 
-/*
- * Unsolved problem: if a type is actually a pointer type, like
- * nid_triple is, then its impossible to get a const where you need
- * it. Consider:
- *
- * typedef int nid_triple[3];
- * const (void)* a_;
- * const nid_triple const *a = a_;
- *
- * The assignement discards a const because what you really want is:
- *
- * const int const * const *a = a_;
- *
- * But if you do that, you lose the fact that a is an array of 3 ints,
- * which breaks comparison functions.
- *
- * Thus we end up having to cast, sadly, or unpack the
- * declarations. Or, as I finally did in this case, delcare nid_triple
- * to be a struct, which it should have been in the first place.
- *
- * Ben, August 2008.
- *
- * Also, strictly speaking not all types need be const, but handling
- * the non-constness means a lot of complication, and in practice
- * comparison routines do always not touch their arguments.
- */
+	/*
+	 * Unsolved problem: if a type is actually a pointer type, like
+	 * nid_triple is, then its impossible to get a const where you need
+	 * it. Consider:
+	 *
+	 * typedef int nid_triple[3];
+	 * const (void)* a_;
+	 * const nid_triple const *a = a_;
+	 *
+	 * The assignement discards a const because what you really want is:
+	 *
+	 * const int const * const *a = a_;
+	 *
+	 * But if you do that, you lose the fact that a is an array of 3 ints,
+	 * which breaks comparison functions.
+	 *
+	 * Thus we end up having to cast, sadly, or unpack the
+	 * declarations. Or, as I finally did in this case, delcare nid_triple
+	 * to be a struct, which it should have been in the first place.
+	 *
+	 * Ben, August 2008.
+	 *
+	 * Also, strictly speaking not all types need be const, but handling
+	 * the non-constness means a lot of complication, and in practice
+	 * comparison routines do always not touch their arguments.
+	 */
 
-//#define IMPLEMENT_OBJ_BSEARCH_CMP_FN(type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)* a_, const (void)* b_) { type1 const* a = a_; type2 const* b = b_; return nm##_cmp(a, b); } static type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num) { return (type2*) .OBJ_bsearch_(key, base, num, type2.sizeof, nm##_cmp_BSEARCH_CMP_FN); } extern void dummy_prototype(void)
+	//#define IMPLEMENT_OBJ_BSEARCH_CMP_FN(type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)* a_, const (void)* b_) { type1 const* a = a_; type2 const* b = b_; return nm##_cmp(a, b); } static type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num) { return (type2*) .OBJ_bsearch_(key, base, num, type2.sizeof, nm##_cmp_BSEARCH_CMP_FN); } extern void dummy_prototype(void)
 
-//#define IMPLEMENT_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)* a_, const (void)* b_) { type1 const* a = a_; type2 const* b = b_; return nm##_cmp(a, b); } type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num) { return (type2*) .OBJ_bsearch_(key, base, num, type2.sizeof, nm##_cmp_BSEARCH_CMP_FN); } extern void dummy_prototype(void)
+	//#define IMPLEMENT_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)* a_, const (void)* b_) { type1 const* a = a_; type2 const* b = b_; return nm##_cmp(a, b); } type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num) { return (type2*) .OBJ_bsearch_(key, base, num, type2.sizeof, nm##_cmp_BSEARCH_CMP_FN); } extern void dummy_prototype(void)
 
-//#define OBJ_bsearch(type1, key, type2, base, num, cmp) ((type2*) .OBJ_bsearch_(libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, key), libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, base), num, type2.sizeof, ((void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, cmp##_type_1), (void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, cmp##_type_2), cmp##_BSEARCH_CMP_FN)))
+	//#define OBJ_bsearch(type1, key, type2, base, num, cmp) ((type2*) .OBJ_bsearch_(libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, key), libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, base), num, type2.sizeof, ((void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, cmp##_type_1), (void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, cmp##_type_2), cmp##_BSEARCH_CMP_FN)))
 
-//#define OBJ_bsearch_ex(type1, key, type2, base, num, cmp, flags) ((type2*) .OBJ_bsearch_ex_(libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, key), libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, base), num, type2.sizeof, ((void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, cmp##_type_1), (void) type_2 = libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, cmp##_type_2), cmp##_BSEARCH_CMP_FN)), flags)
-//#endif /* !LIBRESSL_INTERNAL */
+	//#define OBJ_bsearch_ex(type1, key, type2, base, num, cmp, flags) ((type2*) .OBJ_bsearch_ex_(libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, key), libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, base), num, type2.sizeof, ((void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, cmp##_type_1), (void) type_2 = libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, cmp##_type_2), cmp##_BSEARCH_CMP_FN)), flags)
+}
 
 int OBJ_new_nid(int num);
 int OBJ_add_object(const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj);

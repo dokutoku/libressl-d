@@ -65,7 +65,7 @@ extern (C):
 nothrow @nogc:
 
 version (OPENSSL_NO_BF) {
-	//static assert(false, "BF is disabled.");
+	static assert(false, "BF is disabled.");
 }
 
 enum BF_ENCRYPT = 1;

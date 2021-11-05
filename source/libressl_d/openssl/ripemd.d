@@ -66,7 +66,7 @@ extern (C):
 nothrow @nogc:
 
 version (OPENSSL_NO_RIPEMD) {
-	//static assert(false, "RIPEMD is disabled.");
+	static assert(false, "RIPEMD is disabled.");
 }
 
 //#if defined(__LP32__)

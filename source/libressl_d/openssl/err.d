@@ -118,17 +118,18 @@ public import core.stdc.errno;
 public import libressl_d.compat.stdio;
 public import libressl_d.compat.stdlib;
 public import libressl_d.openssl.bio;
-public import libressl_d.openssl.lhash;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 
-//#if !defined(OPENSSL_NO_BIO)
-	//public import libressl_d.openssl.bio;
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
-//#if !defined(OPENSSL_NO_LHASH)
-	//public import libressl_d.openssl.lhash;
-//#endif
+version (OPENSSL_NO_LHASH) {
+} else {
+	public import libressl_d.openssl.lhash;
+}
 
 extern (C):
 nothrow @nogc:
@@ -812,16 +813,18 @@ const (char)* ERR_reason_error_string(core.stdc.config.c_ulong e);
 void ERR_print_errors_cb(int function(const (char)* str, size_t len, void* u) cb, void* u);
 void ERR_print_errors_fp(libressl_d.compat.stdio.FILE* fp);
 
-//#if !defined(OPENSSL_NO_BIO)
-void ERR_print_errors(libressl_d.openssl.bio.BIO* bp);
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	void ERR_print_errors(libressl_d.openssl.bio.BIO* bp);
+}
 
 void ERR_asprintf_error_data(char* format, ...);
 
-//#if !defined(LIBRESSL_INTERNAL)
-void ERR_add_error_data(int num, ...);
-void ERR_add_error_vdata(int num, core.stdc.stdarg.va_list args);
-//#endif
+version (LIBRESSL_INTERNAL) {
+} else {
+	void ERR_add_error_data(int num, ...);
+	void ERR_add_error_vdata(int num, core.stdc.stdarg.va_list args);
+}
 
 void ERR_load_strings(int lib, .ERR_STRING_DATA* str);
 void ERR_unload_strings(int lib, .ERR_STRING_DATA* str);
@@ -831,22 +834,24 @@ void ERR_free_strings();
 
 void ERR_remove_thread_state(const (libressl_d.openssl.crypto.CRYPTO_THREADID)* tid);
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-/**
- * if zero we look it up
- */
-void ERR_remove_state(core.stdc.config.c_ulong pid);
-//#endif
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	/**
+	 * if zero we look it up
+	 */
+	void ERR_remove_state(core.stdc.config.c_ulong pid);
+}
 
 .ERR_STATE* ERR_get_state();
 
-//#if !defined(OPENSSL_NO_LHASH)
+version (OPENSSL_NO_LHASH) {
+} else {
 	package alias lhash_st_ERR_STRING_DATA = void;
 	package alias lhash_st_ERR_STATE = void;
 	lhash_st_ERR_STRING_DATA* ERR_get_string_table();
 	.lhash_st_ERR_STATE* ERR_get_err_state_table();
 	void ERR_release_err_state_table(.lhash_st_ERR_STATE** hash);
-//#endif
+}
 
 int ERR_get_next_error_library();
 

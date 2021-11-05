@@ -62,21 +62,22 @@ private static import core.stdc.config;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.evp;
 public import libressl_d.openssl.bio;
-public import libressl_d.openssl.bn;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 
 version (OPENSSL_NO_DH) {
-	//static assert(false, "DH is disabled.");
+	static assert(false, "DH is disabled.");
 }
 
-//#if !defined(OPENSSL_NO_BIO)
-	//public import libressl_d.openssl.bio;
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-	//public import libressl_d.openssl.bn;
-//#endif
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	public import libressl_d.openssl.bn;
+}
 
 //#if !defined(OPENSSL_DH_MAX_MODULUS_BITS)
 	enum OPENSSL_DH_MAX_MODULUS_BITS = 10000;
@@ -225,9 +226,10 @@ void DH_set_flags(libressl_d.openssl.ossl_typ.DH* dh, int flags);
 int DH_set_length(libressl_d.openssl.ossl_typ.DH* dh, core.stdc.config.c_long length_);
 
 /* Deprecated version */
-//#if !defined(OPENSSL_NO_DEPRECATED)
-libressl_d.openssl.ossl_typ.DH* DH_generate_parameters(int prime_len, int generator, void function(int, int, void*) callback, void* cb_arg);
-//#endif /* !defined(OPENSSL_NO_DEPRECATED) */
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	libressl_d.openssl.ossl_typ.DH* DH_generate_parameters(int prime_len, int generator, void function(int, int, void*) callback, void* cb_arg);
+}
 
 /* New version */
 int DH_generate_parameters_ex(libressl_d.openssl.ossl_typ.DH* dh, int prime_len, int generator, libressl_d.openssl.ossl_typ.BN_GENCB* cb);
@@ -240,11 +242,11 @@ libressl_d.openssl.ossl_typ.DH* d2i_DHparams(libressl_d.openssl.ossl_typ.DH** a,
 int i2d_DHparams(const (libressl_d.openssl.ossl_typ.DH)* a, ubyte** pp);
 int DHparams_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.DH)* x);
 
-//#if !defined(OPENSSL_NO_BIO)
+version(OPENSSL_NO_BIO) {
+	int DHparams_print(char* bp, const (libressl_d.openssl.ossl_typ.DH)* x);
+} else {
 	int DHparams_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DH)* x);
-//#else
-//	int DHparams_print(char* bp, const (libressl_d.openssl.ossl_typ.DH)* x);
-//#endif
+}
 
 pragma(inline, true)
 int EVP_PKEY_CTX_set_dh_paramgen_prime_len(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int len)

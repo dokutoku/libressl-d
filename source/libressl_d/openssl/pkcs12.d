@@ -78,7 +78,7 @@ enum PKCS12_MAC_ID = 3;
 
 /* Default iteration count */
 //#if !defined(PKCS12_DEFAULT_ITER)
-alias PKCS12_DEFAULT_ITER = libressl_d.openssl.evp.PKCS5_DEFAULT_ITER;
+	alias PKCS12_DEFAULT_ITER = libressl_d.openssl.evp.PKCS5_DEFAULT_ITER;
 //#endif
 
 enum PKCS12_MAC_KEY_LENGTH = 20;
@@ -182,53 +182,53 @@ alias PKCS12_BAGS = .pkcs12_bag_st;
 enum PKCS12_ERROR = 0;
 enum PKCS12_OK = 1;
 
-//#if !defined(LIBRESSL_INTERNAL)
-/* Compatibility macros */
+version (LIBRESSL_INTERNAL) {
+} else {
+	/* Compatibility macros */
 
-alias M_PKCS12_x5092certbag = .PKCS12_x5092certbag;
-alias M_PKCS12_x509crl2certbag = .PKCS12_x509crl2certbag;
+	alias M_PKCS12_x5092certbag = .PKCS12_x5092certbag;
+	alias M_PKCS12_x509crl2certbag = .PKCS12_x509crl2certbag;
 
-alias M_PKCS12_certbag2x509 = .PKCS12_certbag2x509;
-alias M_PKCS12_certbag2x509crl = .PKCS12_certbag2x509crl;
+	alias M_PKCS12_certbag2x509 = .PKCS12_certbag2x509;
+	alias M_PKCS12_certbag2x509crl = .PKCS12_certbag2x509crl;
 
-alias M_PKCS12_unpack_p7data = .PKCS12_unpack_p7data;
-alias M_PKCS12_pack_authsafes = .PKCS12_pack_authsafes;
-alias M_PKCS12_unpack_authsafes = .PKCS12_unpack_authsafes;
-alias M_PKCS12_unpack_p7encdata = .PKCS12_unpack_p7encdata;
+	alias M_PKCS12_unpack_p7data = .PKCS12_unpack_p7data;
+	alias M_PKCS12_pack_authsafes = .PKCS12_pack_authsafes;
+	alias M_PKCS12_unpack_authsafes = .PKCS12_unpack_authsafes;
+	alias M_PKCS12_unpack_p7encdata = .PKCS12_unpack_p7encdata;
 
-alias M_PKCS12_decrypt_skey = .PKCS12_decrypt_skey;
-alias M_PKCS8_decrypt = .PKCS8_decrypt;
+	alias M_PKCS12_decrypt_skey = .PKCS12_decrypt_skey;
+	alias M_PKCS8_decrypt = .PKCS8_decrypt;
 
-pragma(inline, true)
-int M_PKCS12_bag_type(BG)(scope const BG* bg)
+	pragma(inline, true)
+	int M_PKCS12_bag_type(BG)(scope const BG* bg)
 
-	in
-	{
-		assert(bg != null);
-	}
+		in
+		{
+			assert(bg != null);
+		}
 
-	do
-	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(bg.type);
-	}
+		do
+		{
+			return libressl_d.openssl.objects.OBJ_obj2nid(bg.type);
+		}
 
-pragma(inline, true)
-int M_PKCS12_cert_bag_type(scope const .PKCS12_SAFEBAG* bg)
+	pragma(inline, true)
+	int M_PKCS12_cert_bag_type(scope const .PKCS12_SAFEBAG* bg)
 
-	in
-	{
-		assert(bg != null);
-		assert(bg.value.bag != null);
-	}
+		in
+		{
+			assert(bg != null);
+			assert(bg.value.bag != null);
+		}
 
-	do
-	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(bg.value.bag.type);
-	}
+		do
+		{
+			return libressl_d.openssl.objects.OBJ_obj2nid(bg.value.bag.type);
+		}
 
-alias M_PKCS12_crl_bag_type = .M_PKCS12_cert_bag_type;
-
-//#endif /* !LIBRESSL_INTERNAL */
+	alias M_PKCS12_crl_bag_type = .M_PKCS12_cert_bag_type;
+}
 
 pragma(inline, true)
 libressl_d.openssl.asn1.ASN1_TYPE* PKCS12_get_attr(BAG)(BAG* bag, int attr_nid)

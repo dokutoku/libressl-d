@@ -8,32 +8,45 @@ module libressl_d.compat.stdlib;
 private static import core.stdc.config;
 public import core.stdc.stdint;
 public import core.stdc.stdlib;
+public import core.sys.bionic.stdlib;
+public import core.sys.darwin.stdlib;
+public import core.sys.dragonflybsd.stdlib;
+public import core.sys.freebsd.stdlib;
+public import core.sys.netbsd.stdlib;
+public import core.sys.openbsd.stdlib;
 public import core.sys.posix.stdlib;
+public import core.sys.solaris.stdlib;
 public import libressl_d.compat.sys.types;
 
 extern (C):
 nothrow @nogc:
 
-//#if !defined(HAVE_ARC4RANDOM_BUF)
-	//core.stdc.stdint.uint32_t arc4random();
-	//void arc4random_buf(void* _buf, size_t n);
-	//core.stdc.stdint.uint32_t arc4random_uniform(core.stdc.stdint.uint32_t upper_bound);
-//#endif
+static if (!__traits(compiles, arc4random)) {
+	core.stdc.stdint.uint32_t arc4random();
+}
 
-//#if !defined(HAVE_FREEZERO)
-	//void freezero(void* ptr_, size_t sz);
-//#endif
+static if (!__traits(compiles, arc4random_buf)) {
+	void arc4random_buf(void* _buf, size_t n);
+}
 
-//#if !defined(HAVE_GETPROGNAME)
-	//const (char)* getprogname();
-//#endif
+static if (!__traits(compiles, arc4random_uniform)) {
+	core.stdc.stdint.uint32_t arc4random_uniform(core.stdc.stdint.uint32_t upper_bound);
+}
 
-//void* reallocarray(void*, size_t, size_t);
+static if (!__traits(compiles, freezero)) {
+	void freezero(void* ptr_, size_t sz);
+}
 
-//#if !defined(HAVE_RECALLOCARRAY)
-	//void* recallocarray(void*, size_t, size_t, size_t);
-//#endif
+static if (!__traits(compiles, getprogname)) {
+	const (char)* getprogname();
+}
 
-//#if !defined(HAVE_STRTONUM)
+void* reallocarray(void*, size_t, size_t);
+
+static if (!__traits(compiles, recallocarray)) {
+	void* recallocarray(void*, size_t, size_t, size_t);
+}
+
+static if (!__traits(compiles, strtonum)) {
 	//core.stdc.config.cpp_longlong strtonum(const (char)* nptr, core.stdc.config.cpp_longlong minval, core.stdc.config.cpp_longlong maxval, const (char)** errstr);
-//#endif
+}

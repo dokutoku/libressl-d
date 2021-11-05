@@ -65,9 +65,10 @@ public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 public import libressl_d.openssl.safestack;
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-	//public import libressl_d.openssl.crypto;
-//#endif
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	public import libressl_d.openssl.crypto;
+}
 
 extern (C):
 nothrow @nogc:

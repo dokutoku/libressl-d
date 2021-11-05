@@ -64,7 +64,7 @@ public import libressl_d.compat.sys.types;
 public import libressl_d.openssl.ossl_typ;
 
 //#if !defined(HAVE_ATTRIBUTE__BOUNDED__) && !defined(__OpenBSD__)
-//	#define __bounded__(x, y, z)
+	//#define __bounded__(x, y, z)
 //#endif
 
 extern (C):
@@ -95,20 +95,21 @@ void BUF_MEM_free(libressl_d.openssl.ossl_typ.BUF_MEM* a);
 int BUF_MEM_grow(libressl_d.openssl.ossl_typ.BUF_MEM* str, size_t len);
 int BUF_MEM_grow_clean(libressl_d.openssl.ossl_typ.BUF_MEM* str, size_t len);
 
-//#if !defined(LIBRESSL_INTERNAL)
-char* BUF_strdup(const (char)* str);
-char* BUF_strndup(const (char)* str, size_t siz);
-void* BUF_memdup(const (void)* data, size_t siz);
-void BUF_reverse(ubyte* out_, const (ubyte)* in_, size_t siz);
+version (LIBRESSL_INTERNAL) {
+} else {
+	char* BUF_strdup(const (char)* str);
+	char* BUF_strndup(const (char)* str, size_t siz);
+	void* BUF_memdup(const (void)* data, size_t siz);
+	void BUF_reverse(ubyte* out_, const (ubyte)* in_, size_t siz);
 
-/* safe string functions */
+	/* safe string functions */
 
-//__attribute__((__bounded__(__string__, 1, 3)));
-size_t BUF_strlcpy(char* dst, const (char)* src, size_t siz);
+	//__attribute__((__bounded__(__string__, 1, 3)));
+	size_t BUF_strlcpy(char* dst, const (char)* src, size_t siz);
 
-//__attribute__((__bounded__(__string__, 1, 3)));
-size_t BUF_strlcat(char* dst, const (char)* src, size_t siz);
-//#endif
+	//__attribute__((__bounded__(__string__, 1, 3)));
+	size_t BUF_strlcat(char* dst, const (char)* src, size_t siz);
+}
 
 /* BEGIN ERROR CODES */
 /**

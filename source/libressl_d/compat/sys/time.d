@@ -12,9 +12,7 @@ extern (C):
 nothrow @nogc:
 
 version (Windows) {
-	//extern (C)
-	//nothrow @nogc
-	//int gettimeofday(.timeval* tp, void* tzp);
+	int gettimeofday(core.sys.windows.winsock2.timeval* tp, void* tzp);
 }
 
 version (Posix) {

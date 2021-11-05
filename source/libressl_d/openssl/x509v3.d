@@ -70,7 +70,7 @@ public import libressl_d.openssl.conf;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.x509;
 
-//version = HEADER_X509V3_H;
+enum HEADER_X509V3_H = true;
 
 extern (C):
 nothrow @nogc:
@@ -875,7 +875,7 @@ extern const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_CONSTRAINTS_it;
 
 .GENERAL_NAME* a2i_GENERAL_NAME(.GENERAL_NAME* out_, const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, int gen_type, const (char)* value, int is_nc);
 
-//#if defined(HEADER_CONF_H)
+static assert(libressl_d.openssl.conf.HEADER_CONF_H);
 .GENERAL_NAME* v2i_GENERAL_NAME(const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.CONF_VALUE* cnf);
 .GENERAL_NAME* v2i_GENERAL_NAME_ex(.GENERAL_NAME* out_, const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.CONF_VALUE* cnf, int is_nc);
 void X509V3_conf_free(libressl_d.openssl.conf.CONF_VALUE* val);
@@ -898,7 +898,6 @@ int X509V3_get_value_bool(const (libressl_d.openssl.conf.CONF_VALUE)* value, int
 int X509V3_get_value_int(const (libressl_d.openssl.conf.CONF_VALUE)* value, libressl_d.openssl.ossl_typ.ASN1_INTEGER** aint);
 void X509V3_set_nconf(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.ossl_typ.CONF* conf);
 void X509V3_set_conf_lhash(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.lhash_st_CONF_VALUE* lhash);
-//#endif
 
 char* X509V3_get_string(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* name, const (char)* section);
 libressl_d.openssl.conf.stack_st_CONF_VALUE* X509V3_get_section(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section);

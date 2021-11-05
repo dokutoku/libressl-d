@@ -8,6 +8,7 @@ module libressl_d.compat.string;
 private static import core.sys.windows.winsock2;
 public import core.stdc.string;
 public import core.sys.posix.string;
+public import core.sys.posix.strings;
 public import libressl_d.compat.sys.types;
 
 version (Windows) {
@@ -26,47 +27,50 @@ nothrow @nogc:
 	//#include <strings.h>
 //#endif
 
-//#if !defined(HAVE_STRCASECMP)
-	//int strcasecmp(const (char)* s1, const (char)* s2);
-	//int strncasecmp(const (char)* s1, const (char)* s2, size_t len);
-//#endif
+static if (!__traits(compiles, strcasecmp)) {
+	int strcasecmp(const (char)* s1, const (char)* s2);
+}
 
-//#if !defined(HAVE_STRLCPY)
-	//size_t strlcpy(char* dst, const (char)* src, size_t siz);
-//#endif
+static if (!__traits(compiles, strncasecmp)) {
+	int strncasecmp(const (char)* s1, const (char)* s2, size_t len);
+}
 
-//#if !defined(HAVE_STRLCAT)
-	//size_t strlcat(char* dst, const (char)* src, size_t siz);
-//#endif
+static if (!__traits(compiles, strlcpy)) {
+	size_t strlcpy(char* dst, const (char)* src, size_t siz);
+}
 
-//#if !defined(HAVE_STRNDUP)
-	//char* strndup(const (char)* str, size_t maxlen);
+static if (!__traits(compiles, strlcat)) {
+	size_t strlcat(char* dst, const (char)* src, size_t siz);
+}
+
+static if (!__traits(compiles, strndup)) {
+	char* strndup(const (char)* str, size_t maxlen);
 
 	/* the only user of strnlen is strndup, so only build it if needed */
-	//#if !defined(HAVE_STRNLEN)
-		//size_t strnlen(const (char)* str, size_t maxlen);
-	//#endif
-//#endif
+	static if (!__traits(compiles, strnlen)) {
+		size_t strnlen(const (char)* str, size_t maxlen);
+	}
+}
 
-//#if !defined(HAVE_STRSEP)
-	//char* strsep(char** stringp, const (char)* delim);
-//#endif
+static if (!__traits(compiles, strsep)) {
+	char* strsep(char** stringp, const (char)* delim);
+}
 
-//#if !defined(HAVE_EXPLICIT_BZERO)
-	//void explicit_bzero(void*, size_t);
-//#endif
+static if (!__traits(compiles, explicit_bzero)) {
+	void explicit_bzero(void*, size_t);
+}
 
-//#if !defined(HAVE_TIMINGSAFE_BCMP)
-	//int timingsafe_bcmp(const (void)* b1, const (void)* b2, size_t n);
-//#endif
+static if (!__traits(compiles, timingsafe_bcmp)) {
+	int timingsafe_bcmp(const (void)* b1, const (void)* b2, size_t n);
+}
 
-//#if !defined(HAVE_TIMINGSAFE_MEMCMP)
-	//int timingsafe_memcmp(const (void)* b1, const (void)* b2, size_t len);
-//#endif
+static if (!__traits(compiles, timingsafe_memcmp)) {
+	int timingsafe_memcmp(const (void)* b1, const (void)* b2, size_t len);
+}
 
-//#if !defined(HAVE_MEMMEM)
-	//void* memmem(const (void)* big, size_t big_len, const (void)* little, size_t little_len);
-//#endif
+static if (!__traits(compiles, memmem)) {
+	void* memmem(const (void)* big, size_t big_len, const (void)* little, size_t little_len);
+}
 
 version (Windows) {
 	pragma(inline, true)

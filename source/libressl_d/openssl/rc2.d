@@ -61,10 +61,10 @@ module libressl_d.openssl.rc2;
 private static import core.stdc.config;
 public import libressl_d.openssl.opensslconf;
 
-//version = HEADER_RC2_H;
+enum HEADER_RC2_H = true;
 
 version (OPENSSL_NO_RC2) {
-	//static assert(false, "RC2 is disabled.");
+	static assert(false, "RC2 is disabled.");
 }
 
 enum RC2_ENCRYPT = 1;

@@ -5,12 +5,14 @@
 module libressl_d.compat.resolv;
 
 
+private static import core.stdcpp.xutility;
+
 version (Windows) {
-	//#if _MSC_VER >= 1900
+	static if (core.stdcpp.xutility._MSC_VER >= 1900) {
 		//#include <../ucrt/resolv.h>
-	//#else
+	} else {
 		//#include <../include/resolv.h>
-	//#endif
+	}
 } else {
 	//#include_next <resolv.h>
 }

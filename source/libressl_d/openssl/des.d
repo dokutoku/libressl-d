@@ -58,13 +58,13 @@
 module libressl_d.openssl.des;
 
 
-//version = HEADER_NEW_DES_H;
+enum HEADER_NEW_DES_H = true;
 
 private static import core.stdc.config;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_DES) {
-	//static assert(false, "DES is disabled.");
+	static assert(false, "DES is disabled.");
 }
 
 extern (C):

@@ -82,24 +82,26 @@ struct rand_meth_st
 int RAND_set_rand_method(const (libressl_d.openssl.ossl_typ.RAND_METHOD)* meth);
 const (libressl_d.openssl.ossl_typ.RAND_METHOD)* RAND_get_rand_method();
 
-//#if !defined(OPENSSL_NO_ENGINE)
-int RAND_set_rand_engine(libressl_d.openssl.ossl_typ.ENGINE* engine);
-//#endif
+version (OPENSSL_NO_ENGINE) {
+} else {
+	int RAND_set_rand_engine(libressl_d.openssl.ossl_typ.ENGINE* engine);
+}
 
 libressl_d.openssl.ossl_typ.RAND_METHOD* RAND_SSLeay();
 
-//#if !defined(LIBRESSL_INTERNAL)
-void RAND_cleanup();
-int RAND_bytes(ubyte* buf, int num);
-int RAND_pseudo_bytes(ubyte* buf, int num);
-void RAND_seed(const (void)* buf, int num);
-void RAND_add(const (void)* buf, int num, double entropy);
-int RAND_load_file(const (char)* file, core.stdc.config.c_long max_bytes);
-int RAND_write_file(const (char)* file);
-const (char)* RAND_file_name(char* file, size_t num);
-int RAND_status();
-int RAND_poll();
-//#endif
+version (LIBRESSL_INTERNAL) {
+} else {
+	void RAND_cleanup();
+	int RAND_bytes(ubyte* buf, int num);
+	int RAND_pseudo_bytes(ubyte* buf, int num);
+	void RAND_seed(const (void)* buf, int num);
+	void RAND_add(const (void)* buf, int num, double entropy);
+	int RAND_load_file(const (char)* file, core.stdc.config.c_long max_bytes);
+	int RAND_write_file(const (char)* file);
+	const (char)* RAND_file_name(char* file, size_t num);
+	int RAND_status();
+	int RAND_poll();
+}
 
 /* BEGIN ERROR CODES */
 /**

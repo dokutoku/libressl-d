@@ -61,7 +61,7 @@ public import libressl_d.openssl.ec;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_GOST) {
-	//static assert(false, "GOST is disabled.");
+	static assert(false, "GOST is disabled.");
 }
 
 extern (C):

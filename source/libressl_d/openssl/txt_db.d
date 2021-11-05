@@ -60,14 +60,14 @@ module libressl_d.openssl.txt_db;
 
 private static import core.stdc.config;
 private static import libressl_d.openssl.safestack;
-public import libressl_d.openssl.bio;
 public import libressl_d.openssl.lhash;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.stack;
 
-//#if !defined(OPENSSL_NO_BIO)
-//	public import libressl_d.openssl.bio;
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
 enum DB_ERROR_OK = 0;
 enum DB_ERROR_MALLOC = 1;
@@ -103,13 +103,13 @@ struct txt_db_st
 
 alias TXT_DB = .txt_db_st;
 
-//#if !defined(OPENSSL_NO_BIO)
+version (OPENSSL_NO_BIO) {
+	.TXT_DB* TXT_DB_read(char* in_, int num);
+	core.stdc.config.c_long TXT_DB_write(char* out_, .TXT_DB* db);
+} else {
 	.TXT_DB* TXT_DB_read(libressl_d.openssl.bio.BIO* in_, int num);
 	core.stdc.config.c_long TXT_DB_write(libressl_d.openssl.bio.BIO* out_, .TXT_DB* db);
-//#else
-//	.TXT_DB* TXT_DB_read(char* in_, int num);
-//	core.stdc.config.c_long TXT_DB_write(char* out_, .TXT_DB* db);
-//#endif
+}
 
 int TXT_DB_create_index(.TXT_DB* db, int field, int function(libressl_d.openssl.safestack.OPENSSL_STRING*) qual, libressl_d.openssl.lhash.LHASH_HASH_FN_TYPE hash, libressl_d.openssl.lhash.LHASH_COMP_FN_TYPE cmp);
 void TXT_DB_free(.TXT_DB* db);

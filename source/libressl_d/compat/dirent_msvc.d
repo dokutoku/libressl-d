@@ -43,26 +43,36 @@ public import libressl_d.compat.string;
 public import libressl_d.compat.sys.stat;
 public import libressl_d.compat.sys.types;
 
-version (none):
+version (Windows):
 extern (C):
 nothrow @nogc:
+
+alias errno_t = int;
+
+.errno_t _set_errno(int);
+.errno_t mbstowcs_s(size_t*, wchar_t*, size_t, const (char)*, size_t);
+.errno_t wcstombs_s(size_t*, char*, size_t, const (wchar_t)*, size_t);
 
 /**
  * Indicates that d_type field is available in dirent structure
  */
-version = _DIRENT_HAVE_D_TYPE;
+enum _DIRENT_HAVE_D_TYPE = true;
 
 /**
  * Indicates that d_namlen field is available in dirent structure
  */
-version = _DIRENT_HAVE_D_NAMLEN;
+enum _DIRENT_HAVE_D_NAMLEN = true;
 
 /* Maximum length of file name */
-enum PATH_MAX = (!__traits(compiles, libressl_d.compat.limits.PATH_MAX)) ? (core.sys.windows.windef.MAX_PATH) : (libressl_d.compat.limits.PATH_MAX);
+enum PATH_MAX = libressl_d.compat.limits.PATH_MAX;
 
-enum FILENAME_MAX = (!__traits(compiles, libressl_d.compat.stdio.FILENAME_MAX)) ? (core.sys.windows.windef.MAX_PATH) : (libressl_d.compat.stdio.FILENAME_MAX);
+static if (!__traits(compiles, libressl_d.compat.stdio.FILENAME_MAX)) {
+	enum FILENAME_MAX = core.sys.windows.windef.MAX_PATH;
+} else {
+	enum FILENAME_MAX = libressl_d.compat.stdio.FILENAME_MAX;
+}
 
-enum NAME_MAX = (!__traits(compiles, libressl_d.compat.limits.NAME_MAX)) ? (.FILENAME_MAX) : (libressl_d.compat.limits.NAME_MAX);
+enum NAME_MAX = libressl_d.compat.limits.NAME_MAX;
 
 /**
  * Return the exact length of d_namlen without zero terminator
@@ -199,7 +209,7 @@ package(libressl_d)
 
 		/* Must have directory name */
 		if ((dirname == null) || (dirname[0] == '\0')) {
-			_set_errno(core.stdc.errno.ENOENT);
+			._set_errno(core.stdc.errno.ENOENT);
 
 			return null;
 		}
@@ -260,11 +270,11 @@ package(libressl_d)
 					} else {
 						/* Cannot retrieve first entry */
 						error = 1;
-						_set_errno(core.stdc.errno.ENOENT);
+						._set_errno(core.stdc.errno.ENOENT);
 					}
 				} else {
 					/* Cannot retrieve full path name */
-					_set_errno(core.stdc.errno.ENOENT);
+					._set_errno(core.stdc.errno.ENOENT);
 					error = 1;
 				}
 			} else {
@@ -379,7 +389,7 @@ int _wclosedir(._WDIR* dirp)
 			ok = 0;
 		} else {
 			/* Invalid directory stream */
-			_set_errno(core.stdc.errno.EBADF);
+			._set_errno(core.stdc.errno.EBADF);
 
 			/*failure*/
 			ok = -1;
@@ -477,7 +487,7 @@ package(libressl_d)
 
 		/* Must have directory name */
 		if ((dirname == null) || (dirname[0] == '\0')) {
-			_set_errno(core.stdc.errno.ENOENT);
+			._set_errno(core.stdc.errno.ENOENT);
 
 			return null;
 		}
@@ -643,7 +653,7 @@ int closedir(.DIR* dirp)
 			libressl_d.compat.stdlib.free(dirp);
 		} else {
 			/* Invalid directory stream */
-			_set_errno(core.stdc.errno.EBADF);
+			._set_errno(core.stdc.errno.EBADF);
 
 			/*failure*/
 			ok = -1;
@@ -668,29 +678,20 @@ void rewinddir(.DIR* dirp)
 		._wrewinddir(dirp.wdirp);
 	}
 
-/+
 /* Convert multi-byte string to wide character string */
 package(libressl_d)
 int dirent_mbstowcs_s(size_t* pReturnValue, core.stdc.stddef.wchar_t* wcstr, size_t sizeInWords, const (char)* mbstr, size_t count)
 
-	in
-	{
-	}
-
 	do
 	{
-		return mbstowcs_s(pReturnValue, wcstr, sizeInWords, mbstr, count);
+		return .mbstowcs_s(pReturnValue, wcstr, sizeInWords, mbstr, count);
 	}
-+/
 
-/+
 /* Convert wide-character string to multi-byte string */
 package(libressl_d)
-int dirent_wcstombs_s(size_t* pReturnValue, char* mbstr, size_t sizeInBytes, /* max size of mbstr */
-                             const (core.stdc.stddef.wchar_t)* wcstr, size_t count)
+int dirent_wcstombs_s(size_t* pReturnValue, char* mbstr, size_t sizeInBytes, /* max size of mbstr */ const (core.stdc.stddef.wchar_t)* wcstr, size_t count)
 
 	do
 	{
-		return wcstombs_s(pReturnValue, mbstr, sizeInBytes, wcstr, count);
+		return .wcstombs_s(pReturnValue, mbstr, sizeInBytes, wcstr, count);
 	}
-+/

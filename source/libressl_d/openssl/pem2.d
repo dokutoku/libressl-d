@@ -60,9 +60,12 @@
 module libressl_d.openssl.pem2;
 
 
+private static import libressl_d.openssl.pem;
+
 extern (C):
 nothrow @nogc:
 
-//#if !defined(HEADER_PEM_H)
-//void ERR_load_PEM_strings();
-//#endif
+version (none) {
+	static assert(!libressl_d.openssl.pem.HEADER_PEM_H);
+	void ERR_load_PEM_strings();
+}

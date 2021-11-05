@@ -32,9 +32,9 @@ version (Windows) {
 }
 
 //#ifndef __STRICT_ALIGNMENT
-//	#define __STRICT_ALIGNMENT
-//
-//	#if defined(__i386) || defined(__i386__) || defined(__x86_64) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__) || defined(__aarch64__) || ((defined(__arm__) || defined(__arm)) && __ARM_ARCH >= 6)
-//		#undef __STRICT_ALIGNMENT
-//	#endif
+	//#define __STRICT_ALIGNMENT
+
+	//#if defined(__i386) || defined(__i386__) || defined(__x86_64) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__) || defined(__aarch64__) || ((defined(__arm__) || defined(__arm)) && __ARM_ARCH >= 6)
+		//#undef __STRICT_ALIGNMENT
+	//#endif
 //#endif

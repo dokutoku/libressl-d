@@ -63,22 +63,22 @@ private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.evp;
 private static import libressl_d.openssl.rsa;
 public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.bio;
-public import libressl_d.openssl.bn;
 public import libressl_d.openssl.crypto;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 
-//#if !defined(OPENSSL_NO_BIO)
-	//public import libressl_d.openssl.bio;
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-	//public import libressl_d.openssl.bn;
-//#endif
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	public import libressl_d.openssl.bn;
+}
 
 version (OPENSSL_NO_RSA) {
-	//static assert(false, "RSA is disabled.");
+	static assert(false, "RSA is disabled.");
 }
 
 extern (C):
@@ -220,18 +220,18 @@ struct rsa_st
 }
 
 //#if !defined(OPENSSL_RSA_MAX_MODULUS_BITS)
-enum OPENSSL_RSA_MAX_MODULUS_BITS = 16384;
+	enum OPENSSL_RSA_MAX_MODULUS_BITS = 16384;
 //#endif
 
 //#if !defined(OPENSSL_RSA_SMALL_MODULUS_BITS)
-enum OPENSSL_RSA_SMALL_MODULUS_BITS = 3072;
+	enum OPENSSL_RSA_SMALL_MODULUS_BITS = 3072;
 //#endif
 
 //#if !defined(OPENSSL_RSA_MAX_PUBEXP_BITS)
-/**
- *  exponent limit enforced for "large" modulus only
- */
-enum OPENSSL_RSA_MAX_PUBEXP_BITS = 64;
+	/**
+	 *  exponent limit enforced for "large" modulus only
+	 */
+	enum OPENSSL_RSA_MAX_PUBEXP_BITS = 64;
 //#endif
 
 enum RSA_3 = 0x03L;
@@ -450,9 +450,10 @@ int RSA_bits(const (libressl_d.openssl.ossl_typ.RSA)* rsa);
 int RSA_size(const (libressl_d.openssl.ossl_typ.RSA)* rsa);
 
 /* Deprecated version */
-//#if !defined(OPENSSL_NO_DEPRECATED)
-libressl_d.openssl.ossl_typ.RSA* RSA_generate_key(int bits, core.stdc.config.c_ulong e, void function(int, int, void*) callback, void* cb_arg);
-//#endif /* !defined(OPENSSL_NO_DEPRECATED) */
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	libressl_d.openssl.ossl_typ.RSA* RSA_generate_key(int bits, core.stdc.config.c_ulong e, void function(int, int, void*) callback, void* cb_arg);
+}
 
 /**
  * New version
@@ -507,17 +508,19 @@ extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_OAEP_PARAMS_it;
 
 int RSA_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.RSA)* r, int offset);
 
-//#if !defined(OPENSSL_NO_BIO)
-int RSA_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.RSA)* r, int offset);
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	int RSA_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.RSA)* r, int offset);
+}
 
-//#if !defined(OPENSSL_NO_RC4)
-int i2d_RSA_NET(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** pp, int function(char* buf, int len, const (char)* prompt, int verify) cb, int sgckey);
-libressl_d.openssl.ossl_typ.RSA* d2i_RSA_NET(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** pp, core.stdc.config.c_long length_, int function(char* buf, int len, const (char)* prompt, int verify) cb, int sgckey);
+version (OPENSSL_NO_RC4) {
+} else {
+	int i2d_RSA_NET(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** pp, int function(char* buf, int len, const (char)* prompt, int verify) cb, int sgckey);
+	libressl_d.openssl.ossl_typ.RSA* d2i_RSA_NET(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** pp, core.stdc.config.c_long length_, int function(char* buf, int len, const (char)* prompt, int verify) cb, int sgckey);
 
-int i2d_Netscape_RSA(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** pp, int function(char* buf, int len, const (char)* prompt, int verify) cb);
-libressl_d.openssl.ossl_typ.RSA* d2i_Netscape_RSA(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** pp, core.stdc.config.c_long length_, int function(char* buf, int len, const (char)* prompt, int verify) cb);
-//#endif
+	int i2d_Netscape_RSA(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** pp, int function(char* buf, int len, const (char)* prompt, int verify) cb);
+	libressl_d.openssl.ossl_typ.RSA* d2i_Netscape_RSA(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** pp, core.stdc.config.c_long length_, int function(char* buf, int len, const (char)* prompt, int verify) cb);
+}
 
 /*
  * The following 2 functions sign and verify a X509_SIG ASN1 object

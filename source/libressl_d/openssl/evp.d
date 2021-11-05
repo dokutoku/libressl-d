@@ -72,9 +72,10 @@ public import libressl_d.openssl.objects;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 
-//#if !defined(OPENSSL_NO_BIO)
-	//public import libressl_d.openssl.bio;
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	public import libressl_d.openssl.bio;
+}
 
 /*
 enum EVP_RC2_KEY_SIZE = 16;
@@ -209,118 +210,119 @@ enum EVP_PKEY_MO_DECRYPT = 0x0008;
 alias evp_sign_method = extern (C) nothrow @nogc int function(int type, const (ubyte)* m, uint m_length, ubyte* sigret, uint* siglen, void* key);
 alias evp_verify_method = extern (C) nothrow @nogc int function(int type, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, void* key);
 
-//#if !defined(libressl_d.openssl.ossl_typ.EVP_MD)
-struct env_md_st
-{
-	int type;
-	int pkey_type;
-	int md_size;
-	core.stdc.config.c_ulong flags;
-	int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx) init;
-	int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, const (void)* data, size_t count) update;
-	int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, ubyte* md) final_;
-	int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* to, const (libressl_d.openssl.ossl_typ.EVP_MD_CTX)* from) copy;
-	int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx) cleanup;
+//static if (!__traits(compiles, libressl_d.openssl.ossl_typ.EVP_MD))
+version (all) {
+	struct env_md_st
+	{
+		int type;
+		int pkey_type;
+		int md_size;
+		core.stdc.config.c_ulong flags;
+		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx) init;
+		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, const (void)* data, size_t count) update;
+		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, ubyte* md) final_;
+		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* to, const (libressl_d.openssl.ossl_typ.EVP_MD_CTX)* from) copy;
+		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx) cleanup;
 
-	.evp_sign_method* sign;
-	evp_verify_method* verify;
+		.evp_sign_method* sign;
+		evp_verify_method* verify;
+
+		/**
+		 * EVP_PKEY_xxx
+		 */
+		int[5] required_pkey_type;
+
+		int block_size;
+
+		/**
+		 * how big does the ctx.md_data need to be
+		 */
+		int ctx_size;
+
+		/**
+		 * control function
+		 */
+		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, int cmd, int p1, void* p2) md_ctrl;
+	} /* EVP_MD */;
 
 	/**
-	 * EVP_PKEY_xxx
+	 * digest can only handle a single
+	 * block
 	 */
-	int[5] required_pkey_type;
-
-	int block_size;
+	enum EVP_MD_FLAG_ONESHOT = 0x0001;
 
 	/**
-	 * how big does the ctx.md_data need to be
+	 * digest is a "clone" digest used
+	 * which is a copy of an existing
+	 * one for a specific public key type.
+	 * EVP_dss1() etc
 	 */
-	int ctx_size;
+	enum EVP_MD_FLAG_PKEY_DIGEST = 0x0002;
 
 	/**
-	 * control function
+	 * Digest uses EVP_PKEY_METHOD for signing instead of MD specific signing
 	 */
-	int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, int cmd, int p1, void* p2) md_ctrl;
-} /* EVP_MD */;
+	enum EVP_MD_FLAG_PKEY_METHOD_SIGNATURE = 0x0004;
 
-/**
- * digest can only handle a single
- * block
- */
-enum EVP_MD_FLAG_ONESHOT = 0x0001;
+	/**
+	 * DigestAlgorithmIdentifier flags...
+	 */
+	enum EVP_MD_FLAG_DIGALGID_MASK = 0x0018;
 
-/**
- * digest is a "clone" digest used
- * which is a copy of an existing
- * one for a specific public key type.
- * EVP_dss1() etc
- */
-enum EVP_MD_FLAG_PKEY_DIGEST = 0x0002;
+	/**
+	 * null or absent parameter accepted. Use null
+	 */
+	enum EVP_MD_FLAG_DIGALGID_NULL = 0x0000;
 
-/**
- * Digest uses EVP_PKEY_METHOD for signing instead of MD specific signing
- */
-enum EVP_MD_FLAG_PKEY_METHOD_SIGNATURE = 0x0004;
+	/**
+	 * null or absent parameter accepted. Use null for PKCS#1 otherwise absent
+	 */
+	enum EVP_MD_FLAG_DIGALGID_ABSENT = 0x0008;
 
-/**
- * DigestAlgorithmIdentifier flags...
- */
-enum EVP_MD_FLAG_DIGALGID_MASK = 0x0018;
+	/**
+	 * Custom handling via ctrl
+	 */
+	enum EVP_MD_FLAG_DIGALGID_CUSTOM = 0x0018;
 
-/**
- * null or absent parameter accepted. Use null
- */
-enum EVP_MD_FLAG_DIGALGID_NULL = 0x0000;
+	/**
+	 *  Note if suitable for use in FIPS mode
+	 */
+	enum EVP_MD_FLAG_FIPS = 0x0400;
 
-/**
- * null or absent parameter accepted. Use null for PKCS#1 otherwise absent
- */
-enum EVP_MD_FLAG_DIGALGID_ABSENT = 0x0008;
+	/* Digest ctrls */
 
-/**
- * Custom handling via ctrl
- */
-enum EVP_MD_FLAG_DIGALGID_CUSTOM = 0x0018;
+	enum EVP_MD_CTRL_DIGALGID = 0x01;
+	enum EVP_MD_CTRL_MICALG = 0x02;
+	enum EVP_MD_CTRL_SET_KEY = 0x03;
+	enum EVP_MD_CTRL_GOST_SET_SBOX = 0x04;
 
-/**
- *  Note if suitable for use in FIPS mode
- */
-enum EVP_MD_FLAG_FIPS = 0x0400;
+	/**
+	 * Minimum Algorithm specific ctrl value
+	 */
+	enum EVP_MD_CTRL_ALG_CTRL = 0x1000;
 
-/* Digest ctrls */
+	//#define EVP_PKEY_NULL_method null, null, { 0, 0, 0, 0 }
 
-enum EVP_MD_CTRL_DIGALGID = 0x01;
-enum EVP_MD_CTRL_MICALG = 0x02;
-enum EVP_MD_CTRL_SET_KEY = 0x03;
-enum EVP_MD_CTRL_GOST_SET_SBOX = 0x04;
+	version (OPENSSL_NO_DSA) {
+		//#define EVP_PKEY_DSA_method EVP_PKEY_NULL_method
+	} else {
+		//#define EVP_PKEY_DSA_method cast(.evp_sign_method*)(libressl_d.openssl.dsa.DSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.dsa.DSA_verify), { .EVP_PKEY_DSA, .EVP_PKEY_DSA2, .EVP_PKEY_DSA3, .EVP_PKEY_DSA4, 0 }
+	}
 
-/**
- * Minimum Algorithm specific ctrl value
- */
-enum EVP_MD_CTRL_ALG_CTRL = 0x1000;
+	version (OPENSSL_NO_ECDSA) {
+		//#define EVP_PKEY_ECDSA_method EVP_PKEY_NULL_method
+	} else {
+		//#define EVP_PKEY_ECDSA_method cast(.evp_sign_method*)(libressl_d.openssl.ecdsa.ECDSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.ecdsa.ECDSA_verify), { .EVP_PKEY_EC, 0, 0, 0 }
+	}
 
-//#define EVP_PKEY_NULL_method null, null, { 0, 0, 0, 0 }
-
-//#if !defined(OPENSSL_NO_DSA)
-//	#define EVP_PKEY_DSA_method cast(.evp_sign_method*)(libressl_d.openssl.dsa.DSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.dsa.DSA_verify), { .EVP_PKEY_DSA, .EVP_PKEY_DSA2, .EVP_PKEY_DSA3, .EVP_PKEY_DSA4, 0 }
-//#else
-//	#define EVP_PKEY_DSA_method EVP_PKEY_NULL_method
-//#endif
-
-//#if !defined(OPENSSL_NO_ECDSA)
-	//#define EVP_PKEY_ECDSA_method cast(.evp_sign_method*)(libressl_d.openssl.ecdsa.ECDSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.ecdsa.ECDSA_verify), { .EVP_PKEY_EC, 0, 0, 0 }
-//#else
-	//#define EVP_PKEY_ECDSA_method EVP_PKEY_NULL_method
-//#endif
-
-//#if !defined(OPENSSL_NO_RSA)
-	//#define EVP_PKEY_RSA_method cast(.evp_sign_method*)(libressl_d.openssl.rsa.RSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.rsa.RSA_verify), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
-	//#define EVP_PKEY_RSA_ASN1_OCTET_STRING_method cast(.evp_sign_method*)(libressl_d.openssl.rsa.RSA_sign_ASN1_OCTET_STRING), cast(.evp_verify_method*)(libressl_d.openssl.rsa.RSA_verify_ASN1_OCTET_STRING), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
-//#else
-	//#define EVP_PKEY_RSA_method EVP_PKEY_NULL_method
-	//#define EVP_PKEY_RSA_ASN1_OCTET_STRING_method EVP_PKEY_NULL_method
-//#endif
-//#endif /* !libressl_d.openssl.ossl_typ.EVP_MD */
+	version (OPENSSL_NO_RSA) {
+		//#define EVP_PKEY_RSA_method EVP_PKEY_NULL_method
+		//#define EVP_PKEY_RSA_ASN1_OCTET_STRING_method EVP_PKEY_NULL_method
+	} else {
+		//#define EVP_PKEY_RSA_method cast(.evp_sign_method*)(libressl_d.openssl.rsa.RSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.rsa.RSA_verify), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
+		//#define EVP_PKEY_RSA_ASN1_OCTET_STRING_method cast(.evp_sign_method*)(libressl_d.openssl.rsa.RSA_sign_ASN1_OCTET_STRING), cast(.evp_verify_method*)(libressl_d.openssl.rsa.RSA_verify_ASN1_OCTET_STRING), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
+	}
+}
 
 struct env_md_ctx_st
 {
@@ -726,7 +728,8 @@ alias EVP_ENCODE_CTX = .evp_Encode_Ctx_st;
  */
 alias EVP_PBE_KEYGEN = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (char)* pass, int passlen, libressl_d.openssl.asn1.ASN1_TYPE* param, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, int en_de);
 
-//#if !defined(OPENSSL_NO_RSA)
+version (OPENSSL_NO_RSA) {
+} else {
 	pragma(inline, true)
 	int EVP_PKEY_assign_RSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, char* rsa)
 
@@ -734,9 +737,10 @@ alias EVP_PBE_KEYGEN = extern (C) nothrow @nogc int function(libressl_d.openssl.
 		{
 			return .EVP_PKEY_assign(pkey, .EVP_PKEY_RSA, rsa);
 		}
-//#endif
+}
 
-//#if !defined(OPENSSL_NO_DSA)
+version (OPENSSL_NO_DSA) {
+} else {
 	pragma(inline, true)
 	int EVP_PKEY_assign_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, char* dsa)
 
@@ -744,9 +748,10 @@ alias EVP_PBE_KEYGEN = extern (C) nothrow @nogc int function(libressl_d.openssl.
 		{
 			return .EVP_PKEY_assign(pkey, .EVP_PKEY_DSA, dsa);
 		}
-//#endif
+}
 
-//#if !defined(OPENSSL_NO_DH)
+version (OPENSSL_NO_DH) {
+} else {
 	pragma(inline, true)
 	int EVP_PKEY_assign_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, char* dh)
 
@@ -754,9 +759,10 @@ alias EVP_PBE_KEYGEN = extern (C) nothrow @nogc int function(libressl_d.openssl.
 		{
 			return .EVP_PKEY_assign(pkey, .EVP_PKEY_DH, dh);
 		}
-//#endif
+}
 
-//#if !defined(OPENSSL_NO_EC)
+version (OPENSSL_NO_EC) {
+} else {
 	pragma(inline, true)
 	int EVP_PKEY_assign_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, char* eckey)
 
@@ -764,9 +770,10 @@ alias EVP_PBE_KEYGEN = extern (C) nothrow @nogc int function(libressl_d.openssl.
 		{
 			return .EVP_PKEY_assign(pkey, .EVP_PKEY_EC, eckey);
 		}
-//#endif
+}
 
-//#if !defined(OPENSSL_NO_GOST)
+version (OPENSSL_NO_GOST) {
+} else {
 	pragma(inline, true)
 	int EVP_PKEY_assign_GOST(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, char* gostkey)
 
@@ -774,7 +781,7 @@ alias EVP_PBE_KEYGEN = extern (C) nothrow @nogc int function(libressl_d.openssl.
 		{
 			return .EVP_PKEY_assign(pkey, .EVP_PKEY_GOSTR01, gostkey);
 		}
-//#endif
+}
 
 /* Add some extra combinations */
 pragma(inline, true)
@@ -1033,27 +1040,30 @@ int EVP_EncryptInit_ex(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (l
 int EVP_EncryptUpdate(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* out_, int* outl, const (ubyte)* in_, int inl);
 int EVP_EncryptFinal_ex(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* out_, int* outl);
 
-//#if !defined(LIBRESSL_INTERNAL)
+version (LIBRESSL_INTERNAL) {
+} else {
 	int EVP_EncryptFinal(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* out_, int* outl);
-//#endif
+}
 
 int EVP_DecryptInit(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (ubyte)* key, const (ubyte)* iv);
 int EVP_DecryptInit_ex(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, libressl_d.openssl.ossl_typ.ENGINE* impl, const (ubyte)* key, const (ubyte)* iv);
 int EVP_DecryptUpdate(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* out_, int* outl, const (ubyte)* in_, int inl);
 int EVP_DecryptFinal_ex(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* outm, int* outl);
 
-//#if !defined(LIBRESSL_INTERNAL)
+version (LIBRESSL_INTERNAL) {
+} else {
 	int EVP_DecryptFinal(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* outm, int* outl);
-//#endif
+}
 
 int EVP_CipherInit(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (ubyte)* key, const (ubyte)* iv, int enc);
 int EVP_CipherInit_ex(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, libressl_d.openssl.ossl_typ.ENGINE* impl, const (ubyte)* key, const (ubyte)* iv, int enc);
 int EVP_CipherUpdate(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* out_, int* outl, const (ubyte)* in_, int inl);
 int EVP_CipherFinal_ex(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* outm, int* outl);
 
-//#if !defined(LIBRESSL_INTERNAL)
+version (LIBRESSL_INTERNAL) {
+} else {
 	int EVP_CipherFinal(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* outm, int* outl);
-//#endif
+}
 
 int EVP_SignFinal(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, ubyte* md, uint* s, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 
@@ -1097,218 +1107,244 @@ int EVP_CIPHER_CTX_set_padding(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* c, in
 int EVP_CIPHER_CTX_ctrl(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, int type, int arg, void* ptr_);
 int EVP_CIPHER_CTX_rand_key(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, ubyte* key);
 
-//#if !defined(OPENSSL_NO_BIO)
+version (OPENSSL_NO_BIO) {
+} else {
 	const (libressl_d.openssl.bio.BIO_METHOD)* BIO_f_md();
 	const (libressl_d.openssl.bio.BIO_METHOD)* BIO_f_base64();
 	const (libressl_d.openssl.bio.BIO_METHOD)* BIO_f_cipher();
 	int BIO_set_cipher(libressl_d.openssl.bio.BIO* b, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* c, const (ubyte)* k, const (ubyte)* i, int enc);
-//#endif
+}
 
 const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_md_null();
 
-//#if !defined(OPENSSL_NO_MD4)
+version (OPENSSL_NO_MD4) {
+} else {
 	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_md4();
-//#endif
+}
 
-//#if !defined(OPENSSL_NO_MD5)
+version (OPENSSL_NO_MD5) {
+} else {
 	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_md5();
 	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_md5_sha1();
-//#endif
+}
 
-//#if !defined(OPENSSL_NO_SHA)
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha1();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_dss();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_dss1();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_ecdsa();
-//#endif
+version (OPENSSL_NO_SHA) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha1();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_dss();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_dss1();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_ecdsa();
+}
 
-//#if !defined(OPENSSL_NO_SHA256)
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha224();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha256();
-//#endif
+version (OPENSSL_NO_SHA256) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha224();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha256();
+}
 
-//#if !defined(OPENSSL_NO_SHA512)
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha384();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha512();
-//#endif
+version (OPENSSL_NO_SHA512) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha384();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sha512();
+}
 
-//#if !defined(OPENSSL_NO_SM3)
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sm3();
-//#endif
+version (OPENSSL_NO_SM3) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_sm3();
+}
 
-//#if !defined(OPENSSL_NO_RIPEMD)
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_ripemd160();
-//#endif
+version (OPENSSL_NO_RIPEMD) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_ripemd160();
+}
 
-//#if !defined(OPENSSL_NO_WHIRLPOOL)
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_whirlpool();
-//#endif
+version (OPENSSL_NO_WHIRLPOOL) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_whirlpool();
+}
 
-//#if !defined(OPENSSL_NO_GOST)
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_gostr341194();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_gost2814789imit();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_streebog256();
-const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_streebog512();
-//#endif
+version (OPENSSL_NO_GOST) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_gostr341194();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_gost2814789imit();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_streebog256();
+	const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_streebog512();
+}
 
 /**
  * does nothing :-\)
  */
 const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_enc_null();
 
-//#if !defined(OPENSSL_NO_DES)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cfb64();
-alias EVP_des_cfb = .EVP_des_cfb64;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_cfb64();
-alias EVP_des_ede_cfb = .EVP_des_ede_cfb64;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cfb64();
-alias EVP_des_ede3_cfb = .EVP_des_ede3_cfb64;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_desx_cbc();
-//#endif
+version (OPENSSL_NO_DES) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cfb64();
+	alias EVP_des_cfb = .EVP_des_cfb64;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_cfb64();
+	alias EVP_des_ede_cfb = .EVP_des_ede_cfb64;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cfb64();
+	alias EVP_des_ede3_cfb = .EVP_des_ede3_cfb64;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_des_ede3_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_desx_cbc();
+}
 
-//#if !defined(OPENSSL_NO_RC4)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc4();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc4_40();
+version (OPENSSL_NO_RC4) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc4();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc4_40();
 
-//#if !defined(OPENSSL_NO_MD5)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc4_hmac_md5();
-//#endif
-//#endif
+	version (OPENSSL_NO_MD5) {
+	} else {
+		const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc4_hmac_md5();
+	}
+}
 
-//#if !defined(OPENSSL_NO_IDEA)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_cfb64();
-alias EVP_idea_cfb = .EVP_idea_cfb64;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_cbc();
-//#endif
+version (OPENSSL_NO_IDEA) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_cfb64();
+	alias EVP_idea_cfb = .EVP_idea_cfb64;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_idea_cbc();
+}
 
-//#if !defined(OPENSSL_NO_RC2)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_40_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_64_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_cfb64();
-alias EVP_rc2_cfb = .EVP_rc2_cfb64;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_ofb();
-//#endif
+version (OPENSSL_NO_RC2) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_40_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_64_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_cfb64();
+	alias EVP_rc2_cfb = .EVP_rc2_cfb64;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_rc2_ofb();
+}
 
-//#if !defined(OPENSSL_NO_BF)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_cfb64();
-alias EVP_bf_cfb = .EVP_bf_cfb64;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_ofb();
-//#endif
+version (OPENSSL_NO_BF) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_cfb64();
+	alias EVP_bf_cfb = .EVP_bf_cfb64;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_bf_ofb();
+}
 
-//#if !defined(OPENSSL_NO_CAST)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_cfb64();
-alias EVP_cast5_cfb = .EVP_cast5_cfb64;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_ofb();
-//#endif
+version (OPENSSL_NO_CAST) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_cfb64();
+	alias EVP_cast5_cfb = .EVP_cast5_cfb64;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_cast5_ofb();
+}
 
-//#if !defined(OPENSSL_NO_AES)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cfb128();
-alias EVP_aes_128_cfb = .EVP_aes_128_cfb128;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ctr();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ccm();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_gcm();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_wrap();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_xts();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cfb128();
-alias EVP_aes_192_cfb = .EVP_aes_192_cfb128;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ctr();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ccm();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_gcm();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_wrap();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cfb128();
-alias EVP_aes_256_cfb = .EVP_aes_256_cfb128;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ctr();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ccm();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_gcm();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_wrap();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_xts();
+version (OPENSSL_NO_AES) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cfb128();
+	alias EVP_aes_128_cfb = .EVP_aes_128_cfb128;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ctr();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_ccm();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_gcm();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_wrap();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_xts();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_cfb128();
+	alias EVP_aes_192_cfb = .EVP_aes_192_cfb128;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ctr();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_ccm();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_gcm();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_192_wrap();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cfb128();
+	alias EVP_aes_256_cfb = .EVP_aes_256_cfb128;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ctr();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_ccm();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_gcm();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_wrap();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_xts();
 
-//#if !defined(OPENSSL_NO_SHA) && !defined(OPENSSL_NO_SHA1)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cbc_hmac_sha1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cbc_hmac_sha1();
-//#endif
-//#endif
+	version (OPENSSL_NO_SHA) {
+	} else {
+		version (OPENSSL_NO_SHA1) {
+		} else {
+			const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_128_cbc_hmac_sha1();
+			const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_aes_256_cbc_hmac_sha1();
+		}
+	}
+}
 
-//#if !defined(OPENSSL_NO_CAMELLIA)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cfb128();
-alias EVP_camellia_128_cfb = .EVP_camellia_128_cfb128;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cfb128();
-alias EVP_camellia_192_cfb = .EVP_camellia_192_cfb128;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cfb1();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cfb8();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cfb128();
-alias EVP_camellia_256_cfb = .EVP_camellia_256_cfb128;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_ofb();
-//#endif
+version (OPENSSL_NO_CAMELLIA) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_cfb128();
+	alias EVP_camellia_128_cfb = .EVP_camellia_128_cfb128;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_128_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_cfb128();
+	alias EVP_camellia_192_cfb = .EVP_camellia_192_cfb128;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_192_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cfb1();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cfb8();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_cfb128();
+	alias EVP_camellia_256_cfb = .EVP_camellia_256_cfb128;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_camellia_256_ofb();
+}
 
-//#if !defined(OPENSSL_NO_CHACHA)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_chacha20();
-//#endif
+version (OPENSSL_NO_CHACHA) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_chacha20();
+}
 
-//#if !defined(OPENSSL_NO_GOST)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_gost2814789_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_gost2814789_cfb64();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_gost2814789_cnt();
-//#endif
+version (OPENSSL_NO_GOST) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_gost2814789_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_gost2814789_cfb64();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_gost2814789_cnt();
+}
 
-//#if !defined(OPENSSL_NO_SM4)
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_ecb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_cbc();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_cfb128();
-alias EVP_sm4_cfb = .EVP_sm4_cfb128;
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_ofb();
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_ctr();
-//#endif
+version (OPENSSL_NO_SM4) {
+} else {
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_ecb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_cbc();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_cfb128();
+	alias EVP_sm4_cfb = .EVP_sm4_cfb128;
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_ofb();
+	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* EVP_sm4_ctr();
+}
 
 void OPENSSL_add_all_algorithms_noconf();
 void OPENSSL_add_all_algorithms_conf();
@@ -1352,36 +1388,41 @@ int EVP_PKEY_assign(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, int type, void* 
 void* EVP_PKEY_get0(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey);
 const (ubyte)* EVP_PKEY_get0_hmac(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, size_t* len);
 
-//#if !defined(OPENSSL_NO_RSA)
-libressl_d.openssl.rsa.rsa_st* EVP_PKEY_get0_RSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-libressl_d.openssl.rsa.rsa_st* EVP_PKEY_get1_RSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-int EVP_PKEY_set1_RSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.rsa.rsa_st* key);
-//#endif
+version (OPENSSL_NO_RSA) {
+} else {
+	libressl_d.openssl.rsa.rsa_st* EVP_PKEY_get0_RSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	libressl_d.openssl.rsa.rsa_st* EVP_PKEY_get1_RSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	int EVP_PKEY_set1_RSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.rsa.rsa_st* key);
+}
 
-//#if !defined(OPENSSL_NO_DSA)
-//struct libressl_d.openssl.dsa.dsa_st;
-libressl_d.openssl.dsa.dsa_st* EVP_PKEY_get0_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-libressl_d.openssl.dsa.dsa_st* EVP_PKEY_get1_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-int EVP_PKEY_set1_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.dsa.dsa_st* key);
-//#endif
+version (OPENSSL_NO_DSA) {
+} else {
+	//struct libressl_d.openssl.dsa.dsa_st;
+	libressl_d.openssl.dsa.dsa_st* EVP_PKEY_get0_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	libressl_d.openssl.dsa.dsa_st* EVP_PKEY_get1_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	int EVP_PKEY_set1_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.dsa.dsa_st* key);
+}
 
-//#if !defined(OPENSSL_NO_DH)
-//struct dh_st;
-libressl_d.openssl.dh.dh_st* EVP_PKEY_get0_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-libressl_d.openssl.dh.dh_st* EVP_PKEY_get1_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-int EVP_PKEY_set1_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.dh.dh_st* key);
-//#endif
+version (OPENSSL_NO_DH) {
+} else {
+	//struct dh_st;
+	libressl_d.openssl.dh.dh_st* EVP_PKEY_get0_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	libressl_d.openssl.dh.dh_st* EVP_PKEY_get1_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	int EVP_PKEY_set1_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.dh.dh_st* key);
+}
 
-//#if !defined(OPENSSL_NO_EC)
-//struct ec_key_st;
-libressl_d.openssl.ec.ec_key_st* EVP_PKEY_get0_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-libressl_d.openssl.ec.ec_key_st* EVP_PKEY_get1_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-int EVP_PKEY_set1_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ec.ec_key_st* key);
-//#endif
+version (OPENSSL_NO_EC) {
+} else {
+	//struct ec_key_st;
+	libressl_d.openssl.ec.ec_key_st* EVP_PKEY_get0_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	libressl_d.openssl.ec.ec_key_st* EVP_PKEY_get1_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	int EVP_PKEY_set1_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ec.ec_key_st* key);
+}
 
-//#if !defined(OPENSSL_NO_GOST)
-//struct gost_key_st;
-//#endif
+version (OPENSSL_NO_GOST) {
+} else {
+	//struct gost_key_st;
+}
 
 libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new();
 void EVP_PKEY_free(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
@@ -1643,29 +1684,34 @@ void EVP_PKEY_meth_set_ctrl(libressl_d.openssl.ossl_typ.EVP_PKEY_METHOD* pmeth, 
 package alias evp_aead_st = void;
 alias EVP_AEAD = .evp_aead_st;
 
-//#if !defined(OPENSSL_NO_AES)
-/**
- * EVP_aes_128_gcm is AES-128 in Galois Counter Mode.
- */
-const (.EVP_AEAD)* EVP_aead_aes_128_gcm();
+version (OPENSSL_NO_AES) {
+} else {
+	/**
+	 * EVP_aes_128_gcm is AES-128 in Galois Counter Mode.
+	 */
+	const (.EVP_AEAD)* EVP_aead_aes_128_gcm();
 
-/**
- * EVP_aes_256_gcm is AES-256 in Galois Counter Mode.
- */
-const (.EVP_AEAD)* EVP_aead_aes_256_gcm();
-//#endif
+	/**
+	 * EVP_aes_256_gcm is AES-256 in Galois Counter Mode.
+	 */
+	const (.EVP_AEAD)* EVP_aead_aes_256_gcm();
+}
 
-//#if !defined(OPENSSL_NO_CHACHA) && !defined(OPENSSL_NO_POLY1305)
-/**
- * EVP_aead_chacha20_poly1305 is ChaCha20 with a Poly1305 authenticator.
- */
-const (.EVP_AEAD)* EVP_aead_chacha20_poly1305();
+version (OPENSSL_NO_CHACHA) {
+} else {
+	version (OPENSSL_NO_POLY1305) {
+	} else {
+		/**
+		 * EVP_aead_chacha20_poly1305 is ChaCha20 with a Poly1305 authenticator.
+		 */
+		const (.EVP_AEAD)* EVP_aead_chacha20_poly1305();
 
-/**
- * EVP_aead_xchacha20_poly1305 is XChaCha20 with a Poly1305 authenticator.
- */
-const (.EVP_AEAD)* EVP_aead_xchacha20_poly1305();
-//#endif
+		/**
+		 * EVP_aead_xchacha20_poly1305 is XChaCha20 with a Poly1305 authenticator.
+		 */
+		const (.EVP_AEAD)* EVP_aead_xchacha20_poly1305();
+	}
+}
 
 /**
  * EVP_AEAD_key_length returns the length of the keys used.

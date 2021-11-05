@@ -65,7 +65,7 @@ extern (C):
 nothrow @nogc:
 
 version (OPENSSL_NO_CAST) {
-	//static assert(false, "CAST is disabled.");
+	static assert(false, "CAST is disabled.");
 }
 
 enum CAST_ENCRYPT = 1;

@@ -86,12 +86,13 @@ public import libressl_d.openssl.bn;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_EC) {
-	//static assert(false, "EC is disabled.");
+	static assert(false, "EC is disabled.");
 }
 
-//#if !defined(OPENSSL_NO_DEPRECATED)
-	//public import libressl_d.openssl.bn;
-//#endif
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	public import libressl_d.openssl.bn;
+}
 
 extern (C):
 nothrow @nogc:
@@ -170,37 +171,39 @@ const (.EC_METHOD)* EC_GFp_mont_method();
  */
 const (.EC_METHOD)* EC_GFp_nist_method();
 
-//#if !defined(OPENSSL_NO_EC_NISTP_64_GCC_128)
-/**
- * Returns 64-bit optimized methods for nistp224
- *  \return  EC_METHOD object
- */
-const (.EC_METHOD)* EC_GFp_nistp224_method();
+version (OPENSSL_NO_EC_NISTP_64_GCC_128) {
+} else {
+	/**
+	 * Returns 64-bit optimized methods for nistp224
+	 *  \return  EC_METHOD object
+	 */
+	const (.EC_METHOD)* EC_GFp_nistp224_method();
 
-/**
- * Returns 64-bit optimized methods for nistp256
- *  \return  EC_METHOD object
- */
-const (.EC_METHOD)* EC_GFp_nistp256_method();
+	/**
+	 * Returns 64-bit optimized methods for nistp256
+	 *  \return  EC_METHOD object
+	 */
+	const (.EC_METHOD)* EC_GFp_nistp256_method();
 
-/**
- * Returns 64-bit optimized methods for nistp521
- *  \return  EC_METHOD object
- */
-const (.EC_METHOD)* EC_GFp_nistp521_method();
-//#endif
+	/**
+	 * Returns 64-bit optimized methods for nistp521
+	 *  \return  EC_METHOD object
+	 */
+	const (.EC_METHOD)* EC_GFp_nistp521_method();
+}
 
-//#if !defined(OPENSSL_NO_EC2M)
-/********************************************************************/
-/*           EC_METHOD for curves over GF(2^m)                      */
-/********************************************************************/
+version (OPENSSL_NO_EC2M) {
+} else {
+	/********************************************************************/
+	/*           EC_METHOD for curves over GF(2^m)                      */
+	/********************************************************************/
 
-/**
- * Returns the basic GF2m ec method
- *  \return  EC_METHOD object
- */
-const (.EC_METHOD)* EC_GF2m_simple_method();
-//#endif
+	/**
+	 * Returns the basic GF2m ec method
+	 *  \return  EC_METHOD object
+	 */
+	const (.EC_METHOD)* EC_GF2m_simple_method();
+}
 
 /********************************************************************/
 /*                   EC_GROUP functions                             */
@@ -344,29 +347,30 @@ version (LIBRESSL_INTERNAL) {
 	 */
 	int EC_GROUP_get_curve_GFp(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-	//#if !defined(OPENSSL_NO_EC2M)
-	/**
-	 * Sets the parameter of a ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
-	 *  \param  group  EC_GROUP object
-	 *  \param  p      BIGNUM with the polynomial defining the underlying field
-	 *  \param  a      BIGNUM with parameter a of the equation
-	 *  \param  b      BIGNUM with parameter b of the equation
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
-	 */
-	int EC_GROUP_set_curve_GF2m(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	version (OPENSSL_NO_EC2M) {
+	} else {
+		/**
+		 * Sets the parameter of a ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
+		 *  \param  group  EC_GROUP object
+		 *  \param  p      BIGNUM with the polynomial defining the underlying field
+		 *  \param  a      BIGNUM with parameter a of the equation
+		 *  \param  b      BIGNUM with parameter b of the equation
+		 *  \param  ctx    BN_CTX object (optional)
+		 *  \return 1 on success and 0 if an error occured
+		 */
+		int EC_GROUP_set_curve_GF2m(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-	/**
-	 * Gets the parameter of the ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
-	 *  \param  group  EC_GROUP object
-	 *  \param  p      BIGNUM for the polynomial defining the underlying field
-	 *  \param  a      BIGNUM for parameter a of the equation
-	 *  \param  b      BIGNUM for parameter b of the equation
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
-	 */
-	int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-	//#endif
+		/**
+		 * Gets the parameter of the ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
+		 *  \param  group  EC_GROUP object
+		 *  \param  p      BIGNUM for the polynomial defining the underlying field
+		 *  \param  a      BIGNUM for parameter a of the equation
+		 *  \param  b      BIGNUM for parameter b of the equation
+		 *  \param  ctx    BN_CTX object (optional)
+		 *  \return 1 on success and 0 if an error occured
+		 */
+		int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	}
 }
 
 /**
@@ -417,18 +421,19 @@ int EC_GROUP_cmp(const (.EC_GROUP)* a, const (.EC_GROUP)* b, libressl_d.openssl.
  */
 .EC_GROUP* EC_GROUP_new_curve_GFp(const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-//#if !defined(OPENSSL_NO_EC2M)
-/**
- * Creates a new EC_GROUP object with the specified parameters defined
- *  over GF2m (defined by the equation y^2 + x*y = x^3 + a*x^2 + b)
- *  \param  p    BIGNUM with the polynomial defining the underlying field
- *  \param  a    BIGNUM with the parameter a of the equation
- *  \param  b    BIGNUM with the parameter b of the equation
- *  \param  ctx  BN_CTX object (optional)
- *  \return newly created EC_GROUP object with the specified parameters
- */
-.EC_GROUP* EC_GROUP_new_curve_GF2m(const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-//#endif
+version (OPENSSL_NO_EC2M) {
+} else {
+	/**
+	 * Creates a new EC_GROUP object with the specified parameters defined
+	 *  over GF2m (defined by the equation y^2 + x*y = x^3 + a*x^2 + b)
+	 *  \param  p    BIGNUM with the polynomial defining the underlying field
+	 *  \param  a    BIGNUM with the parameter a of the equation
+	 *  \param  b    BIGNUM with the parameter b of the equation
+	 *  \param  ctx  BN_CTX object (optional)
+	 *  \return newly created EC_GROUP object with the specified parameters
+	 */
+	.EC_GROUP* EC_GROUP_new_curve_GF2m(const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+}
 
 /**
  * Creates a EC_GROUP object with a curve specified by a NID
@@ -579,7 +584,8 @@ version (LIBRESSL_INTERNAL) {
 	 */
 	int EC_POINT_set_compressed_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
-	//#if !defined(OPENSSL_NO_EC2M)
+	version (OPENSSL_NO_EC2M) {
+	} else {
 		/**
 		 * Sets the affine coordinates of a EC_POINT over GF2m
 		 *  \param  group  underlying EC_GROUP object
@@ -612,7 +618,7 @@ version (LIBRESSL_INTERNAL) {
 		 *  \return 1 on success and 0 if an error occured
 		 */
 		int EC_POINT_set_compressed_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-	//#endif
+	}
 }
 
 /**
@@ -759,10 +765,11 @@ int EC_GROUP_have_precompute_mult(const (.EC_GROUP)* group);
  */
 int EC_GROUP_get_basis_type(const (.EC_GROUP)*);
 
-//#if !defined(OPENSSL_NO_EC2M)
-int EC_GROUP_get_trinomial_basis(const (.EC_GROUP)*, uint* k);
-int EC_GROUP_get_pentanomial_basis(const (.EC_GROUP)*, uint* k1, uint* k2, uint* k3);
-//#endif
+version (OPENSSL_NO_EC2M) {
+} else {
+	int EC_GROUP_get_trinomial_basis(const (.EC_GROUP)*, uint* k);
+	int EC_GROUP_get_pentanomial_basis(const (.EC_GROUP)*, uint* k1, uint* k2, uint* k3);
+}
 
 enum OPENSSL_EC_EXPLICIT_CURVE = 0x0000;
 enum OPENSSL_EC_NAMED_CURVE = 0x0001;
@@ -785,9 +792,10 @@ int i2d_ECPKParameters_fp(libressl_d.compat.stdio.FILE* fp, ubyte* x)
 		return libressl_d.openssl.asn1.ASN1_i2d_fp(&.i2d_ECPKParameters, fp, x);
 	}
 
-//#if !defined(OPENSSL_NO_BIO)
-int ECPKParameters_print(libressl_d.openssl.bio.BIO* bp, const (.EC_GROUP)* x, int off);
-//#endif
+version (OPENSSL_NO_BIO) {
+} else {
+	int ECPKParameters_print(libressl_d.openssl.bio.BIO* bp, const (.EC_GROUP)* x, int off);
+}
 
 int ECPKParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_GROUP)* x, int off);
 
@@ -1030,24 +1038,25 @@ int i2d_ECParameters(.EC_KEY* key, ubyte** out_);
  */
 int i2o_ECPublicKey(const (.EC_KEY)* key, ubyte** out_);
 
-//#if !defined(OPENSSL_NO_BIO)
-/**
- * Prints out the ec parameters on human readable form.
- *  \param  bp   BIO object to which the information is printed
- *  \param  key  EC_KEY object
- *  \return 1 on success and 0 if an error occurred
- */
-int ECParameters_print(libressl_d.openssl.bio.BIO* bp, const (.EC_KEY)* key);
+version (OPENSSL_NO_BIO) {
+} else {
+	/**
+	 * Prints out the ec parameters on human readable form.
+	 *  \param  bp   BIO object to which the information is printed
+	 *  \param  key  EC_KEY object
+	 *  \return 1 on success and 0 if an error occurred
+	 */
+	int ECParameters_print(libressl_d.openssl.bio.BIO* bp, const (.EC_KEY)* key);
 
-/**
- * Prints out the contents of a EC_KEY object
- *  \param  bp   BIO object to which the information is printed
- *  \param  key  EC_KEY object
- *  \param  off  line offset
- *  \return 1 on success and 0 if an error occurred
- */
-int EC_KEY_print(libressl_d.openssl.bio.BIO* bp, const (.EC_KEY)* key, int off);
-//#endif
+	/**
+	 * Prints out the contents of a EC_KEY object
+	 *  \param  bp   BIO object to which the information is printed
+	 *  \param  key  EC_KEY object
+	 *  \param  off  line offset
+	 *  \return 1 on success and 0 if an error occurred
+	 */
+	int EC_KEY_print(libressl_d.openssl.bio.BIO* bp, const (.EC_KEY)* key, int off);
+}
 
 /**
  * Prints out the ec parameters on human readable form.

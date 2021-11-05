@@ -55,7 +55,7 @@ public import core.stdc.stddef;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_CAMELLIA) {
-	//static assert(false, "CAMELLIA is disabled.");
+	static assert(false, "CAMELLIA is disabled.");
 }
 
 enum CAMELLIA_ENCRYPT = 1;

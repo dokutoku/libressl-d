@@ -22,7 +22,7 @@ public import core.stdc.stdint;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_CHACHA) {
-	//static assert(false, "ChaCha is disabled.");
+	static assert(false, "ChaCha is disabled.");
 }
 
 extern (C):

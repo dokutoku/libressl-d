@@ -67,7 +67,7 @@ public import libressl_d.openssl.ossl_typ;
 public import libressl_d.openssl.safestack;
 public import libressl_d.openssl.stack;
 
-//version = HEADER_CONF_H;
+enum HEADER_CONF_H = true;
 
 extern (C):
 nothrow @nogc:

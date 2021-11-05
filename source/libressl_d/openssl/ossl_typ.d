@@ -98,20 +98,19 @@ alias ASN1_ITEM = libressl_d.openssl.asn1t.ASN1_ITEM_st;
 //alias ASN1_PCTX = asn1_pctx_st;
 package alias ASN1_PCTX = void;
 
-/+
-#if defined(_WIN32) && defined(__WINCRYPT_H__)
-	#if !defined(LIBRESSL_INTERNAL)
+//#if defined(_WIN32) && defined(__WINCRYPT_H__)
+	version (LIBRESSL_INTERNAL) {
+	} else {
 		//pragma(msg, "Warning, overriding WinCrypt defines");
-	#endif
+	}
 
-	#undef X509_NAME
-	#undef libressl_d.openssl.x509.X509_CERT_PAIR
-	#undef X509_EXTENSIONS
-	#undef OCSP_REQUEST
-	#undef OCSP_RESPONSE
-	#undef PKCS7_ISSUER_AND_SERIAL
-#endif
-+/
+	//#undef X509_NAME
+	//#undef libressl_d.openssl.x509.X509_CERT_PAIR
+	//#undef X509_EXTENSIONS
+	//#undef OCSP_REQUEST
+	//#undef OCSP_RESPONSE
+	//#undef PKCS7_ISSUER_AND_SERIAL
+//#endif
 
 alias BIGNUM = libressl_d.openssl.bn.bignum_st;
 

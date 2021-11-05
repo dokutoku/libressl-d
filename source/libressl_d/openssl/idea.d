@@ -61,10 +61,10 @@ module libressl_d.openssl.idea;
 private static import core.stdc.config;
 public import libressl_d.openssl.opensslconf;
 
-//version = HEADER_IDEA_H;
+enum HEADER_IDEA_H = true;
 
 version (OPENSSL_NO_IDEA) {
-	//static assert(false, "IDEA is disabled.");
+	static assert(false, "IDEA is disabled.");
 }
 
 enum IDEA_ENCRYPT = 1;

@@ -72,12 +72,13 @@ extern (C):
 nothrow @nogc:
 
 //#if defined(_WIN32) && defined(__WINCRYPT_H__)
-//#if !defined(LIBRESSL_INTERNAL)
-//	pragma(msg, "Warning, overriding WinCrypt defines");
-//#endif
+	version (LIBRESSL_INTERNAL) {
+	} else {
+		//pragma(msg, "Warning, overriding WinCrypt defines");
+	}
 
-//#undef PKCS7_ISSUER_AND_SERIAL
-//#undef PKCS7_SIGNER_INFO
+	//#undef PKCS7_ISSUER_AND_SERIAL
+	//#undef PKCS7_SIGNER_INFO
 //#endif
 
 /*

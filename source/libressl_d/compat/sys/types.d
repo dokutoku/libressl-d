@@ -5,6 +5,8 @@
 module libressl_d.compat.sys.types;
 
 
+private static import core.stdc.config;
+private static import core.stdcpp.xutility;
 public import core.stdc.stdint;
 public import core.sys.posix.sys.types;
 public import core.sys.windows.basetsd;
@@ -13,11 +15,11 @@ extern (C):
 nothrow @nogc:
 
 version (Windows) {
-	//#if _MSC_VER >= 1900
+	static if (core.stdcpp.xutility._MSC_VER >= 1900) {
 		//#include <../ucrt/sys/types.h>
-	//#else
+	} else {
 		//#include <../include/sys/types.h>
-	//#endif
+	}
 }
 
 version (MinGW) {
@@ -27,6 +29,7 @@ version (MinGW) {
 }
 
 version (Windows) {
+	alias off_t = core.stdc.config.c_long;
 	alias u_char = ubyte;
 	alias u_short = ushort;
 	alias u_int = uint;
@@ -43,11 +46,11 @@ version (Windows) {
 #endif
 
 #if !defined(HAVE_ATTRIBUTE__DEAD) && !defined(__dead)
-	#if defined(_MSC_VER)
+	static if (__traits(compiles, core.stdcpp.xutility._MSC_VER)) {
 		#define __dead __declspec(noreturn)
-	#else
+	} else {
 		#define __dead __attribute__((__noreturn__))
-	#endif
+	}
 #endif
 
 version (Windows) {

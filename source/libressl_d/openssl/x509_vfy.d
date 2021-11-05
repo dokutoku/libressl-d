@@ -66,21 +66,21 @@ private static import libressl_d.openssl.stack;
 private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.bio;
 public import libressl_d.openssl.crypto;
-public import libressl_d.openssl.lhash;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.x509;
 
-//#if !defined(HEADER_X509_H)
-	//public import libressl_d.openssl.x509;
-	/*
-	 * openssl/x509.h ends up #include-ing this file at about the only
-	 * appropriate moment.
-	 */
-//#endif
+static assert(libressl_d.openssl.x509.HEADER_X509_H);
 
-//#if !defined(OPENSSL_NO_LHASH)
-	//public import libressl_d.openssl.lhash;
-//#endif
+/*
+ * openssl/x509.h ends up #include-ing this file at about the only
+ * appropriate moment.
+ */
+public import libressl_d.openssl.x509;
+
+version (OPENSSL_NO_LHASH) {
+} else {
+	public import libressl_d.openssl.lhash;
+}
 
 extern (C):
 nothrow @nogc:

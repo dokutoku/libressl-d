@@ -30,10 +30,11 @@ struct WHIRLPOOL_CTX
 	size_t[.WHIRLPOOL_COUNTER / size_t.sizeof] bitlen;
 }
 
-//#if !defined(OPENSSL_NO_WHIRLPOOL)
-int WHIRLPOOL_Init(.WHIRLPOOL_CTX* c);
-int WHIRLPOOL_Update(.WHIRLPOOL_CTX* c, const (void)* inp, size_t bytes);
-void WHIRLPOOL_BitUpdate(.WHIRLPOOL_CTX* c, const (void)* inp, size_t bits);
-int WHIRLPOOL_Final(ubyte* md, .WHIRLPOOL_CTX* c);
-ubyte* WHIRLPOOL(const (void)* inp, size_t bytes, ubyte* md);
-//#endif
+version (OPENSSL_NO_WHIRLPOOL) {
+} else {
+	int WHIRLPOOL_Init(.WHIRLPOOL_CTX* c);
+	int WHIRLPOOL_Update(.WHIRLPOOL_CTX* c, const (void)* inp, size_t bytes);
+	void WHIRLPOOL_BitUpdate(.WHIRLPOOL_CTX* c, const (void)* inp, size_t bits);
+	int WHIRLPOOL_Final(ubyte* md, .WHIRLPOOL_CTX* c);
+	ubyte* WHIRLPOOL(const (void)* inp, size_t bytes, ubyte* md);
+}

@@ -63,15 +63,17 @@ public import core.stdc.stddef;
 public import libressl_d.openssl.opensslconf;
 
 //#if !defined(HAVE_ATTRIBUTE__BOUNDED__) && !defined(__OpenBSD__)
-//	#define __bounded__(x, y, z)
+	//#define __bounded__(x, y, z)
 //#endif
 
 extern (C):
 nothrow @nogc:
 
-//#if defined(OPENSSL_NO_SHA) || defined(OPENSSL_NO_SHA1)
-//	static assert(false, "SHA is disabled.");
-//#endif
+version (OPENSSL_NO_SHA) {
+	static assert(false, "SHA is disabled.");
+} else version (OPENSSL_NO_SHA1) {
+	static assert(false, "SHA is disabled.");
+}
 
 /*
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -108,19 +110,20 @@ struct SHAstate_st
 
 alias SHA_CTX = SHAstate_st;
 
-//#if !defined(OPENSSL_NO_SHA1)
-int SHA1_Init(.SHA_CTX* c);
+version (OPENSSL_NO_SHA1) {
+} else {
+	int SHA1_Init(.SHA_CTX* c);
 
-//__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA1_Update(.SHA_CTX* c, const (void)* data, size_t len);
+	//__attribute__((__bounded__(__buffer__, 2, 3)));
+	int SHA1_Update(.SHA_CTX* c, const (void)* data, size_t len);
 
-int SHA1_Final(ubyte* md, .SHA_CTX* c);
+	int SHA1_Final(ubyte* md, .SHA_CTX* c);
 
-//__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA1(const (ubyte)* d, size_t n, ubyte* md);
+	//__attribute__((__bounded__(__buffer__, 1, 2)));
+	ubyte* SHA1(const (ubyte)* d, size_t n, ubyte* md);
 
-void SHA1_Transform(.SHA_CTX* c, const (ubyte)* data);
-//#endif
+	void SHA1_Transform(.SHA_CTX* c, const (ubyte)* data);
+}
 
 /**
  * SHA-256 treats input data as a
@@ -144,89 +147,92 @@ struct SHA256state_st
 
 alias SHA256_CTX = .SHA256state_st;
 
-//#if !defined(OPENSSL_NO_SHA256)
-int SHA224_Init(.SHA256_CTX* c);
+version (OPENSSL_NO_SHA256) {
+} else {
+	int SHA224_Init(.SHA256_CTX* c);
 
-//__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA224_Update(.SHA256_CTX* c, const (void)* data, size_t len);
+	//__attribute__((__bounded__(__buffer__, 2, 3)));
+	int SHA224_Update(.SHA256_CTX* c, const (void)* data, size_t len);
 
-int SHA224_Final(ubyte* md, .SHA256_CTX* c);
+	int SHA224_Final(ubyte* md, .SHA256_CTX* c);
 
-//__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA224(const (ubyte)* d, size_t n, ubyte* md);
+	//__attribute__((__bounded__(__buffer__, 1, 2)));
+	ubyte* SHA224(const (ubyte)* d, size_t n, ubyte* md);
 
-int SHA256_Init(.SHA256_CTX* c);
+	int SHA256_Init(.SHA256_CTX* c);
 
-//__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA256_Update(.SHA256_CTX* c, const (void)* data, size_t len);
+	//__attribute__((__bounded__(__buffer__, 2, 3)));
+	int SHA256_Update(.SHA256_CTX* c, const (void)* data, size_t len);
 
-int SHA256_Final(ubyte* md, .SHA256_CTX* c);
+	int SHA256_Final(ubyte* md, .SHA256_CTX* c);
 
-//__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA256(const (ubyte)* d, size_t n, ubyte* md);
+	//__attribute__((__bounded__(__buffer__, 1, 2)));
+	ubyte* SHA256(const (ubyte)* d, size_t n, ubyte* md);
 
-void SHA256_Transform(.SHA256_CTX* c, const (ubyte)* data);
-//#endif
+	void SHA256_Transform(.SHA256_CTX* c, const (ubyte)* data);
+}
 
 enum SHA384_DIGEST_LENGTH = 48;
 enum SHA512_DIGEST_LENGTH = 64;
 
-//#if !defined(OPENSSL_NO_SHA512)
-/*
- * Unlike 32-bit digest algorithms, SHA-512 *relies* on SHA_LONG64
- * being exactly 64-bit wide. See Implementation Notes in sha512.c
- * for further details.
- */
+version (OPENSSL_NO_SHA512) {
+} else {
+	/*
+	 * Unlike 32-bit digest algorithms, SHA-512 *relies* on SHA_LONG64
+	 * being exactly 64-bit wide. See Implementation Notes in sha512.c
+	 * for further details.
+	 */
 
-/**
- * SHA-512 treats input data as a
- * contiguous array of 64 bit
- * wide big-endian values.
- */
-enum SHA512_CBLOCK = .SHA_LBLOCK * 8;
+	/**
+	 * SHA-512 treats input data as a
+	 * contiguous array of 64 bit
+	 * wide big-endian values.
+	 */
+	enum SHA512_CBLOCK = .SHA_LBLOCK * 8;
 
-alias SHA_LONG64 = ulong;
+	alias SHA_LONG64 = ulong;
 
-struct SHA512state_st
-{
-	.SHA_LONG64[8] h;
-	.SHA_LONG64 Nl;
-	.SHA_LONG64 Nh;
-
-	union u_
+	struct SHA512state_st
 	{
-		.SHA_LONG64[.SHA_LBLOCK] d;
-		ubyte[.SHA512_CBLOCK] p;
+		.SHA_LONG64[8] h;
+		.SHA_LONG64 Nl;
+		.SHA_LONG64 Nh;
+
+		union u_
+		{
+			.SHA_LONG64[.SHA_LBLOCK] d;
+			ubyte[.SHA512_CBLOCK] p;
+		}
+
+		u_ u;
+		uint num;
+		uint md_len;
 	}
 
-	u_ u;
-	uint num;
-	uint md_len;
+	alias SHA512_CTX = .SHA512state_st;
 }
 
-alias SHA512_CTX = .SHA512state_st;
-//#endif
+version (OPENSSL_NO_SHA512) {
+} else {
+	int SHA384_Init(.SHA512_CTX* c);
 
-//#if !defined(OPENSSL_NO_SHA512)
-int SHA384_Init(.SHA512_CTX* c);
+	//__attribute__((__bounded__(__buffer__, 2, 3)));
+	int SHA384_Update(.SHA512_CTX* c, const (void)* data, size_t len);
 
-//__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA384_Update(.SHA512_CTX* c, const (void)* data, size_t len);
+	int SHA384_Final(ubyte* md, .SHA512_CTX* c);
 
-int SHA384_Final(ubyte* md, .SHA512_CTX* c);
+	//__attribute__((__bounded__(__buffer__, 1, 2)));
+	ubyte* SHA384(const (ubyte)* d, size_t n, ubyte* md);
 
-//__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA384(const (ubyte)* d, size_t n, ubyte* md);
+	int SHA512_Init(.SHA512_CTX* c);
 
-int SHA512_Init(.SHA512_CTX* c);
+	//__attribute__((__bounded__(__buffer__, 2, 3)));
+	int SHA512_Update(.SHA512_CTX* c, const (void)* data, size_t len);
 
-//__attribute__((__bounded__(__buffer__, 2, 3)));
-int SHA512_Update(.SHA512_CTX* c, const (void)* data, size_t len);
+	int SHA512_Final(ubyte* md, .SHA512_CTX* c);
 
-int SHA512_Final(ubyte* md, .SHA512_CTX* c);
+	//__attribute__((__bounded__(__buffer__, 1, 2)));
+	ubyte* SHA512(const (ubyte)* d, size_t n, ubyte* md);
 
-//__attribute__((__bounded__(__buffer__, 1, 2)));
-ubyte* SHA512(const (ubyte)* d, size_t n, ubyte* md);
-
-void SHA512_Transform(.SHA512_CTX* c, const (ubyte)* data);
-//#endif
+	void SHA512_Transform(.SHA512_CTX* c, const (ubyte)* data);
+}
