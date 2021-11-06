@@ -5,6 +5,7 @@
 module libressl_d.compat.stdio;
 
 
+private static import core.stdc.config;
 private static import core.stdcpp.xutility;
 public import core.stdc.stdarg;
 public import core.stdc.stdio;
@@ -29,6 +30,8 @@ static if (!__traits(compiles, asprintf)) {
 }
 
 version (Windows) {
+	alias off_t = core.stdc.config.c_long;
+
 	static if (__traits(compiles, core.stdcpp.xutility._MSC_VER)) {
 		//#define __func__ __FUNCTION__
 	}

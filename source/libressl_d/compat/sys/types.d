@@ -5,8 +5,8 @@
 module libressl_d.compat.sys.types;
 
 
-private static import core.stdc.config;
 private static import core.stdcpp.xutility;
+private static import libressl_d.compat.stdio;
 public import core.stdc.stdint;
 public import core.sys.posix.sys.types;
 public import core.sys.windows.basetsd;
@@ -29,7 +29,7 @@ version (MinGW) {
 }
 
 version (Windows) {
-	alias off_t = core.stdc.config.c_long;
+	alias off_t = libressl_d.compat.stdio.off_t;
 	alias u_char = ubyte;
 	alias u_short = ushort;
 	alias u_int = uint;

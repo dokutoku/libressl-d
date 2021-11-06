@@ -6,6 +6,7 @@ module libressl_d.compat.unistd;
 
 
 private static import core.sys.windows.winbase;
+private static import libressl_d.compat.stdio;
 private static import libressl_d.compat.sys.types;
 public import core.sys.posix.unistd;
 
@@ -14,10 +15,10 @@ nothrow @nogc:
 
 version (Posix) {
 	//#if defined(__MINGW32__)
-		//int ftruncate(int fd, libressl_d.compat.sys.types.off_t length_);
+		//int ftruncate(int fd, libressl_d.compat.stdio.off_t length_);
 		//libressl_d.compat.sys.types.uid_t getuid();
-		//libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
-		//libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
+		//libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
+		//libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
 	//#endif
 } else {
 	public import libressl_d.compat.stdlib;
@@ -58,10 +59,10 @@ version (Posix) {
 		//alias access = ._access;
 	}
 
-	int ftruncate(int fd, libressl_d.compat.sys.types.off_t length_);
+	int ftruncate(int fd, libressl_d.compat.stdio.off_t length_);
 	libressl_d.compat.sys.types.uid_t getuid();
-	libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
-	libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.sys.types.off_t offset);
+	libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
+	libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
 }
 
 static if (!__traits(compiles, getentropy)) {
