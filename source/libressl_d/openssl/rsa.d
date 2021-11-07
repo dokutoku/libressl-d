@@ -126,9 +126,7 @@ struct rsa_meth_st
 	 */
 	int function(libressl_d.openssl.ossl_typ.BIGNUM* r0, const (libressl_d.openssl.ossl_typ.BIGNUM)* I, libressl_d.openssl.ossl_typ.RSA* rsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx) rsa_mod_exp;
 
-	/**
-	 * Can be null
-	 */
+	///Ditto
 	int function(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BN_MONT_CTX* m_ctx) bn_mod_exp;
 
 	/**
@@ -229,7 +227,7 @@ struct rsa_st
 
 //#if !defined(OPENSSL_RSA_MAX_PUBEXP_BITS)
 	/**
-	 *  exponent limit enforced for "large" modulus only
+	 * exponent limit enforced for "large" modulus only
 	 */
 	enum OPENSSL_RSA_MAX_PUBEXP_BITS = 64;
 //#endif

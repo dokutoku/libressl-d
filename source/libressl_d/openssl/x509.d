@@ -487,7 +487,7 @@ alias X509_CERT_PAIR = .x509_cert_pair_st;
 /* standard trust ids */
 
 /**
- *  Only valid in purpose settings
+ * Only valid in purpose settings
  */
 enum X509_TRUST_DEFAULT = -1;
 
@@ -537,7 +537,7 @@ enum X509_FLAG_NO_ATTRIBUTES = 1L << 11;
 enum XN_FLAG_SEP_MASK = 0x0F << 16;
 
 /**
- *  Traditional SSLeay: use old X509_NAME_print
+ * Traditional SSLeay: use old X509_NAME_print
  */
 enum XN_FLAG_COMPAT = 0;
 
@@ -571,7 +571,7 @@ enum XN_FLAG_DN_REV = 1 << 20;
 enum XN_FLAG_FN_MASK = 0x03 << 21;
 
 /**
- *  Object short name
+ * Object short name
  */
 enum XN_FLAG_FN_SN = 0;
 
@@ -845,7 +845,7 @@ struct pkcs8_priv_key_info_st
 enum X509_EXT_PACK_UNKNOWN = 1;
 enum X509_EXT_PACK_STRING = 2;
 
-/*****/
+/* ****/
 alias X509_extract_key = .X509_get_pubkey;
 
 alias X509_REQ_extract_key = .X509_REQ_get_pubkey;

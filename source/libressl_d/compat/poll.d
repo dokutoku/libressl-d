@@ -53,54 +53,54 @@ version (Windows) {
 		/* Event types that can be polled */
 
 		/**
-		 *  There is data to read.
+		 * There is data to read.
 		 */
 		enum POLLIN = 0x0001;
 
 		/**
-		 *  There is urgent data to read.
+		 * There is urgent data to read.
 		 */
 		enum POLLPRI = 0x0002;
 
 		/**
-		 *  Writing now will not block.
+		 * Writing now will not block.
 		 */
 		enum POLLOUT = 0x0004;
 
 		/**
-		 *  Normal data may be read.
+		 * Normal data may be read.
 		 */
 		enum POLLRDNORM = 0x0040;
 
 		/**
-		 *  Priority data may be read.
+		 * Priority data may be read.
 		 */
 		enum POLLRDBAND = 0x0080;
 
 		/**
-		 *  Writing now will not block.
+		 * Writing now will not block.
 		 */
 		enum POLLWRNORM = 0x0100;
 
 		/**
-		 *  Priority data may be written.
+		 * Priority data may be written.
 		 */
 		enum POLLWRBAND = 0x0200;
 
 		/* Event types always implicitly polled. */
 
 		/**
-		 *  Error condition.
+		 * Error condition.
 		 */
 		enum POLLERR = 0x0008;
 
 		/**
-		 *  Hung up.
+		 * Hung up.
 		 */
 		enum POLLHUP = 0x0010;
 
 		/**
-		 *  Invalid polling request.
+		 * Invalid polling request.
 		 */
 		enum POLLNVAL = 0x0020;
 	} else {
@@ -128,54 +128,54 @@ version (Windows) {
 		/* Event types that can be polled */
 
 		/**
-		 *  There is data to read.
+		 * There is data to read.
 		 */
 		enum POLLIN = .POLLRDNORM | .POLLRDBAND;
 
 		/**
-		 *  There is urgent data to read.
+		 * There is urgent data to read.
 		 */
 		enum POLLPRI = 0x0400;
 
 		/**
-		 *  Writing now will not block.
+		 * Writing now will not block.
 		 */
 		enum POLLOUT = POLLWRNORM;
 
 		/**
-		 *  Normal data may be read.
+		 * Normal data may be read.
 		 */
 		enum POLLRDNORM = 0x0100;
 
 		/**
-		 *  Priority data may be read.
+		 * Priority data may be read.
 		 */
 		enum POLLRDBAND = 0x0200;
 
 		/**
-		 *  Writing now will not block.
+		 * Writing now will not block.
 		 */
 		enum POLLWRNORM = 0x0010;
 
 		/**
-		 *  Priority data may be written.
+		 * Priority data may be written.
 		 */
 		enum POLLWRBAND = 0x0020;
 
 		/* Event types always implicitly polled. */
 
 		/**
-		 *  Error condition.
+		 * Error condition.
 		 */
 		enum POLLERR = 0x0001;
 
 		/**
-		 *  Hung up.
+		 * Hung up.
 		 */
 		enum POLLHUP = 0x0002;
 
 		/**
-		 *  Invalid polling request.
+		 * Invalid polling request.
 		 */
 		enum POLLNVAL = 0x0004;
 	}

@@ -86,7 +86,7 @@ enum EVP_RC5_32_12_16_KEY_SIZE = 16;
  */
 
 /**
- *  longest known is SHA512
+ * longest known is SHA512
  */
 enum EVP_MAX_MD_SIZE = 64;
 
@@ -110,7 +110,7 @@ enum EVP_PKS_DSA = 0x0200;
 enum EVP_PKS_EC = 0x0400;
 
 /**
- *  <= 512 bit key
+ * <= 512 bit key
  */
 enum EVP_PKT_EXP = 0x1000;
 
@@ -285,7 +285,7 @@ version (all) {
 	enum EVP_MD_FLAG_DIGALGID_CUSTOM = 0x0018;
 
 	/**
-	 *  Note if suitable for use in FIPS mode
+	 * Note if suitable for use in FIPS mode
 	 */
 	enum EVP_MD_FLAG_FIPS = 0x0400;
 
@@ -385,27 +385,27 @@ enum EVP_MD_CTX_FLAG_NON_FIPS_ALLOW = 0x0008;
  */
 
 /**
- *  RSA mode to use
+ * RSA mode to use
  */
 enum EVP_MD_CTX_FLAG_PAD_MASK = 0xF0;
 
 /**
- *  PKCS#1 v1.5 mode
+ * PKCS#1 v1.5 mode
  */
 enum EVP_MD_CTX_FLAG_PAD_PKCS1 = 0x00;
 
 /**
- *  X9.31 mode
+ * X9.31 mode
  */
 enum EVP_MD_CTX_FLAG_PAD_X931 = 0x10;
 
 /**
- *  PSS mode
+ * PSS mode
  */
 enum EVP_MD_CTX_FLAG_PAD_PSS = 0x20;
 
 /**
- *  Don't initialize md_data
+ * Don't initialize md_data
  */
 enum EVP_MD_CTX_FLAG_NO_INIT = 0x0100;
 

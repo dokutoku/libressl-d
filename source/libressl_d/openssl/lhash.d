@@ -140,9 +140,7 @@ struct lhash_st
 	 */
 	core.stdc.config.c_ulong up_load;
 
-	/**
-	 * load times 256
-	 */
+	///Ditto
 	core.stdc.config.c_ulong down_load;
 
 	core.stdc.config.c_ulong num_items;

@@ -276,22 +276,20 @@ struct CRYPTO_dynlock
  */
 
 /**
- *  an enume
+ * an enume
  */
 enum CRYPTO_MEM_CHECK_OFF = 0x00;
 
 /**
- *  a bit
+ * a bit
  */
 enum CRYPTO_MEM_CHECK_ON = 0x01;
 
-/**
- *  a bit
- */
+///Ditto
 enum CRYPTO_MEM_CHECK_ENABLE = 0x02;
 
 /**
- *  an enume
+ * an enume
  */
 enum CRYPTO_MEM_CHECK_DISABLE = 0x03;
 

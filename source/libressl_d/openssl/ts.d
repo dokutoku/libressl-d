@@ -140,9 +140,7 @@ struct TS_req_st
 	 */
 	libressl_d.openssl.asn1.ASN1_OBJECT* policy_id;
 
-	/**
-	 * OPTIONAL
-	 */
+	///Ditto
 	libressl_d.openssl.ossl_typ.ASN1_INTEGER* nonce;
 
 	/**
@@ -573,14 +571,10 @@ struct TS_resp_ctx
 	 */
 	libressl_d.openssl.ossl_typ.ASN1_INTEGER* seconds;
 
-	/**
-	 * accuracy, 0 means not specified.
-	 */
+	///Ditto
 	libressl_d.openssl.ossl_typ.ASN1_INTEGER* millis;
 
-	/**
-	 * accuracy, 0 means not specified.
-	 */
+	///Ditto
 	libressl_d.openssl.ossl_typ.ASN1_INTEGER* micros;
 
 	/**
@@ -640,14 +634,10 @@ void TS_RESP_CTX_free(.TS_RESP_CTX* ctx);
  */
 int TS_RESP_CTX_set_signer_cert(.TS_RESP_CTX* ctx, libressl_d.openssl.ossl_typ.X509* signer);
 
-/**
- * This parameter must be set.
- */
+///Ditto
 int TS_RESP_CTX_set_signer_key(.TS_RESP_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY* key);
 
-/**
- * This parameter must be set.
- */
+///Ditto
 int TS_RESP_CTX_set_def_policy(.TS_RESP_CTX* ctx, const (libressl_d.openssl.asn1.ASN1_OBJECT)* def_policy);
 
 /**

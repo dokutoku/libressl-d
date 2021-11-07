@@ -610,7 +610,7 @@ enum SYS_F_LISTEN = 7;
 enum SYS_F_ACCEPT = 8;
 
 /**
- *  Winsock stuff
+ * Winsock stuff
  */
 enum SYS_F_WSASTARTUP = 9;
 

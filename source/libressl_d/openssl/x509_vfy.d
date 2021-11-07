@@ -104,7 +104,7 @@ struct x509_file_st
 
 alias X509_CERT_FILE_CTX = .x509_file_st;
 
-/*******************************/
+/* ******************************/
 /*
  * SL_CTX . X509_STORE
  *     . X509_LOOKUP

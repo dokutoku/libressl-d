@@ -184,46 +184,36 @@ version (LIBRESSL_INTERNAL) {
 	enum TLS1_AD_RECORD_OVERFLOW = 22;
 
 	/**
-	 *  fatal
+	 * fatal
 	 */
 	enum TLS1_AD_UNKNOWN_CA = 48;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum TLS1_AD_ACCESS_DENIED = 49;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum TLS1_AD_DECODE_ERROR = 50;
 
 	enum TLS1_AD_DECRYPT_ERROR = 51;
 
 	/**
-	 *  fatal
+	 * fatal
 	 */
 	enum TLS1_AD_EXPORT_RESTRICTION = 60;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum TLS1_AD_PROTOCOL_VERSION = 70;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum TLS1_AD_INSUFFICIENT_SECURITY = 71;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum TLS1_AD_INTERNAL_ERROR = 80;
 
 	/* Code 86 from RFC 7507. */
 
 	/**
-	 *  fatal
+	 * fatal
 	 */
 	enum TLS1_AD_INAPPROPRIATE_FALLBACK = 86;
 
@@ -238,7 +228,7 @@ version (LIBRESSL_INTERNAL) {
 	/* Code 115 from RFC 4279. */
 
 	/**
-	 *  fatal
+	 * fatal
 	 */
 	enum TLS1_AD_UNKNOWN_PSK_IDENTITY = 115;
 }
@@ -559,13 +549,11 @@ enum TLS1_CK_PSK_WITH_AES_256_CBC_SHA = 0x0300008D;
  */
 
 /**
- *  not in ID
+ * not in ID
  */
 enum TLS1_CK_RSA_EXPORT1024_WITH_RC4_56_MD5 = 0x03000060;
 
-/**
- *  not in ID
- */
+///Ditto
 enum TLS1_CK_RSA_EXPORT1024_WITH_RC2_CBC_56_MD5 = 0x03000061;
 
 enum TLS1_CK_RSA_EXPORT1024_WITH_DES_CBC_SHA = 0x03000062;
@@ -921,13 +909,11 @@ enum TLS_CT_GOST12_256_SIGN = 67;
 enum TLS_CT_GOST12_512_SIGN = 68;
 
 /**
- *  pre-IANA, for compat
+ * pre-IANA, for compat
  */
 enum TLS_CT_GOST12_256_SIGN_COMPAT = 238;
 
-/**
- *  pre-IANA, for compat
- */
+///Ditto
 enum TLS_CT_GOST12_512_SIGN_COMPAT = 239;
 
 /**

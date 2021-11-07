@@ -91,22 +91,22 @@ enum V_ASN1_PRIMITIVE_TAG = 0x1F;
 enum V_ASN1_PRIMATIVE_TAG = 0x1F;
 
 /**
- *  let the recipient choose
+ * let the recipient choose
  */
 enum V_ASN1_APP_CHOOSE = -2;
 
 /**
- *  used in ASN1_TYPE
+ * used in ASN1_TYPE
  */
 enum V_ASN1_OTHER = -3;
 
 /**
- *  used in ASN1 template code
+ * used in ASN1 template code
  */
 enum V_ASN1_ANY = -4;
 
 /**
- *  negative flag
+ * negative flag
  */
 enum V_ASN1_NEG = 0x0100;
 
@@ -142,7 +142,7 @@ enum V_ASN1_PRINTABLESTRING = 19;
 enum V_ASN1_T61STRING = 20;
 
 /**
- *  alias
+ * alias
  */
 enum V_ASN1_TELETEXSTRING = 20;
 
@@ -170,7 +170,7 @@ enum V_ASN1_GRAPHICSTRING = 25;
 enum V_ASN1_ISO64STRING = 26;
 
 /**
- *  alias
+ * alias
  */
 enum V_ASN1_VISIBLESTRING = 26;
 
@@ -358,23 +358,21 @@ alias ASN1_const_CTX = .asn1_const_ctx_st;
  */
 
 /**
- *  internal use
+ * internal use
  */
 enum ASN1_OBJECT_FLAG_DYNAMIC = 0x01;
 
 /**
- *  critical x509v3 object id
+ * critical x509v3 object id
  */
 enum ASN1_OBJECT_FLAG_CRITICAL = 0x02;
 
 /**
- *  internal use
+ * internal use
  */
 enum ASN1_OBJECT_FLAG_DYNAMIC_STRINGS = 0x04;
 
-/**
- *  internal use
- */
+///Ditto
 enum ASN1_OBJECT_FLAG_DYNAMIC_DATA = 0x08;
 
 struct asn1_object_st
@@ -399,7 +397,7 @@ struct asn1_object_st
 alias ASN1_OBJECT = .asn1_object_st;
 
 /**
- *  Set if 0x07 has bits left value
+ * Set if 0x07 has bits left value
  */
 enum ASN1_STRING_FLAG_BITS_LEFT = 0x08;
 

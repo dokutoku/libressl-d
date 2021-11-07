@@ -593,7 +593,7 @@ enum EXFLAG_NSCERT = 0x0008;
 enum EXFLAG_CA = 0x0010;
 
 /**
- *  Self issued.
+ * Self issued.
  */
 enum EXFLAG_SI = 0x0020;
 
@@ -606,7 +606,7 @@ enum EXFLAG_INVALID_POLICY = 0x0800;
 enum EXFLAG_FRESHEST = 0x1000;
 
 /**
- *  Self signed.
+ * Self signed.
  */
 enum EXFLAG_SS = 0x2000;
 

@@ -96,14 +96,10 @@ enum BIO_TYPE_MD = 8 | 0x0200;
  */
 enum BIO_TYPE_BUFFER = 9 | 0x0200;
 
-/**
- * filter
- */
+///Ditto
 enum BIO_TYPE_CIPHER = 10 | 0x0200;
 
-/**
- * filter
- */
+///Ditto
 enum BIO_TYPE_BASE64 = 11 | 0x0200;
 
 /**
@@ -126,9 +122,7 @@ enum BIO_TYPE_PROXY_CLIENT = 14 | 0x0200;
  */
 enum BIO_TYPE_PROXY_SERVER = 15 | 0x0200;
 
-/**
- * server proxy BIO
- */
+///Ditto
 enum BIO_TYPE_NBIO_TEST = 16 | 0x0200;
 
 enum BIO_TYPE_NULL_FILTER = 17 | 0x0200;
@@ -155,13 +149,11 @@ enum BIO_TYPE_DGRAM = 21 | 0x0400 | 0x0100;
  */
 enum BIO_TYPE_ASN1 = 22 | 0x0200;
 
-/**
- * filter
- */
+///Ditto
 enum BIO_TYPE_COMP = 23 | 0x0200;
 
 /**
- *  socket, fd, connect or accept
+ * socket, fd, connect or accept
  */
 enum BIO_TYPE_DESCRIPTOR = 0x0100;
 
@@ -192,86 +184,80 @@ enum BIO_CLOSE = 0x01;
 enum BIO_CTRL_RESET = 1;
 
 /**
- *  opt - are we at the eof
+ * opt - are we at the eof
  */
 enum BIO_CTRL_EOF = 2;
 
 /**
- *  opt - extra tit-bits
+ * opt - extra tit-bits
  */
 enum BIO_CTRL_INFO = 3;
 
 /**
- *  man - set the 'IO' type
+ * man - set the 'IO' type
  */
 enum BIO_CTRL_SET = 4;
 
 /**
- *  man - get the 'IO' type
+ * man - get the 'IO' type
  */
 enum BIO_CTRL_GET = 5;
 
 /**
- *  opt - internal, used to signify change
+ * opt - internal, used to signify change
  */
 enum BIO_CTRL_PUSH = 6;
 
-/**
- *  opt - internal, used to signify change
- */
+///Ditto
 enum BIO_CTRL_POP = 7;
 
 /**
- *  man - set the 'close' on free
+ * man - set the 'close' on free
  */
 enum BIO_CTRL_GET_CLOSE = 8;
 
-/**
- *  man - set the 'close' on free
- */
+///Ditto
 enum BIO_CTRL_SET_CLOSE = 9;
 
 /**
- *  opt - is their more data buffered
+ * opt - is their more data buffered
  */
 enum BIO_CTRL_PENDING = 10;
 
 /**
- *  opt - 'flush' buffered output
+ * opt - 'flush' buffered output
  */
 enum BIO_CTRL_FLUSH = 11;
 
 /**
- *  man - extra stuff for 'duped' BIO
+ * man - extra stuff for 'duped' BIO
  */
 enum BIO_CTRL_DUP = 12;
 
 /**
- *  opt - number of bytes still to write
+ * opt - number of bytes still to write
  */
 enum BIO_CTRL_WPENDING = 13;
 
 /* callback is int cb(BIO* io,state,ret); */
 
 /**
- *  opt - set callback function
+ * opt - set callback function
  */
 enum BIO_CTRL_SET_CALLBACK = 14;
 
-/**
- *  opt - set callback function
- */
+///Ditto
 enum BIO_CTRL_GET_CALLBACK = 15;
 
 /**
- *  BIO_s_file special
+ * BIO_s_file special
  */
 enum BIO_CTRL_SET_FILENAME = 30;
 
 /* dgram BIO stuff */
 
 /**
- *  BIO dgram special
+ * BIO dgram special
  */
 enum BIO_CTRL_DGRAM_CONNECT = 31;
 
@@ -283,27 +269,27 @@ enum BIO_CTRL_DGRAM_CONNECT = 31;
 enum BIO_CTRL_DGRAM_SET_CONNECTED = 32;
 
 /**
- *  setsockopt, essentially
+ * setsockopt, essentially
  */
 enum BIO_CTRL_DGRAM_SET_RECV_TIMEOUT = 33;
 
 /**
- *  getsockopt, essentially
+ * getsockopt, essentially
  */
 enum BIO_CTRL_DGRAM_GET_RECV_TIMEOUT = 34;
 
 /**
- *  setsockopt, essentially
+ * setsockopt, essentially
  */
 enum BIO_CTRL_DGRAM_SET_SEND_TIMEOUT = 35;
 
 /**
- *  getsockopt, essentially
+ * getsockopt, essentially
  */
 enum BIO_CTRL_DGRAM_GET_SEND_TIMEOUT = 36;
 
 /**
- *  flag whether the last
+ * flag whether the last
  */
 enum BIO_CTRL_DGRAM_GET_RECV_TIMER_EXP = 37;
 
@@ -314,20 +300,20 @@ enum BIO_CTRL_DGRAM_GET_SEND_TIMER_EXP = 38;
 
 /* #ifdef IP_MTU_DISCOVER */
 	/**
-	 *  set DF bit on egress packets
+	 * set DF bit on egress packets
 	 */
 	enum BIO_CTRL_DGRAM_MTU_DISCOVER = 39;
 /* #endif */
 
 /**
- *  as kernel for current MTU
+ * as kernel for current MTU
  */
 enum BIO_CTRL_DGRAM_QUERY_MTU = 40;
 
 enum BIO_CTRL_DGRAM_GET_FALLBACK_MTU = 47;
 
 /**
- *  get cached value for MTU
+ * get cached value for MTU
  */
 enum BIO_CTRL_DGRAM_GET_MTU = 41;
 
@@ -350,7 +336,7 @@ enum BIO_CTRL_DGRAM_MTU_EXCEEDED = 43;
 enum BIO_CTRL_DGRAM_GET_PEER = 46;
 
 /**
- *  Destination for the data
+ * Destination for the data
  */
 enum BIO_CTRL_DGRAM_SET_PEER = 44;
 
@@ -612,9 +598,7 @@ struct bio_st
 	 */
 	.bio_st* next_bio;
 
-	/**
-	 * used by filter BIOs
-	 */
+	///Ditto
 	.bio_st* prev_bio;
 
 	int references;
@@ -747,7 +731,7 @@ enum BIO_C_GET_MD_CTX = 120;
 enum BIO_C_GET_PROXY_PARAM = 121;
 
 /**
- *  data to read first
+ * data to read first
  */
 enum BIO_C_SET_BUFF_READ_DATA = 122;
 
@@ -771,7 +755,7 @@ enum BIO_C_GET_SOCKS = 134;
 enum BIO_C_SET_SOCKS = 135;
 
 /**
- *  for BIO_s_bio
+ * for BIO_s_bio
  */
 enum BIO_C_SET_WRITE_BUF_SIZE = 136;
 

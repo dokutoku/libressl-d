@@ -235,7 +235,7 @@ enum ENGINE_CTRL_SET_PASSWORD_CALLBACK = 2;
 enum ENGINE_CTRL_HUP = 3;
 
 /**
- *  Alternative to callback
+ * Alternative to callback
  */
 enum ENGINE_CTRL_SET_USER_INTERFACE = 4;
 
@@ -753,9 +753,9 @@ void ENGINE_add_conf_module();
 /* Deprecated functions ... */
 /* int ENGINE_clear_defaults(); */
 
-/**************************/
+/* *************************/
 /* DYNAMIC ENGINE SUPPORT */
-/**************************/
+/* *************************/
 
 /**
  * Binary/behaviour compatibility levels

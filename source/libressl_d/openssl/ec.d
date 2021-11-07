@@ -3,8 +3,9 @@
  * Originally written by Bodo Moeller for the OpenSSL project.
  */
 /**
- * \file crypto/ec/ec.h Include file for the OpenSSL EC functions
- * \author Originally written by Bodo Moeller for the OpenSSL project
+ * Include file for the OpenSSL EC functions
+ *
+ * Author: Originally written by Bodo Moeller for the OpenSSL project
  */
 /* ====================================================================
  * Copyright (c) 1998-2005 The OpenSSL Project.  All rights reserved.
@@ -148,26 +149,28 @@ package alias ec_point_st = void;
 alias EC_GROUP = .ec_group_st;
 alias EC_POINT = .ec_point_st;
 
-/********************************************************************/
+/* *******************************************************************/
 /*               EC_METHODs for curves over GF(p)                   */
-/********************************************************************/
+/* *******************************************************************/
 
 /**
- * Returns the basic GFp ec methods which provides the basis for the
- *  optimized methods.
- *  \return  EC_METHOD object
+ * Returns the basic GFp ec methods which provides the basis for the optimized methods.
+ *
+ * Returns: EC_METHOD object
  */
 const (.EC_METHOD)* EC_GFp_simple_method();
 
 /**
  * Returns GFp methods using montgomery multiplication.
- *  \return  EC_METHOD object
+ *
+ * Returns: EC_METHOD object
  */
 const (.EC_METHOD)* EC_GFp_mont_method();
 
 /**
  * Returns GFp methods using optimized methods for NIST recommended curves
- *  \return  EC_METHOD object
+ *
+ * Returns: EC_METHOD object
  */
 const (.EC_METHOD)* EC_GFp_nist_method();
 
@@ -175,113 +178,143 @@ version (OPENSSL_NO_EC_NISTP_64_GCC_128) {
 } else {
 	/**
 	 * Returns 64-bit optimized methods for nistp224
-	 *  \return  EC_METHOD object
+	 *
+	 * Returns: EC_METHOD object
 	 */
 	const (.EC_METHOD)* EC_GFp_nistp224_method();
 
 	/**
 	 * Returns 64-bit optimized methods for nistp256
-	 *  \return  EC_METHOD object
+	 *
+	 * Returns: EC_METHOD object
 	 */
 	const (.EC_METHOD)* EC_GFp_nistp256_method();
 
 	/**
 	 * Returns 64-bit optimized methods for nistp521
-	 *  \return  EC_METHOD object
+	 *
+	 * Returns: EC_METHOD object
 	 */
 	const (.EC_METHOD)* EC_GFp_nistp521_method();
 }
 
 version (OPENSSL_NO_EC2M) {
 } else {
-	/********************************************************************/
+	/* *******************************************************************/
 	/*           EC_METHOD for curves over GF(2^m)                      */
-	/********************************************************************/
+	/* *******************************************************************/
 
 	/**
 	 * Returns the basic GF2m ec method
-	 *  \return  EC_METHOD object
+	 *
+	 * Returns: EC_METHOD object
 	 */
 	const (.EC_METHOD)* EC_GF2m_simple_method();
 }
 
-/********************************************************************/
+/* *******************************************************************/
 /*                   EC_GROUP functions                             */
-/********************************************************************/
+/* *******************************************************************/
 
 /**
  * Creates a new EC_GROUP object
- *  \param   meth  EC_METHOD to use
- *  \return  newly created EC_GROUP object or null in case of an error.
+ *
+ * Params:
+ *      meth = EC_METHOD to use
+ *
+ * Returns: newly created EC_GROUP object or null in case of an error.
  */
 .EC_GROUP* EC_GROUP_new(const (.EC_METHOD)* meth);
 
 /**
  * Frees a EC_GROUP object
- *  \param  group  EC_GROUP object to be freed.
+ *
+ * Params:
+ *      group = EC_GROUP object to be freed.
  */
 void EC_GROUP_free(.EC_GROUP* group);
 
 /**
  * Clears and frees a EC_GROUP object
- *  \param  group  EC_GROUP object to be cleared and freed.
+ *
+ * Params:
+ *      group = EC_GROUP object to be cleared and freed.
  */
 void EC_GROUP_clear_free(.EC_GROUP* group);
 
 /**
  * Copies EC_GROUP objects. Note: both EC_GROUPs must use the same EC_METHOD.
- *  \param  dst  destination EC_GROUP object
- *  \param  src  source EC_GROUP object
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      dst = destination EC_GROUP object
+ *      src = source EC_GROUP object
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int EC_GROUP_copy(.EC_GROUP* dst, const (.EC_GROUP)* src);
 
 /**
- * Creates a new EC_GROUP object and copies the copies the content
- *  form src to the newly created EC_KEY object
- *  \param  src  source EC_GROUP object
- *  \return newly created EC_GROUP object or null in case of an error.
+ * Creates a new EC_GROUP object and copies the copies the content form src to the newly created EC_KEY object
+ *
+ * Params:
+ *      src = source EC_GROUP object
+ *
+ * Returns: newly created EC_GROUP object or null in case of an error.
  */
 .EC_GROUP* EC_GROUP_dup(const (.EC_GROUP)* src);
 
 /**
  * Returns the EC_METHOD of the EC_GROUP object.
- *  \param  group  EC_GROUP object
- *  \return EC_METHOD used in this EC_GROUP object.
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *
+ * Returns: EC_METHOD used in this EC_GROUP object.
  */
 const (.EC_METHOD)* EC_GROUP_method_of(const (.EC_GROUP)* group);
 
 /**
  * Returns the field type of the EC_METHOD.
- *  \param  meth  EC_METHOD object
- *  \return NID of the underlying field type OID.
+ *
+ * Params:
+ *      meth = EC_METHOD object
+ *
+ * Returns: NID of the underlying field type OID.
  */
 int EC_METHOD_get_field_type(const (.EC_METHOD)* meth);
 
 /**
  * Sets the generator and it's order/cofactor of a EC_GROUP object.
- *  \param  group      EC_GROUP object
- *  \param  generator  EC_POINT object with the generator.
- *  \param  order      the order of the group generated by the generator.
- *  \param  cofactor   the index of the sub-group generated by the generator
- *                     in the group of all points on the elliptic curve.
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *      generator = EC_POINT object with the generator.
+ *      order = the order of the group generated by the generator.
+ *      cofactor = the index of the sub-group generated by the generator in the group of all points on the elliptic curve.
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_GROUP_set_generator(.EC_GROUP* group, const (.EC_POINT)* generator, const (libressl_d.openssl.ossl_typ.BIGNUM)* order, const (libressl_d.openssl.ossl_typ.BIGNUM)* cofactor);
 
 /**
  * Returns the generator of a EC_GROUP object.
- *  \param  group  EC_GROUP object
- *  \return the currently used generator (possibly null).
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *
+ * Returns: the currently used generator (possibly null).
  */
 const (.EC_POINT)* EC_GROUP_get0_generator(const (.EC_GROUP)* group);
 
 /**
  * Gets the order of a EC_GROUP
- *  \param  group  EC_GROUP object
- *  \param  order  BIGNUM to which the order is copied
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *      order = BIGNUM to which the order is copied
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_GROUP_get_order(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* order, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
@@ -289,24 +322,32 @@ int EC_GROUP_order_bits(const (.EC_GROUP)* group);
 
 /**
  * Gets the cofactor of a EC_GROUP
- *  \param  group     EC_GROUP object
- *  \param  cofactor  BIGNUM to which the cofactor is copied
- *  \param  ctx       BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *      cofactor = BIGNUM to which the cofactor is copied
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_GROUP_get_cofactor(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* cofactor, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Sets the name of a EC_GROUP object
- *  \param  group  EC_GROUP object
- *  \param  nid    NID of the curve name OID
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *      nid = NID of the curve name OID
  */
 void EC_GROUP_set_curve_name(.EC_GROUP* group, int nid);
 
 /**
  * Returns the curve name of a EC_GROUP object
- *  \param  group  EC_GROUP object
- *  \return NID of the curve name OID or 0 if not set.
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *
+ * Returns: NID of the curve name OID or 0 if not set.
  */
 int EC_GROUP_get_curve_name(const (.EC_GROUP)* group);
 
@@ -327,23 +368,29 @@ version (LIBRESSL_INTERNAL) {
 } else {
 	/**
 	 * Sets the parameter of a ec over GFp defined by y^2 = x^3 + a*x + b
-	 *  \param  group  EC_GROUP object
-	 *  \param  p      BIGNUM with the prime number
-	 *  \param  a      BIGNUM with parameter a of the equation
-	 *  \param  b      BIGNUM with parameter b of the equation
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
+	 *
+	 * Params:
+	 *      group = EC_GROUP object
+	 *      p = BIGNUM with the prime number
+	 *      a = BIGNUM with parameter a of the equation
+	 *      b = BIGNUM with parameter b of the equation
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: 1 on success and 0 if an error occured
 	 */
 	int EC_GROUP_set_curve_GFp(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Gets the parameter of the ec over GFp defined by y^2 = x^3 + a*x + b
-	 *  \param  group  EC_GROUP object
-	 *  \param  p      BIGNUM for the prime number
-	 *  \param  a      BIGNUM for parameter a of the equation
-	 *  \param  b      BIGNUM for parameter b of the equation
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
+	 *
+	 * Params:
+	 *      group = EC_GROUP object
+	 *      p = BIGNUM for the prime number
+	 *      a = BIGNUM for parameter a of the equation
+	 *      b = BIGNUM for parameter b of the equation
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: 1 on success and 0 if an error occured
 	 */
 	int EC_GROUP_get_curve_GFp(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
@@ -351,23 +398,29 @@ version (LIBRESSL_INTERNAL) {
 	} else {
 		/**
 		 * Sets the parameter of a ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
-		 *  \param  group  EC_GROUP object
-		 *  \param  p      BIGNUM with the polynomial defining the underlying field
-		 *  \param  a      BIGNUM with parameter a of the equation
-		 *  \param  b      BIGNUM with parameter b of the equation
-		 *  \param  ctx    BN_CTX object (optional)
-		 *  \return 1 on success and 0 if an error occured
+		 *
+		 * Params:
+		 *      group = EC_GROUP object
+		 *      p = BIGNUM with the polynomial defining the underlying field
+		 *      a = BIGNUM with parameter a of the equation
+		 *      b = BIGNUM with parameter b of the equation
+		 *      ctx = BN_CTX object (optional)
+		 *
+		 * Returns: 1 on success and 0 if an error occured
 		 */
 		int EC_GROUP_set_curve_GF2m(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 		/**
 		 * Gets the parameter of the ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
-		 *  \param  group  EC_GROUP object
-		 *  \param  p      BIGNUM for the polynomial defining the underlying field
-		 *  \param  a      BIGNUM for parameter a of the equation
-		 *  \param  b      BIGNUM for parameter b of the equation
-		 *  \param  ctx    BN_CTX object (optional)
-		 *  \return 1 on success and 0 if an error occured
+		 *
+		 * Params:
+		 *      group = EC_GROUP object
+		 *      p = BIGNUM for the polynomial defining the underlying field
+		 *      a = BIGNUM for parameter a of the equation
+		 *      b = BIGNUM for parameter b of the equation
+		 *      ctx = BN_CTX object (optional)
+		 *
+		 * Returns: 1 on success and 0 if an error occured
 		 */
 		int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 	}
@@ -375,33 +428,45 @@ version (LIBRESSL_INTERNAL) {
 
 /**
  * Returns the number of bits needed to represent a field element
- *  \param  group  EC_GROUP object
- *  \return number of bits needed to represent a field element
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *
+ * Returns: number of bits needed to represent a field element
  */
 int EC_GROUP_get_degree(const (.EC_GROUP)* group);
 
 /**
  * Checks whether the parameter in the EC_GROUP define a valid ec group
- *  \param  group  EC_GROUP object
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 if group is a valid ec group and 0 otherwise
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 if group is a valid ec group and 0 otherwise
  */
 int EC_GROUP_check(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Checks whether the discriminant of the elliptic curve is zero or not
- *  \param  group  EC_GROUP object
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 if the discriminant is not zero and 0 otherwise
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 if the discriminant is not zero and 0 otherwise
  */
 int EC_GROUP_check_discriminant(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Compares two EC_GROUP objects
- *  \param  a    first EC_GROUP object
- *  \param  b    second EC_GROUP object
- *  \param  ctx  BN_CTX object (optional)
- *  \return 0 if both groups are equal and 1 otherwise
+ *
+ * Params:
+ *      a = first EC_GROUP object
+ *      b = second EC_GROUP object
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 0 if both groups are equal and 1 otherwise
  */
 int EC_GROUP_cmp(const (.EC_GROUP)* a, const (.EC_GROUP)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
@@ -411,41 +476,47 @@ int EC_GROUP_cmp(const (.EC_GROUP)* a, const (.EC_GROUP)* b, libressl_d.openssl.
  */
 
 /**
- * Creates a new EC_GROUP object with the specified parameters defined
- *  over GFp (defined by the equation y^2 = x^3 + a*x + b)
- *  \param  p    BIGNUM with the prime number
- *  \param  a    BIGNUM with the parameter a of the equation
- *  \param  b    BIGNUM with the parameter b of the equation
- *  \param  ctx  BN_CTX object (optional)
- *  \return newly created EC_GROUP object with the specified parameters
+ * Creates a new EC_GROUP object with the specified parameters defined over GFp (defined by the equation y^2 = x^3 + a*x + b)
+ *
+ * Params:
+ *      p = BIGNUM with the prime number
+ *      a = BIGNUM with the parameter a of the equation
+ *      b = BIGNUM with the parameter b of the equation
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: newly created EC_GROUP object with the specified parameters
  */
 .EC_GROUP* EC_GROUP_new_curve_GFp(const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 version (OPENSSL_NO_EC2M) {
 } else {
 	/**
-	 * Creates a new EC_GROUP object with the specified parameters defined
-	 *  over GF2m (defined by the equation y^2 + x*y = x^3 + a*x^2 + b)
-	 *  \param  p    BIGNUM with the polynomial defining the underlying field
-	 *  \param  a    BIGNUM with the parameter a of the equation
-	 *  \param  b    BIGNUM with the parameter b of the equation
-	 *  \param  ctx  BN_CTX object (optional)
-	 *  \return newly created EC_GROUP object with the specified parameters
+	 * Creates a new EC_GROUP object with the specified parameters defined over GF2m (defined by the equation y^2 + x*y = x^3 + a*x^2 + b)
+	 *
+	 * Params:
+	 *      p = BIGNUM with the polynomial defining the underlying field
+	 *      a = BIGNUM with the parameter a of the equation
+	 *      b = BIGNUM with the parameter b of the equation
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: newly created EC_GROUP object with the specified parameters
 	 */
 	.EC_GROUP* EC_GROUP_new_curve_GF2m(const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 }
 
 /**
  * Creates a EC_GROUP object with a curve specified by a NID
- *  \param  nid  NID of the OID of the curve name
- *  \return newly created EC_GROUP object with specified curve or null
- *          if an error occurred
+ *
+ * Params:
+ *      nid = NID of the OID of the curve name
+ *
+ * Returns: newly created EC_GROUP object with specified curve or null if an error occurred
  */
 .EC_GROUP* EC_GROUP_new_by_curve_name(int nid);
 
-/********************************************************************/
+/* *******************************************************************/
 /*               handling of internal curves                        */
-/********************************************************************/
+/* *******************************************************************/
 
 struct EC_builtin_curve
 {
@@ -464,58 +535,76 @@ size_t EC_get_builtin_curves(.EC_builtin_curve* r, size_t nitems);
 const (char)* EC_curve_nid2nist(int nid);
 int EC_curve_nist2nid(const (char)* name);
 
-/********************************************************************/
+/* *******************************************************************/
 /*                    EC_POINT functions                            */
-/********************************************************************/
+/* *******************************************************************/
 
 /**
  * Creates a new EC_POINT object for the specified EC_GROUP
- *  \param  group  EC_GROUP the underlying EC_GROUP object
- *  \return newly created EC_POINT object or null if an error occurred
+ *
+ * Params:
+ *      group = EC_GROUP the underlying EC_GROUP object
+ *
+ * Returns: newly created EC_POINT object or null if an error occurred
  */
 .EC_POINT* EC_POINT_new(const (.EC_GROUP)* group);
 
 /**
  * Frees a EC_POINT object
- *  \param  point  EC_POINT object to be freed
+ *
+ * Params:
+ *      point = EC_POINT object to be freed
  */
 void EC_POINT_free(.EC_POINT* point);
 
 /**
  * Clears and frees a EC_POINT object
- *  \param  point  EC_POINT object to be cleared and freed
+ *
+ * Params:
+ *      point = EC_POINT object to be cleared and freed
  */
 void EC_POINT_clear_free(.EC_POINT* point);
 
 /**
  * Copies EC_POINT object
- *  \param  dst  destination EC_POINT object
- *  \param  src  source EC_POINT object
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      dst = destination EC_POINT object
+ *      src = source EC_POINT object
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINT_copy(.EC_POINT* dst, const (.EC_POINT)* src);
 
 /**
- * Creates a new EC_POINT object and copies the content of the supplied
- *  EC_POINT
- *  \param  src    source EC_POINT object
- *  \param  group  underlying the EC_GROUP object
- *  \return newly created EC_POINT object or null if an error occurred
+ * Creates a new EC_POINT object and copies the content of the supplied EC_POINT
+ *
+ * Params:
+ *      src = source EC_POINT object
+ *      group = underlying the EC_GROUP object
+ *
+ * Returns: newly created EC_POINT object or null if an error occurred
  */
 .EC_POINT* EC_POINT_dup(const (.EC_POINT)* src, const (.EC_GROUP)* group);
 
 /**
  * Returns the EC_METHOD used in EC_POINT object
- *  \param  point  EC_POINT object
- *  \return the EC_METHOD used
+ *
+ * Params:
+ *      point = EC_POINT object
+ *
+ * Returns: the EC_METHOD used
  */
 const (.EC_METHOD)* EC_POINT_method_of(const (.EC_POINT)* point);
 
 /**
  * Sets a point to infinity (neutral element)
- *  \param  group  underlying EC_GROUP object
- *  \param  point  EC_POINT to set to infinity
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      point = EC_POINT to set to infinity
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINT_set_to_infinity(const (.EC_GROUP)* group, .EC_POINT* point);
 
@@ -529,58 +618,73 @@ version (LIBRESSL_INTERNAL) {
 } else {
 	/**
 	 * Sets the jacobian projective coordinates of a EC_POINT over GFp
-	 *  \param  group  underlying EC_GROUP object
-	 *  \param  p      EC_POINT object
-	 *  \param  x      BIGNUM with the x-coordinate
-	 *  \param  y      BIGNUM with the y-coordinate
-	 *  \param  z      BIGNUM with the z-coordinate
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
+	 *
+	 * Params:
+	 *      group = underlying EC_GROUP object
+	 *      p = EC_POINT object
+	 *      x = BIGNUM with the x-coordinate
+	 *      y = BIGNUM with the y-coordinate
+	 *      z = BIGNUM with the z-coordinate
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: 1 on success and 0 if an error occured
 	 */
 	int EC_POINT_set_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, const (libressl_d.openssl.ossl_typ.BIGNUM)* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Gets the jacobian projective coordinates of a EC_POINT over GFp
-	 *  \param  group  underlying EC_GROUP object
-	 *  \param  p      EC_POINT object
-	 *  \param  x      BIGNUM for the x-coordinate
-	 *  \param  y      BIGNUM for the y-coordinate
-	 *  \param  z      BIGNUM for the z-coordinate
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
+	 *
+	 * Params:
+	 *      group = underlying EC_GROUP object
+	 *      p = EC_POINT object
+	 *      x = BIGNUM for the x-coordinate
+	 *      y = BIGNUM for the y-coordinate
+	 *      z = BIGNUM for the z-coordinate
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: 1 on success and 0 if an error occured
 	 */
 	int EC_POINT_get_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BIGNUM* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Sets the affine coordinates of a EC_POINT over GFp
-	 *  \param  group  underlying EC_GROUP object
-	 *  \param  p      EC_POINT object
-	 *  \param  x      BIGNUM with the x-coordinate
-	 *  \param  y      BIGNUM with the y-coordinate
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
+	 *
+	 * Params:
+	 *      group = underlying EC_GROUP object
+	 *      p = EC_POINT object
+	 *      x = BIGNUM with the x-coordinate
+	 *      y = BIGNUM with the y-coordinate
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: 1 on success and 0 if an error occured
 	 */
 	int EC_POINT_set_affine_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Gets the affine coordinates of a EC_POINT over GFp
-	 *  \param  group  underlying EC_GROUP object
-	 *  \param  p      EC_POINT object
-	 *  \param  x      BIGNUM for the x-coordinate
-	 *  \param  y      BIGNUM for the y-coordinate
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
+	 *
+	 * Params:
+	 *      group = underlying EC_GROUP object
+	 *      p = EC_POINT object
+	 *      x = BIGNUM for the x-coordinate
+	 *      y = BIGNUM for the y-coordinate
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: 1 on success and 0 if an error occured
 	 */
 	int EC_POINT_get_affine_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Sets the x9.62 compressed coordinates of a EC_POINT over GFp
-	 *  \param  group  underlying EC_GROUP object
-	 *  \param  p      EC_POINT object
-	 *  \param  x      BIGNUM with x-coordinate
-	 *  \param  y_bit  integer with the y-Bit (either 0 or 1)
-	 *  \param  ctx    BN_CTX object (optional)
-	 *  \return 1 on success and 0 if an error occured
+	 *
+	 * Params:
+	 *      group = underlying EC_GROUP object
+	 *      p = EC_POINT object
+	 *      x = BIGNUM with x-coordinate
+	 *      y_bit = integer with the y-Bit (either 0 or 1)
+	 *      ctx = BN_CTX object (optional)
+	 *
+	 * Returns: 1 on success and 0 if an error occured
 	 */
 	int EC_POINT_set_compressed_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
@@ -588,34 +692,43 @@ version (LIBRESSL_INTERNAL) {
 	} else {
 		/**
 		 * Sets the affine coordinates of a EC_POINT over GF2m
-		 *  \param  group  underlying EC_GROUP object
-		 *  \param  p      EC_POINT object
-		 *  \param  x      BIGNUM with the x-coordinate
-		 *  \param  y      BIGNUM with the y-coordinate
-		 *  \param  ctx    BN_CTX object (optional)
-		 *  \return 1 on success and 0 if an error occured
+		 *
+		 * Params:
+		 *      group = underlying EC_GROUP object
+		 *      p = EC_POINT object
+		 *      x = BIGNUM with the x-coordinate
+		 *      y = BIGNUM with the y-coordinate
+		 *      ctx = BN_CTX object (optional)
+		 *
+		 * Returns: 1 on success and 0 if an error occured
 		 */
 		int EC_POINT_set_affine_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 		/**
 		 * Gets the affine coordinates of a EC_POINT over GF2m
-		 *  \param  group  underlying EC_GROUP object
-		 *  \param  p      EC_POINT object
-		 *  \param  x      BIGNUM for the x-coordinate
-		 *  \param  y      BIGNUM for the y-coordinate
-		 *  \param  ctx    BN_CTX object (optional)
-		 *  \return 1 on success and 0 if an error occured
+		 *
+		 * Params:
+		 *      group = underlying EC_GROUP object
+		 *      p = EC_POINT object
+		 *      x = BIGNUM for the x-coordinate
+		 *      y = BIGNUM for the y-coordinate
+		 *      ctx = BN_CTX object (optional)
+		 *
+		 * Returns: 1 on success and 0 if an error occured
 		 */
 		int EC_POINT_get_affine_coordinates_GF2m(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 		/**
 		 * Sets the x9.62 compressed coordinates of a EC_POINT over GF2m
-		 *  \param  group  underlying EC_GROUP object
-		 *  \param  p      EC_POINT object
-		 *  \param  x      BIGNUM with x-coordinate
-		 *  \param  y_bit  integer with the y-Bit (either 0 or 1)
-		 *  \param  ctx    BN_CTX object (optional)
-		 *  \return 1 on success and 0 if an error occured
+		 *
+		 * Params:
+		 *      group = underlying EC_GROUP object
+		 *      p = EC_POINT object
+		 *      x = BIGNUM with x-coordinate
+		 *      y_bit = integer with the y-Bit (either 0 or 1)
+		 *      ctx = BN_CTX object (optional)
+		 *
+		 * Returns: 1 on success and 0 if an error occured
 		 */
 		int EC_POINT_set_compressed_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 	}
@@ -623,25 +736,30 @@ version (LIBRESSL_INTERNAL) {
 
 /**
  * Encodes a EC_POINT object to a octet string
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  form   point conversion form
- *  \param  buf    memory buffer for the result. If null the function returns
- *                 required buffer size.
- *  \param  len    length of the memory buffer
- *  \param  ctx    BN_CTX object (optional)
- *  \return the length of the encoded octet string or 0 if an error occurred
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      p = EC_POINT object
+ *      form = point conversion form
+ *      buf = memory buffer for the result. If null the function returns required buffer size.
+ *      len = length of the memory buffer
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: the length of the encoded octet string or 0 if an error occurred
  */
 size_t EC_POINT_point2oct(const (.EC_GROUP)* group, const (.EC_POINT)* p, .point_conversion_form_t form, ubyte* buf, size_t len, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Decodes a EC_POINT from a octet string
- *  \param  group  underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \param  buf    memory buffer with the encoded ec point
- *  \param  len    length of the encoded ec point
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      p = EC_POINT object
+ *      buf = memory buffer with the encoded ec point
+ *      len = length of the encoded ec point
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINT_oct2point(const (.EC_GROUP)* group, .EC_POINT* p, const (ubyte)* buf, size_t len, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
@@ -651,64 +769,82 @@ libressl_d.openssl.ossl_typ.BIGNUM* EC_POINT_point2bn(const (.EC_GROUP)*, const 
 char* EC_POINT_point2hex(const (.EC_GROUP)*, const (.EC_POINT)*, .point_conversion_form_t form, libressl_d.openssl.ossl_typ.BN_CTX*);
 .EC_POINT* EC_POINT_hex2point(const (.EC_GROUP)*, const (char)*, .EC_POINT*, libressl_d.openssl.ossl_typ.BN_CTX*);
 
-/********************************************************************/
+/* *******************************************************************/
 /*         functions for doing EC_POINT arithmetic                  */
-/********************************************************************/
+/* *******************************************************************/
 
 /**
  * Computes the sum of two EC_POINT
- *  \param  group  underlying EC_GROUP object
- *  \param  r      EC_POINT object for the result (r = a + b)
- *  \param  a      EC_POINT object with the first summand
- *  \param  b      EC_POINT object with the second summand
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      r = EC_POINT object for the result (r = a + b)
+ *      a = EC_POINT object with the first summand
+ *      b = EC_POINT object with the second summand
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINT_add(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, const (.EC_POINT)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes the double of a EC_POINT
- *  \param  group  underlying EC_GROUP object
- *  \param  r      EC_POINT object for the result (r = 2 * a)
- *  \param  a      EC_POINT object
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      r = EC_POINT object for the result (r = 2 * a)
+ *      a = EC_POINT object
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINT_dbl(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes the inverse of a EC_POINT
- *  \param  group  underlying EC_GROUP object
- *  \param  a      EC_POINT object to be inverted (it's used for the result as well)
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      a = EC_POINT object to be inverted (it's used for the result as well)
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINT_invert(const (.EC_GROUP)* group, .EC_POINT* a, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Checks whether the point is the neutral element of the group
- *  \param  group  the underlying EC_GROUP object
- *  \param  p      EC_POINT object
- *  \return 1 if the point is the neutral element and 0 otherwise
+ *
+ * Params:
+ *      group = the underlying EC_GROUP object
+ *      p = EC_POINT object
+ *
+ * Returns: 1 if the point is the neutral element and 0 otherwise
  */
 int EC_POINT_is_at_infinity(const (.EC_GROUP)* group, const (.EC_POINT)* p);
 
 /**
  * Checks whether the point is on the curve
- *  \param  group  underlying EC_GROUP object
- *  \param  point  EC_POINT object to check
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 if point if on the curve and 0 otherwise
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      point = EC_POINT object to check
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 if point if on the curve and 0 otherwise
  */
 int EC_POINT_is_on_curve(const (.EC_GROUP)* group, const (.EC_POINT)* point, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Compares two EC_POINTs
- *  \param  group  underlying EC_GROUP object
- *  \param  a      first EC_POINT object
- *  \param  b      second EC_POINT object
- *  \param  ctx    BN_CTX object (optional)
- *  \return 0 if both points are equal and a value != 0 otherwise
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      a = first EC_POINT object
+ *      b = second EC_POINT object
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 0 if both points are equal and a value != 0 otherwise
  */
 int EC_POINT_cmp(const (.EC_GROUP)* group, const (.EC_POINT)* a, const (.EC_POINT)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
@@ -717,47 +853,59 @@ int EC_POINTs_make_affine(const (.EC_GROUP)* group, size_t num, .EC_POINT** poin
 
 /**
  * Computes r = generator * n sum_{i=0}^num p[i] * m[i]
- *  \param  group  underlying EC_GROUP object
- *  \param  r      EC_POINT object for the result
- *  \param  n      BIGNUM with the multiplier for the group generator (optional)
- *  \param  num    number futher summands
- *  \param  p      array of size num of EC_POINT objects
- *  \param  m      array of size num of BIGNUM objects
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      r = EC_POINT object for the result
+ *      n = BIGNUM with the multiplier for the group generator (optional)
+ *      num = number futher summands
+ *      p = array of size num of EC_POINT objects
+ *      m = array of size num of BIGNUM objects
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINTs_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* n, size_t num, const (.EC_POINT)** p, const (libressl_d.openssl.ossl_typ.BIGNUM)** m, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes r = generator * n + q * m
- *  \param  group  underlying EC_GROUP object
- *  \param  r      EC_POINT object for the result
- *  \param  n      BIGNUM with the multiplier for the group generator (optional)
- *  \param  q      EC_POINT object with the first factor of the second summand
- *  \param  m      BIGNUM with the second factor of the second summand
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = underlying EC_GROUP object
+ *      r = EC_POINT object for the result
+ *      n = BIGNUM with the multiplier for the group generator (optional)
+ *      q = EC_POINT object with the first factor of the second summand
+ *      m = BIGNUM with the second factor of the second summand
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_POINT_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* n, const (.EC_POINT)* q, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Stores multiples of generator for faster point multiplication
- *  \param  group  EC_GROUP object
- *  \param  ctx    BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occured
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occured
  */
 int EC_GROUP_precompute_mult(.EC_GROUP* group, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Reports whether a precomputation has been done
- *  \param  group  EC_GROUP object
- *  \return 1 if a pre-computation has been done and 0 otherwise
+ *
+ * Params:
+ *      group = EC_GROUP object
+ *
+ * Returns: 1 if a pre-computation has been done and 0 otherwise
  */
 int EC_GROUP_have_precompute_mult(const (.EC_GROUP)* group);
 
-/********************************************************************/
+/* *******************************************************************/
 /*                       ASN1 stuff                                 */
-/********************************************************************/
+/* *******************************************************************/
 
 /*
  * EC_GROUP_get_basis_type() returns the NID of the basis type
@@ -799,9 +947,9 @@ version (OPENSSL_NO_BIO) {
 
 int ECPKParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_GROUP)* x, int off);
 
-/********************************************************************/
+/* *******************************************************************/
 /*                      EC_KEY functions                            */
-/********************************************************************/
+/* *******************************************************************/
 
 //struct ec_key_st;
 package alias ec_key_st = void;
@@ -821,7 +969,8 @@ enum EC_FLAG_COFACTOR_ECDH = 0x1000;
 
 /**
  * Creates a new EC_KEY object.
- *  \return EC_KEY object or null if an error occurred.
+ *
+ * Returns: EC_KEY object or null if an error occurred.
  */
 .EC_KEY* EC_KEY_new();
 
@@ -832,86 +981,114 @@ void EC_KEY_set_flags(.EC_KEY* key, int flags);
 void EC_KEY_clear_flags(.EC_KEY* key, int flags);
 
 /**
- * Creates a new EC_KEY object using a named curve as underlying
- *  EC_GROUP object.
- *  \param  nid  NID of the named curve.
- *  \return EC_KEY object or null if an error occurred.
+ * Creates a new EC_KEY object using a named curve as underlying EC_GROUP object.
+ *
+ * Params:
+ *      nid = NID of the named curve.
+ *
+ * Returns: EC_KEY object or null if an error occurred.
  */
 .EC_KEY* EC_KEY_new_by_curve_name(int nid);
 
 /**
  * Frees a EC_KEY object.
- *  \param  key  EC_KEY object to be freed.
+ *
+ * Params:
+ *      key = EC_KEY object to be freed.
  */
 void EC_KEY_free(.EC_KEY* key);
 
 /**
  * Copies a EC_KEY object.
- *  \param  dst  destination EC_KEY object
- *  \param  src  src EC_KEY object
- *  \return dst or null if an error occurred.
+ *
+ * Params:
+ *      dst = destination EC_KEY object
+ *      src = src EC_KEY object
+ *
+ * Returns: dst or null if an error occurred.
  */
 .EC_KEY* EC_KEY_copy(.EC_KEY* dst, const (.EC_KEY)* src);
 
 /**
  * Creates a new EC_KEY object and copies the content from src to it.
- *  \param  src  the source EC_KEY object
- *  \return newly created EC_KEY object or null if an error occurred.
+ *
+ * Params:
+ *      src = the source EC_KEY object
+ *
+ * Returns: newly created EC_KEY object or null if an error occurred.
  */
 .EC_KEY* EC_KEY_dup(const (.EC_KEY)* src);
 
 /**
  * Increases the internal reference count of a EC_KEY object.
- *  \param  key  EC_KEY object
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      key = EC_KEY object
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int EC_KEY_up_ref(.EC_KEY* key);
 
 /**
  * Returns the EC_GROUP object of a EC_KEY object
- *  \param  key  EC_KEY object
- *  \return the EC_GROUP object (possibly null).
+ *
+ * Params:
+ *      key = EC_KEY object
+ *
+ * Returns: the EC_GROUP object (possibly null).
  */
 const (.EC_GROUP)* EC_KEY_get0_group(const (.EC_KEY)* key);
 
 /**
  * Sets the EC_GROUP of a EC_KEY object.
- *  \param  key    EC_KEY object
- *  \param  group  EC_GROUP to use in the EC_KEY object (note: the EC_KEY
- *                 object will use an own copy of the EC_GROUP).
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      key = EC_KEY object
+ *      group = EC_GROUP to use in the EC_KEY object (note: the EC_KEY object will use an own copy of the EC_GROUP).
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int EC_KEY_set_group(.EC_KEY* key, const (.EC_GROUP)* group);
 
 /**
  * Returns the private key of a EC_KEY object.
- *  \param  key  EC_KEY object
- *  \return a BIGNUM with the private key (possibly null).
+ *
+ * Params:
+ *      key = EC_KEY object
+ *
+ * Returns: a BIGNUM with the private key (possibly null).
  */
 const (libressl_d.openssl.ossl_typ.BIGNUM)* EC_KEY_get0_private_key(const (.EC_KEY)* key);
 
 /**
  * Sets the private key of a EC_KEY object.
- *  \param  key  EC_KEY object
- *  \param  prv  BIGNUM with the private key (note: the EC_KEY object
- *               will use an own copy of the BIGNUM).
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      key = EC_KEY object
+ *      prv = BIGNUM with the private key (note: the EC_KEY object will use an own copy of the BIGNUM).
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int EC_KEY_set_private_key(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* prv);
 
 /**
  * Returns the public key of a EC_KEY object.
- *  \param  key  the EC_KEY object
- *  \return a EC_POINT object with the public key (possibly null)
+ *
+ * Params:
+ *      key = the EC_KEY object
+ *
+ * Returns: a EC_POINT object with the public key (possibly null)
  */
 const (.EC_POINT)* EC_KEY_get0_public_key(const (.EC_KEY)* key);
 
 /**
  * Sets the public key of a EC_KEY object.
- *  \param  key  EC_KEY object
- *  \param  pub  EC_POINT object with the public key (note: the EC_KEY object
- *               will use an own copy of the EC_POINT object).
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      key = EC_KEY object
+ *      pub = EC_POINT object with the public key (note: the EC_KEY object will use an own copy of the EC_POINT object).
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int EC_KEY_set_public_key(.EC_KEY* key, const (.EC_POINT)* pub);
 
@@ -924,12 +1101,15 @@ void* EC_KEY_get_key_method_data(.EC_KEY* key, void* function(void*) dup_func, v
 
 /**
  * Sets the key method data of an EC_KEY object, if none has yet been set.
- *  \param  key              EC_KEY object
- *  \param  data             opaque data to install.
- *  \param  dup_func         a function that duplicates |data|.
- *  \param  free_func        a function that frees |data|.
- *  \param  clear_free_func  a function that wipes and frees |data|.
- *  \return the previously set data pointer, or null if |data| was inserted.
+ *
+ * Params:
+ *      key = EC_KEY object
+ *      data = opaque data to install.
+ *      dup_func = a function that duplicates |data|.
+ *      free_func = a function that frees |data|.
+ *      clear_free_func = a function that wipes and frees |data|.
+ *
+ * Returns: the previously set data pointer, or null if |data| was inserted.
  */
 void* EC_KEY_insert_key_method_data(.EC_KEY* key, void* data, void* function(void*) dup_func, void function(void*) free_func, void function(void*) clear_free_func);
 
@@ -937,104 +1117,127 @@ void* EC_KEY_insert_key_method_data(.EC_KEY* key, void* data, void* function(voi
 void EC_KEY_set_asn1_flag(.EC_KEY* eckey, int asn1_flag);
 
 /**
- * Creates a table of pre-computed multiples of the generator to
- *  accelerate further EC_KEY operations.
- *  \param  key  EC_KEY object
- *  \param  ctx  BN_CTX object (optional)
- *  \return 1 on success and 0 if an error occurred.
+ * Creates a table of pre-computed multiples of the generator to accelerate further EC_KEY operations.
+ *
+ * Params:
+ *      key = EC_KEY object
+ *      ctx = BN_CTX object (optional)
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int EC_KEY_precompute_mult(.EC_KEY* key, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Creates a new ec private (and optional a new public) key.
- *  \param  key  EC_KEY object
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      key = EC_KEY object
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int EC_KEY_generate_key(.EC_KEY* key);
 
 /**
  * Verifies that a private and/or public key is valid.
- *  \param  key  the EC_KEY object
- *  \return 1 on success and 0 otherwise.
+ *
+ * Params:
+ *      key = the EC_KEY object
+ *
+ * Returns: 1 on success and 0 otherwise.
  */
 int EC_KEY_check_key(const (.EC_KEY)* key);
 
 /**
- * Sets a public key from affine coordindates performing
- *  neccessary NIST PKV tests.
- *  \param  key  the EC_KEY object
- *  \param  x    public key x coordinate
- *  \param  y    public key y coordinate
- *  \return 1 on success and 0 otherwise.
+ * Sets a public key from affine coordindates performing neccessary NIST PKV tests.
+ *
+ * Params:
+ *      key = the EC_KEY object
+ *      x = public key x coordinate
+ *      y = public key y coordinate
+ *
+ * Returns: 1 on success and 0 otherwise.
  */
 int EC_KEY_set_public_key_affine_coordinates(.EC_KEY* key, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y);
 
-/********************************************************************/
+/* *******************************************************************/
 /*        de- and encoding functions for SEC1 ECPrivateKey          */
-/********************************************************************/
+/* *******************************************************************/
 
 /**
  * Decodes a private key from a memory buffer.
- *  \param  key  a pointer to a EC_KEY object which should be used (or null)
- *  \param  in   pointer to memory with the DER encoded private key
- *  \param  len  length of the DER encoded private key
- *  \return the decoded private key or null if an error occurred.
+ *
+ * Params:
+ *      key = a pointer to a EC_KEY object which should be used (or null)
+ *      in_ = pointer to memory with the DER encoded private key
+ *      len = length of the DER encoded private key
+ *
+ * Returns: the decoded private key or null if an error occurred.
  */
 .EC_KEY* d2i_ECPrivateKey(.EC_KEY** key, const (ubyte)** in_, core.stdc.config.c_long len);
 
 /**
  * Encodes a private key object and stores the result in a buffer.
- *  \param  key  the EC_KEY object to encode
- *  \param  out  the buffer for the result (if null the function returns number
- *               of bytes needed).
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      key = the EC_KEY object to encode
+ *      out_ = the buffer for the result (if null the function returns number of bytes needed).
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int i2d_ECPrivateKey(.EC_KEY* key, ubyte** out_);
 
-/********************************************************************/
+/* *******************************************************************/
 /*        de- and encoding functions for EC parameters              */
-/********************************************************************/
+/* *******************************************************************/
 
 /**
  * Decodes ec parameter from a memory buffer.
- *  \param  key  a pointer to a EC_KEY object which should be used (or null)
- *  \param  in   pointer to memory with the DER encoded ec parameters
- *  \param  len  length of the DER encoded ec parameters
- *  \return a EC_KEY object with the decoded parameters or null if an error
- *          occurred.
+ *
+ * Params:
+ *      key = a pointer to a EC_KEY object which should be used (or null)
+ *      in_ = pointer to memory with the DER encoded ec parameters
+ *      len = length of the DER encoded ec parameters
+ *
+ * Returns: a EC_KEY object with the decoded parameters or null if an error occurred.
  */
 .EC_KEY* d2i_ECParameters(.EC_KEY** key, const (ubyte)** in_, core.stdc.config.c_long len);
 
 /**
  * Encodes ec parameter and stores the result in a buffer.
- *  \param  key  the EC_KEY object with ec paramters to encode
- *  \param  out  the buffer for the result (if null the function returns number
- *               of bytes needed).
- *  \return 1 on success and 0 if an error occurred.
+ *
+ * Params:
+ *      key = the EC_KEY object with ec paramters to encode
+ *      out_ = the buffer for the result (if null the function returns number of bytes needed).
+ *
+ * Returns: 1 on success and 0 if an error occurred.
  */
 int i2d_ECParameters(.EC_KEY* key, ubyte** out_);
 
-/********************************************************************/
+/* *******************************************************************/
 /*         de- and encoding functions for EC public key             */
 /*         (octet string, not DER -- hence 'o2i' and 'i2o')         */
-/********************************************************************/
+/* *******************************************************************/
 
 /**
  * Decodes a ec public key from a octet string.
- *  \param  key  a pointer to a EC_KEY object which should be used
- *  \param  in   memory buffer with the encoded public key
- *  \param  len  length of the encoded public key
- *  \return EC_KEY object with decoded public key or null if an error
- *          occurred.
+ *
+ * Params:
+ *      key = a pointer to a EC_KEY object which should be used
+ *      in_ = memory buffer with the encoded public key
+ *      len = length of the encoded public key
+ *
+ * Returns: EC_KEY object with decoded public key or null if an error occurred.
  */
 .EC_KEY* o2i_ECPublicKey(.EC_KEY** key, const (ubyte)** in_, core.stdc.config.c_long len);
 
 /**
  * Encodes a ec public key in an octet string.
- *  \param  key  the EC_KEY object with the public key
- *  \param  out  the buffer for the result (if null the function returns number
- *               of bytes needed).
- *  \return 1 on success and 0 if an error occurred
+ *
+ * Params:
+ *      key = the EC_KEY object with the public key
+ *      out_ = the buffer for the result (if null the function returns number of bytes needed).
+ *
+ * Returns: 1 on success and 0 if an error occurred
  */
 int i2o_ECPublicKey(const (.EC_KEY)* key, ubyte** out_);
 
@@ -1042,36 +1245,48 @@ version (OPENSSL_NO_BIO) {
 } else {
 	/**
 	 * Prints out the ec parameters on human readable form.
-	 *  \param  bp   BIO object to which the information is printed
-	 *  \param  key  EC_KEY object
-	 *  \return 1 on success and 0 if an error occurred
+	 *
+	 * Params:
+	 *      bp = BIO object to which the information is printed
+	 *      key = EC_KEY object
+	 *
+	 * Returns: 1 on success and 0 if an error occurred
 	 */
 	int ECParameters_print(libressl_d.openssl.bio.BIO* bp, const (.EC_KEY)* key);
 
 	/**
 	 * Prints out the contents of a EC_KEY object
-	 *  \param  bp   BIO object to which the information is printed
-	 *  \param  key  EC_KEY object
-	 *  \param  off  line offset
-	 *  \return 1 on success and 0 if an error occurred
+	 *
+	 * Params:
+	 *      bp = BIO object to which the information is printed
+	 *      key = EC_KEY object
+	 *      off = line offset
+	 *
+	 * Returns: 1 on success and 0 if an error occurred
 	 */
 	int EC_KEY_print(libressl_d.openssl.bio.BIO* bp, const (.EC_KEY)* key, int off);
 }
 
 /**
  * Prints out the ec parameters on human readable form.
- *  \param  fp   file descriptor to which the information is printed
- *  \param  key  EC_KEY object
- *  \return 1 on success and 0 if an error occurred
+ *
+ * Params:
+ *      fp = file descriptor to which the information is printed
+ *      key = EC_KEY object
+ *
+ * Returns: 1 on success and 0 if an error occurred
  */
 int ECParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key);
 
 /**
  * Prints out the contents of a EC_KEY object
- *  \param  fp   file descriptor to which the information is printed
- *  \param  key  EC_KEY object
- *  \param  off  line offset
- *  \return 1 on success and 0 if an error occurred
+ *
+ * Params:
+ *      fp = file descriptor to which the information is printed
+ *      key = EC_KEY object
+ *      off = line offset
+ *
+ * Returns: 1 on success and 0 if an error occurred
  */
 int EC_KEY_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key, int off);
 

@@ -14,12 +14,12 @@ nothrow @nogc:
 version (Posix) {
 } else {
 	/**
-	 *  set FD_CLOEXEC
+	 * set FD_CLOEXEC
 	 */
 	enum SOCK_CLOEXEC = 0x8000;
 
 	/**
-	 *  set O_NONBLOCK
+	 * set O_NONBLOCK
 	 */
 	enum SOCK_NONBLOCK = 0x4000;
 }

@@ -91,7 +91,7 @@ enum SSL2_PE_UNSUPPORTED_CERTIFICATE_TYPE = 0x0006;
 /* Cipher Kind Values */
 
 /**
- *  v3
+ * v3
  */
 enum SSL2_CK_NULL_WITH_MD5 = 0x02000000;
 
@@ -103,30 +103,28 @@ enum SSL2_CK_IDEA_128_CBC_WITH_MD5 = 0x02050080;
 enum SSL2_CK_DES_64_CBC_WITH_MD5 = 0x02060040;
 
 /**
- *  v3
+ * v3
  */
 enum SSL2_CK_DES_64_CBC_WITH_SHA = 0x02060140;
 
 enum SSL2_CK_DES_192_EDE3_CBC_WITH_MD5 = 0x020700C0;
 
 /**
- *  v3
+ * v3
  */
 enum SSL2_CK_DES_192_EDE3_CBC_WITH_SHA = 0x020701C0;
 
 /**
- *  MS hack
+ * MS hack
  */
 enum SSL2_CK_RC4_64_WITH_MD5 = 0x02080080;
 
 /**
- *  SSLeay
+ * SSLeay
  */
 enum SSL2_CK_DES_64_CFB64_WITH_MD5_1 = 0x02FF0800;
 
-/**
- *  SSLeay
- */
+///Ditto
 enum SSL2_CK_NULL = 0x02FF0810;
 
 enum SSL2_TXT_DES_64_CFB64_WITH_MD5_1 = "DES-CFB-M1";
@@ -165,7 +163,7 @@ enum SSL2_MAX_MASTER_KEY_LENGTH_IN_BITS = 256;
 enum SSL2_MAX_RECORD_LENGTH_2_BYTE_HEADER = 32767u;
 
 /**
- *  2^14-1
+ * 2^14-1
  */
 enum SSL2_MAX_RECORD_LENGTH_3_BYTE_HEADER = 16383;
 

@@ -68,7 +68,7 @@ version (OPENSSL_NO_HMAC) {
 }
 
 /**
- *  largest known is SHA512
+ * largest known is SHA512
  */
 enum HMAC_MAX_MD_CBLOCK = 128;
 

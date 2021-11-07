@@ -330,16 +330,16 @@ version (LIBRESSL_INTERNAL) {
 //#define DECLARE_PEM_write_cb_fp(name, type) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u);
 
 version (OPENSSL_NO_BIO) {
-	/**/
+	/* */
 	//#define DECLARE_PEM_read_bio(name, type)
 
-	/**/
+	/* */
 	//#define DECLARE_PEM_write_bio(name, type)
 
-	/**/
+	/* */
 	//#define DECLARE_PEM_write_bio_const(name, type)
 
-	/**/
+	/* */
 	//#define DECLARE_PEM_write_cb_bio(name, type)
 } else {
 	//#define DECLARE_PEM_read_bio(name, type) type* PEM_read_bio_##name(libressl_d.openssl.bio.BIO* bp, type** x, .pem_password_cb* cb, void* u);

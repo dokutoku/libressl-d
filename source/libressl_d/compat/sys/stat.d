@@ -70,23 +70,23 @@ version (Posix) {
 	alias S_IFIFO = core.sys.windows.stat.S_IFIFO;
 
 	/**
-	 *  Block device
+	 * Block device
 	 */
 	alias S_IFBLK = core.sys.windows.stat.S_IFBLK;
 
 	/**
-	 *  Link
+	 * Link
 	 */
 	enum S_IFLNK = 0;
 
 	/**
-	 *  Socket
+	 * Socket
 	 */
 	enum S_IFSOCK = 0;
 
 	version (Windows) {
 		/**
-		 *  RWX user
+		 * RWX user
 		 */
 		enum S_IRWXU = 0;
 
@@ -101,47 +101,47 @@ version (Posix) {
 		alias S_IWUSR = libressl_d.compat.stdio.S_IWRITE;
 
 		/**
-		 *  Execute user
+		 * Execute user
 		 */
 		enum S_IXUSR = 0;
 
 		/**
-		 *  RWX group
+		 * RWX group
 		 */
 		enum S_IRWXG = 0;
 
 		/**
-		 *  Read group
+		 * Read group
 		 */
 		enum S_IRGRP = 0;
 
 		/**
-		 *  Write group
+		 * Write group
 		 */
 		enum S_IWGRP = 0;
 
 		/**
-		 *  Execute group
+		 * Execute group
 		 */
 		enum S_IXGRP = 0;
 
 		/**
-		 *  RWX others
+		 * RWX others
 		 */
 		enum S_IRWXO = 0;
 
 		/**
-		 *  Read others
+		 * Read others
 		 */
 		enum S_IROTH = 0;
 
 		/**
-		 *  Write others
+		 * Write others
 		 */
 		enum S_IWOTH = 0;
 
 		/**
-		 *  Execute others
+		 * Execute others
 		 */
 		enum S_IXOTH = 0;
 	}

@@ -250,7 +250,7 @@ version (OPENSSL_NO_DEPRECATED) {
 version (OPENSSL_NO_DEPRECATED) {
 } else {
 	/**
-	 *  used for debuging
+	 * used for debuging
 	 */
 	enum BN_FLG_FREE = 0x8000;
 }
@@ -726,16 +726,21 @@ int BN_mul(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl
 int BN_sqr(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
- * BN_set_negative sets sign of a BIGNUM
- * \param  b  pointer to the BIGNUM object
- * \param  n  0 if the BIGNUM b should be positive and a value != 0 otherwise
+ * sets sign of a BIGNUM
+ *
+ * Params:
+ *      b = pointer to the BIGNUM object
+ *      n = 0 if the BIGNUM b should be positive and a value != 0 otherwise
  */
 void BN_set_negative(libressl_d.openssl.ossl_typ.BIGNUM* b, int n);
 
-/*
- * BN_is_negative returns 1 if the BIGNUM is negative
- * \param  a  pointer to the BIGNUM object
- * \return 1 if a < 0 and 0 otherwise
+/**
+ * returns 1 if the BIGNUM is negative
+ *
+ * Params:
+ *      a = pointer to the BIGNUM object
+ *
+ * Returns: 1 if a < 0 and 0 otherwise
  */
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
@@ -940,7 +945,7 @@ version (OPENSSL_NO_EC2M) {
 	alias BN_GF2m_sub = .BN_GF2m_add;
 
 	/**
-	 * r=a mod p
+	 * r = a mod p
 	 */
 	int BN_GF2m_mod(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p);
 

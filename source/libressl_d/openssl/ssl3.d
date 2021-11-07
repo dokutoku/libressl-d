@@ -309,23 +309,17 @@ version (LIBRESSL_INTERNAL) {
 	enum SSL3_AD_CLOSE_NOTIFY = 0;
 
 	/**
-	 *  fatal
+	 * fatal
 	 */
 	enum SSL3_AD_UNEXPECTED_MESSAGE = 10;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum SSL3_AD_BAD_RECORD_MAC = 20;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum SSL3_AD_DECOMPRESSION_FAILURE = 30;
 
-	/**
-	 *  fatal
-	 */
+	///Ditto
 	enum SSL3_AD_HANDSHAKE_FAILURE = 40;
 
 	enum SSL3_AD_NO_CERTIFICATE = 41;
@@ -336,7 +330,7 @@ version (LIBRESSL_INTERNAL) {
 	enum SSL3_AD_CERTIFICATE_UNKNOWN = 46;
 
 	/**
-	 *  fatal
+	 * fatal
 	 */
 	enum SSL3_AD_ILLEGAL_PARAMETER = 47;
 }

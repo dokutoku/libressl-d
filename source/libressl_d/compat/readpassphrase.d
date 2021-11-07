@@ -29,32 +29,32 @@ nothrow @nogc:
 	//#include_next <readpassphrase.h>
 //#else
 	/**
-	 *  Turn off echo (default).
+	 * Turn off echo (default).
 	 */
 	enum RPP_ECHO_OFF = 0x00;
 
 	/**
-	 *  Leave echo on.
+	 * Leave echo on.
 	 */
 	enum RPP_ECHO_ON = 0x01;
 
 	/**
-	 *  Fail if there is no tty.
+	 * Fail if there is no tty.
 	 */
 	enum RPP_REQUIRE_TTY = 0x02;
 
 	/**
-	 *  Force input to lower case.
+	 * Force input to lower case.
 	 */
 	enum RPP_FORCELOWER = 0x04;
 
 	/**
-	 *  Force input to upper case.
+	 * Force input to upper case.
 	 */
 	enum RPP_FORCEUPPER = 0x08;
 
 	/**
-	 *  Strip the high bit from input.
+	 * Strip the high bit from input.
 	 */
 	enum RPP_SEVENBIT = 0x10;
 

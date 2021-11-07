@@ -250,19 +250,13 @@ enum SSL_TXT_HIGH = "HIGH";
  */
 enum SSL_TXT_kFZA = "kFZA";
 
-/**
- * unused!
- */
+///Ditto
 enum SSL_TXT_aFZA = "aFZA";
 
-/**
- * unused!
- */
+///Ditto
 enum SSL_TXT_eFZA = "eFZA";
 
-/**
- * unused!
- */
+///Ditto
 enum SSL_TXT_FZA = "FZA";
 
 enum SSL_TXT_aNULL = "aNULL";
@@ -276,14 +270,10 @@ enum SSL_TXT_kRSA = "kRSA";
  */
 enum SSL_TXT_kDHr = "kDHr";
 
-/**
- * no such ciphersuites supported!
- */
+///Ditto
 enum SSL_TXT_kDHd = "kDHd";
 
-/**
- * no such ciphersuites supported!
- */
+///Ditto
 enum SSL_TXT_kDH = "kDH";
 
 enum SSL_TXT_kEDH = "kEDH";
@@ -1039,7 +1029,7 @@ version (LIBRESSL_INTERNAL) {
 
 	struct ssl_st
 	{
-		/*
+		/**
 		 * protocol version
 		 * (one of SSL2_VERSION, SSL3_VERSION, TLS1_VERSION, DTLS1_VERSION)
 		 */
@@ -1089,10 +1079,14 @@ version (LIBRESSL_INTERNAL) {
 
 		libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* param;
 
-		/* crypto */
+		/**
+		 * crypto
+		 */
 		.stack_st_SSL_CIPHER* cipher_list;
 
-		/* This is used to hold the server certificate used */
+		/**
+		 * This is used to hold the server certificate used
+		 */
 		cert_st /* CERT */* cert;
 
 		/*
@@ -1247,7 +1241,7 @@ enum SSL_CB_READ = 0x04;
 enum SSL_CB_WRITE = 0x08;
 
 /**
- *  used in callback
+ * used in callback
  */
 enum SSL_CB_ALERT = 0x4000;
 
@@ -2119,14 +2113,10 @@ int SSL_CTX_set_ssl_version(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (.SS
  */
 const (.SSL_METHOD)* SSLv23_method();
 
-/**
- * SSLv3 or TLSv1.*
- */
+///Ditto
 const (.SSL_METHOD)* SSLv23_server_method();
 
-/**
- * SSLv3 or TLSv1.*
- */
+///Ditto
 const (.SSL_METHOD)* SSLv23_client_method();
 
 /**
@@ -2134,14 +2124,10 @@ const (.SSL_METHOD)* SSLv23_client_method();
  */
 const (.SSL_METHOD)* TLSv1_method();
 
-/**
- * TLSv1.0
- */
+///Ditto
 const (.SSL_METHOD)* TLSv1_server_method();
 
-/**
- * TLSv1.0
- */
+///Ditto
 const (.SSL_METHOD)* TLSv1_client_method();
 
 /**
@@ -2149,14 +2135,10 @@ const (.SSL_METHOD)* TLSv1_client_method();
  */
 const (.SSL_METHOD)* TLSv1_1_method();
 
-/**
- * TLSv1.1
- */
+///Ditto
 const (.SSL_METHOD)* TLSv1_1_server_method();
 
-/**
- * TLSv1.1
- */
+///Ditto
 const (.SSL_METHOD)* TLSv1_1_client_method();
 
 /**
@@ -2164,14 +2146,10 @@ const (.SSL_METHOD)* TLSv1_1_client_method();
  */
 const (.SSL_METHOD)* TLSv1_2_method();
 
-/**
- * TLSv1.2
- */
+///Ditto
 const (.SSL_METHOD)* TLSv1_2_server_method();
 
-/**
- * TLSv1.2
- */
+///Ditto
 const (.SSL_METHOD)* TLSv1_2_client_method();
 
 /**
@@ -2179,14 +2157,10 @@ const (.SSL_METHOD)* TLSv1_2_client_method();
  */
 const (.SSL_METHOD)* TLS_method();
 
-/**
- * TLS v1.0 or later
- */
+///Ditto
 const (.SSL_METHOD)* TLS_server_method();
 
-/**
- * TLS v1.0 or later
- */
+///Ditto
 const (.SSL_METHOD)* TLS_client_method();
 
 /**
@@ -2194,14 +2168,10 @@ const (.SSL_METHOD)* TLS_client_method();
  */
 const (.SSL_METHOD)* DTLSv1_method();
 
-/**
- * DTLSv1.0
- */
+///Ditto
 const (.SSL_METHOD)* DTLSv1_server_method();
 
-/**
- * DTLSv1.0
- */
+///Ditto
 const (.SSL_METHOD)* DTLSv1_client_method();
 
 /**
@@ -2209,14 +2179,10 @@ const (.SSL_METHOD)* DTLSv1_client_method();
  */
 const (.SSL_METHOD)* DTLSv1_2_method();
 
-/**
- * DTLSv1.2
- */
+///Ditto
 const (.SSL_METHOD)* DTLSv1_2_server_method();
 
-/**
- * DTLSv1.2
- */
+///Ditto
 const (.SSL_METHOD)* DTLSv1_2_client_method();
 
 /**
@@ -2224,14 +2190,10 @@ const (.SSL_METHOD)* DTLSv1_2_client_method();
  */
 const (.SSL_METHOD)* DTLS_method();
 
-/**
- * DTLS v1.0 or later
- */
+///Ditto
 const (.SSL_METHOD)* DTLS_server_method();
 
-/**
- * DTLS v1.0 or later
- */
+///Ditto
 const (.SSL_METHOD)* DTLS_client_method();
 
 .stack_st_SSL_CIPHER* SSL_get_ciphers(const (libressl_d.openssl.ossl_typ.SSL)* s);

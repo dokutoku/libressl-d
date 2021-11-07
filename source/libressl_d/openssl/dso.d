@@ -156,7 +156,6 @@ struct dso_meth_st
 	/**
 	 * Unloads a shared library
 	 */
-
 	int function(.DSO* dso) dso_unload;
 
 	/**
@@ -209,7 +208,7 @@ struct dso_meth_st
 
 alias DSO_METHOD = .dso_meth_st;
 
-/**********************************************************************/
+/* *********************************************************************/
 /* The low-level handle type used to refer to a loaded shared library */
 
 struct dso_st

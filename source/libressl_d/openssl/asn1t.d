@@ -623,9 +623,7 @@ struct ASN1_TLC_st
 	 */
 	int ptag;
 
-	/**
-	 * class value
-	 */
+	///Ditto
 	int pclass;
 
 	/**
@@ -766,10 +764,12 @@ alias ASN1_STREAM_ARG = .ASN1_STREAM_ARG_st;
  * Use a reference count
  */
 enum ASN1_AFLG_REFCOUNT = 1;
+
 /**
  * Save the encoding of structure (useful for signatures)
  */
 enum ASN1_AFLG_ENCODING = 2;
+
 /**
  * The Sequence length is invalid
  */

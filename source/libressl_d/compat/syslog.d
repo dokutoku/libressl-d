@@ -16,7 +16,7 @@ version (Posix) {
 } else {
 	version (Windows) {
 		/**
-		 *  informational
+		 * informational
 		 */
 		enum LOG_INFO = 6;
 
