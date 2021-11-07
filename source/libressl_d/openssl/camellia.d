@@ -109,4 +109,4 @@ void Camellia_cfb128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, co
 void Camellia_cfb1_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.CAMELLIA_KEY)* key, ubyte* ivec, int* num, const int enc);
 void Camellia_cfb8_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.CAMELLIA_KEY)* key, ubyte* ivec, int* num, const int enc);
 void Camellia_ofb128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.CAMELLIA_KEY)* key, ubyte* ivec, int* num);
-void Camellia_ctr128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.CAMELLIA_KEY)* key, ubyte[.CAMELLIA_BLOCK_SIZE] ivec, ubyte[.CAMELLIA_BLOCK_SIZE] ecount_buf, uint* num);
+void Camellia_ctr128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.CAMELLIA_KEY)* key, ubyte* ivec, ubyte* ecount_buf, uint* num);

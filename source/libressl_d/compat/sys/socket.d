@@ -25,7 +25,7 @@ version (Posix) {
 }
 
 version (none) {
-	int bsd_socketpair(int domain, int type, int protocol, int[2] socket_vector);
+	int bsd_socketpair(int domain, int type, int protocol, int* socket_vector);
 
 	pragma(inline, true)
 	nothrow @nogc

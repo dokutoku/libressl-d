@@ -35,6 +35,6 @@ struct poly1305_context
 
 alias poly1305_state = .poly1305_context;
 
-void CRYPTO_poly1305_init(.poly1305_context* ctx, const ubyte[32] key);
+void CRYPTO_poly1305_init(.poly1305_context* ctx, const (ubyte)* key);
 void CRYPTO_poly1305_update(.poly1305_context* ctx, const (ubyte)* in_, size_t len);
-void CRYPTO_poly1305_finish(.poly1305_context* ctx, ubyte[16] mac);
+void CRYPTO_poly1305_finish(.poly1305_context* ctx, ubyte* mac);

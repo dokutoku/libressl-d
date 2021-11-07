@@ -39,6 +39,6 @@ void ChaCha_set_key(.ChaCha_ctx* ctx, const (ubyte)* key, uint keybits);
 void ChaCha_set_iv(.ChaCha_ctx* ctx, const (ubyte)* iv, const (ubyte)* counter);
 void ChaCha(.ChaCha_ctx* ctx, ubyte* out_, const (ubyte)* in_, size_t len);
 
-void CRYPTO_chacha_20(ubyte* out_, const (ubyte)* in_, size_t len, const ubyte[32] key, const ubyte[8] iv, core.stdc.stdint.uint64_t counter);
-void CRYPTO_xchacha_20(ubyte* out_, const (ubyte)* in_, size_t len, const ubyte[32] key, const ubyte[24] iv);
-void CRYPTO_hchacha_20(ubyte[32] out_, const ubyte[32] key, const ubyte[16] iv);
+void CRYPTO_chacha_20(ubyte* out_, const (ubyte)* in_, size_t len, const (ubyte)* key, const (ubyte)* iv, core.stdc.stdint.uint64_t counter);
+void CRYPTO_xchacha_20(ubyte* out_, const (ubyte)* in_, size_t len, const (ubyte)* key, const (ubyte)* iv);
+void CRYPTO_hchacha_20(ubyte* out_, const (ubyte)* key, const (ubyte)* iv);

@@ -47,7 +47,7 @@ enum X25519_KEY_LENGTH = 32;
  * X25519_keypair sets |out_public_value| and |out_private_key| to a freshly
  * generated, public/private key pair.
  */
-void X25519_keypair(core.stdc.stdint.uint8_t[.X25519_KEY_LENGTH] out_public_value, core.stdc.stdint.uint8_t[.X25519_KEY_LENGTH] out_private_key);
+void X25519_keypair(core.stdc.stdint.uint8_t* out_public_value, core.stdc.stdint.uint8_t* out_private_key);
 
 /**
  * X25519 writes a shared key to |out_shared_key| that is calculated from the
@@ -57,4 +57,4 @@ void X25519_keypair(core.stdc.stdint.uint8_t[.X25519_KEY_LENGTH] out_public_valu
  * Don't use the shared key directly, rather use a KDF and also include the two
  * public values as inputs.
  */
-int X25519(core.stdc.stdint.uint8_t[.X25519_KEY_LENGTH] out_shared_key, const core.stdc.stdint.uint8_t[.X25519_KEY_LENGTH] private_key, const core.stdc.stdint.uint8_t[.X25519_KEY_LENGTH] peers_public_value);
+int X25519(core.stdc.stdint.uint8_t* out_shared_key, const (core.stdc.stdint.uint8_t)* private_key, const (core.stdc.stdint.uint8_t)* peers_public_value);

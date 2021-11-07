@@ -97,7 +97,7 @@ void AES_cfb128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (
 void AES_cfb1_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.AES_KEY)* key, ubyte* ivec, int* num, const int enc);
 void AES_cfb8_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.AES_KEY)* key, ubyte* ivec, int* num, const int enc);
 void AES_ofb128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.AES_KEY)* key, ubyte* ivec, int* num);
-void AES_ctr128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.AES_KEY)* key, ubyte[.AES_BLOCK_SIZE] ivec, ubyte[.AES_BLOCK_SIZE] ecount_buf, uint* num);
+void AES_ctr128_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.AES_KEY)* key, ubyte* ivec, ubyte* ecount_buf, uint* num);
 /* NB: the IV is _two_ blocks core.stdc.config.c_long */
 void AES_ige_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, const (.AES_KEY)* key, ubyte* ivec, const int enc);
 
