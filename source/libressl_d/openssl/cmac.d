@@ -60,8 +60,8 @@ extern (C):
 nothrow @nogc:
 
 /* Opaque */
-//alias CMAC_CTX = CMAC_CTX_st;
-package alias CMAC_CTX = void;
+struct CMAC_CTX_st;
+alias CMAC_CTX = .CMAC_CTX_st;
 
 .CMAC_CTX* CMAC_CTX_new();
 void CMAC_CTX_cleanup(.CMAC_CTX* ctx);

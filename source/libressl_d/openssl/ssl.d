@@ -731,9 +731,7 @@ core.stdc.config.c_long SSL_set_msg_callback_arg(libressl_d.openssl.ossl_typ.SSL
 
 version (LIBRESSL_INTERNAL) {
 } else {
-	//struct ssl_aead_ctx_st;
-	package alias ssl_aead_ctx_st = void;
-
+	struct ssl_aead_ctx_st;
 	alias SSL_AEAD_CTX = .ssl_aead_ctx_st;
 }
 
@@ -781,8 +779,7 @@ version (LIBRESSL_INTERNAL) {
 		int dummy;
 	}
 
-	//struct ssl_ctx_internal_st;
-	package alias ssl_ctx_internal_st = void;
+	struct ssl_ctx_internal_st;
 
 	struct ssl_ctx_st
 	{
@@ -1018,14 +1015,10 @@ enum SSL_MAC_FLAG_READ_MAC_STREAM = 1;
 enum SSL_MAC_FLAG_WRITE_MAC_STREAM = 2;
 
 version (LIBRESSL_INTERNAL) {
-	//struct ssl_internal_st;
-	package alias ssl_internal_st = void;
-	package alias cert_st = void;
-
-	version (all) {
-		struct dtls1_state_st;
-		struct ssl3_state_st;
-	}
+	struct ssl_internal_st;
+	struct cert_st;
+	struct dtls1_state_st;
+	struct ssl3_state_st;
 
 	struct ssl_st
 	{
@@ -1070,7 +1063,7 @@ version (LIBRESSL_INTERNAL) {
 		/**
 		 * SSLv3 variables
 		 */
-		ssl3_state_st* s3;
+		.ssl3_state_st* s3;
 
 		/**
 		 * DTLSv1 variables
@@ -1087,7 +1080,7 @@ version (LIBRESSL_INTERNAL) {
 		/**
 		 * This is used to hold the server certificate used
 		 */
-		cert_st /* CERT */* cert;
+		.cert_st /* CERT */* cert;
 
 		/*
 		 * the session_id_context is used to ensure sessions are only reused

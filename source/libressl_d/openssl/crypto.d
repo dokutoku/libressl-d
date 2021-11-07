@@ -259,7 +259,7 @@ version (CRYPTO_w_lock) {
  * and deallocate locks in a dynamic fashion.  The following typedef
  * makes this possible in a type-safe manner.
  */
-alias CRYPTO_dynlock_value = void*;
+alias CRYPTO_dynlock_value = void;
 
 /**
  * CRYPTO_dynlock_value has to be defined by the application.
@@ -483,8 +483,8 @@ const (char)* SSLeay_version(int type);
 core.stdc.config.c_ulong SSLeay();
 
 /* An opaque type representing an implementation of "ex_data" support */
-package alias st_CRYPTO_EX_DATA_IMPL = void;
-alias CRYPTO_EX_DATA_IMPL = st_CRYPTO_EX_DATA_IMPL;
+struct st_CRYPTO_EX_DATA_IMPL;
+alias CRYPTO_EX_DATA_IMPL = .st_CRYPTO_EX_DATA_IMPL;
 
 /**
  * Return an opaque pointer to the current "ex_data" implementation
@@ -569,7 +569,7 @@ version (LIBRESSL_INTERNAL) {
 	int CRYPTO_get_new_dynlockid();
 	void CRYPTO_destroy_dynlockid(int i);
 	.CRYPTO_dynlock_value* CRYPTO_get_dynlock_value(int i);
-	void CRYPTO_set_dynlock_create_callback(.CRYPTO_dynlock_value * function(const (char)* file, int line) dyn_create_function);
+	void CRYPTO_set_dynlock_create_callback(.CRYPTO_dynlock_value* function(const (char)* file, int line) dyn_create_function);
 	void CRYPTO_set_dynlock_lock_callback(void function(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_lock_function);
 	void CRYPTO_set_dynlock_destroy_callback(void function(.CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_destroy_function);
 	//.CRYPTO_dynlock_value* (*CRYPTO_get_dynlock_create_callback(void))(const (char)* file, int line);

@@ -132,7 +132,7 @@ enum
 	POINT_CONVERSION_HYBRID = .point_conversion_form_t.POINT_CONVERSION_HYBRID,
 }
 
-package alias ec_method_st = void;
+struct ec_method_st;
 alias EC_METHOD = .ec_method_st;
 
 /*
@@ -143,10 +143,10 @@ alias EC_METHOD = .ec_method_st;
  * -- optional extra data (precomputed table for fast computation of multiples of generator)
  * -- ASN1 stuff
  */
-package alias ec_group_st = void;
-package alias ec_point_st = void;
-
+struct ec_group_st;
 alias EC_GROUP = .ec_group_st;
+
+struct ec_point_st;
 alias EC_POINT = .ec_point_st;
 
 /* *******************************************************************/
@@ -922,8 +922,8 @@ version (OPENSSL_NO_EC2M) {
 enum OPENSSL_EC_EXPLICIT_CURVE = 0x0000;
 enum OPENSSL_EC_NAMED_CURVE = 0x0001;
 
-package alias ecpk_parameters_st = void;
-alias ECPKPARAMETERS = ecpk_parameters_st;
+struct ecpk_parameters_st;
+alias ECPKPARAMETERS = .ecpk_parameters_st;
 
 .EC_GROUP* d2i_ECPKParameters(.EC_GROUP**, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ECPKParameters(const (.EC_GROUP)*, ubyte** out_);
@@ -951,11 +951,9 @@ int ECPKParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_GROUP)*
 /*                      EC_KEY functions                            */
 /* *******************************************************************/
 
-//struct ec_key_st;
-package alias ec_key_st = void;
-
+struct ec_key_st;
 alias EC_KEY = .ec_key_st;
-package alias ec_key_method_st = void;
+struct ec_key_method_st;
 alias EC_KEY_METHOD = .ec_key_method_st;
 
 /* some values for the encoding_flag */

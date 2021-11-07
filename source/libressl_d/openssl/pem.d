@@ -148,22 +148,18 @@ enum PEM_STRING_ECPRIVATEKEY = "EC PRIVATE KEY";
 enum PEM_STRING_PARAMETERS = "PARAMETERS";
 enum PEM_STRING_CMS = "CMS";
 
-version (none) {
-	/**
-	 * Note that this structure is initialised by PEM_SealInit and cleaned up
-	 * by PEM_SealFinal (at least for now)
-	 */
-	struct PEM_Encode_Seal_st
-	{
-		libressl_d.openssl.evp.EVP_ENCODE_CTX encode;
-		libressl_d.openssl.ossl_typ.EVP_MD_CTX md;
-		libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX cipher;
-	}
-
-	alias PEM_ENCODE_SEAL_CTX = .PEM_Encode_Seal_st;
-} else {
-	package alias PEM_ENCODE_SEAL_CTX = void;
+/**
+ * Note that this structure is initialised by PEM_SealInit and cleaned up
+ * by PEM_SealFinal (at least for now)
+ */
+struct PEM_Encode_Seal_st
+{
+	libressl_d.openssl.evp.EVP_ENCODE_CTX encode;
+	libressl_d.openssl.ossl_typ.EVP_MD_CTX md;
+	libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX cipher;
 }
+
+alias PEM_ENCODE_SEAL_CTX = .PEM_Encode_Seal_st;
 
 /* enc_type is one off */
 enum PEM_TYPE_ENCRYPTED = 10;

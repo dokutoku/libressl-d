@@ -108,11 +108,11 @@ struct conf_method_st
 }
 
 /* Module definitions */
-package alias conf_imodule_st = void;
-package alias conf_module_st = void;
+struct conf_imodule_st;
+struct conf_module_st;
 
-alias CONF_IMODULE = conf_imodule_st;
-alias CONF_MODULE = conf_module_st;
+alias CONF_IMODULE = .conf_imodule_st;
+alias CONF_MODULE = .conf_module_st;
 
 //DECLARE_STACK_OF(CONF_MODULE)
 struct stack_st_CONF_MODULE

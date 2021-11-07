@@ -87,13 +87,11 @@ struct stack_st_OPENSSL_PSTRING
 	libressl_d.openssl.stack._STACK stack;
 }
 
-package alias lhash_st_OPENSSL_STRING = void;
-
 struct txt_db_st
 {
 	int num_fields;
 	.stack_st_OPENSSL_PSTRING* data;
-	lhash_st_OPENSSL_STRING** index;
+	libressl_d.openssl.lhash.lhash_st_OPENSSL_STRING** index;
 	int function(libressl_d.openssl.safestack.OPENSSL_STRING*)* qual;
 	core.stdc.config.c_long error;
 	core.stdc.config.c_long arg1;

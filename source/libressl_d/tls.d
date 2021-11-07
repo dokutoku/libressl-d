@@ -67,11 +67,8 @@ enum TLS_CRL_REASON_AA_COMPROMISE = 10;
 enum TLS_MAX_SESSION_ID_LENGTH = 32;
 enum TLS_TICKET_KEY_SIZE = 48;
 
-//struct tls;
-alias tls = void;
-
-//struct tls_config;
-alias tls_config = void;
+struct tls;
+struct tls_config;
 
 alias tls_read_cb = extern (C) nothrow @nogc libressl_d.compat.sys.types.ssize_t function(.tls* _ctx, void* _buf, size_t _buflen, void* _cb_arg);
 alias tls_write_cb = extern (C) nothrow @nogc libressl_d.compat.sys.types.ssize_t function(.tls* _ctx, const (void)* _buf, size_t _buflen, void* _cb_arg);

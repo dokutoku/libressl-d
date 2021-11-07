@@ -795,12 +795,12 @@ alias dynamic_MEM_fns = .st_dynamic_MEM_fns;
  * FIXME: Perhaps the memory and locking code (crypto.h) should declare and use
  * these types so we (and any other dependant code) can simplify a bit??
  */
-package alias CRYPTO_dynlock_value = void;
 alias dyn_lock_locking_cb = extern (C) nothrow @nogc void function(int, int, const (char)*, int);
 alias dyn_lock_add_lock_cb = extern (C) nothrow @nogc int function(int*, int, int, const (char)*, int);
-alias dyn_dynlock_create_cb = extern (C) nothrow @nogc CRYPTO_dynlock_value* function(const (char)*, int);
-alias dyn_dynlock_lock_cb = extern (C) nothrow @nogc void function(int, CRYPTO_dynlock_value*, const (char)*, int);
-alias dyn_dynlock_destroy_cb = extern (C) nothrow @nogc void function(CRYPTO_dynlock_value*, const (char)*, int);
+struct CRYPTO_dynlock_value;
+alias dyn_dynlock_create_cb = extern (C) nothrow @nogc .CRYPTO_dynlock_value* function(const (char)*, int);
+alias dyn_dynlock_lock_cb = extern (C) nothrow @nogc void function(int, .CRYPTO_dynlock_value*, const (char)*, int);
+alias dyn_dynlock_destroy_cb = extern (C) nothrow @nogc void function(.CRYPTO_dynlock_value*, const (char)*, int);
 
 struct st_dynamic_LOCK_fns
 {

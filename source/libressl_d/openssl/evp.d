@@ -1397,7 +1397,6 @@ version (OPENSSL_NO_RSA) {
 
 version (OPENSSL_NO_DSA) {
 } else {
-	//struct libressl_d.openssl.dsa.dsa_st;
 	libressl_d.openssl.dsa.dsa_st* EVP_PKEY_get0_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 	libressl_d.openssl.dsa.dsa_st* EVP_PKEY_get1_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 	int EVP_PKEY_set1_DSA(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.dsa.dsa_st* key);
@@ -1405,7 +1404,6 @@ version (OPENSSL_NO_DSA) {
 
 version (OPENSSL_NO_DH) {
 } else {
-	//struct dh_st;
 	libressl_d.openssl.dh.dh_st* EVP_PKEY_get0_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 	libressl_d.openssl.dh.dh_st* EVP_PKEY_get1_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 	int EVP_PKEY_set1_DH(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.dh.dh_st* key);
@@ -1413,15 +1411,9 @@ version (OPENSSL_NO_DH) {
 
 version (OPENSSL_NO_EC) {
 } else {
-	//struct ec_key_st;
 	libressl_d.openssl.ec.ec_key_st* EVP_PKEY_get0_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 	libressl_d.openssl.ec.ec_key_st* EVP_PKEY_get1_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 	int EVP_PKEY_set1_EC_KEY(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ec.ec_key_st* key);
-}
-
-version (OPENSSL_NO_GOST) {
-} else {
-	//struct gost_key_st;
 }
 
 libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new();
@@ -1680,8 +1672,7 @@ void EVP_PKEY_meth_set_ctrl(libressl_d.openssl.ossl_typ.EVP_PKEY_METHOD* pmeth, 
  * which is authenticated but not included in the output.
  */
 
-//struct evp_aead_st;
-package alias evp_aead_st = void;
+struct evp_aead_st;
 alias EVP_AEAD = .evp_aead_st;
 
 version (OPENSSL_NO_AES) {

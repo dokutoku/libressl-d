@@ -74,27 +74,24 @@ version (OPENSSL_NO_CMS) {
 	extern (C):
 	nothrow @nogc:
 
-	version (none) {
-		alias CMS_ContentInfo = CMS_ContentInfo_st;
-		alias CMS_SignerInfo = CMS_SignerInfo_st;
-		alias CMS_CertificateChoices = CMS_CertificateChoices;
-		alias CMS_RevocationInfoChoice = CMS_RevocationInfoChoice_st;
-		alias CMS_RecipientInfo = CMS_RecipientInfo_st;
-		alias CMS_ReceiptRequest = CMS_ReceiptRequest_st;
-		alias CMS_Receipt = CMS_Receipt_st;
-		alias CMS_RecipientEncryptedKey = CMS_RecipientEncryptedKey_st;
-		alias CMS_OtherKeyAttribute = CMS_OtherKeyAttribute_st;
-	} else {
-		package alias CMS_ContentInfo = void;
-		package alias CMS_SignerInfo = void;
-		package alias CMS_CertificateChoices = void;
-		package alias CMS_RevocationInfoChoice = void;
-		package alias CMS_RecipientInfo = void;
-		package alias CMS_ReceiptRequest = void;
-		package alias CMS_Receipt = void;
-		package alias CMS_RecipientEncryptedKey = void;
-		package alias CMS_OtherKeyAttribute = void;
-	}
+	struct CMS_ContentInfo_st;
+	struct CMS_SignerInfo_st;
+	struct CMS_CertificateChoices;
+	struct CMS_RevocationInfoChoice_st;
+	struct CMS_RecipientInfo_st;
+	struct CMS_ReceiptRequest_st;
+	struct CMS_Receipt_st;
+	struct CMS_RecipientEncryptedKey_st;
+	struct CMS_OtherKeyAttribute_st;
+
+	alias CMS_ContentInfo = .CMS_ContentInfo_st;
+	alias CMS_SignerInfo = .CMS_SignerInfo_st;
+	alias CMS_RevocationInfoChoice = .CMS_RevocationInfoChoice_st;
+	alias CMS_RecipientInfo = .CMS_RecipientInfo_st;
+	alias CMS_ReceiptRequest = .CMS_ReceiptRequest_st;
+	alias CMS_Receipt = .CMS_Receipt_st;
+	alias CMS_RecipientEncryptedKey = .CMS_RecipientEncryptedKey_st;
+	alias CMS_OtherKeyAttribute = .CMS_OtherKeyAttribute_st;
 
 	//DECLARE_STACK_OF(CMS_SignerInfo)
 	struct stack_st_CMS_SignerInfo
@@ -308,11 +305,11 @@ version (OPENSSL_NO_CMS) {
 	void* CMS_unsigned_get0_data_by_OBJ(.CMS_SignerInfo* si, libressl_d.openssl.asn1.ASN1_OBJECT* oid, int lastpos, int type);
 
 	static assert(libressl_d.openssl.x509v3.HEADER_X509V3_H);
-	package alias stack_st_GENERAL_NAMES = void;
+	struct stack_st_GENERAL_NAMES;
 	int CMS_get1_ReceiptRequest(.CMS_SignerInfo* si, .CMS_ReceiptRequest** prr);
-	.CMS_ReceiptRequest* CMS_ReceiptRequest_create0(ubyte* id, int idlen, int allorfirst, stack_st_GENERAL_NAMES* receiptList, stack_st_GENERAL_NAMES* receiptsTo);
+	.CMS_ReceiptRequest* CMS_ReceiptRequest_create0(ubyte* id, int idlen, int allorfirst, .stack_st_GENERAL_NAMES* receiptList, .stack_st_GENERAL_NAMES* receiptsTo);
 	int CMS_add1_ReceiptRequest(.CMS_SignerInfo* si, .CMS_ReceiptRequest* rr);
-	void CMS_ReceiptRequest_get0_values(.CMS_ReceiptRequest* rr, libressl_d.openssl.ossl_typ.ASN1_STRING** pcid, int* pallorfirst, stack_st_GENERAL_NAMES** plist, stack_st_GENERAL_NAMES** prto);
+	void CMS_ReceiptRequest_get0_values(.CMS_ReceiptRequest* rr, libressl_d.openssl.ossl_typ.ASN1_STRING** pcid, int* pallorfirst, .stack_st_GENERAL_NAMES** plist, .stack_st_GENERAL_NAMES** prto);
 
 	int CMS_RecipientInfo_kari_get0_alg(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.X509_ALGOR** palg, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** pukm);
 	.stack_st_CMS_RecipientEncryptedKey* CMS_RecipientInfo_kari_get0_reks(.CMS_RecipientInfo* ri);

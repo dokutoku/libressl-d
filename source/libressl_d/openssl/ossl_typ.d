@@ -95,8 +95,8 @@ alias ASN1_BOOLEAN = int;
 alias ASN1_NULL = int;
 
 alias ASN1_ITEM = libressl_d.openssl.asn1t.ASN1_ITEM_st;
-//alias ASN1_PCTX = asn1_pctx_st;
-package alias ASN1_PCTX = void;
+struct asn1_pctx_st;
+alias ASN1_PCTX = .asn1_pctx_st;
 
 //#if defined(_WIN32) && defined(__WINCRYPT_H__)
 	version (LIBRESSL_INTERNAL) {
@@ -114,11 +114,11 @@ package alias ASN1_PCTX = void;
 
 alias BIGNUM = libressl_d.openssl.bn.bignum_st;
 
-//alias BN_CTX = bignum_ctx;
-package alias BN_CTX = void;
+struct bignum_ctx;
+alias BN_CTX = .bignum_ctx;
 
-//alias BN_BLINDING = bn_blinding_st;
-package alias BN_BLINDING = void;
+struct bn_blinding_st;
+alias BN_BLINDING = .bn_blinding_st;
 
 alias BN_MONT_CTX = libressl_d.openssl.bn.bn_mont_ctx_st;
 alias BN_RECP_CTX = libressl_d.openssl.bn.bn_recp_ctx_st;
@@ -133,13 +133,14 @@ alias EVP_MD = libressl_d.openssl.evp.env_md_st;
 alias EVP_MD_CTX = libressl_d.openssl.evp.env_md_ctx_st;
 alias EVP_PKEY = libressl_d.openssl.evp.evp_pkey_st;
 
-//alias EVP_PKEY_ASN1_METHOD = evp_pkey_asn1_method_st;
-package alias EVP_PKEY_ASN1_METHOD = void;
+struct evp_pkey_asn1_method_st;
+alias EVP_PKEY_ASN1_METHOD = .evp_pkey_asn1_method_st;
 
-//alias EVP_PKEY_METHOD = evp_pkey_method_st;
-package alias EVP_PKEY_METHOD = void;
-//alias EVP_PKEY_CTX = evp_pkey_ctx_st;
-package alias EVP_PKEY_CTX = void;
+struct evp_pkey_method_st;
+alias EVP_PKEY_METHOD = .evp_pkey_method_st;
+
+struct evp_pkey_ctx_st;
+alias EVP_PKEY_CTX = .evp_pkey_ctx_st;
 
 alias DH = libressl_d.openssl.dh.dh_st;
 alias DH_METHOD = libressl_d.openssl.dh.dh_method;
@@ -152,15 +153,16 @@ alias RSA_METHOD = libressl_d.openssl.rsa.rsa_meth_st;
 
 alias RAND_METHOD = libressl_d.openssl.rand.rand_meth_st;
 
-//alias ECDH_METHOD = ecdh_method;
-package alias ECDH_METHOD = void;
+struct ecdh_method;
+alias ECDH_METHOD = .ecdh_method;
+
 alias ECDSA_METHOD = libressl_d.openssl.ecdsa.ecdsa_method;
 
 alias X509 = libressl_d.openssl.x509.x509_st;
 alias X509_ALGOR = libressl_d.openssl.x509.X509_algor_st;
 alias X509_CRL = libressl_d.openssl.x509.X509_crl_st;
-//alias X509_CRL_METHOD = x509_crl_method_st;
-package alias X509_CRL_METHOD = void;
+struct x509_crl_method_st;
+alias X509_CRL_METHOD = .x509_crl_method_st;
 alias X509_REVOKED = libressl_d.openssl.x509.x509_revoked_st;
 alias X509_NAME = libressl_d.openssl.x509.X509_name_st;
 alias X509_PUBKEY = libressl_d.openssl.x509.X509_pubkey_st;
@@ -172,36 +174,33 @@ alias PKCS8_PRIV_KEY_INFO = libressl_d.openssl.x509.pkcs8_priv_key_info_st;
 alias X509V3_CTX = libressl_d.openssl.x509v3.v3_ext_ctx;
 alias CONF = libressl_d.openssl.conf.conf_st;
 
-//alias STORE = store_st;
-package alias STORE = void;
-//alias STORE_METHOD = store_method_st;
-package alias STORE_METHOD = void;
+struct store_st;
+alias STORE = .store_st;
+struct store_method_st;
+alias STORE_METHOD = .store_method_st;
 
-//alias UI = ui_st;
-package alias UI = void;
-//alias UI_METHOD = ui_method_st;
-package alias UI_METHOD = void;
+struct ui_st;
+alias UI = .ui_st;
+struct ui_method_st;
+alias UI_METHOD = .ui_method_st;
 
-//alias ERR_FNS = st_ERR_FNS;
-package alias ERR_FNS = void;
+struct st_ERR_FNS;
+alias ERR_FNS = .st_ERR_FNS;
 
-//alias ENGINE = engine_st;
-package alias ENGINE = void;
+struct engine_st;
+alias ENGINE = .engine_st;
 
 alias SSL = libressl_d.openssl.ssl.ssl_st;
 alias SSL_CTX = libressl_d.openssl.ssl.ssl_ctx_st;
 
-//alias X509_POLICY_NODE = X509_POLICY_NODE_st;
-package alias X509_POLICY_NODE = void;
-
-//alias X509_POLICY_LEVEL = X509_POLICY_LEVEL_st;
-package alias X509_POLICY_LEVEL = void;
-
-//alias X509_POLICY_TREE = X509_POLICY_TREE_st;
-package alias X509_POLICY_TREE = void;
-
-//alias X509_POLICY_CACHE = X509_POLICY_CACHE_st;
-package alias X509_POLICY_CACHE = void;
+struct X509_POLICY_NODE_st;
+alias X509_POLICY_NODE = .X509_POLICY_NODE_st;
+struct X509_POLICY_LEVEL_st;
+alias X509_POLICY_LEVEL = .X509_POLICY_LEVEL_st;
+struct X509_POLICY_TREE_st;
+alias X509_POLICY_TREE = .X509_POLICY_TREE_st;
+struct X509_POLICY_CACHE_st;
+alias X509_POLICY_CACHE = .X509_POLICY_CACHE_st;
 
 alias AUTHORITY_KEYID = libressl_d.openssl.x509v3.AUTHORITY_KEYID_st;
 alias DIST_POINT = libressl_d.openssl.x509v3.DIST_POINT_st;
@@ -219,8 +218,8 @@ alias CRYPTO_EX_new = extern (C) nothrow @nogc int function(void* parent, void* 
 alias CRYPTO_EX_free = extern (C) nothrow @nogc void function(void* parent, void* ptr_, .CRYPTO_EX_DATA* ad, int idx, core.stdc.config.c_long argl, void* argp);
 alias CRYPTO_EX_dup = extern (C) nothrow @nogc int function(.CRYPTO_EX_DATA* to, .CRYPTO_EX_DATA* from, void* from_d, int idx, core.stdc.config.c_long argl, void* argp);
 
-//alias OCSP_REQ_CTX = ocsp_req_ctx_st;
-package alias OCSP_REQ_CTX = void;
+struct ocsp_req_ctx_st;
+alias OCSP_REQ_CTX = .ocsp_req_ctx_st;
 
 alias OCSP_RESPONSE = libressl_d.openssl.ocsp.ocsp_response_st;
 alias OCSP_RESPID = libressl_d.openssl.ocsp.ocsp_responder_id_st;

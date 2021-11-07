@@ -67,7 +67,7 @@ private static import libressl_d.openssl.dtls1;
 extern (C):
 nothrow @nogc:
 
-private alias _pqueue = void;
+struct _pqueue;
 alias pqueue = ._pqueue*;
 
 struct _pitem

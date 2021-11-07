@@ -407,12 +407,6 @@ struct x509_cert_aux_st
 
 alias X509_CERT_AUX = .x509_cert_aux_st;
 
-version (OPENSSL_NO_RFC3779) {
-} else {
-	struct stack_st_IPAddressFamily;
-	struct ASIdentifiers_st;
-}
-
 struct x509_st
 {
 	.X509_CINF* cert_info;
@@ -438,8 +432,8 @@ struct x509_st
 
 	version (OPENSSL_NO_RFC3779) {
 	} else {
-		.stack_st_IPAddressFamily* rfc3779_addr;
-		.ASIdentifiers_st* rfc3779_asid;
+		libressl_d.openssl.x509v3.stack_st_IPAddressFamily* rfc3779_addr;
+		libressl_d.openssl.x509v3.ASIdentifiers_st* rfc3779_asid;
 	}
 
 	version (OPENSSL_NO_SHA) {
@@ -654,7 +648,8 @@ struct X509_crl_info_st
 }
 
 alias X509_CRL_INFO = .X509_crl_info_st;
-package alias stack_st_GENERAL_NAMES = void;
+
+struct stack_st_GENERAL_NAMES;
 
 struct X509_crl_st
 {
@@ -679,7 +674,7 @@ struct X509_crl_st
 		ubyte[libressl_d.openssl.sha.SHA_DIGEST_LENGTH] sha1_hash;
 	}
 
-	stack_st_GENERAL_NAMES* issuers;
+	.stack_st_GENERAL_NAMES* issuers;
 	const (libressl_d.openssl.ossl_typ.X509_CRL_METHOD)* meth;
 	void* meth_data;
 }

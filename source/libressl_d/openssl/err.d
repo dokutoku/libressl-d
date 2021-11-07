@@ -846,9 +846,9 @@ version (OPENSSL_NO_DEPRECATED) {
 
 version (OPENSSL_NO_LHASH) {
 } else {
-	package alias lhash_st_ERR_STRING_DATA = void;
-	package alias lhash_st_ERR_STATE = void;
-	lhash_st_ERR_STRING_DATA* ERR_get_string_table();
+	struct lhash_st_ERR_STRING_DATA;
+	struct lhash_st_ERR_STATE;
+	.lhash_st_ERR_STRING_DATA* ERR_get_string_table();
 	.lhash_st_ERR_STATE* ERR_get_err_state_table();
 	void ERR_release_err_state_table(.lhash_st_ERR_STATE** hash);
 }

@@ -331,7 +331,7 @@ struct ASN1_TEMPLATE_st
 alias ASN1_ADB_TABLE = .ASN1_ADB_TABLE_st;
 alias ASN1_ADB = .ASN1_ADB_st;
 
-package alias stack_st_ASN1_ADB_TABLE = void;
+struct stack_st_ASN1_ADB_TABLE;
 
 struct ASN1_ADB_st
 {
@@ -348,7 +348,7 @@ struct ASN1_ADB_st
 	/**
 	 * Application defined items
 	 */
-	stack_st_ASN1_ADB_TABLE** app_items;
+	.stack_st_ASN1_ADB_TABLE** app_items;
 
 	/**
 	 * Table of possible types

@@ -181,8 +181,8 @@ struct x509_lookup_method_st
 
 alias X509_LOOKUP_METHOD = .x509_lookup_method_st;
 
-package alias X509_VERIFY_PARAM_ID_st = void;
-alias X509_VERIFY_PARAM_ID = X509_VERIFY_PARAM_ID_st;
+struct X509_VERIFY_PARAM_ID_st;
+alias X509_VERIFY_PARAM_ID = .X509_VERIFY_PARAM_ID_st;
 
 /**
  * This structure hold all parameters associated with a verify operation

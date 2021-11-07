@@ -319,8 +319,8 @@ libressl_d.openssl.ossl_typ.UI_METHOD* UI_OpenSSL();
  * The UI_STRING type is the data structure that contains all the needed info
  * about a string or a prompt, including test data for a verification prompt.
  */
-package alias ui_string_st = void;
-alias UI_STRING = ui_string_st;
+struct ui_string_st;
+alias UI_STRING = .ui_string_st;
 
 //DECLARE_STACK_OF(UI_STRING)
 struct stack_st_UI_STRING

@@ -67,24 +67,18 @@ version (OPENSSL_NO_GOST) {
 extern (C):
 nothrow @nogc:
 
-version (none) {
-	struct gost2814789_key_st
-	{
-		uint[8] key;
-		uint[256] k87;
-		uint[256] k65;
-		uint[256] k43;
-		uint[256] k21;
-		uint count;
-
-		//ToDO:
-		mixin(std.bitmanip.bitfields!(uint, "key_meshing", 1));
-	}
-
-	alias GOST2814789_KEY = .gost2814789_key_st;
-} else {
-	package alias GOST2814789_KEY = void;
+struct gost2814789_key_st
+{
+	uint[8] key;
+	uint[256] k87;
+	uint[256] k65;
+	uint[256] k43;
+	uint[256] k21;
+	uint count;
+	mixin(std.bitmanip.bitfields!(ubyte, "key_meshing", 1, uint, "", 7));
 }
+
+alias GOST2814789_KEY = .gost2814789_key_st;
 
 int Gost2814789_set_sbox(.GOST2814789_KEY* key, int nid);
 int Gost2814789_set_key(.GOST2814789_KEY* key, const (ubyte)* userKey, const int bits);
@@ -108,22 +102,18 @@ enum GOST2814789IMIT_LENGTH = 4;
 enum GOST2814789IMIT_CBLOCK = 8;
 alias GOST2814789IMIT_LONG = uint;
 
-version (none) {
-	struct GOST2814789IMITstate_st
-	{
-		.GOST2814789IMIT_LONG Nl;
-		.GOST2814789IMIT_LONG Nh;
-		ubyte[.GOST2814789IMIT_CBLOCK] data;
-		uint num;
+struct GOST2814789IMITstate_st
+{
+	.GOST2814789IMIT_LONG Nl;
+	.GOST2814789IMIT_LONG Nh;
+	ubyte[.GOST2814789IMIT_CBLOCK] data;
+	uint num;
 
-		.GOST2814789_KEY cipher;
-		ubyte[.GOST2814789IMIT_CBLOCK] mac;
-	}
-
-	alias GOST2814789IMIT_CTX = .GOST2814789IMITstate_st;
-} else {
-	package alias GOST2814789IMIT_CTX = void;
+	.GOST2814789_KEY cipher;
+	ubyte[.GOST2814789IMIT_CBLOCK] mac;
 }
+
+alias GOST2814789IMIT_CTX = .GOST2814789IMITstate_st;
 
 /* Note, also removed second parameter and removed dctx.cipher setting */
 int GOST2814789IMIT_Init(.GOST2814789IMIT_CTX* c, int nid);
@@ -138,23 +128,19 @@ enum GOSTR341194_LENGTH = 32;
 enum GOSTR341194_CBLOCK = 32;
 enum GOSTR341194_LBLOCK = .GOSTR341194_CBLOCK / 4;
 
-version (none) {
-	struct GOSTR341194state_st
-	{
-		.GOSTR341194_LONG Nl;
-		.GOSTR341194_LONG Nh;
-		.GOSTR341194_LONG[.GOSTR341194_LBLOCK] data;
-		uint num;
+struct GOSTR341194state_st
+{
+	.GOSTR341194_LONG Nl;
+	.GOSTR341194_LONG Nh;
+	.GOSTR341194_LONG[.GOSTR341194_LBLOCK] data;
+	uint num;
 
-		.GOST2814789_KEY cipher;
-		ubyte[.GOSTR341194_CBLOCK] H;
-		ubyte[.GOSTR341194_CBLOCK] S;
-	}
-
-	alias GOSTR341194_CTX = .GOSTR341194state_st;
-} else {
-	package alias GOSTR341194_CTX = void;
+	.GOST2814789_KEY cipher;
+	ubyte[.GOSTR341194_CBLOCK] H;
+	ubyte[.GOSTR341194_CBLOCK] S;
 }
+
+alias GOSTR341194_CTX = .GOSTR341194state_st;
 
 /* Note, also removed second parameter and removed dctx.cipher setting */
 int GOSTR341194_Init(.GOSTR341194_CTX* c, int nid);
@@ -194,9 +180,7 @@ int STREEBOG512_Final(ubyte* md, .STREEBOG_CTX* c);
 void STREEBOG512_Transform(.STREEBOG_CTX* c, const (ubyte)* data);
 ubyte* STREEBOG512(const (ubyte)* d, size_t n, ubyte* md);
 
-//struct gost_key_st;
-package alias gost_key_st = void;
-
+struct gost_key_st;
 alias GOST_KEY = .gost_key_st;
 .GOST_KEY* GOST_KEY_new();
 void GOST_KEY_free(.GOST_KEY* r);

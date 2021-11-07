@@ -44,9 +44,7 @@ size_t CRYPTO_nistcts128_encrypt(const (ubyte)* in_, ubyte* out_, size_t len, co
 size_t CRYPTO_nistcts128_decrypt_block(const (ubyte)* in_, ubyte* out_, size_t len, const (void)* key, ubyte* ivec, .block128_f block);
 size_t CRYPTO_nistcts128_decrypt(const (ubyte)* in_, ubyte* out_, size_t len, const (void)* key, ubyte* ivec, .cbc128_f cbc);
 
-package alias gcm128_context = void;
-package alias ccm128_context = void;
-package alias xts128_context = void;
+struct gcm128_context;
 alias GCM128_CONTEXT = .gcm128_context;
 
 .GCM128_CONTEXT* CRYPTO_gcm128_new(void* key, .block128_f block);
@@ -61,6 +59,7 @@ int CRYPTO_gcm128_finish(.GCM128_CONTEXT* ctx, const (ubyte)* tag, size_t len);
 void CRYPTO_gcm128_tag(.GCM128_CONTEXT* ctx, ubyte* tag, size_t len);
 void CRYPTO_gcm128_release(.GCM128_CONTEXT* ctx);
 
+struct ccm128_context;
 alias CCM128_CONTEXT = .ccm128_context;
 
 void CRYPTO_ccm128_init(.CCM128_CONTEXT* ctx, uint M, uint L, void* key, .block128_f block);
@@ -72,6 +71,7 @@ int CRYPTO_ccm128_encrypt_ccm64(.CCM128_CONTEXT* ctx, const (ubyte)* inp, ubyte*
 int CRYPTO_ccm128_decrypt_ccm64(.CCM128_CONTEXT* ctx, const (ubyte)* inp, ubyte* out_, size_t len, .ccm128_f stream);
 size_t CRYPTO_ccm128_tag(.CCM128_CONTEXT* ctx, ubyte* tag, size_t len);
 
+struct xts128_context;
 alias XTS128_CONTEXT = .xts128_context;
 
 int CRYPTO_xts128_encrypt(const (.XTS128_CONTEXT)* ctx, const (ubyte)* iv, const (ubyte)* inp, ubyte* out_, size_t len, int enc);

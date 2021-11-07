@@ -509,8 +509,8 @@ enum ub_email_address = 128;
 alias ASN1_TEMPLATE = libressl_d.openssl.asn1t.ASN1_TEMPLATE_st;
 alias ASN1_TLC = libressl_d.openssl.asn1t.ASN1_TLC_st;
 /* This is just an opaque pointer */
-//alias ASN1_VALUE = ASN1_VALUE_st;
-package alias ASN1_VALUE = void;
+struct ASN1_VALUE_st;
+alias ASN1_VALUE = .ASN1_VALUE_st;
 
 version (LIBRESSL_INTERNAL) {
 } else {
