@@ -11,8 +11,6 @@ private static import core.sys.windows.winnt;
 public import core.sys.posix.pthread;
 public import core.sys.windows.windows;
 
-package(libressl_d):
-
 extern (C):
 nothrow @nogc:
 
@@ -44,7 +42,6 @@ version (Windows) {
 
 	//pragma(inline, true)
 	extern (Windows)
-	package(libressl_d)
 	core.sys.windows.windef.BOOL _pthread_once_win32_cb(PINIT_ONCE once, core.sys.windows.winnt.PVOID param, core.sys.windows.winnt.PVOID* context)
 
 		do
@@ -56,7 +53,6 @@ version (Windows) {
 		}
 
 	pragma(inline, true)
-	package(libressl_d)
 	int pthread_once(.pthread_once_t* once, void function() cb)
 
 		in
@@ -78,7 +74,6 @@ version (Windows) {
 	alias pthread_t = core.sys.windows.windef.DWORD;
 
 	pragma(inline, true)
-	package(libressl_d)
 	.pthread_t pthread_self()
 
 		do
@@ -103,7 +98,6 @@ version (Windows) {
 	alias pthread_mutexattr_t = void;
 
 	pragma(inline, true)
-	package(libressl_d)
 	int pthread_mutex_init(.pthread_mutex_t* mutex, const (.pthread_mutexattr_t)* attr)
 
 		in
@@ -125,7 +119,6 @@ version (Windows) {
 		}
 
 	pragma(inline, true)
-	package(libressl_d)
 	int pthread_mutex_lock(.pthread_mutex_t* mutex)
 
 		in
@@ -156,7 +149,6 @@ version (Windows) {
 		}
 
 	pragma(inline, true)
-	package(libressl_d)
 	int pthread_mutex_unlock(.pthread_mutex_t* mutex)
 
 		in
@@ -172,7 +164,6 @@ version (Windows) {
 		}
 
 	pragma(inline, true)
-	package(libressl_d)
 	int pthread_mutex_destroy(.pthread_mutex_t* mutex)
 
 		in

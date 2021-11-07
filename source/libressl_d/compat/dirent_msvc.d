@@ -200,7 +200,6 @@ struct DIR
  * internal working area that is used to retrieve individual directory
  * entries.
  */
-package(libressl_d)
 ._WDIR* _wopendir(const (core.stdc.stddef.wchar_t)* dirname)
 
 	do
@@ -299,7 +298,6 @@ package(libressl_d)
  * this function include regular files, sub-directories, pseudo-directories
  * "." and ".." as well as volume labels, hidden files and system files.
  */
-package(libressl_d)
 ._wdirent* _wreaddir(._WDIR* dirp)
 
 	in
@@ -362,7 +360,6 @@ package(libressl_d)
  * DIR structure as well as any directory entry read previously by
  * _wreaddir().
  */
-package(libressl_d)
 int _wclosedir(._WDIR* dirp)
 
 	do
@@ -402,7 +399,6 @@ int _wclosedir(._WDIR* dirp)
  * Rewind directory stream such that _wreaddir() returns the very first
  * file name again.
  */
-package(libressl_d)
 void _wrewinddir(._WDIR* dirp)
 
 	do
@@ -420,7 +416,6 @@ void _wrewinddir(._WDIR* dirp)
 	}
 
 /* Get first directory entry(internal) */
-package(libressl_d)
 core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_first(._WDIR* dirp)
 
 	in
@@ -449,7 +444,6 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_first(._WDIR* dirp)
 	}
 
 /* Get next directory entry(internal) */
-package(libressl_d)
 core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 
 	in
@@ -488,7 +482,6 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 /**
  * Open directory stream using plain old C-string.
  */
-package(libressl_d)
 .DIR* opendir(const (char)* dirname)
 
 	do
@@ -559,7 +552,6 @@ package(libressl_d)
  * ANSI strings to the console code page so many non-ASCII characters will
  * display correcly.
  */
-package(libressl_d)
 .dirent* readdir(.DIR* dirp)
 
 	in
@@ -641,7 +633,6 @@ package(libressl_d)
 /**
  * Close directory stream.
  */
-package(libressl_d)
 int closedir(.DIR* dirp)
 
 	do
@@ -669,7 +660,6 @@ int closedir(.DIR* dirp)
 /**
  * Rewind directory stream to beginning.
  */
-package(libressl_d)
 void rewinddir(.DIR* dirp)
 
 	in
@@ -684,7 +674,6 @@ void rewinddir(.DIR* dirp)
 	}
 
 /* Convert multi-byte string to wide character string */
-package(libressl_d)
 int dirent_mbstowcs_s(size_t* pReturnValue, core.stdc.stddef.wchar_t* wcstr, size_t sizeInWords, const (char)* mbstr, size_t count)
 
 	do
@@ -693,7 +682,6 @@ int dirent_mbstowcs_s(size_t* pReturnValue, core.stdc.stddef.wchar_t* wcstr, siz
 	}
 
 /* Convert wide-character string to multi-byte string */
-package(libressl_d)
 int dirent_wcstombs_s(size_t* pReturnValue, char* mbstr, size_t sizeInBytes, /* max size of mbstr */ const (core.stdc.stddef.wchar_t)* wcstr, size_t count)
 
 	do

@@ -21,7 +21,6 @@ public import libressl_d.compat.stdlib;
 public import libressl_d.compat.string;
 
 extern (C):
-package(libressl_d):
 
 version (Posix) {
 } else {

@@ -46,7 +46,6 @@ version (Posix) {
 
 		pragma(inline, true)
 		nothrow @nogc
-		package(libressl_d)
 		uint sleep(uint seconds)
 
 			do
