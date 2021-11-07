@@ -80,7 +80,7 @@ version (Windows) {
 		do
 		{
 			if (errnum == core.sys.windows.winsock2.ECONNREFUSED) {
-				return cast(char*)("Connection refused");
+				return cast(char*)(&("Connection refused\0"[0]));
 			}
 
 			return core.stdc.string.strerror(errnum);

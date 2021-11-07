@@ -200,7 +200,7 @@ struct evp_pkey_st
 	 * [ 0 ]
 	 */
 	libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* attributes;
-} /* EVP_PKEY */;
+}
 
 enum EVP_PKEY_MO_SIGN = 0x0001;
 enum EVP_PKEY_MO_VERIFY = 0x0002;
@@ -243,7 +243,7 @@ version (all) {
 		 * control function
 		 */
 		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx, int cmd, int p1, void* p2) md_ctrl;
-	} /* EVP_MD */;
+	}
 
 	/**
 	 * digest can only handle a single
@@ -465,7 +465,7 @@ struct evp_cipher_st
 	 * Application data
 	 */
 	void* app_data;
-} /* EVP_CIPHER */;
+}
 
 /* Values for cipher flags */
 

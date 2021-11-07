@@ -29,6 +29,7 @@ module libressl_d.compat.dirent_msvc;
 
 private static import core.stdc.config;
 private static import core.stdc.stddef;
+private static import core.sys.windows.basetsd;
 private static import core.sys.windows.winbase;
 private static import core.sys.windows.windef;
 private static import core.sys.windows.winnt;
@@ -149,7 +150,7 @@ struct _WDIR
 	/**
 	 * Win32 search handle
 	 */
-	HANDLE handle;
+	core.sys.windows.basetsd.HANDLE handle;
 
 	/**
 	 * Initial directory name
@@ -204,9 +205,6 @@ package(libressl_d)
 
 	do
 	{
-		._WDIR* dirp = null;
-		int error;
-
 		/* Must have directory name */
 		if ((dirname == null) || (dirname[0] == '\0')) {
 			._set_errno(core.stdc.errno.ENOENT);
@@ -215,23 +213,23 @@ package(libressl_d)
 		}
 
 		/* Allocate new _WDIR structure */
-		dirp = cast(._WDIR*)(libressl_d.compat.stdlib.malloc(._WDIR.sizeof));
+		._WDIR* dirp = cast(._WDIR*)(libressl_d.compat.stdlib.malloc(._WDIR.sizeof));
+
+		int error = void;
 
 		if (dirp != null) {
-			core.sys.windows.windef.DWORD n;
-
 			/* Reset _WDIR structure */
 			dirp.handle = core.sys.windows.winbase.INVALID_HANDLE_VALUE;
 			dirp.patt = null;
 			dirp.cached = 0;
 
 			/* Compute the length of full path plus zero terminator */
-			n = core.sys.windows.winbase.GetFullPathNameW(dirname, 0, null, null);
+			core.sys.windows.windef.DWORD n = core.sys.windows.winbase.GetFullPathNameW(dirname, 0, null, null);
 
 			/* Allocate room for absolute directory name and search pattern */
 			dirp.patt = cast(core.stdc.stddef.wchar_t*)(libressl_d.compat.stdlib.malloc((core.stdc.stddef.wchar_t.sizeof * n) + 16));
 
-			if (dirp.patt) {
+			if (dirp.patt != null) {
 				/*
 				 * Convert relative directory name to an absolute one.  This
 				 * allows rewinddir() to function correctly even when current
@@ -287,7 +285,7 @@ package(libressl_d)
 		}
 
 		/* Clean up in case of error */
-		if ((error) && (dirp)) {
+		if ((error) && (dirp != null)) {
 			._wclosedir(dirp);
 			dirp = null;
 		}
@@ -314,12 +312,9 @@ package(libressl_d)
 		/* Read next directory entry */
 		core.sys.windows.winbase.WIN32_FIND_DATAW* datap = .dirent_next(dirp);
 
-		._wdirent* entp;
+		._wdirent* entp = void;
 
 		if (datap != null) {
-			size_t n;
-			core.sys.windows.windef.DWORD attr;
-
 			/* Pointer to directory entry to return */
 			entp = &dirp.ent;
 
@@ -328,7 +323,7 @@ package(libressl_d)
 			 * core.stdc.config.c_long to fit in to the destination buffer, then truncate file name
 			 * to PATH_MAX characters and zero-terminate the buffer.
 			 */
-			n = 0;
+			size_t n = 0;
 
 			while (((n + 1) < libressl_d.compat.limits.PATH_MAX) && (datap.cFileName[n] != 0)) {
 				entp.d_name[n] = datap.cFileName[n];
@@ -341,7 +336,7 @@ package(libressl_d)
 			entp.d_namlen = n;
 
 			/* File type */
-			attr = datap.dwFileAttributes;
+			core.sys.windows.windef.DWORD attr = datap.dwFileAttributes;
 
 			if ((attr & core.sys.windows.winnt.FILE_ATTRIBUTE_DEVICE) != 0) {
 				entp.d_type = libressl_d.compat.sys.stat.DT_CHR;
@@ -372,7 +367,7 @@ int _wclosedir(._WDIR* dirp)
 
 	do
 	{
-		int ok;
+		int ok = void;
 
 		if (dirp != null) {
 			/* Release search handle */
@@ -382,7 +377,7 @@ int _wclosedir(._WDIR* dirp)
 			}
 
 			/* Release search pattern */
-			if (dirp.patt) {
+			if (dirp.patt != null) {
 				libressl_d.compat.stdlib.free(dirp.patt);
 				dirp.patt = null;
 			}
@@ -416,6 +411,7 @@ void _wrewinddir(._WDIR* dirp)
 			/* Release existing search handle */
 			if (dirp.handle != core.sys.windows.winbase.INVALID_HANDLE_VALUE) {
 				core.sys.windows.winbase.FindClose(dirp.handle);
+				dirp.handle = core.sys.windows.windef.NULL;
 			}
 
 			/* Open new search handle */
@@ -434,7 +430,7 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_first(._WDIR* dirp)
 
 	do
 	{
-		core.sys.windows.winbase.WIN32_FIND_DATAW* datap;
+		core.sys.windows.winbase.WIN32_FIND_DATAW* datap = void;
 
 		/* Open directory and retrieve the first entry */
 		dirp.handle = core.sys.windows.winbase.FindFirstFileW(dirp.patt, &dirp.data);
@@ -463,7 +459,7 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 
 	do
 	{
-		core.sys.windows.winbase.WIN32_FIND_DATAW* p;
+		core.sys.windows.winbase.WIN32_FIND_DATAW* p = void;
 
 		/* Get next directory entry */
 		if (dirp.cached != 0) {
@@ -497,9 +493,6 @@ package(libressl_d)
 
 	do
 	{
-		.DIR* dirp;
-		int error;
-
 		/* Must have directory name */
 		if ((dirname == null) || (dirname[0] == '\0')) {
 			._set_errno(core.stdc.errno.ENOENT);
@@ -508,11 +501,13 @@ package(libressl_d)
 		}
 
 		/* Allocate memory for DIR structure */
-		dirp = cast(.DIR*)(libressl_d.compat.stdlib.malloc(.DIR.sizeof));
+		.DIR* dirp = cast(.DIR*)(libressl_d.compat.stdlib.malloc(.DIR.sizeof));
+
+		int error = void;
 
 		if (dirp != null) {
-			core.stdc.stddef.wchar_t[libressl_d.compat.limits.PATH_MAX] wname;
-			size_t n;
+			core.stdc.stddef.wchar_t[libressl_d.compat.limits.PATH_MAX] wname = void;
+			size_t n = void;
 
 			/* Convert directory name to wide-character string */
 			error = .dirent_mbstowcs_s(&n, &(wname[0]), libressl_d.compat.limits.PATH_MAX, dirname, libressl_d.compat.limits.PATH_MAX);
@@ -543,7 +538,7 @@ package(libressl_d)
 		}
 
 		/* Clean up in case of error */
-		if ((error) && (dirp)) {
+		if ((error) && (dirp != null)) {
 			libressl_d.compat.stdlib.free(dirp);
 			dirp = null;
 		}
@@ -574,14 +569,13 @@ package(libressl_d)
 
 	do
 	{
-		core.sys.windows.winbase.WIN32_FIND_DATAW* datap;
-		.dirent* entp;
-
 		/* Read next directory entry */
-		datap = .dirent_next(dirp.wdirp);
+		core.sys.windows.winbase.WIN32_FIND_DATAW* datap = .dirent_next(dirp.wdirp);
+
+		.dirent* entp = void;
 
 		if (datap != null) {
-			size_t n;
+			size_t n = void;
 
 			/* Attempt to convert file name to multi-byte string */
 			int error = .dirent_wcstombs_s(&n, &(dirp.ent.d_name[0]), libressl_d.compat.limits.PATH_MAX, &(datap.cFileName[0]), libressl_d.compat.limits.PATH_MAX);
@@ -601,8 +595,6 @@ package(libressl_d)
 			}
 
 			if (!error) {
-				core.sys.windows.windef.DWORD attr;
-
 				/* Initialize directory entry for return */
 				entp = &dirp.ent;
 
@@ -610,7 +602,7 @@ package(libressl_d)
 				entp.d_namlen = n - 1;
 
 				/* File attributes */
-				attr = datap.dwFileAttributes;
+				core.sys.windows.windef.DWORD attr = datap.dwFileAttributes;
 
 				if ((attr & core.sys.windows.winnt.FILE_ATTRIBUTE_DEVICE) != 0) {
 					entp.d_type = libressl_d.compat.sys.stat.DT_CHR;
@@ -654,7 +646,7 @@ int closedir(.DIR* dirp)
 
 	do
 	{
-		int ok;
+		int ok = void;
 
 		if (dirp != null) {
 			/* Close wide-character directory stream */
