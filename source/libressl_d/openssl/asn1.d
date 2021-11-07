@@ -610,7 +610,7 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define ASN1_ITEM_rptr(ref_) (&(ref##_it))
 
-	//#define DECLARE_ASN1_ITEM(name) extern const libressl_d.openssl.ossl_typ.ASN1_ITEM name##_it;
+	//#define DECLARE_ASN1_ITEM(name) extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM name##_it;
 }
 
 /* Parameters used by ASN1_STRING_print_ex() */
@@ -757,10 +757,10 @@ alias ASN1_SEQUENCE_ANY = .stack_st_ASN1_TYPE;
 
 .ASN1_SEQUENCE_ANY* d2i_ASN1_SEQUENCE_ANY(.ASN1_SEQUENCE_ANY** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_SEQUENCE_ANY(const (.ASN1_SEQUENCE_ANY)* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_ANY_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_ANY_it;
 .ASN1_SEQUENCE_ANY* d2i_ASN1_SET_ANY(.ASN1_SEQUENCE_ANY** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_SET_ANY(const (.ASN1_SEQUENCE_ANY)* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SET_ANY_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SET_ANY_it;
 
 struct NETSCAPE_X509_st
 {
@@ -808,7 +808,7 @@ version (LIBRESSL_INTERNAL) {
 void ASN1_TYPE_free(.ASN1_TYPE* a);
 .ASN1_TYPE* d2i_ASN1_TYPE(.ASN1_TYPE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_TYPE(.ASN1_TYPE* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_ANY_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_ANY_it;
 
 int ASN1_TYPE_get(const (.ASN1_TYPE)* a);
 void ASN1_TYPE_set(.ASN1_TYPE* a, int type, void* value);
@@ -821,7 +821,7 @@ int i2d_ASN1_OBJECT(const (.ASN1_OBJECT)* a, ubyte** pp);
 .ASN1_OBJECT* c2i_ASN1_OBJECT(.ASN1_OBJECT** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 .ASN1_OBJECT* d2i_ASN1_OBJECT(.ASN1_OBJECT** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OBJECT_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OBJECT_it;
 
 //DECLARE_STACK_OF(ASN1_OBJECT)
 struct stack_st_ASN1_OBJECT
@@ -851,7 +851,7 @@ libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* ASN1_BIT_STRING_new();
 void ASN1_BIT_STRING_free(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* d2i_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BIT_STRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BIT_STRING_it;
 int i2c_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a, ubyte** pp);
 libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* c2i_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 int ASN1_BIT_STRING_set(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a, ubyte* d, int length_);
@@ -874,7 +874,7 @@ libressl_d.openssl.ossl_typ.ASN1_INTEGER* ASN1_INTEGER_new();
 void ASN1_INTEGER_free(libressl_d.openssl.ossl_typ.ASN1_INTEGER* a);
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* d2i_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_INTEGER_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_INTEGER_it;
 int i2c_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER* a, ubyte** pp);
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* c2i_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* d2i_ASN1_UINTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER** a, const (ubyte)** pp, core.stdc.config.c_long length_);
@@ -885,7 +885,7 @@ libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* ASN1_ENUMERATED_new();
 void ASN1_ENUMERATED_free(libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* a);
 libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* d2i_ASN1_ENUMERATED(libressl_d.openssl.ossl_typ.ASN1_ENUMERATED** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_ENUMERATED(libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_ENUMERATED_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_ENUMERATED_it;
 
 int ASN1_UTCTIME_check(const (libressl_d.openssl.ossl_typ.ASN1_UTCTIME)* a);
 libressl_d.openssl.ossl_typ.ASN1_UTCTIME* ASN1_UTCTIME_set(libressl_d.openssl.ossl_typ.ASN1_UTCTIME* s, libressl_d.compat.time.time_t t);
@@ -906,7 +906,7 @@ libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* ASN1_OCTET_STRING_new();
 void ASN1_OCTET_STRING_free(libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* d2i_ASN1_OCTET_STRING(libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_OCTET_STRING(libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OCTET_STRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OCTET_STRING_it;
 libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* ASN1_OCTET_STRING_dup(const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)* a);
 int ASN1_OCTET_STRING_cmp(const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)* a, const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)* b);
 int ASN1_OCTET_STRING_set(libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* str, const (ubyte)* data, int len);
@@ -915,81 +915,81 @@ libressl_d.openssl.ossl_typ.ASN1_VISIBLESTRING* ASN1_VISIBLESTRING_new();
 void ASN1_VISIBLESTRING_free(libressl_d.openssl.ossl_typ.ASN1_VISIBLESTRING* a);
 libressl_d.openssl.ossl_typ.ASN1_VISIBLESTRING* d2i_ASN1_VISIBLESTRING(libressl_d.openssl.ossl_typ.ASN1_VISIBLESTRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_VISIBLESTRING(libressl_d.openssl.ossl_typ.ASN1_VISIBLESTRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_VISIBLESTRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_VISIBLESTRING_it;
 libressl_d.openssl.ossl_typ.ASN1_UNIVERSALSTRING* ASN1_UNIVERSALSTRING_new();
 void ASN1_UNIVERSALSTRING_free(libressl_d.openssl.ossl_typ.ASN1_UNIVERSALSTRING* a);
 libressl_d.openssl.ossl_typ.ASN1_UNIVERSALSTRING* d2i_ASN1_UNIVERSALSTRING(libressl_d.openssl.ossl_typ.ASN1_UNIVERSALSTRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_UNIVERSALSTRING(libressl_d.openssl.ossl_typ.ASN1_UNIVERSALSTRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_UNIVERSALSTRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_UNIVERSALSTRING_it;
 libressl_d.openssl.ossl_typ.ASN1_UTF8STRING* ASN1_UTF8STRING_new();
 void ASN1_UTF8STRING_free(libressl_d.openssl.ossl_typ.ASN1_UTF8STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_UTF8STRING* d2i_ASN1_UTF8STRING(libressl_d.openssl.ossl_typ.ASN1_UTF8STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_UTF8STRING(libressl_d.openssl.ossl_typ.ASN1_UTF8STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_UTF8STRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_UTF8STRING_it;
 libressl_d.openssl.ossl_typ.ASN1_NULL* ASN1_NULL_new();
 void ASN1_NULL_free(libressl_d.openssl.ossl_typ.ASN1_NULL* a);
 libressl_d.openssl.ossl_typ.ASN1_NULL* d2i_ASN1_NULL(libressl_d.openssl.ossl_typ.ASN1_NULL** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_NULL(libressl_d.openssl.ossl_typ.ASN1_NULL* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_NULL_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_NULL_it;
 libressl_d.openssl.ossl_typ.ASN1_BMPSTRING* ASN1_BMPSTRING_new();
 void ASN1_BMPSTRING_free(libressl_d.openssl.ossl_typ.ASN1_BMPSTRING* a);
 libressl_d.openssl.ossl_typ.ASN1_BMPSTRING* d2i_ASN1_BMPSTRING(libressl_d.openssl.ossl_typ.ASN1_BMPSTRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_BMPSTRING(libressl_d.openssl.ossl_typ.ASN1_BMPSTRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BMPSTRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BMPSTRING_it;
 
 libressl_d.openssl.ossl_typ.ASN1_STRING* ASN1_PRINTABLE_new();
 void ASN1_PRINTABLE_free(libressl_d.openssl.ossl_typ.ASN1_STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_STRING* d2i_ASN1_PRINTABLE(libressl_d.openssl.ossl_typ.ASN1_STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_PRINTABLE(libressl_d.openssl.ossl_typ.ASN1_STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_PRINTABLE_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_PRINTABLE_it;
 
 libressl_d.openssl.ossl_typ.ASN1_STRING* DIRECTORYSTRING_new();
 void DIRECTORYSTRING_free(libressl_d.openssl.ossl_typ.ASN1_STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_STRING* d2i_DIRECTORYSTRING(libressl_d.openssl.ossl_typ.ASN1_STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_DIRECTORYSTRING(libressl_d.openssl.ossl_typ.ASN1_STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DIRECTORYSTRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DIRECTORYSTRING_it;
 libressl_d.openssl.ossl_typ.ASN1_STRING* DISPLAYTEXT_new();
 void DISPLAYTEXT_free(libressl_d.openssl.ossl_typ.ASN1_STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_STRING* d2i_DISPLAYTEXT(libressl_d.openssl.ossl_typ.ASN1_STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_DISPLAYTEXT(libressl_d.openssl.ossl_typ.ASN1_STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DISPLAYTEXT_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DISPLAYTEXT_it;
 libressl_d.openssl.ossl_typ.ASN1_PRINTABLESTRING* ASN1_PRINTABLESTRING_new();
 void ASN1_PRINTABLESTRING_free(libressl_d.openssl.ossl_typ.ASN1_PRINTABLESTRING* a);
 libressl_d.openssl.ossl_typ.ASN1_PRINTABLESTRING* d2i_ASN1_PRINTABLESTRING(libressl_d.openssl.ossl_typ.ASN1_PRINTABLESTRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_PRINTABLESTRING(libressl_d.openssl.ossl_typ.ASN1_PRINTABLESTRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_PRINTABLESTRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_PRINTABLESTRING_it;
 libressl_d.openssl.ossl_typ.ASN1_T61STRING* ASN1_T61STRING_new();
 void ASN1_T61STRING_free(libressl_d.openssl.ossl_typ.ASN1_T61STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_T61STRING* d2i_ASN1_T61STRING(libressl_d.openssl.ossl_typ.ASN1_T61STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_T61STRING(libressl_d.openssl.ossl_typ.ASN1_T61STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_T61STRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_T61STRING_it;
 libressl_d.openssl.ossl_typ.ASN1_IA5STRING* ASN1_IA5STRING_new();
 void ASN1_IA5STRING_free(libressl_d.openssl.ossl_typ.ASN1_IA5STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_IA5STRING* d2i_ASN1_IA5STRING(libressl_d.openssl.ossl_typ.ASN1_IA5STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_IA5STRING(libressl_d.openssl.ossl_typ.ASN1_IA5STRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_IA5STRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_IA5STRING_it;
 libressl_d.openssl.ossl_typ.ASN1_GENERALSTRING* ASN1_GENERALSTRING_new();
 void ASN1_GENERALSTRING_free(libressl_d.openssl.ossl_typ.ASN1_GENERALSTRING* a);
 libressl_d.openssl.ossl_typ.ASN1_GENERALSTRING* d2i_ASN1_GENERALSTRING(libressl_d.openssl.ossl_typ.ASN1_GENERALSTRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_GENERALSTRING(libressl_d.openssl.ossl_typ.ASN1_GENERALSTRING* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_GENERALSTRING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_GENERALSTRING_it;
 libressl_d.openssl.ossl_typ.ASN1_UTCTIME* ASN1_UTCTIME_new();
 void ASN1_UTCTIME_free(libressl_d.openssl.ossl_typ.ASN1_UTCTIME* a);
 libressl_d.openssl.ossl_typ.ASN1_UTCTIME* d2i_ASN1_UTCTIME(libressl_d.openssl.ossl_typ.ASN1_UTCTIME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_UTCTIME(libressl_d.openssl.ossl_typ.ASN1_UTCTIME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_UTCTIME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_UTCTIME_it;
 libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* ASN1_GENERALIZEDTIME_new();
 void ASN1_GENERALIZEDTIME_free(libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* a);
 libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* d2i_ASN1_GENERALIZEDTIME(libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_GENERALIZEDTIME(libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_GENERALIZEDTIME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_GENERALIZEDTIME_it;
 libressl_d.openssl.ossl_typ.ASN1_TIME* ASN1_TIME_new();
 void ASN1_TIME_free(libressl_d.openssl.ossl_typ.ASN1_TIME* a);
 libressl_d.openssl.ossl_typ.ASN1_TIME* d2i_ASN1_TIME(libressl_d.openssl.ossl_typ.ASN1_TIME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_TIME(libressl_d.openssl.ossl_typ.ASN1_TIME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_TIME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_TIME_it;
 
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OCTET_STRING_NDEF_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OCTET_STRING_NDEF_it;
 
 libressl_d.openssl.ossl_typ.ASN1_TIME* ASN1_TIME_set(libressl_d.openssl.ossl_typ.ASN1_TIME* s, libressl_d.compat.time.time_t t);
 libressl_d.openssl.ossl_typ.ASN1_TIME* ASN1_TIME_set_tm(libressl_d.openssl.ossl_typ.ASN1_TIME* s, libressl_d.compat.time.tm* tm);
@@ -1097,7 +1097,7 @@ const (char)* ASN1_tag2str(int tag);
 void NETSCAPE_X509_free(.NETSCAPE_X509* a);
 .NETSCAPE_X509* d2i_NETSCAPE_X509(.NETSCAPE_X509** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_NETSCAPE_X509(.NETSCAPE_X509* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_X509_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_X509_it;
 
 int ASN1_UNIVERSALSTRING_to_string(libressl_d.openssl.ossl_typ.ASN1_UNIVERSALSTRING* s);
 

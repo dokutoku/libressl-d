@@ -1073,7 +1073,7 @@ int OBJ_find_sigid_by_algs(int* psignid, int dig_nid, int pkey_nid);
 int OBJ_add_sigid(int signid, int dig_id, int pkey_id);
 void OBJ_sigid_free();
 
-extern int obj_cleanup_defer;
+extern __gshared int obj_cleanup_defer;
 void check_defer(int nid);
 
 /* BEGIN ERROR CODES */

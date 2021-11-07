@@ -102,7 +102,7 @@ struct GOST_CIPHER_PARAMS
 void GOST_CIPHER_PARAMS_free(.GOST_CIPHER_PARAMS* a);
 .GOST_CIPHER_PARAMS* d2i_GOST_CIPHER_PARAMS(.GOST_CIPHER_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_GOST_CIPHER_PARAMS(.GOST_CIPHER_PARAMS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM GOST_CIPHER_PARAMS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GOST_CIPHER_PARAMS_it;
 
 enum GOST2814789IMIT_LENGTH = 4;
 enum GOST2814789IMIT_CBLOCK = 8;

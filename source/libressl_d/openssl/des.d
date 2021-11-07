@@ -140,12 +140,12 @@ void DES_ede2_ofb64_encrypt(const (ubyte)* i, ubyte* o, core.stdc.config.c_long 
 /**
  * defaults to false
  */
-extern int DES_check_key;
+extern __gshared int DES_check_key;
 
 /**
  * defaults to DES_PCBC_MODE
  */
-extern int DES_rw_mode;
+extern __gshared int DES_rw_mode;
 
 const (char)* DES_options();
 void DES_ecb3_encrypt(.const_DES_cblock* input, .DES_cblock* output, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3, int enc);

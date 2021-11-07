@@ -124,12 +124,12 @@ version (OPENSSL_NO_CMS) {
 	void CMS_ContentInfo_free(.CMS_ContentInfo* a);
 	.CMS_ContentInfo* d2i_CMS_ContentInfo(.CMS_ContentInfo** a, const (ubyte)** in_, core.stdc.config.c_long len);
 	int i2d_CMS_ContentInfo(.CMS_ContentInfo* a, ubyte** out_);
-	extern const libressl_d.openssl.ossl_typ.ASN1_ITEM CMS_ContentInfo_it;
+	extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CMS_ContentInfo_it;
 	.CMS_ReceiptRequest* CMS_ReceiptRequest_new();
 	void CMS_ReceiptRequest_free(.CMS_ReceiptRequest* a);
 	.CMS_ReceiptRequest* d2i_CMS_ReceiptRequest(.CMS_ReceiptRequest** a, const (ubyte)** in_, core.stdc.config.c_long len);
 	int i2d_CMS_ReceiptRequest(.CMS_ReceiptRequest* a, ubyte** out_);
-	extern const libressl_d.openssl.ossl_typ.ASN1_ITEM CMS_ReceiptRequest_it;
+	extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CMS_ReceiptRequest_it;
 	int CMS_ContentInfo_print_ctx(libressl_d.openssl.bio.BIO* out_, .CMS_ContentInfo* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 	enum CMS_SIGNERINFO_ISSUER_SERIAL = 0;

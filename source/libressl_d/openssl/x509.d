@@ -1053,21 +1053,21 @@ libressl_d.openssl.ossl_typ.X509_ALGOR* X509_ALGOR_new();
 void X509_ALGOR_free(libressl_d.openssl.ossl_typ.X509_ALGOR* a);
 libressl_d.openssl.ossl_typ.X509_ALGOR* d2i_X509_ALGOR(libressl_d.openssl.ossl_typ.X509_ALGOR** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_ALGOR(libressl_d.openssl.ossl_typ.X509_ALGOR* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_ALGOR_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_ALGOR_it;
 .X509_ALGORS* d2i_X509_ALGORS(.X509_ALGORS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_ALGORS(.X509_ALGORS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_ALGORS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_ALGORS_it;
 .X509_VAL* X509_VAL_new();
 void X509_VAL_free(.X509_VAL* a);
 .X509_VAL* d2i_X509_VAL(.X509_VAL** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_VAL(.X509_VAL* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_VAL_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_VAL_it;
 
 libressl_d.openssl.ossl_typ.X509_PUBKEY* X509_PUBKEY_new();
 void X509_PUBKEY_free(libressl_d.openssl.ossl_typ.X509_PUBKEY* a);
 libressl_d.openssl.ossl_typ.X509_PUBKEY* d2i_X509_PUBKEY(libressl_d.openssl.ossl_typ.X509_PUBKEY** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_PUBKEY(libressl_d.openssl.ossl_typ.X509_PUBKEY* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_PUBKEY_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_PUBKEY_it;
 
 int X509_PUBKEY_set(libressl_d.openssl.ossl_typ.X509_PUBKEY** x, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 libressl_d.openssl.ossl_typ.EVP_PKEY* X509_PUBKEY_get(libressl_d.openssl.ossl_typ.X509_PUBKEY* key);
@@ -1098,45 +1098,45 @@ version (OPENSSL_NO_EC) {
 void X509_SIG_free(.X509_SIG* a);
 .X509_SIG* d2i_X509_SIG(.X509_SIG** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_SIG(.X509_SIG* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_SIG_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_SIG_it;
 .X509_REQ_INFO* X509_REQ_INFO_new();
 void X509_REQ_INFO_free(.X509_REQ_INFO* a);
 .X509_REQ_INFO* d2i_X509_REQ_INFO(.X509_REQ_INFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_REQ_INFO(.X509_REQ_INFO* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_REQ_INFO_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_REQ_INFO_it;
 .X509_REQ* X509_REQ_new();
 void X509_REQ_free(.X509_REQ* a);
 .X509_REQ* d2i_X509_REQ(.X509_REQ** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_REQ(.X509_REQ* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_REQ_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_REQ_it;
 
 .X509_ATTRIBUTE* X509_ATTRIBUTE_new();
 void X509_ATTRIBUTE_free(.X509_ATTRIBUTE* a);
 .X509_ATTRIBUTE* d2i_X509_ATTRIBUTE(.X509_ATTRIBUTE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_ATTRIBUTE(.X509_ATTRIBUTE* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_ATTRIBUTE_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_ATTRIBUTE_it;
 .X509_ATTRIBUTE* X509_ATTRIBUTE_create(int nid, int atrtype, void* value);
 
 .X509_EXTENSION* X509_EXTENSION_new();
 void X509_EXTENSION_free(.X509_EXTENSION* a);
 .X509_EXTENSION* d2i_X509_EXTENSION(.X509_EXTENSION** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_EXTENSION(.X509_EXTENSION* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_EXTENSION_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_EXTENSION_it;
 X509_EXTENSIONS* d2i_X509_EXTENSIONS(X509_EXTENSIONS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_EXTENSIONS(X509_EXTENSIONS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_EXTENSIONS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_EXTENSIONS_it;
 
 .X509_NAME_ENTRY* X509_NAME_ENTRY_new();
 void X509_NAME_ENTRY_free(.X509_NAME_ENTRY* a);
 .X509_NAME_ENTRY* d2i_X509_NAME_ENTRY(.X509_NAME_ENTRY** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_NAME_ENTRY(.X509_NAME_ENTRY* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_NAME_ENTRY_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_NAME_ENTRY_it;
 
 libressl_d.openssl.ossl_typ.X509_NAME* X509_NAME_new();
 void X509_NAME_free(libressl_d.openssl.ossl_typ.X509_NAME* a);
 libressl_d.openssl.ossl_typ.X509_NAME* d2i_X509_NAME(libressl_d.openssl.ossl_typ.X509_NAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_NAME(libressl_d.openssl.ossl_typ.X509_NAME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_NAME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_NAME_it;
 
 int X509_NAME_set(libressl_d.openssl.ossl_typ.X509_NAME** xn, libressl_d.openssl.ossl_typ.X509_NAME* name);
 
@@ -1144,24 +1144,24 @@ int X509_NAME_set(libressl_d.openssl.ossl_typ.X509_NAME** xn, libressl_d.openssl
 void X509_CINF_free(.X509_CINF* a);
 .X509_CINF* d2i_X509_CINF(.X509_CINF** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_CINF(.X509_CINF* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CINF_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CINF_it;
 
 libressl_d.openssl.ossl_typ.X509* X509_new();
 void X509_free(libressl_d.openssl.ossl_typ.X509* a);
 libressl_d.openssl.ossl_typ.X509* d2i_X509(libressl_d.openssl.ossl_typ.X509** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509(libressl_d.openssl.ossl_typ.X509* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_it;
 .X509_CERT_AUX* X509_CERT_AUX_new();
 void X509_CERT_AUX_free(.X509_CERT_AUX* a);
 .X509_CERT_AUX* d2i_X509_CERT_AUX(.X509_CERT_AUX** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_CERT_AUX(.X509_CERT_AUX* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CERT_AUX_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CERT_AUX_it;
 
 .X509_CERT_PAIR* X509_CERT_PAIR_new();
 void X509_CERT_PAIR_free(.X509_CERT_PAIR* a);
 .X509_CERT_PAIR* d2i_X509_CERT_PAIR(.X509_CERT_PAIR** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_CERT_PAIR(.X509_CERT_PAIR* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CERT_PAIR_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CERT_PAIR_it;
 
 int X509_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
 int X509_set_ex_data(libressl_d.openssl.ossl_typ.X509* r, int idx, void* arg);
@@ -1187,19 +1187,19 @@ void X509_REVOKED_free(libressl_d.openssl.ossl_typ.X509_REVOKED* a);
 libressl_d.openssl.ossl_typ.X509_REVOKED* X509_REVOKED_dup(libressl_d.openssl.ossl_typ.X509_REVOKED* a);
 libressl_d.openssl.ossl_typ.X509_REVOKED* d2i_X509_REVOKED(libressl_d.openssl.ossl_typ.X509_REVOKED** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_REVOKED(libressl_d.openssl.ossl_typ.X509_REVOKED* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_REVOKED_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_REVOKED_it;
 
 .X509_CRL_INFO* X509_CRL_INFO_new();
 void X509_CRL_INFO_free(.X509_CRL_INFO* a);
 .X509_CRL_INFO* d2i_X509_CRL_INFO(.X509_CRL_INFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_CRL_INFO(.X509_CRL_INFO* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CRL_INFO_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CRL_INFO_it;
 
 libressl_d.openssl.ossl_typ.X509_CRL* X509_CRL_new();
 void X509_CRL_free(libressl_d.openssl.ossl_typ.X509_CRL* a);
 libressl_d.openssl.ossl_typ.X509_CRL* d2i_X509_CRL(libressl_d.openssl.ossl_typ.X509_CRL** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_X509_CRL(libressl_d.openssl.ossl_typ.X509_CRL* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CRL_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CRL_it;
 
 int X509_CRL_add0_revoked(libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.X509_REVOKED* rev);
 int X509_CRL_get0_by_serial(libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.X509_REVOKED** ret, libressl_d.openssl.ossl_typ.ASN1_INTEGER* serial);
@@ -1212,17 +1212,17 @@ void X509_PKEY_free(.X509_PKEY* a);
 void NETSCAPE_SPKI_free(.NETSCAPE_SPKI* a);
 .NETSCAPE_SPKI* d2i_NETSCAPE_SPKI(.NETSCAPE_SPKI** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_NETSCAPE_SPKI(.NETSCAPE_SPKI* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_SPKI_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_SPKI_it;
 .NETSCAPE_SPKAC* NETSCAPE_SPKAC_new();
 void NETSCAPE_SPKAC_free(.NETSCAPE_SPKAC* a);
 .NETSCAPE_SPKAC* d2i_NETSCAPE_SPKAC(.NETSCAPE_SPKAC** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_NETSCAPE_SPKAC(.NETSCAPE_SPKAC* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_SPKAC_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_SPKAC_it;
 .NETSCAPE_CERT_SEQUENCE* NETSCAPE_CERT_SEQUENCE_new();
 void NETSCAPE_CERT_SEQUENCE_free(.NETSCAPE_CERT_SEQUENCE* a);
 .NETSCAPE_CERT_SEQUENCE* d2i_NETSCAPE_CERT_SEQUENCE(.NETSCAPE_CERT_SEQUENCE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_NETSCAPE_CERT_SEQUENCE(.NETSCAPE_CERT_SEQUENCE* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_CERT_SEQUENCE_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_CERT_SEQUENCE_it;
 
 version (OPENSSL_NO_EVP) {
 } else {
@@ -1460,17 +1460,17 @@ libressl_d.openssl.ossl_typ.X509* X509_find_by_subject(.stack_st_X509* sk, libre
 void PBEPARAM_free(.PBEPARAM* a);
 .PBEPARAM* d2i_PBEPARAM(.PBEPARAM** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PBEPARAM(.PBEPARAM* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM PBEPARAM_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PBEPARAM_it;
 .PBE2PARAM* PBE2PARAM_new();
 void PBE2PARAM_free(.PBE2PARAM* a);
 .PBE2PARAM* d2i_PBE2PARAM(.PBE2PARAM** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PBE2PARAM(.PBE2PARAM* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM PBE2PARAM_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PBE2PARAM_it;
 .PBKDF2PARAM* PBKDF2PARAM_new();
 void PBKDF2PARAM_free(.PBKDF2PARAM* a);
 .PBKDF2PARAM* d2i_PBKDF2PARAM(.PBKDF2PARAM** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PBKDF2PARAM(.PBKDF2PARAM* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM PBKDF2PARAM_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PBKDF2PARAM_it;
 
 int PKCS5_pbe_set0_algor(libressl_d.openssl.ossl_typ.X509_ALGOR* algor, int alg, int iter, const (ubyte)* salt, int saltlen);
 
@@ -1486,7 +1486,7 @@ libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* PKCS8_PRIV_KEY_INFO_new();
 void PKCS8_PRIV_KEY_INFO_free(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* a);
 libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* d2i_PKCS8_PRIV_KEY_INFO(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS8_PRIV_KEY_INFO(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS8_PRIV_KEY_INFO_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS8_PRIV_KEY_INFO_it;
 
 libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKCS82PKEY(const (libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO)* p8);
 libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* EVP_PKEY2PKCS8(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);

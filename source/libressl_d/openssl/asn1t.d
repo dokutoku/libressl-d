@@ -843,14 +843,14 @@ version (LIBRESSL_INTERNAL) {
 
 /* external definitions for primitive types */
 
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BOOLEAN_it;
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_TBOOLEAN_it;
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_FBOOLEAN_it;
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_it;
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM CBIGNUM_it;
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM BIGNUM_it;
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM LONG_it;
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ZLONG_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BOOLEAN_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_TBOOLEAN_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_FBOOLEAN_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CBIGNUM_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM BIGNUM_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM LONG_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ZLONG_it;
 
 //DECLARE_STACK_OF(ASN1_VALUE)
 struct stack_st_ASN1_VALUE

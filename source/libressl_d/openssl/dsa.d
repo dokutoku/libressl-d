@@ -249,15 +249,15 @@ void* DSA_get_ex_data(libressl_d.openssl.ossl_typ.DSA* d, int idx);
 
 libressl_d.openssl.ossl_typ.DSA* d2i_DSAPublicKey(libressl_d.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 int i2d_DSAPublicKey(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAPublicKey_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAPublicKey_it;
 
 libressl_d.openssl.ossl_typ.DSA* d2i_DSAPrivateKey(libressl_d.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 int i2d_DSAPrivateKey(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAPrivateKey_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAPrivateKey_it;
 
 libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams(libressl_d.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 int i2d_DSAparams(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAparams_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAparams_it;
 
 /* Deprecated version */
 version (OPENSSL_NO_DEPRECATED) {

@@ -489,12 +489,12 @@ alias PROXY_CERT_INFO_EXTENSION = .PROXY_CERT_INFO_EXTENSION_st;
 void PROXY_POLICY_free(.PROXY_POLICY* a);
 .PROXY_POLICY* d2i_PROXY_POLICY(.PROXY_POLICY** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PROXY_POLICY(.PROXY_POLICY* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM PROXY_POLICY_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PROXY_POLICY_it;
 .PROXY_CERT_INFO_EXTENSION* PROXY_CERT_INFO_EXTENSION_new();
 void PROXY_CERT_INFO_EXTENSION_free(.PROXY_CERT_INFO_EXTENSION* a);
 .PROXY_CERT_INFO_EXTENSION* d2i_PROXY_CERT_INFO_EXTENSION(.PROXY_CERT_INFO_EXTENSION** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PROXY_CERT_INFO_EXTENSION(.PROXY_CERT_INFO_EXTENSION* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM PROXY_CERT_INFO_EXTENSION_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PROXY_CERT_INFO_EXTENSION_it;
 
 struct ISSUING_DIST_POINT_st
 {
@@ -717,18 +717,18 @@ struct stack_st_X509_PURPOSE
 void BASIC_CONSTRAINTS_free(.BASIC_CONSTRAINTS* a);
 .BASIC_CONSTRAINTS* d2i_BASIC_CONSTRAINTS(.BASIC_CONSTRAINTS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_BASIC_CONSTRAINTS(.BASIC_CONSTRAINTS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM BASIC_CONSTRAINTS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM BASIC_CONSTRAINTS_it;
 
 .SXNET* SXNET_new();
 void SXNET_free(.SXNET* a);
 .SXNET* d2i_SXNET(.SXNET** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_SXNET(.SXNET* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM SXNET_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM SXNET_it;
 .SXNETID* SXNETID_new();
 void SXNETID_free(.SXNETID* a);
 .SXNETID* d2i_SXNETID(.SXNETID** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_SXNETID(.SXNETID* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM SXNETID_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM SXNETID_it;
 
 int SXNET_add_id_asc(.SXNET** psx, const (char)* zone, const (char)* user, int userlen);
 int SXNET_add_id_ulong(.SXNET** psx, core.stdc.config.c_ulong lzone, const (char)* user, int userlen);
@@ -742,19 +742,19 @@ libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* AUTHORITY_KEYID_new();
 void AUTHORITY_KEYID_free(libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* a);
 libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* d2i_AUTHORITY_KEYID(libressl_d.openssl.ossl_typ.AUTHORITY_KEYID** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_AUTHORITY_KEYID(libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM AUTHORITY_KEYID_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM AUTHORITY_KEYID_it;
 
 .PKEY_USAGE_PERIOD* PKEY_USAGE_PERIOD_new();
 void PKEY_USAGE_PERIOD_free(.PKEY_USAGE_PERIOD* a);
 .PKEY_USAGE_PERIOD* d2i_PKEY_USAGE_PERIOD(.PKEY_USAGE_PERIOD** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKEY_USAGE_PERIOD(.PKEY_USAGE_PERIOD* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM PKEY_USAGE_PERIOD_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKEY_USAGE_PERIOD_it;
 
 .GENERAL_NAME* GENERAL_NAME_new();
 void GENERAL_NAME_free(.GENERAL_NAME* a);
 .GENERAL_NAME* d2i_GENERAL_NAME(.GENERAL_NAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_GENERAL_NAME(.GENERAL_NAME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_NAME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_NAME_it;
 .GENERAL_NAME* GENERAL_NAME_dup(.GENERAL_NAME* a);
 int GENERAL_NAME_cmp(.GENERAL_NAME* a, .GENERAL_NAME* b);
 
@@ -768,7 +768,7 @@ int GENERAL_NAME_print(libressl_d.openssl.bio.BIO* out_, .GENERAL_NAME* gen);
 void GENERAL_NAMES_free(.GENERAL_NAMES* a);
 .GENERAL_NAMES* d2i_GENERAL_NAMES(.GENERAL_NAMES** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_GENERAL_NAMES(.GENERAL_NAMES* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_NAMES_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_NAMES_it;
 
 libressl_d.openssl.conf.stack_st_CONF_VALUE* i2v_GENERAL_NAMES(.X509V3_EXT_METHOD* method, .GENERAL_NAMES* gen, libressl_d.openssl.conf.stack_st_CONF_VALUE* extlist);
 .GENERAL_NAMES* v2i_GENERAL_NAMES(const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.stack_st_CONF_VALUE* nval);
@@ -777,12 +777,12 @@ libressl_d.openssl.conf.stack_st_CONF_VALUE* i2v_GENERAL_NAMES(.X509V3_EXT_METHO
 void OTHERNAME_free(.OTHERNAME* a);
 .OTHERNAME* d2i_OTHERNAME(.OTHERNAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_OTHERNAME(.OTHERNAME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM OTHERNAME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM OTHERNAME_it;
 .EDIPARTYNAME* EDIPARTYNAME_new();
 void EDIPARTYNAME_free(.EDIPARTYNAME* a);
 .EDIPARTYNAME* d2i_EDIPARTYNAME(.EDIPARTYNAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_EDIPARTYNAME(.EDIPARTYNAME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM EDIPARTYNAME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM EDIPARTYNAME_it;
 int OTHERNAME_cmp(.OTHERNAME* a, .OTHERNAME* b);
 void GENERAL_NAME_set0_value(.GENERAL_NAME* a, int type, void* value);
 void* GENERAL_NAME_get0_value(.GENERAL_NAME* a, int* ptype);
@@ -796,55 +796,55 @@ libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* s2i_ASN1_OCTET_STRING(.X509V3_EXT
 void EXTENDED_KEY_USAGE_free(.EXTENDED_KEY_USAGE* a);
 .EXTENDED_KEY_USAGE* d2i_EXTENDED_KEY_USAGE(.EXTENDED_KEY_USAGE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_EXTENDED_KEY_USAGE(.EXTENDED_KEY_USAGE* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM EXTENDED_KEY_USAGE_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM EXTENDED_KEY_USAGE_it;
 int i2a_ACCESS_DESCRIPTION(libressl_d.openssl.bio.BIO* bp, const (.ACCESS_DESCRIPTION)* a);
 
 .CERTIFICATEPOLICIES* CERTIFICATEPOLICIES_new();
 void CERTIFICATEPOLICIES_free(.CERTIFICATEPOLICIES* a);
 .CERTIFICATEPOLICIES* d2i_CERTIFICATEPOLICIES(.CERTIFICATEPOLICIES** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_CERTIFICATEPOLICIES(.CERTIFICATEPOLICIES* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM CERTIFICATEPOLICIES_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CERTIFICATEPOLICIES_it;
 .POLICYINFO* POLICYINFO_new();
 void POLICYINFO_free(.POLICYINFO* a);
 .POLICYINFO* d2i_POLICYINFO(.POLICYINFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_POLICYINFO(.POLICYINFO* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICYINFO_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICYINFO_it;
 .POLICYQUALINFO* POLICYQUALINFO_new();
 void POLICYQUALINFO_free(.POLICYQUALINFO* a);
 .POLICYQUALINFO* d2i_POLICYQUALINFO(.POLICYQUALINFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_POLICYQUALINFO(.POLICYQUALINFO* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICYQUALINFO_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICYQUALINFO_it;
 .USERNOTICE* USERNOTICE_new();
 void USERNOTICE_free(.USERNOTICE* a);
 .USERNOTICE* d2i_USERNOTICE(.USERNOTICE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_USERNOTICE(.USERNOTICE* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM USERNOTICE_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM USERNOTICE_it;
 .NOTICEREF* NOTICEREF_new();
 void NOTICEREF_free(.NOTICEREF* a);
 .NOTICEREF* d2i_NOTICEREF(.NOTICEREF** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_NOTICEREF(.NOTICEREF* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM NOTICEREF_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NOTICEREF_it;
 
 .CRL_DIST_POINTS* CRL_DIST_POINTS_new();
 void CRL_DIST_POINTS_free(.CRL_DIST_POINTS* a);
 .CRL_DIST_POINTS* d2i_CRL_DIST_POINTS(.CRL_DIST_POINTS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_CRL_DIST_POINTS(.CRL_DIST_POINTS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM CRL_DIST_POINTS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CRL_DIST_POINTS_it;
 libressl_d.openssl.ossl_typ.DIST_POINT* DIST_POINT_new();
 void DIST_POINT_free(libressl_d.openssl.ossl_typ.DIST_POINT* a);
 libressl_d.openssl.ossl_typ.DIST_POINT* d2i_DIST_POINT(libressl_d.openssl.ossl_typ.DIST_POINT** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_DIST_POINT(libressl_d.openssl.ossl_typ.DIST_POINT* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DIST_POINT_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DIST_POINT_it;
 .DIST_POINT_NAME* DIST_POINT_NAME_new();
 void DIST_POINT_NAME_free(.DIST_POINT_NAME* a);
 .DIST_POINT_NAME* d2i_DIST_POINT_NAME(.DIST_POINT_NAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_DIST_POINT_NAME(.DIST_POINT_NAME* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM DIST_POINT_NAME_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DIST_POINT_NAME_it;
 libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* ISSUING_DIST_POINT_new();
 void ISSUING_DIST_POINT_free(libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* a);
 libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* d2i_ISSUING_DIST_POINT(libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ISSUING_DIST_POINT(libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ISSUING_DIST_POINT_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ISSUING_DIST_POINT_it;
 
 int DIST_POINT_set_dpname(.DIST_POINT_NAME* dpn, libressl_d.openssl.ossl_typ.X509_NAME* iname);
 
@@ -854,29 +854,29 @@ int NAME_CONSTRAINTS_check(libressl_d.openssl.ossl_typ.X509* x, libressl_d.opens
 void ACCESS_DESCRIPTION_free(.ACCESS_DESCRIPTION* a);
 .ACCESS_DESCRIPTION* d2i_ACCESS_DESCRIPTION(.ACCESS_DESCRIPTION** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ACCESS_DESCRIPTION(.ACCESS_DESCRIPTION* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM ACCESS_DESCRIPTION_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ACCESS_DESCRIPTION_it;
 .AUTHORITY_INFO_ACCESS* AUTHORITY_INFO_ACCESS_new();
 void AUTHORITY_INFO_ACCESS_free(.AUTHORITY_INFO_ACCESS* a);
 .AUTHORITY_INFO_ACCESS* d2i_AUTHORITY_INFO_ACCESS(.AUTHORITY_INFO_ACCESS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_AUTHORITY_INFO_ACCESS(.AUTHORITY_INFO_ACCESS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM AUTHORITY_INFO_ACCESS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM AUTHORITY_INFO_ACCESS_it;
 
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPING_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPING_it;
 .POLICY_MAPPING* POLICY_MAPPING_new();
 void POLICY_MAPPING_free(.POLICY_MAPPING* a);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPINGS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPINGS_it;
 
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_SUBTREE_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_SUBTREE_it;
 .GENERAL_SUBTREE* GENERAL_SUBTREE_new();
 void GENERAL_SUBTREE_free(.GENERAL_SUBTREE* a);
 
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM NAME_CONSTRAINTS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NAME_CONSTRAINTS_it;
 libressl_d.openssl.ossl_typ.NAME_CONSTRAINTS* NAME_CONSTRAINTS_new();
 void NAME_CONSTRAINTS_free(libressl_d.openssl.ossl_typ.NAME_CONSTRAINTS* a);
 
 .POLICY_CONSTRAINTS* POLICY_CONSTRAINTS_new();
 void POLICY_CONSTRAINTS_free(.POLICY_CONSTRAINTS* a);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_CONSTRAINTS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_CONSTRAINTS_it;
 
 .GENERAL_NAME* a2i_GENERAL_NAME(.GENERAL_NAME* out_, const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, int gen_type, const (char)* value, int is_nc);
 
@@ -1088,25 +1088,25 @@ version (LIBRESSL_INTERNAL) {
 		void ASRange_free(.ASRange* a);
 		.ASRange* d2i_ASRange(.ASRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_ASRange(.ASRange* a, ubyte** out_);
-		//extern const ASN1_ITEM ASRange_it;
+		extern __gshared const ASN1_ITEM ASRange_it;
 
 		.ASIdOrRange* ASIdOrRange_new();
 		void ASIdOrRange_free(.ASIdOrRange* a);
 		.ASIdOrRange* d2i_ASIdOrRange(.ASIdOrRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_ASIdOrRange(.ASIdOrRange* a, ubyte** out_);
-		//extern const ASN1_ITEM ASIdOrRange_it;
+		extern __gshared const ASN1_ITEM ASIdOrRange_it;
 
 		.ASIdentifierChoice* ASIdentifierChoice_new();
 		void ASIdentifierChoice_free(.ASIdentifierChoice* a);
 		.ASIdentifierChoice* d2i_ASIdentifierChoice(.ASIdentifierChoice** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_ASIdentifierChoice(.ASIdentifierChoice* a, ubyte** out_);
-		//extern const ASN1_ITEM ASIdentifierChoice_it;
+		extern __gshared const ASN1_ITEM ASIdentifierChoice_it;
 
 		.ASIdentifiers* ASIdentifiers_new();
 		void ASIdentifiers_free(.ASIdentifiers* a);
 		.ASIdentifiers* d2i_ASIdentifiers(.ASIdentifiers** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_ASIdentifiers(.ASIdentifiers* a, ubyte** out_);
-		//extern const ASN1_ITEM ASIdentifiers_it;
+		extern __gshared const ASN1_ITEM ASIdentifiers_it;
 
 		struct IPAddressRange_st
 		{
@@ -1180,25 +1180,25 @@ version (LIBRESSL_INTERNAL) {
 		void IPAddressRange_free(.IPAddressRange* a);
 		.IPAddressRange* d2i_IPAddressRange(.IPAddressRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_IPAddressRange(.IPAddressRange* a, ubyte** out_);
-		//extern const ASN1_ITEM IPAddressRange_it;
+		extern __gshared const ASN1_ITEM IPAddressRange_it;
 
 		.IPAddressOrRange* IPAddressOrRange_new();
 		void IPAddressOrRange_free(.IPAddressOrRange* a);
 		.IPAddressOrRange* d2i_IPAddressOrRange(.IPAddressOrRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_IPAddressOrRange(.IPAddressOrRange* a, ubyte** out_);
-		//extern const ASN1_ITEM IPAddressOrRange_it;
+		extern __gshared const ASN1_ITEM IPAddressOrRange_it;
 
 		.IPAddressChoice* IPAddressChoice_new();
 		void IPAddressChoice_free(.IPAddressChoice* a);
 		.IPAddressChoice* d2i_IPAddressChoice(.IPAddressChoice** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_IPAddressChoice(.IPAddressChoice* a, ubyte** out_);
-		//extern const ASN1_ITEM IPAddressChoice_it;
+		extern __gshared const ASN1_ITEM IPAddressChoice_it;
 
 		.IPAddressFamily* IPAddressFamily_new();
 		void IPAddressFamily_free(.IPAddressFamily* a);
 		.IPAddressFamily* d2i_IPAddressFamily(.IPAddressFamily** a, const (ubyte)** in_, core.stdc.config.c_long len);
 		int i2d_IPAddressFamily(.IPAddressFamily* a, ubyte** out_);
-		//extern const ASN1_ITEM IPAddressFamily_it;
+		extern __gshared const ASN1_ITEM IPAddressFamily_it;
 
 		/*
 		 * API tag for elements of the ASIdentifer SEQUENCE.

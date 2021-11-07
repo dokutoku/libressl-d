@@ -487,22 +487,22 @@ int RSA_pkey_ctx_ctrl(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int optype,
 
 libressl_d.openssl.ossl_typ.RSA* d2i_RSAPublicKey(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_RSAPublicKey(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSAPublicKey_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM RSAPublicKey_it;
 libressl_d.openssl.ossl_typ.RSA* d2i_RSAPrivateKey(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_RSAPrivateKey(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSAPrivateKey_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM RSAPrivateKey_it;
 
 .RSA_PSS_PARAMS* RSA_PSS_PARAMS_new();
 void RSA_PSS_PARAMS_free(.RSA_PSS_PARAMS* a);
 .RSA_PSS_PARAMS* d2i_RSA_PSS_PARAMS(.RSA_PSS_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_RSA_PSS_PARAMS(.RSA_PSS_PARAMS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_PSS_PARAMS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_PSS_PARAMS_it;
 
 .RSA_OAEP_PARAMS* RSA_OAEP_PARAMS_new();
 void RSA_OAEP_PARAMS_free(.RSA_OAEP_PARAMS* a);
 .RSA_OAEP_PARAMS* d2i_RSA_OAEP_PARAMS(.RSA_OAEP_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_RSA_OAEP_PARAMS(.RSA_OAEP_PARAMS* a, ubyte** out_);
-extern const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_OAEP_PARAMS_it;
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_OAEP_PARAMS_it;
 
 int RSA_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.RSA)* r, int offset);
 
