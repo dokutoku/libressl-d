@@ -545,6 +545,11 @@ enum IDP_REASONS = 0x40;
 pragma(inline, true)
 void X509V3_conf_err(libressl_d.openssl.conf.CONF_VALUE* val)
 
+	in
+	{
+		assert(val != null);
+	}
+
 	do
 	{
 		libressl_d.openssl.err.ERR_asprintf_error_data(cast(char*)(&("section:%s,name:%s,value:%s\0"[0])), val.section, val.name, val.value);

@@ -455,6 +455,11 @@ pragma(inline, true)
 pure nothrow @trusted @nogc @live
 void BN_GENCB_set_old(scope libressl_d.openssl.ossl_typ.BN_GENCB* gencb, void function(int, int, void*) callback, void* cb_arg)
 
+	in
+	{
+		assert(gencb != null);
+	}
+
 	do
 	{
 		libressl_d.openssl.ossl_typ.BN_GENCB* tmp_gencb = gencb;
@@ -469,6 +474,11 @@ void BN_GENCB_set_old(scope libressl_d.openssl.ossl_typ.BN_GENCB* gencb, void fu
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
 void BN_GENCB_set(scope libressl_d.openssl.ossl_typ.BN_GENCB* gencb, int function(int, int, libressl_d.openssl.ossl_typ.BN_GENCB*) callback, void* cb_arg)
+
+	in
+	{
+		assert(gencb != null);
+	}
 
 	do
 	{
@@ -852,6 +862,11 @@ int BN_mod_mul_montgomery(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl
 
 pragma(inline, true)
 int BN_to_montgomery(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, libressl_d.openssl.ossl_typ.BN_MONT_CTX* mont, libressl_d.openssl.ossl_typ.BN_CTX* ctx)
+
+	in
+	{
+		assert(mont != null);
+	}
 
 	do
 	{

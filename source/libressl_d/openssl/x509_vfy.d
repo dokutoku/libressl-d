@@ -322,6 +322,11 @@ pragma(inline, true)
 pure nothrow @trusted @nogc @live
 void X509_STORE_set_verify_cb_func(scope libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(int ok, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) func)
 
+	in
+	{
+		assert(ctx != null);
+	}
+
 	do
 	{
 		ctx.verify_cb = func;
@@ -330,6 +335,11 @@ void X509_STORE_set_verify_cb_func(scope libressl_d.openssl.ossl_typ.X509_STORE*
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
 void X509_STORE_set_verify_func(scope libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) func)
+
+	in
+	{
+		assert(ctx != null);
+	}
 
 	do
 	{

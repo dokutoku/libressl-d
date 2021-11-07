@@ -304,6 +304,11 @@ package(libressl_d)
 package(libressl_d)
 ._wdirent* _wreaddir(._WDIR* dirp)
 
+	in
+	{
+		assert(dirp != null);
+	}
+
 	do
 	{
 		/* Read next directory entry */
@@ -422,6 +427,11 @@ void _wrewinddir(._WDIR* dirp)
 package(libressl_d)
 core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_first(._WDIR* dirp)
 
+	in
+	{
+		assert(dirp != null);
+	}
+
 	do
 	{
 		core.sys.windows.winbase.WIN32_FIND_DATAW* datap;
@@ -445,6 +455,11 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_first(._WDIR* dirp)
 /* Get next directory entry(internal) */
 package(libressl_d)
 core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
+
+	in
+	{
+		assert(dirp != null);
+	}
 
 	do
 	{
@@ -554,6 +569,7 @@ package(libressl_d)
 
 	in
 	{
+		assert(dirp != null);
 	}
 
 	do
@@ -636,10 +652,6 @@ package(libressl_d)
 package(libressl_d)
 int closedir(.DIR* dirp)
 
-	in
-	{
-	}
-
 	do
 	{
 		int ok;
@@ -670,6 +682,7 @@ void rewinddir(.DIR* dirp)
 
 	in
 	{
+		assert(dirp != null);
 	}
 
 	do

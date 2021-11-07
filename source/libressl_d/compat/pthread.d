@@ -59,6 +59,11 @@ version (Windows) {
 	package(libressl_d)
 	int pthread_once(.pthread_once_t* once, void function() cb)
 
+		in
+		{
+			assert(once != null);
+		}
+
 		do
 		{
 			core.sys.windows.windef.BOOL rc = InitOnceExecuteOnce(&once.once, ._pthread_once_win32_cb, cb, null);
@@ -101,6 +106,11 @@ version (Windows) {
 	package(libressl_d)
 	int pthread_mutex_init(.pthread_mutex_t* mutex, const (.pthread_mutexattr_t)* attr)
 
+		in
+		{
+			assert(mutext != null);
+		}
+
 		do
 		{
 			mutex.lock = core.stdc.stdlib.malloc(core.sys.windows.winbase.CRITICAL_SECTION.sizeof);
@@ -117,6 +127,11 @@ version (Windows) {
 	pragma(inline, true)
 	package(libressl_d)
 	int pthread_mutex_lock(.pthread_mutex_t* mutex)
+
+		in
+		{
+			assert(mutext != null);
+		}
 
 		do
 		{
@@ -144,6 +159,11 @@ version (Windows) {
 	package(libressl_d)
 	int pthread_mutex_unlock(.pthread_mutex_t* mutex)
 
+		in
+		{
+			assert(mutext != null);
+		}
+
 		do
 		{
 			core.sys.windows.winbase.LeaveCriticalSection(mutex.lock);
@@ -154,6 +174,11 @@ version (Windows) {
 	pragma(inline, true)
 	package(libressl_d)
 	int pthread_mutex_destroy(.pthread_mutex_t* mutex)
+
+		in
+		{
+			assert(mutext != null);
+		}
 
 		do
 		{

@@ -91,6 +91,11 @@ version (none) {
 	pure nothrow @trusted @nogc @live
 	void _Q_INVALIDATE(scope void* a)
 
+		in
+		{
+			assert(a != null);
+		}
+
 		do
 		{
 			a = ._Q_INVALID;
@@ -215,7 +220,13 @@ template SIMPLEQ_HEAD(string name, string type)
 
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-HEAD LIST_HEAD_INITIALIZER(HEAD)(HEAD head)
+HEAD LIST_HEAD_INITIALIZER(HEAD)(HEAD* head)
+	if (is(HEAD == struct))
+
+	in
+	{
+		assert(head != null);
+	}
 
 	do
 	{
@@ -313,7 +324,13 @@ template TAILQ_HEAD(string name, string type)
 
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-HEAD TAILQ_HEAD_INITIALIZER(HEAD)(HEAD head)
+HEAD TAILQ_HEAD_INITIALIZER(HEAD)(HEAD* head)
+	if (is(HEAD == struct))
+
+	in
+	{
+		assert(head != null);
+	}
 
 	do
 	{
