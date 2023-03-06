@@ -89,7 +89,8 @@ version (none) {
 
 	pragma(inline, true)
 	pure nothrow @trusted @nogc @live
-	void _Q_INVALIDATE(scope void* a)
+	void _Q_INVALIDATE(A)(ref A* a)
+		if (is(A == struct))
 
 		in
 		{
@@ -103,7 +104,8 @@ version (none) {
 } else {
 	pragma(inline, true)
 	pure nothrow @trusted @nogc @live
-	void _Q_INVALIDATE(scope void* a)
+	void _Q_INVALIDATE(A)(ref A* a)
+		if (is(A == struct))
 
 		do
 		{

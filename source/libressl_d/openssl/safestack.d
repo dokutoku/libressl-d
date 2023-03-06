@@ -132,7 +132,16 @@ template DECLARE_SPECIAL_STACK_OF(string type, string type2)
 	enum DECLARE_SPECIAL_STACK_OF = "struct " ~ libressl_d.openssl.safestack.STACK_OF!(type) ~ " { libressl_d.openssl.stack._STACK stack; }";
 }
 
-//#define IMPLEMENT_STACK_OF(type) /* nada (obsolete in new safestack approach) */
+/**
+ * nada (obsolete in new safestack approach)
+ */
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+void IMPLEMENT_STACK_OF(TYPE)(scope const TYPE type)
+
+	do
+	{
+	}
 
 /*
  * Strings are special: normally an lhash entry will point to a single

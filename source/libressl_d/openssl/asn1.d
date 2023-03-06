@@ -223,8 +223,27 @@ struct stack_st_X509_ALGOR
 	libressl_d.openssl.stack._STACK stack;
 }
 
-//#define DECLARE_ASN1_SET_OF(type) /* filled in by mkstack.pl */
-//#define IMPLEMENT_ASN1_SET_OF(type) /* nothing, no longer needed */
+/**
+ * filled in by mkstack.pl
+ */
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+void DECLARE_ASN1_SET_OF(TYPE)(scope const TYPE type)
+
+	do
+	{
+	}
+
+/**
+ * nothing, no longer needed
+ */
+pragma(inline, true)
+pure nothrow @safe @nogc @live
+void IMPLEMENT_ASN1_SET_OF(TYPE)(scope const TYPE type)
+
+	do
+	{
+	}
 
 /**
  * We MUST make sure that, except for constness, asn1_ctx_st and
@@ -601,7 +620,14 @@ version (LIBRESSL_INTERNAL) {
 	/*
 	 * Macro to obtain ASN1_ITEM pointer from exported type
 	 */
-	//#define ASN1_ITEM_ptr(iptr) (iptr)
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	auto ASN1_ITEM_ptr(IPTR)(return scope IPTR iptr)
+
+		do
+		{
+			return iptr;
+		}
 
 	/*
 	 * Macro to include ASN1_ITEM pointer from base type

@@ -325,8 +325,33 @@ struct ASN1_TEMPLATE_st
 
 /* Macro to extract ASN1_ITEM and ASN1_ADB pointer from ASN1_TEMPLATE */
 
-//#define ASN1_TEMPLATE_item(t) (t.item_ptr)
-//#define ASN1_TEMPLATE_adb(t) (t.item_ptr)
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+auto ASN1_TEMPLATE_item(T)(return scope T* t)
+
+	in
+	{
+		assert(t != null);
+	}
+
+	do
+	{
+		return t.item_ptr;
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+auto ASN1_TEMPLATE_adb(T)(return scope T* t)
+
+	in
+	{
+		assert(t != null);
+	}
+
+	do
+	{
+		return t.item_ptr;
+	}
 
 alias ASN1_ADB_TABLE = .ASN1_ADB_TABLE_st;
 alias ASN1_ADB = .ASN1_ADB_st;
