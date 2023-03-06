@@ -659,32 +659,32 @@ struct ASN1_TLC_st
 
 /* Typedefs for ASN1 function pointers */
 
-alias ASN1_new_func = extern (C) nothrow @nogc libressl_d.openssl.asn1.ASN1_VALUE* function();
-alias ASN1_free_func = extern (C) nothrow @nogc void function(libressl_d.openssl.asn1.ASN1_VALUE* a);
-alias ASN1_d2i_func = extern (C) nothrow @nogc libressl_d.openssl.asn1.ASN1_VALUE* function(libressl_d.openssl.asn1.ASN1_VALUE** a, const (ubyte)** in_, core.stdc.config.c_long length_);
-alias ASN1_i2d_func = extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE* a, ubyte** in_);
+private alias ASN1_new_func = /* Not a function pointer type */ extern (C) nothrow @nogc libressl_d.openssl.asn1.ASN1_VALUE* function();
+private alias ASN1_free_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(libressl_d.openssl.asn1.ASN1_VALUE* a);
+private alias ASN1_d2i_func = /* Not a function pointer type */ extern (C) nothrow @nogc libressl_d.openssl.asn1.ASN1_VALUE* function(libressl_d.openssl.asn1.ASN1_VALUE** a, const (ubyte)** in_, core.stdc.config.c_long length_);
+private alias ASN1_i2d_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE* a, ubyte** in_);
 
-alias ASN1_ex_d2i = extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass, char opt, libressl_d.openssl.asn1.ASN1_TLC* ctx);
+private alias ASN1_ex_d2i = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass, char opt, libressl_d.openssl.asn1.ASN1_TLC* ctx);
 
-alias ASN1_ex_i2d = extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass);
-alias ASN1_ex_new_func = extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-alias ASN1_ex_free_func = extern (C) nothrow @nogc void function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_ex_i2d = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass);
+private alias ASN1_ex_new_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_ex_free_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
 
-alias ASN1_ex_print_func = extern (C) nothrow @nogc int function(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, int indent, const (char)* fname, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+private alias ASN1_ex_print_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, int indent, const (char)* fname, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
-alias ASN1_primitive_i2c = extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte* cont, int* putype, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-alias ASN1_primitive_c2i = extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)* cont, int len, int utype, char* free_cont, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-alias ASN1_primitive_print = extern (C) nothrow @nogc int function(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+private alias ASN1_primitive_i2c = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte* cont, int* putype, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_primitive_c2i = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)* cont, int len, int utype, char* free_cont, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_primitive_print = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 struct ASN1_EXTERN_FUNCS_st
 {
 	void* app_data;
-	.ASN1_ex_new_func* asn1_ex_new;
-	.ASN1_ex_free_func* asn1_ex_free;
-	.ASN1_ex_free_func* asn1_ex_clear;
-	.ASN1_ex_d2i* asn1_ex_d2i;
-	.ASN1_ex_i2d* asn1_ex_i2d;
-	.ASN1_ex_print_func* asn1_ex_print;
+	.ASN1_ex_new_func asn1_ex_new;
+	.ASN1_ex_free_func asn1_ex_free;
+	.ASN1_ex_free_func asn1_ex_clear;
+	.ASN1_ex_d2i asn1_ex_d2i;
+	.ASN1_ex_i2d asn1_ex_i2d;
+	.ASN1_ex_print_func asn1_ex_print;
 }
 
 alias ASN1_EXTERN_FUNCS = .ASN1_EXTERN_FUNCS_st;
@@ -693,12 +693,12 @@ struct ASN1_PRIMITIVE_FUNCS_st
 {
 	void* app_data;
 	core.stdc.config.c_ulong flags;
-	.ASN1_ex_new_func* prim_new;
-	.ASN1_ex_free_func* prim_free;
-	.ASN1_ex_free_func* prim_clear;
-	.ASN1_primitive_c2i* prim_c2i;
-	.ASN1_primitive_i2c* prim_i2c;
-	.ASN1_primitive_print* prim_print;
+	.ASN1_ex_new_func prim_new;
+	.ASN1_ex_free_func prim_free;
+	.ASN1_ex_free_func prim_clear;
+	.ASN1_primitive_c2i prim_c2i;
+	.ASN1_primitive_i2c prim_i2c;
+	.ASN1_primitive_print prim_print;
 }
 
 alias ASN1_PRIMITIVE_FUNCS = .ASN1_PRIMITIVE_FUNCS_st;
@@ -721,7 +721,7 @@ alias ASN1_PRIMITIVE_FUNCS = .ASN1_PRIMITIVE_FUNCS_st;
  * then an external type is more appropriate.
  */
 
-alias ASN1_aux_cb = extern (C) nothrow @nogc int function(int operation, libressl_d.openssl.asn1.ASN1_VALUE** in_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, void* exarg);
+private alias ASN1_aux_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(int operation, libressl_d.openssl.asn1.ASN1_VALUE** in_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, void* exarg);
 
 struct ASN1_AUX_st
 {
@@ -738,7 +738,7 @@ struct ASN1_AUX_st
 	 */
 	int ref_lock;
 
-	.ASN1_aux_cb* asn1_cb;
+	.ASN1_aux_cb asn1_cb;
 
 	/**
 	 * Offset of ASN1_ENCODING structure

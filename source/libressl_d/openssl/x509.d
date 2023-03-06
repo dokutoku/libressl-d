@@ -1158,7 +1158,7 @@ void X509_CERT_PAIR_free(.X509_CERT_PAIR* a);
 int i2d_X509_CERT_PAIR(.X509_CERT_PAIR* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM X509_CERT_PAIR_it;
 
-int X509_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int X509_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int X509_set_ex_data(libressl_d.openssl.ossl_typ.X509* r, int idx, void* arg);
 void* X509_get_ex_data(libressl_d.openssl.ossl_typ.X509* r, int idx);
 int i2d_X509_AUX(libressl_d.openssl.ossl_typ.X509* a, ubyte** pp);

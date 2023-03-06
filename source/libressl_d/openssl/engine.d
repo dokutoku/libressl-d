@@ -611,7 +611,7 @@ int ENGINE_set_flags(libressl_d.openssl.ossl_typ.ENGINE* e, int flags);
 int ENGINE_set_cmd_defns(libressl_d.openssl.ossl_typ.ENGINE* e, const (.ENGINE_CMD_DEFN)* defns);
 
 /* These functions allow control over any per-structure ENGINE data. */
-int ENGINE_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int ENGINE_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int ENGINE_set_ex_data(libressl_d.openssl.ossl_typ.ENGINE* e, int idx, void* arg);
 void* ENGINE_get_ex_data(const (libressl_d.openssl.ossl_typ.ENGINE)* e, int idx);
 

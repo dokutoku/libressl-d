@@ -243,7 +243,7 @@ int DSA_size(const (libressl_d.openssl.ossl_typ.DSA)*);
 int DSA_sign_setup(libressl_d.openssl.ossl_typ.DSA* dsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx_in, libressl_d.openssl.ossl_typ.BIGNUM** kinvp, libressl_d.openssl.ossl_typ.BIGNUM** rp);
 int DSA_sign(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, libressl_d.openssl.ossl_typ.DSA* dsa);
 int DSA_verify(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbuf, int siglen, libressl_d.openssl.ossl_typ.DSA* dsa);
-int DSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int DSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int DSA_set_ex_data(libressl_d.openssl.ossl_typ.DSA* d, int idx, void* arg);
 void* DSA_get_ex_data(libressl_d.openssl.ossl_typ.DSA* d, int idx);
 

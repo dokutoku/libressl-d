@@ -207,8 +207,8 @@ enum EVP_PKEY_MO_VERIFY = 0x0002;
 enum EVP_PKEY_MO_ENCRYPT = 0x0004;
 enum EVP_PKEY_MO_DECRYPT = 0x0008;
 
-alias evp_sign_method = extern (C) nothrow @nogc int function(int type, const (ubyte)* m, uint m_length, ubyte* sigret, uint* siglen, void* key);
-alias evp_verify_method = extern (C) nothrow @nogc int function(int type, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, void* key);
+private alias evp_sign_method = /* Not a function pointer type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* m, uint m_length, ubyte* sigret, uint* siglen, void* key);
+private alias evp_verify_method = /* Not a function pointer type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, void* key);
 
 //static if (!__traits(compiles, libressl_d.openssl.ossl_typ.EVP_MD))
 version (all) {
@@ -224,8 +224,8 @@ version (all) {
 		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* to, const (libressl_d.openssl.ossl_typ.EVP_MD_CTX)* from) copy;
 		int function(libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx) cleanup;
 
-		.evp_sign_method* sign;
-		evp_verify_method* verify;
+		.evp_sign_method sign;
+		evp_verify_method verify;
 
 		/**
 		 * EVP_PKEY_xxx
@@ -306,21 +306,21 @@ version (all) {
 	version (OPENSSL_NO_DSA) {
 		//#define EVP_PKEY_DSA_method EVP_PKEY_NULL_method
 	} else {
-		//#define EVP_PKEY_DSA_method cast(.evp_sign_method*)(libressl_d.openssl.dsa.DSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.dsa.DSA_verify), { .EVP_PKEY_DSA, .EVP_PKEY_DSA2, .EVP_PKEY_DSA3, .EVP_PKEY_DSA4, 0 }
+		//#define EVP_PKEY_DSA_method cast(.evp_sign_method)(libressl_d.openssl.dsa.DSA_sign), cast(.evp_verify_method)(libressl_d.openssl.dsa.DSA_verify), { .EVP_PKEY_DSA, .EVP_PKEY_DSA2, .EVP_PKEY_DSA3, .EVP_PKEY_DSA4, 0 }
 	}
 
 	version (OPENSSL_NO_ECDSA) {
 		//#define EVP_PKEY_ECDSA_method EVP_PKEY_NULL_method
 	} else {
-		//#define EVP_PKEY_ECDSA_method cast(.evp_sign_method*)(libressl_d.openssl.ecdsa.ECDSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.ecdsa.ECDSA_verify), { .EVP_PKEY_EC, 0, 0, 0 }
+		//#define EVP_PKEY_ECDSA_method cast(.evp_sign_method)(libressl_d.openssl.ecdsa.ECDSA_sign), cast(.evp_verify_method)(libressl_d.openssl.ecdsa.ECDSA_verify), { .EVP_PKEY_EC, 0, 0, 0 }
 	}
 
 	version (OPENSSL_NO_RSA) {
 		//#define EVP_PKEY_RSA_method EVP_PKEY_NULL_method
 		//#define EVP_PKEY_RSA_ASN1_OCTET_STRING_method EVP_PKEY_NULL_method
 	} else {
-		//#define EVP_PKEY_RSA_method cast(.evp_sign_method*)(libressl_d.openssl.rsa.RSA_sign), cast(.evp_verify_method*)(libressl_d.openssl.rsa.RSA_verify), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
-		//#define EVP_PKEY_RSA_ASN1_OCTET_STRING_method cast(.evp_sign_method*)(libressl_d.openssl.rsa.RSA_sign_ASN1_OCTET_STRING), cast(.evp_verify_method*)(libressl_d.openssl.rsa.RSA_verify_ASN1_OCTET_STRING), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
+		//#define EVP_PKEY_RSA_method cast(.evp_sign_method)(libressl_d.openssl.rsa.RSA_sign), cast(.evp_verify_method)(libressl_d.openssl.rsa.RSA_verify), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
+		//#define EVP_PKEY_RSA_ASN1_OCTET_STRING_method cast(.evp_sign_method)(libressl_d.openssl.rsa.RSA_sign_ASN1_OCTET_STRING), cast(.evp_verify_method)(libressl_d.openssl.rsa.RSA_verify_ASN1_OCTET_STRING), { .EVP_PKEY_RSA, .EVP_PKEY_RSA2, 0, 0 }
 	}
 }
 
@@ -726,7 +726,7 @@ alias EVP_ENCODE_CTX = .evp_Encode_Ctx_st;
 /**
  * Password based encryption function
  */
-alias EVP_PBE_KEYGEN = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (char)* pass, int passlen, libressl_d.openssl.asn1.ASN1_TYPE* param, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, int en_de);
+private alias EVP_PBE_KEYGEN = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (char)* pass, int passlen, libressl_d.openssl.asn1.ASN1_TYPE* param, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, int en_de);
 
 version (OPENSSL_NO_RSA) {
 } else {
@@ -1472,9 +1472,9 @@ enum EVP_PBE_TYPE_OUTER = 0x00;
  */
 enum EVP_PBE_TYPE_PRF = 0x01;
 
-int EVP_PBE_alg_add_type(int pbe_type, int pbe_nid, int cipher_nid, int md_nid, .EVP_PBE_KEYGEN* keygen);
-int EVP_PBE_alg_add(int nid, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, .EVP_PBE_KEYGEN* keygen);
-int EVP_PBE_find(int type, int pbe_nid, int* pcnid, int* pmnid, .EVP_PBE_KEYGEN** pkeygen);
+int EVP_PBE_alg_add_type(int pbe_type, int pbe_nid, int cipher_nid, int md_nid, .EVP_PBE_KEYGEN keygen);
+int EVP_PBE_alg_add(int nid, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, .EVP_PBE_KEYGEN keygen);
+int EVP_PBE_find(int type, int pbe_nid, int* pcnid, int* pmnid, .EVP_PBE_KEYGEN* pkeygen);
 void EVP_PBE_cleanup();
 
 enum ASN1_PKEY_ALIAS = 0x01;
@@ -1623,15 +1623,15 @@ int EVP_PKEY_derive_init(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
 int EVP_PKEY_derive_set_peer(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY* peer);
 int EVP_PKEY_derive(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, ubyte* key, size_t* keylen);
 
-alias EVP_PKEY_gen_cb = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
+private alias EVP_PKEY_gen_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
 
 int EVP_PKEY_paramgen_init(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
 int EVP_PKEY_paramgen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY** ppkey);
 int EVP_PKEY_keygen_init(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
 int EVP_PKEY_keygen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY** ppkey);
 
-void EVP_PKEY_CTX_set_cb(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, .EVP_PKEY_gen_cb* cb);
-.EVP_PKEY_gen_cb* EVP_PKEY_CTX_get_cb(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
+void EVP_PKEY_CTX_set_cb(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, .EVP_PKEY_gen_cb cb);
+.EVP_PKEY_gen_cb EVP_PKEY_CTX_get_cb(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx);
 
 int EVP_PKEY_CTX_get_keygen_info(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int idx);
 

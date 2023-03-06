@@ -344,9 +344,9 @@ struct crypto_ex_data_func_st
 	 */
 	void* argp;
 
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func;
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func;
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func;
+	libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func;
+	libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func;
+	libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func;
 }
 
 alias CRYPTO_EX_DATA_FUNCS = .crypto_ex_data_func_st;
@@ -504,7 +504,7 @@ int CRYPTO_ex_data_new_class();
 /**
  * Within a given class, get/register a new index
  */
-int CRYPTO_get_ex_new_index(int class_index, core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int CRYPTO_get_ex_new_index(int class_index, core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 
 /*
  * Initialise/duplicate/free CRYPTO_EX_DATA variables corresponding to a given
@@ -659,8 +659,8 @@ core.stdc.config.c_long CRYPTO_dbg_get_options();
 int CRYPTO_mem_leaks_fp(libressl_d.compat.stdio.FILE*);
 int CRYPTO_mem_leaks(libressl_d.openssl.bio.bio_st* bio);
 /* core.stdc.config.c_ulong order, char* ile, int line, int num_bytes, char* ddr */
-alias CRYPTO_MEM_LEAK_CB = extern (C) nothrow @nogc int* function(core.stdc.config.c_ulong, const (char)*, int, int, void*);
-int CRYPTO_mem_leaks_cb(.CRYPTO_MEM_LEAK_CB* cb);
+private alias CRYPTO_MEM_LEAK_CB = /* Not a function pointer type */ extern (C) nothrow @nogc int* function(core.stdc.config.c_ulong, const (char)*, int, int, void*);
+int CRYPTO_mem_leaks_cb(.CRYPTO_MEM_LEAK_CB cb);
 
 /**
  * die if we have to

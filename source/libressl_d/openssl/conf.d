@@ -127,8 +127,8 @@ struct stack_st_CONF_IMODULE
 }
 
 /* DSO module function typedefs */
-alias conf_init_func = extern (C) nothrow @nogc int function(.CONF_IMODULE* md, const (libressl_d.openssl.ossl_typ.CONF)* cnf);
-alias conf_finish_func = extern (C) nothrow @nogc void function(.CONF_IMODULE* md);
+private alias conf_init_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.CONF_IMODULE* md, const (libressl_d.openssl.ossl_typ.CONF)* cnf);
+private alias conf_finish_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(.CONF_IMODULE* md);
 
 enum CONF_MFLAGS_IGNORE_ERRORS = 0x01;
 enum CONF_MFLAGS_IGNORE_RETURN_CODES = 0x02;
@@ -187,7 +187,7 @@ int CONF_modules_load_file(const (char)* filename, const (char)* appname, core.s
 void CONF_modules_unload(int all);
 void CONF_modules_finish();
 void CONF_modules_free();
-int CONF_module_add(const (char)* name, .conf_init_func* ifunc, .conf_finish_func* ffunc);
+int CONF_module_add(const (char)* name, .conf_init_func ifunc, .conf_finish_func ffunc);
 
 const (char)* CONF_imodule_get_name(const (.CONF_IMODULE)* md);
 const (char)* CONF_imodule_get_value(const (.CONF_IMODULE)* md);

@@ -257,7 +257,7 @@ void* UI_get_app_data(libressl_d.openssl.ossl_typ.UI* s)
 		return .UI_get_ex_data(s, 0);
 	}
 
-int UI_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int UI_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int UI_set_ex_data(libressl_d.openssl.ossl_typ.UI* r, int idx, void* arg);
 void* UI_get_ex_data(libressl_d.openssl.ossl_typ.UI* r, int idx);
 

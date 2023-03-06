@@ -214,9 +214,9 @@ alias NAME_CONSTRAINTS = libressl_d.openssl.x509v3.NAME_CONSTRAINTS_st;
 alias CRYPTO_EX_DATA = libressl_d.openssl.crypto.crypto_ex_data_st;
 
 /* Callback types for crypto.h */
-alias CRYPTO_EX_new = extern (C) nothrow @nogc int function(void* parent, void* ptr_, .CRYPTO_EX_DATA* ad, int idx, core.stdc.config.c_long argl, void* argp);
-alias CRYPTO_EX_free = extern (C) nothrow @nogc void function(void* parent, void* ptr_, .CRYPTO_EX_DATA* ad, int idx, core.stdc.config.c_long argl, void* argp);
-alias CRYPTO_EX_dup = extern (C) nothrow @nogc int function(.CRYPTO_EX_DATA* to, .CRYPTO_EX_DATA* from, void* from_d, int idx, core.stdc.config.c_long argl, void* argp);
+package alias CRYPTO_EX_new = /* Not a function pointer type */ extern (C) nothrow @nogc int function(void* parent, void* ptr_, .CRYPTO_EX_DATA* ad, int idx, core.stdc.config.c_long argl, void* argp);
+package alias CRYPTO_EX_free = /* Not a function pointer type */ extern (C) nothrow @nogc void function(void* parent, void* ptr_, .CRYPTO_EX_DATA* ad, int idx, core.stdc.config.c_long argl, void* argp);
+package alias CRYPTO_EX_dup = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.CRYPTO_EX_DATA* to, .CRYPTO_EX_DATA* from, void* from_d, int idx, core.stdc.config.c_long argl, void* argp);
 
 struct ocsp_req_ctx_st;
 alias OCSP_REQ_CTX = .ocsp_req_ctx_st;

@@ -278,25 +278,25 @@ version (LIBRESSL_INTERNAL) {
 	 * IMPLEMENT_PEM_rw(...) or IMPLEMENT_PEM_rw_cb(...)
 	 */
 
-	//#define IMPLEMENT_PEM_read_fp(name, type, str, asn1) type* PEM_read_##name(libressl_d.compat.stdio.FILE* fp, type** x, .pem_password_cb* cb, void* u) { return .PEM_ASN1_read((d2i_of_void*) d2i_##asn1, str, fp, cast(void**)(x), cb, u); }
+	//#define IMPLEMENT_PEM_read_fp(name, type, str, asn1) type* PEM_read_##name(libressl_d.compat.stdio.FILE* fp, type** x, .pem_password_cb cb, void* u) { return .PEM_ASN1_read((d2i_of_void*) d2i_##asn1, str, fp, cast(void**)(x), cb, u); }
 
 	//#define IMPLEMENT_PEM_write_fp(name, type, str, asn1) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, null, null, 0, null, null); }
 
 	//#define IMPLEMENT_PEM_write_fp_const(name, type, str, asn1) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, const (type)* x) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, cast(void*)(x), null, null, 0, null, null); }
 
-	//#define IMPLEMENT_PEM_write_cb_fp(name, type, str, asn1) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, enc, kstr, klen, cb, u); }
+	//#define IMPLEMENT_PEM_write_cb_fp(name, type, str, asn1) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, enc, kstr, klen, cb, u); }
 
-	//#define IMPLEMENT_PEM_write_cb_fp_const(name, type, str, asn1) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, enc, kstr, klen, cb, u); }
+	//#define IMPLEMENT_PEM_write_cb_fp_const(name, type, str, asn1) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, enc, kstr, klen, cb, u); }
 
-	//#define IMPLEMENT_PEM_read_bio(name, type, str, asn1) type* PEM_read_bio_##name(libressl_d.openssl.bio.BIO* bp, type** x, .pem_password_cb* cb, void* u) { return .PEM_ASN1_read_bio((d2i_of_void*) d2i_##asn1, str, bp, cast(void**)(x), cb, u); }
+	//#define IMPLEMENT_PEM_read_bio(name, type, str, asn1) type* PEM_read_bio_##name(libressl_d.openssl.bio.BIO* bp, type** x, .pem_password_cb cb, void* u) { return .PEM_ASN1_read_bio((d2i_of_void*) d2i_##asn1, str, bp, cast(void**)(x), cb, u); }
 
 	//#define IMPLEMENT_PEM_write_bio(name, type, str, asn1) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, x, null, null, 0, null, null); }
 
 	//#define IMPLEMENT_PEM_write_bio_const(name, type, str, asn1) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, const (type)* x) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, cast(void*)(x), null, null, 0, null, null); }
 
-	//#define IMPLEMENT_PEM_write_cb_bio(name, type, str, asn1) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, x, enc, kstr, klen, cb, u); }
+	//#define IMPLEMENT_PEM_write_cb_bio(name, type, str, asn1) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, x, enc, kstr, klen, cb, u); }
 
-	//#define IMPLEMENT_PEM_write_cb_bio_const(name, type, str, asn1) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, cast(void*)(x), enc, kstr, klen, cb, u); }
+	//#define IMPLEMENT_PEM_write_cb_bio_const(name, type, str, asn1) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, cast(void*)(x), enc, kstr, klen, cb, u); }
 
 	//#define IMPLEMENT_PEM_write(name, type, str, asn1) .IMPLEMENT_PEM_write_bio(name, type, str, asn1) .IMPLEMENT_PEM_write_fp(name, type, str, asn1)
 
@@ -317,13 +317,13 @@ version (LIBRESSL_INTERNAL) {
 
 /* These are the same except they are for the declarations */
 
-//#define DECLARE_PEM_read_fp(name, type) type* PEM_read_##name(libressl_d.compat.stdio.FILE* fp, type** x, .pem_password_cb* cb, void* u);
+//#define DECLARE_PEM_read_fp(name, type) type* PEM_read_##name(libressl_d.compat.stdio.FILE* fp, type** x, .pem_password_cb cb, void* u);
 
 //#define DECLARE_PEM_write_fp(name, type) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x);
 
 //#define DECLARE_PEM_write_fp_const(name, type) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, const (type)* x);
 
-//#define DECLARE_PEM_write_cb_fp(name, type) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u);
+//#define DECLARE_PEM_write_cb_fp(name, type) int PEM_write_##name(libressl_d.compat.stdio.FILE* fp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
 
 version (OPENSSL_NO_BIO) {
 	/* */
@@ -338,13 +338,13 @@ version (OPENSSL_NO_BIO) {
 	/* */
 	//#define DECLARE_PEM_write_cb_bio(name, type)
 } else {
-	//#define DECLARE_PEM_read_bio(name, type) type* PEM_read_bio_##name(libressl_d.openssl.bio.BIO* bp, type** x, .pem_password_cb* cb, void* u);
+	//#define DECLARE_PEM_read_bio(name, type) type* PEM_read_bio_##name(libressl_d.openssl.bio.BIO* bp, type** x, .pem_password_cb cb, void* u);
 
 	//#define DECLARE_PEM_write_bio(name, type) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x);
 
 	//#define DECLARE_PEM_write_bio_const(name, type) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, const (type)* x);
 
-	//#define DECLARE_PEM_write_cb_bio(name, type) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u);
+	//#define DECLARE_PEM_write_cb_bio(name, type) int PEM_write_bio_##name(libressl_d.openssl.bio.BIO* bp, type* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
 }
 
 //#define DECLARE_PEM_write(name, type) .DECLARE_PEM_write_bio(name, type) .DECLARE_PEM_write_fp(name, type)
@@ -361,10 +361,10 @@ version (OPENSSL_NO_BIO) {
 
 //#define DECLARE_PEM_rw_cb(name, type) .DECLARE_PEM_read(name, type) .DECLARE_PEM_write_cb(name, type)
 
-alias pem_password_cb = extern (C) nothrow @nogc int function(char* buf, int size, int rwflag, void* userdata);
+package alias pem_password_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(char* buf, int size, int rwflag, void* userdata);
 
 int PEM_get_EVP_CIPHER_INFO(char* header, libressl_d.openssl.evp.EVP_CIPHER_INFO* cipher);
-int PEM_do_header(libressl_d.openssl.evp.EVP_CIPHER_INFO* cipher, ubyte* data, core.stdc.config.c_long* len, .pem_password_cb* callback, void* u);
+int PEM_do_header(libressl_d.openssl.evp.EVP_CIPHER_INFO* cipher, ubyte* data, core.stdc.config.c_long* len, .pem_password_cb callback, void* u);
 
 version (OPENSSL_NO_BIO) {
 } else {
@@ -373,19 +373,19 @@ version (OPENSSL_NO_BIO) {
 
 	int PEM_read_bio(libressl_d.openssl.bio.BIO* bp, char** name, char** header, ubyte** data, core.stdc.config.c_long* len);
 	int PEM_write_bio(libressl_d.openssl.bio.BIO* bp, const (char)* name, const (char)* hdr, const (ubyte)* data, core.stdc.config.c_long len);
-	int PEM_bytes_read_bio(ubyte** pdata, core.stdc.config.c_long* plen, char** pnm, const (char)* name, libressl_d.openssl.bio.BIO* bp, .pem_password_cb* cb, void* u);
-	void* PEM_ASN1_read_bio(d2i_of_void* d2i, const (char)* name, libressl_d.openssl.bio.BIO* bp, void** x, .pem_password_cb* cb, void* u);
-	int PEM_ASN1_write_bio(i2d_of_void* i2d, const (char)* name, libressl_d.openssl.bio.BIO* bp, void* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u);
+	int PEM_bytes_read_bio(ubyte** pdata, core.stdc.config.c_long* plen, char** pnm, const (char)* name, libressl_d.openssl.bio.BIO* bp, .pem_password_cb cb, void* u);
+	void* PEM_ASN1_read_bio(d2i_of_void* d2i, const (char)* name, libressl_d.openssl.bio.BIO* bp, void** x, .pem_password_cb cb, void* u);
+	int PEM_ASN1_write_bio(i2d_of_void* i2d, const (char)* name, libressl_d.openssl.bio.BIO* bp, void* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
 
-	libressl_d.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb* cb, void* u);
-	int PEM_X509_INFO_write_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.x509.X509_INFO* xi, libressl_d.openssl.ossl_typ.EVP_CIPHER* enc, ubyte* kstr, int klen, .pem_password_cb* cd, void* u);
+	libressl_d.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb cb, void* u);
+	int PEM_X509_INFO_write_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.x509.X509_INFO* xi, libressl_d.openssl.ossl_typ.EVP_CIPHER* enc, ubyte* kstr, int klen, .pem_password_cb cd, void* u);
 }
 
 int PEM_read(libressl_d.compat.stdio.FILE* fp, char** name, char** header, ubyte** data, core.stdc.config.c_long* len);
 int PEM_write(libressl_d.compat.stdio.FILE* fp, const (char)* name, const (char)* hdr, const (ubyte)* data, core.stdc.config.c_long len);
-void* PEM_ASN1_read(d2i_of_void* d2i, const (char)* name, libressl_d.compat.stdio.FILE* fp, void** x, .pem_password_cb* cb, void* u);
-int PEM_ASN1_write(i2d_of_void* i2d, const (char)* name, libressl_d.compat.stdio.FILE* fp, void* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* callback, void* u);
-libressl_d.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb* cb, void* u);
+void* PEM_ASN1_read(d2i_of_void* d2i, const (char)* name, libressl_d.compat.stdio.FILE* fp, void** x, .pem_password_cb cb, void* u);
+int PEM_ASN1_write(i2d_of_void* i2d, const (char)* name, libressl_d.compat.stdio.FILE* fp, void* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb callback, void* u);
+libressl_d.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb cb, void* u);
 
 int PEM_SealInit(.PEM_ENCODE_SEAL_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_CIPHER* type, libressl_d.openssl.ossl_typ.EVP_MD* md_type, ubyte** ek, int* ekl, ubyte* iv, libressl_d.openssl.ossl_typ.EVP_PKEY** pubk, int npubk);
 void PEM_SealUpdate(.PEM_ENCODE_SEAL_CTX* ctx, ubyte* out_, int* outl, ubyte* in_, int inl);
@@ -447,19 +447,19 @@ version (OPENSSL_NO_DH) {
 
 //.DECLARE_PEM_rw(PUBKEY, libressl_d.openssl.ossl_typ.EVP_PKEY)
 
-int PEM_write_bio_PKCS8PrivateKey_nid(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb* cb, void* u);
-int PEM_write_bio_PKCS8PrivateKey(libressl_d.openssl.bio.BIO*, libressl_d.openssl.ossl_typ.EVP_PKEY*, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)*, char*, int, .pem_password_cb*, void*);
-int i2d_PKCS8PrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, char* kstr, int klen, .pem_password_cb* cb, void* u);
-int i2d_PKCS8PrivateKey_nid_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb* cb, void* u);
-libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PKCS8PrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY** x, .pem_password_cb* cb, void* u);
+int PEM_write_bio_PKCS8PrivateKey_nid(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb cb, void* u);
+int PEM_write_bio_PKCS8PrivateKey(libressl_d.openssl.bio.BIO*, libressl_d.openssl.ossl_typ.EVP_PKEY*, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)*, char*, int, .pem_password_cb, void*);
+int i2d_PKCS8PrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, char* kstr, int klen, .pem_password_cb cb, void* u);
+int i2d_PKCS8PrivateKey_nid_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb cb, void* u);
+libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PKCS8PrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY** x, .pem_password_cb cb, void* u);
 
-int i2d_PKCS8PrivateKey_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, char* kstr, int klen, .pem_password_cb* cb, void* u);
-int i2d_PKCS8PrivateKey_nid_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb* cb, void* u);
-int PEM_write_PKCS8PrivateKey_nid(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb* cb, void* u);
+int i2d_PKCS8PrivateKey_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, char* kstr, int klen, .pem_password_cb cb, void* u);
+int i2d_PKCS8PrivateKey_nid_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb cb, void* u);
+int PEM_write_PKCS8PrivateKey_nid(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb cb, void* u);
 
-libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PKCS8PrivateKey_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY** x, .pem_password_cb* cb, void* u);
+libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PKCS8PrivateKey_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY** x, .pem_password_cb cb, void* u);
 
-int PEM_write_PKCS8PrivateKey(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, char* kstr, int klen, .pem_password_cb* cd, void* u);
+int PEM_write_PKCS8PrivateKey(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.EVP_PKEY* x, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* enc, char* kstr, int klen, .pem_password_cb cd, void* u);
 
 libressl_d.openssl.ossl_typ.EVP_PKEY* PEM_read_bio_Parameters(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY** x);
 int PEM_write_bio_Parameters(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* x);
@@ -473,8 +473,8 @@ int i2b_PublicKey_bio(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.ossl_
 
 version (OPENSSL_NO_RC4) {
 } else {
-	libressl_d.openssl.ossl_typ.EVP_PKEY* b2i_PVK_bio(libressl_d.openssl.bio.BIO* in_, .pem_password_cb* cb, void* u);
-	int i2b_PVK_bio(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.ossl_typ.EVP_PKEY* pk, int enclevel, .pem_password_cb* cb, void* u);
+	libressl_d.openssl.ossl_typ.EVP_PKEY* b2i_PVK_bio(libressl_d.openssl.bio.BIO* in_, .pem_password_cb cb, void* u);
+	int i2b_PVK_bio(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.ossl_typ.EVP_PKEY* pk, int enclevel, .pem_password_cb cb, void* u);
 }
 
 /* BEGIN ERROR CODES */

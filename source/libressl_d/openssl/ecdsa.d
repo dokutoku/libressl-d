@@ -308,7 +308,7 @@ int ECDSA_sign_ex(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* 
 int ECDSA_verify(int type, const (ubyte)* dgst, int dgstlen, const (ubyte)* sig, int siglen, libressl_d.openssl.ec.EC_KEY* eckey);
 
 /* the standard ex_data functions */
-int ECDSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int ECDSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int ECDSA_set_ex_data(libressl_d.openssl.ec.EC_KEY* d, int idx, void* arg);
 void* ECDSA_get_ex_data(libressl_d.openssl.ec.EC_KEY* d, int idx);
 

@@ -174,8 +174,8 @@ version (OPENSSL_NO_CMS) {
 	int CMS_set_detached(.CMS_ContentInfo* cms, int detached);
 
 	static assert(libressl_d.openssl.pem.HEADER_PEM_H);
-	.CMS_ContentInfo* PEM_read_bio_CMS(libressl_d.openssl.bio.BIO* bp, .CMS_ContentInfo** x, libressl_d.openssl.pem.pem_password_cb* cb, void* u);
-	.CMS_ContentInfo* PEM_read_CMS(libressl_d.compat.stdio.FILE* fp, .CMS_ContentInfo** x, libressl_d.openssl.pem.pem_password_cb* cb, void* u);
+	.CMS_ContentInfo* PEM_read_bio_CMS(libressl_d.openssl.bio.BIO* bp, .CMS_ContentInfo** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
+	.CMS_ContentInfo* PEM_read_CMS(libressl_d.compat.stdio.FILE* fp, .CMS_ContentInfo** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
 	int PEM_write_bio_CMS(libressl_d.openssl.bio.BIO* bp, const (.CMS_ContentInfo)* x);
 	int PEM_write_CMS(libressl_d.compat.stdio.FILE* fp, const (.CMS_ContentInfo)* x);
 

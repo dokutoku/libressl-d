@@ -560,7 +560,7 @@ int RSA_verify_PKCS1_PSS_mgf1(libressl_d.openssl.ossl_typ.RSA* rsa, const (ubyte
 
 int RSA_padding_add_PKCS1_PSS_mgf1(libressl_d.openssl.ossl_typ.RSA* rsa, ubyte* EM, const (ubyte)* mHash, const (libressl_d.openssl.ossl_typ.EVP_MD)* Hash, const (libressl_d.openssl.ossl_typ.EVP_MD)* mgf1Hash, int sLen);
 
-int RSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int RSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int RSA_set_ex_data(libressl_d.openssl.ossl_typ.RSA* r, int idx, void* arg);
 void* RSA_get_ex_data(const (libressl_d.openssl.ossl_typ.RSA)* r, int idx);
 

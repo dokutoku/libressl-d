@@ -814,7 +814,7 @@ version (LIBRESSL_INTERNAL) {
 		 * add an accessor
 		 */
 		/* Default password callback. */
-		libressl_d.openssl.pem.pem_password_cb* default_passwd_callback;
+		libressl_d.openssl.pem.pem_password_cb default_passwd_callback;
 
 		/* Default password callback user data. */
 		void* default_passwd_callback_userdata;
@@ -1368,8 +1368,8 @@ alias SSL_set_timeout = .SSL_SESSION_set_timeout;
 //#define d2i_SSL_SESSION_bio(bp, s_id) libressl_d.openssl.asn1.ASN1_d2i_bio_of(.SSL_SESSION, .SSL_SESSION_new, .d2i_SSL_SESSION, bp, s_id)
 //#define i2d_SSL_SESSION_bio(bp, s_id) libressl_d.openssl.asn1.ASN1_i2d_bio_of(.SSL_SESSION, .i2d_SSL_SESSION, bp, s_id)
 
-.SSL_SESSION* PEM_read_bio_SSL_SESSION(libressl_d.openssl.bio.BIO* bp, .SSL_SESSION** x, libressl_d.openssl.pem.pem_password_cb* cb, void* u);
-.SSL_SESSION* PEM_read_SSL_SESSION(libressl_d.compat.stdio.FILE* fp, .SSL_SESSION** x, libressl_d.openssl.pem.pem_password_cb* cb, void* u);
+.SSL_SESSION* PEM_read_bio_SSL_SESSION(libressl_d.openssl.bio.BIO* bp, .SSL_SESSION** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
+.SSL_SESSION* PEM_read_SSL_SESSION(libressl_d.compat.stdio.FILE* fp, .SSL_SESSION** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
 int PEM_write_bio_SSL_SESSION(libressl_d.openssl.bio.BIO* bp, .SSL_SESSION* x);
 int PEM_write_SSL_SESSION(libressl_d.compat.stdio.FILE* fp, .SSL_SESSION* x);
 
@@ -2035,8 +2035,8 @@ int SSL_CTX_use_PrivateKey_ASN1(int pk, libressl_d.openssl.ossl_typ.SSL_CTX* ctx
 int SSL_CTX_use_certificate(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.X509* x);
 int SSL_CTX_use_certificate_ASN1(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int len, const (ubyte)* d);
 
-libressl_d.openssl.pem.pem_password_cb* SSL_CTX_get_default_passwd_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
-void SSL_CTX_set_default_passwd_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.pem.pem_password_cb* cb);
+libressl_d.openssl.pem.pem_password_cb SSL_CTX_get_default_passwd_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
+void SSL_CTX_set_default_passwd_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.pem.pem_password_cb cb);
 void* SSL_CTX_get_default_passwd_cb_userdata(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
 void SSL_CTX_set_default_passwd_cb_userdata(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* u);
 
@@ -2265,15 +2265,15 @@ core.stdc.config.c_long SSL_get_verify_result(const (libressl_d.openssl.ossl_typ
 
 int SSL_set_ex_data(libressl_d.openssl.ossl_typ.SSL* ssl, int idx, void* data);
 void* SSL_get_ex_data(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int idx);
-int SSL_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int SSL_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 
 int SSL_SESSION_set_ex_data(.SSL_SESSION* ss, int idx, void* data);
 void* SSL_SESSION_get_ex_data(const (.SSL_SESSION)* ss, int idx);
-int SSL_SESSION_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int SSL_SESSION_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 
 int SSL_CTX_set_ex_data(libressl_d.openssl.ossl_typ.SSL_CTX* ssl, int idx, void* data);
 void* SSL_CTX_get_ex_data(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ssl, int idx);
-int SSL_CTX_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int SSL_CTX_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 
 int SSL_get_ex_data_X509_STORE_CTX_idx();
 

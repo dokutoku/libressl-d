@@ -211,7 +211,7 @@ void DH_free(libressl_d.openssl.ossl_typ.DH* dh);
 int DH_up_ref(libressl_d.openssl.ossl_typ.DH* dh);
 int DH_size(const (libressl_d.openssl.ossl_typ.DH)* dh);
 int DH_bits(const (libressl_d.openssl.ossl_typ.DH)* dh);
-int DH_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int DH_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int DH_set_ex_data(libressl_d.openssl.ossl_typ.DH* d, int idx, void* arg);
 void* DH_get_ex_data(libressl_d.openssl.ossl_typ.DH* d, int idx);
 

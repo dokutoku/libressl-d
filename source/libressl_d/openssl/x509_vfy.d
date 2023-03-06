@@ -782,7 +782,7 @@ void* X509_STORE_get_ex_data(libressl_d.openssl.ossl_typ.X509_STORE* xs, int idx
 int X509_STORE_set_ex_data(libressl_d.openssl.ossl_typ.X509_STORE* xs, int idx, void* data);
 
 pragma(inline, true)
-int X509_STORE_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* newf, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dupf, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* freef)
+int X509_STORE_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.openssl.ossl_typ.CRYPTO_EX_new newf, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dupf, libressl_d.openssl.ossl_typ.CRYPTO_EX_free freef)
 
 	do
 	{
@@ -842,7 +842,7 @@ int X509_STORE_load_locations(libressl_d.openssl.ossl_typ.X509_STORE* ctx, const
 int X509_STORE_load_mem(libressl_d.openssl.ossl_typ.X509_STORE* ctx, void* buf, int len);
 int X509_STORE_set_default_paths(libressl_d.openssl.ossl_typ.X509_STORE* ctx);
 
-int X509_STORE_CTX_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int X509_STORE_CTX_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int X509_STORE_CTX_set_ex_data(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int idx, void* data);
 void* X509_STORE_CTX_get_ex_data(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int idx);
 int X509_STORE_CTX_get_error(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);

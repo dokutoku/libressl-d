@@ -1289,7 +1289,7 @@ int ECParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key
 int EC_KEY_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key, int off);
 
 pragma(inline, true)
-int EC_KEY_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* newf, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dupf, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* freef)
+int EC_KEY_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.openssl.ossl_typ.CRYPTO_EX_new newf, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dupf, libressl_d.openssl.ossl_typ.CRYPTO_EX_free freef)
 
 	do
 	{

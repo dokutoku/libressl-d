@@ -548,8 +548,8 @@ void BIO_set_callback_arg(.BIO* b, char* arg);
 const (char)* BIO_method_name(const (.BIO)* b);
 int BIO_method_type(const (.BIO)* b);
 
-alias bio_info_cb = extern (C) nothrow @nogc void function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long);
-alias BIO_info_cb = extern (C) nothrow @nogc int function(.BIO*, int, int);
+private alias bio_info_cb = /* Not a function pointer type */ extern (C) nothrow @nogc void function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long);
+private alias BIO_info_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.BIO*, int, int);
 
 struct bio_method_st
 {
@@ -562,7 +562,7 @@ struct bio_method_st
 	core.stdc.config.c_long function(.BIO*, int, core.stdc.config.c_long, void*) ctrl;
 	int function(.BIO*) create;
 	int function(.BIO*) destroy;
-	core.stdc.config.c_long function(.BIO*, int, .bio_info_cb*) callback_ctrl;
+	core.stdc.config.c_long function(.BIO*, int, .bio_info_cb) callback_ctrl;
 }
 
 alias BIO_METHOD = .bio_method_st;
@@ -674,7 +674,7 @@ alias BIO_F_BUFFER_CTX = .bio_f_buffer_ctx_struct;
 /**
  * Prefix and suffix callback in ASN1 BIO
  */
-alias asn1_ps_func = extern (C) nothrow @nogc int function(.BIO* b, ubyte** pbuf, int* plen, void* parg);
+private alias asn1_ps_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.BIO* b, ubyte** pbuf, int* plen, void* parg);
 
 /* BIO_METHOD accessors */
 .BIO_METHOD* BIO_meth_new(int type, const (char)* name);
@@ -693,8 +693,8 @@ int BIO_meth_set_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(.BIO*,
 int BIO_meth_set_create(.BIO_METHOD* biom, int function(.BIO*) create);
 //int (*BIO_meth_get_destroy(const (.BIO_METHOD)* biom))(.BIO*);
 int BIO_meth_set_destroy(.BIO_METHOD* biom, int function(.BIO*) destroy);
-//core.stdc.config.c_long (*BIO_meth_get_callback_ctrl(const (.BIO_METHOD)* biom))(.BIO*, int, .BIO_info_cb*);
-int BIO_meth_set_callback_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(.BIO*, int, .BIO_info_cb*) callback_ctrl);
+//core.stdc.config.c_long (*BIO_meth_get_callback_ctrl(const (.BIO_METHOD)* biom))(.BIO*, int, .BIO_info_cb);
+int BIO_meth_set_callback_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(.BIO*, int, .BIO_info_cb) callback_ctrl);
 
 /* connect BIO stuff */
 enum BIO_CONN_S_BEFORE = 1;
@@ -1452,15 +1452,15 @@ int BIO_dgram_set_peer(.BIO* b, char* peer)
 /* void BIO_set_ex_free_func(.BIO* io,int idx,void function() cb); */
 int BIO_set_ex_data(.BIO* bio, int idx, void* data);
 void* BIO_get_ex_data(.BIO* bio, int idx);
-int BIO_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new* new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup* dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free* free_func);
+int BIO_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 core.stdc.config.c_ulong BIO_number_read(.BIO* bio);
 core.stdc.config.c_ulong BIO_number_written(.BIO* bio);
 
 /* For BIO_f_asn1() */
-int BIO_asn1_set_prefix(.BIO* b, .asn1_ps_func* prefix, .asn1_ps_func* prefix_free);
-int BIO_asn1_get_prefix(.BIO* b, .asn1_ps_func** pprefix, .asn1_ps_func** pprefix_free);
-int BIO_asn1_set_suffix(.BIO* b, .asn1_ps_func* suffix, .asn1_ps_func* suffix_free);
-int BIO_asn1_get_suffix(.BIO* b, .asn1_ps_func** psuffix, .asn1_ps_func** psuffix_free);
+int BIO_asn1_set_prefix(.BIO* b, .asn1_ps_func prefix, .asn1_ps_func prefix_free);
+int BIO_asn1_get_prefix(.BIO* b, .asn1_ps_func* pprefix, .asn1_ps_func* pprefix_free);
+int BIO_asn1_set_suffix(.BIO* b, .asn1_ps_func suffix, .asn1_ps_func suffix_free);
+int BIO_asn1_get_suffix(.BIO* b, .asn1_ps_func* psuffix, .asn1_ps_func* psuffix_free);
 
 int BIO_get_new_index();
 const (.BIO_METHOD)* BIO_s_file();
