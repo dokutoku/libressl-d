@@ -223,339 +223,339 @@ version (LIBRESSL_INTERNAL) {
 } else {
 	template SYSerr(string f, string r)
 	{
-		enum SYSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_SYS, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum SYSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_SYS, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template BNerr(string f, string r)
 	{
-		enum BNerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BN, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum BNerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BN, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template RSAerr(string f, string r)
 	{
-		enum RSAerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RSA, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum RSAerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RSA, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template DHerr(string f, string r)
 	{
-		enum DHerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DH, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum DHerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DH, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template EVPerr(string f, string r)
 	{
-		enum EVPerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EVP, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum EVPerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EVP, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template BUFerr(string f, string r)
 	{
-		enum BUFerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BUF, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum BUFerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BUF, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template OBJerr(string f, string r)
 	{
-		enum OBJerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OBJ, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum OBJerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OBJ, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template PEMerr(string f, string r)
 	{
-		enum PEMerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PEM, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum PEMerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PEM, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template DSAerr(string f, string r)
 	{
-		enum DSAerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSA, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum DSAerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSA, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template X509err(string f, string r)
 	{
-		enum X509err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum X509err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ASN1err(string f, string r)
 	{
-		enum ASN1err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ASN1, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum ASN1err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ASN1, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CONFerr(string f, string r)
 	{
-		enum CONFerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CONF, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum CONFerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CONF, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CRYPTOerr(string f, string r)
 	{
-		enum CRYPTOerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CRYPTO, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum CRYPTOerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CRYPTO, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ECerr(string f, string r)
 	{
-		enum ECerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EC, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum ECerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EC, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template BIOerr(string f, string r)
 	{
-		enum BIOerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BIO, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum BIOerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BIO, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template PKCS7err(string f, string r)
 	{
-		enum PKCS7err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS7, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum PKCS7err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS7, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template X509V3err(string f, string r)
 	{
-		enum X509V3err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509V3, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum X509V3err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509V3, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template PKCS12err(string f, string r)
 	{
-		enum PKCS12err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS12, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum PKCS12err = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS12, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template RANDerr(string f, string r)
 	{
-		enum RANDerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RAND, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum RANDerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RAND, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template DSOerr(string f, string r)
 	{
-		enum DSOerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSO, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum DSOerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSO, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ENGINEerr(string f, string r)
 	{
-		enum ENGINEerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ENGINE, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum ENGINEerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ENGINE, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template OCSPerr(string f, string r)
 	{
-		enum OCSPerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OCSP, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum OCSPerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OCSP, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template UIerr(string f, string r)
 	{
-		enum UIerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_UI, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum UIerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_UI, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template COMPerr(string f, string r)
 	{
-		enum COMPerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_COMP, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum COMPerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_COMP, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ECDSAerr(string f, string r)
 	{
-		enum ECDSAerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDSA, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum ECDSAerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDSA, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ECDHerr(string f, string r)
 	{
-		enum ECDHerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDH, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum ECDHerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDH, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template STOREerr(string f, string r)
 	{
-		enum STOREerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_STORE, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum STOREerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_STORE, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template FIPSerr(string f, string r)
 	{
-		enum FIPSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_FIPS, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum FIPSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_FIPS, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CMSerr(string f, string r)
 	{
-		enum CMSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CMS, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum CMSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CMS, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template TSerr(string f, string r)
 	{
-		enum TSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_TS, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum TSerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_TS, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template HMACerr(string f, string r)
 	{
-		enum HMACerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_HMAC, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum HMACerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_HMAC, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template JPAKEerr(string f, string r)
 	{
-		enum JPAKEerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_JPAKE, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum JPAKEerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_JPAKE, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template GOSTerr(string f, string r)
 	{
-		enum GOSTerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_GOST, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum GOSTerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_GOST, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template SSLerr(string f, string r)
 	{
-		enum SSLerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_SSL, " ~ f ~ ", " ~ r ~ ", __FILE__, __LINE__);";
+		enum SSLerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_SSL, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
 }
 
 version (LIBRESSL_INTERNAL) {
 	template SYSerror(string r)
 	{
-		enum SYSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_SYS, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum SYSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_SYS, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template BNerror(string r)
 	{
-		enum BNerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BN, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum BNerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BN, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template RSAerror(string r)
 	{
-		enum RSAerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RSA, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum RSAerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RSA, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template DHerror(string r)
 	{
-		enum DHerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DH, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum DHerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DH, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template EVPerror(string r)
 	{
-		enum EVPerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EVP, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum EVPerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EVP, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template BUFerror(string r)
 	{
-		enum BUFerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BUF, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum BUFerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BUF, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template OBJerror(string r)
 	{
-		enum OBJerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OBJ, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum OBJerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OBJ, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template PEMerror(string r)
 	{
-		enum PEMerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PEM, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum PEMerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PEM, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template DSAerror(string r)
 	{
-		enum DSAerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSA, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum DSAerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSA, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template X509error(string r)
 	{
-		enum X509error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum X509error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ASN1error(string r)
 	{
-		enum ASN1error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ASN1, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum ASN1error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ASN1, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CONFerror(string r)
 	{
-		enum CONFerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CONF, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum CONFerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CONF, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CRYPTOerror(string r)
 	{
-		enum CRYPTOerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CRYPTO, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum CRYPTOerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CRYPTO, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ECerror(string r)
 	{
-		enum ECerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EC, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum ECerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_EC, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template BIOerror(string r)
 	{
-		enum BIOerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BIO, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum BIOerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_BIO, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template PKCS7error(string r)
 	{
-		enum PKCS7error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS7, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum PKCS7error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS7, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template X509V3error(string r)
 	{
-		enum X509V3error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509V3, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum X509V3error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_X509V3, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template PKCS12error(string r)
 	{
-		enum PKCS12error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS12, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum PKCS12error = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_PKCS12, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template RANDerror(string r)
 	{
-		enum RANDerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RAND, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum RANDerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_RAND, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template DSOerror(string r)
 	{
-		enum DSOerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSO, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum DSOerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_DSO, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ENGINEerror(string r)
 	{
-		enum ENGINEerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ENGINE, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum ENGINEerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ENGINE, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template OCSPerror(string r)
 	{
-		enum OCSPerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OCSP, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum OCSPerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_OCSP, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template UIerror(string r)
 	{
-		enum UIerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_UI, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum UIerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_UI, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template COMPerror(string r)
 	{
-		enum COMPerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_COMP, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum COMPerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_COMP, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ECDSAerror(string r)
 	{
-		enum ECDSAerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDSA, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum ECDSAerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDSA, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template ECDHerror(string r)
 	{
-		enum ECDHerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDH, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum ECDHerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_ECDH, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template STOREerror(string r)
 	{
-		enum STOREerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_STORE, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum STOREerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_STORE, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template FIPSerror(string r)
 	{
-		enum FIPSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_FIPS, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum FIPSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_FIPS, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CMSerror(string r)
 	{
-		enum CMSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CMS, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum CMSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CMS, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template TSerror(string r)
 	{
-		enum TSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_TS, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum TSerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_TS, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template HMACerror(string r)
 	{
-		enum HMACerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_HMAC, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum HMACerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_HMAC, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template JPAKEerror(string r)
 	{
-		enum JPAKEerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_JPAKE, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum JPAKEerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_JPAKE, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 
 	template GOSTerror(string r)
 	{
-		enum GOSTerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_GOST, 0x0FFF, " ~ r ~", __FILE__, __LINE__);";
+		enum GOSTerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_GOST, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 }
 

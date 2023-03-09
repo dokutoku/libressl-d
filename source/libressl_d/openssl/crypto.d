@@ -230,27 +230,27 @@ version (CRYPTO_w_lock) {
 } else {
 	template CRYPTO_w_lock(string type)
 	{
-		enum CRYPTO_w_lock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_LOCK | libressl_d.openssl.crypto.CRYPTO_WRITE, " ~ type ~ ", __FILE__, __LINE__);";
+		enum CRYPTO_w_lock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_LOCK | libressl_d.openssl.crypto.CRYPTO_WRITE, " ~ type ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CRYPTO_w_unlock(string type)
 	{
-		enum CRYPTO_w_unlock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_UNLOCK | libressl_d.openssl.crypto.CRYPTO_WRITE, " ~ type ~ ", __FILE__, __LINE__);";
+		enum CRYPTO_w_unlock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_UNLOCK | libressl_d.openssl.crypto.CRYPTO_WRITE, " ~ type ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CRYPTO_r_lock(string type)
 	{
-		enum CRYPTO_r_lock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_LOCK | libressl_d.openssl.crypto.CRYPTO_READ, " ~ type ~ ", __FILE__, __LINE__);";
+		enum CRYPTO_r_lock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_LOCK | libressl_d.openssl.crypto.CRYPTO_READ, " ~ type ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CRYPTO_r_unlock(string type)
 	{
-		enum CRYPTO_r_unlock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_UNLOCK | libressl_d.openssl.crypto.CRYPTO_READ, " ~ type ~ ", __FILE__, __LINE__);";
+		enum CRYPTO_r_unlock = "libressl_d.openssl.crypto.CRYPTO_lock(libressl_d.openssl.crypto.CRYPTO_UNLOCK | libressl_d.openssl.crypto.CRYPTO_READ, " ~ type ~ ", &(__FILE__[0]), __LINE__);";
 	}
 
 	template CRYPTO_add(string addr, string amount, string type)
 	{
-		enum CRYPTO_add = "libressl_d.openssl.crypto.CRYPTO_add_lock(" ~ addr ~ ", " ~ amount ~ ", " ~ type ~ ", __FILE__, __LINE__);";
+		enum CRYPTO_add = "libressl_d.openssl.crypto.CRYPTO_add_lock(" ~ addr ~ ", " ~ amount ~ ", " ~ type ~ ", &(__FILE__[0]), __LINE__);";
 	}
 }
 
@@ -436,27 +436,27 @@ version (LIBRESSL_INTERNAL) {
 
 	template OPENSSL_malloc(string num)
 	{
-		enum OPENSSL_malloc = "libressl_d.openssl.crypto.CRYPTO_malloc(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+		enum OPENSSL_malloc = "libressl_d.openssl.crypto.CRYPTO_malloc(cast(int)(" ~ num ~ "), &(__FILE__[0]), __LINE__)";
 	}
 
 	template OPENSSL_strdup(string str)
 	{
-		enum OPENSSL_strdup = "libressl_d.openssl.crypto.CRYPTO_strdup(" ~ str ~ ", __FILE__, __LINE__)";
+		enum OPENSSL_strdup = "libressl_d.openssl.crypto.CRYPTO_strdup(" ~ str ~ ", &(__FILE__[0]), __LINE__)";
 	}
 
 	template OPENSSL_realloc(string addr, string num)
 	{
-		enum OPENSSL_realloc = "libressl_d.openssl.crypto.CRYPTO_realloc(cast(char*)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+		enum OPENSSL_realloc = "libressl_d.openssl.crypto.CRYPTO_realloc(cast(char*)(" ~ addr ~ "), cast(int)(" ~ num ~ "), &(__FILE__[0]), __LINE__)";
 	}
 
 	template OPENSSL_realloc_clean(string addr, string old_num, string num)
 	{
-		enum OPENSSL_realloc_clean = "libressl_d.openssl.crypto.CRYPTO_realloc_clean(" ~ addr ~ ", " ~ old_num ~ ", " ~ num ~ ", __FILE__, __LINE__)";
+		enum OPENSSL_realloc_clean = "libressl_d.openssl.crypto.CRYPTO_realloc_clean(" ~ addr ~ ", " ~ old_num ~ ", " ~ num ~ ", &(__FILE__[0]), __LINE__)";
 	}
 
 	template OPENSSL_remalloc(string addr, string num)
 	{
-		enum OPENSSL_remalloc = "libressl_d.openssl.crypto.CRYPTO_remalloc(cast(char**)(" ~ addr ~ "), cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+		enum OPENSSL_remalloc = "libressl_d.openssl.crypto.CRYPTO_remalloc(cast(char**)(" ~ addr ~ "), cast(int)(" ~ num ~ "), &(__FILE__[0]), __LINE__)";
 	}
 
 	alias OPENSSL_freeFunc = .CRYPTO_free;
@@ -464,7 +464,7 @@ version (LIBRESSL_INTERNAL) {
 
 	template OPENSSL_malloc_locked(num)
 	{
-		enum OPENSSL_malloc_locked = "libressl_d.openssl.crypto.CRYPTO_malloc_locked(cast(int)(" ~ num ~ "), __FILE__, __LINE__)";
+		enum OPENSSL_malloc_locked = "libressl_d.openssl.crypto.CRYPTO_malloc_locked(cast(int)(" ~ num ~ "), &(__FILE__[0]), __LINE__)";
 	}
 
 	alias OPENSSL_free_locked = .CRYPTO_free_locked;
@@ -615,7 +615,7 @@ core.stdc.config.c_long CRYPTO_get_mem_debug_options();
 
 template CRYPTO_push_info(string info)
 {
-	enum CRYPTO_push_info = "libressl_d.openssl.crypto.CRYPTO_push_info_(" ~ info ~ ", __FILE__, __LINE__)";
+	enum CRYPTO_push_info = "libressl_d.openssl.crypto.CRYPTO_push_info_(" ~ info ~ ", &(__FILE__[0]), __LINE__)";
 }
 
 int CRYPTO_push_info_(const (char)* info, const (char)* file, int line);
@@ -666,7 +666,7 @@ int CRYPTO_mem_leaks_cb(.CRYPTO_MEM_LEAK_CB cb);
  * die if we have to
  */
 void OpenSSLDie(const (char)* file, int line, const (char)* assertion);
-//#define OPENSSL_assert(e) cast(void)(e ? (0) : (.OpenSSLDie(__FILE__, __LINE__, #e), 1))
+//#define OPENSSL_assert(e) cast(void)(e ? (0) : (.OpenSSLDie(&(__FILE__[0]), __LINE__, #e), 1))
 
 core.stdc.stdint.uint64_t OPENSSL_cpu_caps();
 
