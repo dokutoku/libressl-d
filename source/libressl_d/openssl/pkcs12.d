@@ -201,7 +201,7 @@ version (LIBRESSL_INTERNAL) {
 	alias M_PKCS8_decrypt = .PKCS8_decrypt;
 
 	pragma(inline, true)
-	int M_PKCS12_bag_type(BG)(scope const BG* bg)
+	int M_PKCS12_bag_type(BG)(const (BG)* bg)
 
 		in
 		{
@@ -214,7 +214,7 @@ version (LIBRESSL_INTERNAL) {
 		}
 
 	pragma(inline, true)
-	int M_PKCS12_cert_bag_type(scope const .PKCS12_SAFEBAG* bg)
+	int M_PKCS12_cert_bag_type(const (.PKCS12_SAFEBAG)* bg)
 
 		in
 		{

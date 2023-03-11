@@ -651,7 +651,7 @@ struct x509_purpose_st
 	int trust;
 
 	int flags;
-	int function(const .x509_purpose_st*, const (libressl_d.openssl.ossl_typ.X509)*, int) check_purpose;
+	int function(const (.x509_purpose_st)*, const (libressl_d.openssl.ossl_typ.X509)*, int) check_purpose;
 	char* name;
 	char* sname;
 	void* usr_data;

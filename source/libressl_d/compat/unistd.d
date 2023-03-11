@@ -40,7 +40,7 @@ version (Posix) {
 	version (Windows) {
 		public import core.sys.windows.windows;
 
-		int _access(const char* path, const int access_mode);
+		int _access(const (char)* path, const int access_mode);
 
 		alias access = ._access;
 

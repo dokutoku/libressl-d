@@ -391,7 +391,7 @@ libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_attributes(return sco
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_signed(A)(scope const A* a)
+bool PKCS7_type_is_signed(A)(const (A)* a)
 
 	in
 	{
@@ -404,7 +404,7 @@ bool PKCS7_type_is_signed(A)(scope const A* a)
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_encrypted(A)(scope const A* a)
+bool PKCS7_type_is_encrypted(A)(const (A)* a)
 
 	in
 	{
@@ -417,7 +417,7 @@ bool PKCS7_type_is_encrypted(A)(scope const A* a)
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_enveloped(A)(scope const A* a)
+bool PKCS7_type_is_enveloped(A)(const (A)* a)
 
 	in
 	{
@@ -430,7 +430,7 @@ bool PKCS7_type_is_enveloped(A)(scope const A* a)
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_signedAndEnveloped(A)(scope const A* a)
+bool PKCS7_type_is_signedAndEnveloped(A)(const (A)* a)
 
 	in
 	{
@@ -443,7 +443,7 @@ bool PKCS7_type_is_signedAndEnveloped(A)(scope const A* a)
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_data(A)(scope const A* a)
+bool PKCS7_type_is_data(A)(const (A)* a)
 
 	in
 	{
@@ -456,7 +456,7 @@ bool PKCS7_type_is_data(A)(scope const A* a)
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_digest(A)(scope const A* a)
+bool PKCS7_type_is_digest(A)(const (A)* a)
 
 	in
 	{
@@ -469,7 +469,7 @@ bool PKCS7_type_is_digest(A)(scope const A* a)
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_encrypted(A)(scope const A* a)
+bool PKCS7_type_is_encrypted(A)(const (A)* a)
 
 	in
 	{
@@ -482,7 +482,7 @@ bool PKCS7_type_is_encrypted(A)(scope const A* a)
 	}
 
 pragma(inline, true)
-bool PKCS7_type_is_digest(A)(scope const A* a)
+bool PKCS7_type_is_digest(A)(const (A)* a)
 
 	in
 	{
