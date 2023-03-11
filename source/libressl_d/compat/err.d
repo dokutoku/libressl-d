@@ -26,10 +26,9 @@ version (Posix) {
 } else {
 	version (D_BetterC) {
 	} else {
-		//noreturn
 		pragma(inline, true)
 		nothrow
-		void err(int eval, const (char)* fmt, ...)
+		noreturn err(int eval, const (char)* fmt, ...)
 
 			do
 			{
@@ -48,10 +47,9 @@ version (Posix) {
 				libressl_d.compat.stdlib.exit(eval);
 			}
 
-		//noreturn
 		pragma(inline, true)
 		nothrow
-		void errx(int eval, const (char)* fmt, ...)
+		noreturn errx(int eval, const (char)* fmt, ...)
 
 			do
 			{
