@@ -61,7 +61,6 @@ module libressl_d.openssl.rsa;
 private static import core.stdc.config;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.evp;
-private static import libressl_d.openssl.rsa;
 public import libressl_d.openssl.asn1;
 public import libressl_d.openssl.crypto;
 public import libressl_d.openssl.opensslconf;
@@ -85,8 +84,8 @@ extern (C):
 nothrow @nogc:
 
 /* Declared already in ossl_typ.h */
-/* alias RSA = libressl_d.openssl.rsa.rsa_st; */
-/* alias RSA_METHOD = libressl_d.openssl.rsa.rsa_meth_st; */
+/* alias RSA = .rsa_st; */
+/* alias RSA_METHOD = .rsa_meth_st; */
 
 struct rsa_pss_params_st
 {

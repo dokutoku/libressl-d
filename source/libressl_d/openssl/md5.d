@@ -58,7 +58,6 @@
 module libressl_d.openssl.md5;
 
 
-private static import core.stdc.config;
 public import core.stdc.stddef;
 public import libressl_d.openssl.opensslconf;
 

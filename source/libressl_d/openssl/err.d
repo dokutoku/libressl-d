@@ -117,7 +117,6 @@ private static import libressl_d.openssl.crypto;
 public import core.stdc.errno;
 public import libressl_d.compat.stdio;
 public import libressl_d.compat.stdlib;
-public import libressl_d.openssl.bio;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 

@@ -116,7 +116,6 @@
 module libressl_d.openssl.ssl3;
 
 
-private static import core.stdc.config;
 public import libressl_d.openssl.buffer;
 public import libressl_d.openssl.evp;
 public import libressl_d.openssl.opensslconf;

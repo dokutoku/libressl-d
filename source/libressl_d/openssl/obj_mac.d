@@ -64,8 +64,6 @@
 module libressl_d.openssl.obj_mac;
 
 
-private static import core.stdc.config;
-
 enum SN_undef = "UNDEF";
 enum LN_undef = "undefined";
 enum NID_undef = 0;

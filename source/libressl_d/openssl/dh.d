@@ -61,7 +61,6 @@ module libressl_d.openssl.dh;
 private static import core.stdc.config;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.evp;
-public import libressl_d.openssl.bio;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 

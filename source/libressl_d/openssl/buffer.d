@@ -58,7 +58,6 @@
 module libressl_d.openssl.buffer;
 
 
-private static import core.stdc.config;
 public import core.stdc.stddef;
 public import libressl_d.compat.sys.types;
 public import libressl_d.openssl.ossl_typ;
@@ -69,8 +68,6 @@ public import libressl_d.openssl.ossl_typ;
 
 extern (C):
 nothrow @nogc:
-
-//public import libressl_d.compat.sys.types;
 
 /* Already declared in ossl_typ.h */
 /* alias BUF_MEM = buf_mem_st; */

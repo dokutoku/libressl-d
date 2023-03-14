@@ -117,7 +117,6 @@
 module libressl_d.openssl.srtp;
 
 
-private static import core.stdc.config;
 private static import libressl_d.openssl.ossl_typ;
 private static import libressl_d.openssl.ssl;
 

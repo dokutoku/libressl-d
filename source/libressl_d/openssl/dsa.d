@@ -68,8 +68,6 @@ module libressl_d.openssl.dsa;
 private static import core.stdc.config;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.evp;
-public import libressl_d.openssl.bio;
-public import libressl_d.openssl.bn;
 public import libressl_d.openssl.crypto;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
@@ -79,8 +77,12 @@ version (OPENSSL_NO_DSA) {
 }
 
 version (OPENSSL_NO_BIO) {
+	private struct bio_st;
+	private alias BIO = .bio_st;
 } else {
 	public import libressl_d.openssl.bio;
+
+	private alias BIO = libressl_d.openssl.bio.BIO;
 }
 
 version (OPENSSL_NO_DEPRECATED) {
@@ -211,8 +213,8 @@ struct dsa_st
 	libressl_d.openssl.ossl_typ.ENGINE* engine;
 }
 
-libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DSA** a);
-int i2d_DSAparams_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DSA* a);
+libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA** a);
+int i2d_DSAparams_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA* a);
 libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DSA** a);
 int i2d_DSAparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DSA* a);
 
@@ -272,8 +274,8 @@ int DSA_generate_key(libressl_d.openssl.ossl_typ.DSA* a);
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int DSAparams_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x);
-	int DSA_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
+	int DSAparams_print(.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x);
+	int DSA_print(.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
 }
 
 int DSAparams_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.DSA)* x);
@@ -284,13 +286,16 @@ enum DSS_prime_checks = 50;
  * Primality test according to FIPS PUB 186[-1], Appendix 2.1:
  * 50 rounds of Rabin-Miller
  */
-pragma(inline, true)
-int DSA_is_prime(const (libressl_d.openssl.ossl_typ.BIGNUM)* n, void function(int, int, void*) callback, void* cb_arg)
+version (OPENSSL_NO_DEPRECATED) {
+} else {
+	pragma(inline, true)
+	int DSA_is_prime(const (libressl_d.openssl.ossl_typ.BIGNUM)* n, void function(int, int, void*) callback, void* cb_arg)
 
-	do
-	{
-		return libressl_d.openssl.bn.BN_is_prime(n, .DSS_prime_checks, callback, null, cb_arg);
-	}
+		do
+		{
+			return libressl_d.openssl.bn.BN_is_prime(n, .DSS_prime_checks, callback, null, cb_arg);
+		}
+}
 
 version (OPENSSL_NO_DH) {
 } else {

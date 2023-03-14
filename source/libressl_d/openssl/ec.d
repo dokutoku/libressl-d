@@ -83,7 +83,6 @@ private static import libressl_d.openssl.crypto;
 private static import libressl_d.openssl.evp;
 private static import libressl_d.openssl.ossl_typ;
 public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.bn;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_EC) {

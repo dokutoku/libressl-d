@@ -59,10 +59,6 @@
 module libressl_d.openssl.dtls1;
 
 
-private static import core.stdc.config;
-private static import libressl_d.openssl.ossl_typ;
-private static import libressl_d.openssl.ssl3;
-private static import libressl_d.openssl.ssl;
 public import libressl_d.compat.stdio;
 public import libressl_d.compat.stdlib;
 public import libressl_d.compat.string;

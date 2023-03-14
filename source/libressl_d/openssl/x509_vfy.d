@@ -67,15 +67,14 @@ private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.bio;
 public import libressl_d.openssl.crypto;
 public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.x509;
-
-static assert(libressl_d.openssl.x509.HEADER_X509_H);
 
 /*
  * openssl/x509.h ends up #include-ing this file at about the only
  * appropriate moment.
  */
 public import libressl_d.openssl.x509;
+
+static assert(libressl_d.openssl.x509.HEADER_X509_H);
 
 version (OPENSSL_NO_LHASH) {
 } else {

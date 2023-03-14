@@ -58,8 +58,6 @@
 module libressl_d.openssl.ssl2;
 
 
-private static import core.stdc.config;
-
 extern (C):
 nothrow @nogc:
 

@@ -51,7 +51,6 @@
 module libressl_d.openssl.aes;
 
 
-private static import core.stdc.config;
 public import core.stdc.stddef;
 public import libressl_d.openssl.opensslconf;
 

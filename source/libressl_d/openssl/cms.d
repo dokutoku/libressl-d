@@ -57,13 +57,11 @@ module libressl_d.openssl.cms;
 private static import core.stdc.config;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.compat.sys.types;
-private static import libressl_d.compat.time;
 private static import libressl_d.openssl.asn1;
 private static import libressl_d.openssl.bio;
 private static import libressl_d.openssl.ossl_typ;
 private static import libressl_d.openssl.pem;
 private static import libressl_d.openssl.stack;
-private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_CMS) {

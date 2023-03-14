@@ -64,7 +64,6 @@ private static import libressl_d.compat.time;
 private static import libressl_d.openssl.ossl_typ;
 private static import libressl_d.openssl.pkcs7;
 public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.bio;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.safestack;
 public import libressl_d.openssl.stack;
@@ -82,8 +81,12 @@ version (OPENSSL_NO_EVP) {
 }
 
 version (OPENSSL_NO_BIO) {
+	private struct bio_st;
+	private alias BIO = .bio_st;
 } else {
 	public import libressl_d.openssl.bio;
+
+	private alias BIO = libressl_d.openssl.bio.BIO;
 }
 
 version (OPENSSL_NO_RSA) {
@@ -337,8 +340,8 @@ int i2d_TS_REQ(const (.TS_REQ)* a, ubyte** pp);
 
 .TS_REQ* d2i_TS_REQ_fp(libressl_d.compat.stdio.FILE* fp, .TS_REQ** a);
 int i2d_TS_REQ_fp(libressl_d.compat.stdio.FILE* fp, .TS_REQ* a);
-.TS_REQ* d2i_TS_REQ_bio(libressl_d.openssl.bio.BIO* fp, .TS_REQ** a);
-int i2d_TS_REQ_bio(libressl_d.openssl.bio.BIO* fp, .TS_REQ* a);
+.TS_REQ* d2i_TS_REQ_bio(.BIO* fp, .TS_REQ** a);
+int i2d_TS_REQ_bio(.BIO* fp, .TS_REQ* a);
 
 .TS_MSG_IMPRINT* TS_MSG_IMPRINT_new();
 void TS_MSG_IMPRINT_free(.TS_MSG_IMPRINT* a);
@@ -349,8 +352,8 @@ int i2d_TS_MSG_IMPRINT(const (.TS_MSG_IMPRINT)* a, ubyte** pp);
 
 .TS_MSG_IMPRINT* d2i_TS_MSG_IMPRINT_fp(libressl_d.compat.stdio.FILE* fp, .TS_MSG_IMPRINT** a);
 int i2d_TS_MSG_IMPRINT_fp(libressl_d.compat.stdio.FILE* fp, .TS_MSG_IMPRINT* a);
-.TS_MSG_IMPRINT* d2i_TS_MSG_IMPRINT_bio(libressl_d.openssl.bio.BIO* fp, .TS_MSG_IMPRINT** a);
-int i2d_TS_MSG_IMPRINT_bio(libressl_d.openssl.bio.BIO* fp, .TS_MSG_IMPRINT* a);
+.TS_MSG_IMPRINT* d2i_TS_MSG_IMPRINT_bio(.BIO* fp, .TS_MSG_IMPRINT** a);
+int i2d_TS_MSG_IMPRINT_bio(.BIO* fp, .TS_MSG_IMPRINT* a);
 
 .TS_RESP* TS_RESP_new();
 void TS_RESP_free(.TS_RESP* a);
@@ -361,8 +364,8 @@ int i2d_TS_RESP(const (.TS_RESP)* a, ubyte** pp);
 
 .TS_RESP* d2i_TS_RESP_fp(libressl_d.compat.stdio.FILE* fp, .TS_RESP** a);
 int i2d_TS_RESP_fp(libressl_d.compat.stdio.FILE* fp, .TS_RESP* a);
-.TS_RESP* d2i_TS_RESP_bio(libressl_d.openssl.bio.BIO* fp, .TS_RESP** a);
-int i2d_TS_RESP_bio(libressl_d.openssl.bio.BIO* fp, .TS_RESP* a);
+.TS_RESP* d2i_TS_RESP_bio(.BIO* fp, .TS_RESP** a);
+int i2d_TS_RESP_bio(.BIO* fp, .TS_RESP* a);
 
 .TS_STATUS_INFO* TS_STATUS_INFO_new();
 void TS_STATUS_INFO_free(.TS_STATUS_INFO* a);
@@ -378,8 +381,8 @@ int i2d_TS_TST_INFO(const (.TS_TST_INFO)* a, ubyte** pp);
 
 .TS_TST_INFO* d2i_TS_TST_INFO_fp(libressl_d.compat.stdio.FILE* fp, .TS_TST_INFO** a);
 int i2d_TS_TST_INFO_fp(libressl_d.compat.stdio.FILE* fp, .TS_TST_INFO* a);
-.TS_TST_INFO* d2i_TS_TST_INFO_bio(libressl_d.openssl.bio.BIO* fp, .TS_TST_INFO** a);
-int i2d_TS_TST_INFO_bio(libressl_d.openssl.bio.BIO* fp, .TS_TST_INFO* a);
+.TS_TST_INFO* d2i_TS_TST_INFO_bio(.BIO* fp, .TS_TST_INFO** a);
+int i2d_TS_TST_INFO_bio(.BIO* fp, .TS_TST_INFO* a);
 
 .TS_ACCURACY* TS_ACCURACY_new();
 void TS_ACCURACY_free(.TS_ACCURACY* a);
@@ -441,7 +444,7 @@ void* TS_REQ_get_ext_d2i(.TS_REQ* a, int nid, int* crit, int* idx);
 
 /* Function declarations for TS_REQ defined in ts/ts_req_print.c */
 
-int TS_REQ_print_bio(libressl_d.openssl.bio.BIO* bio, .TS_REQ* a);
+int TS_REQ_print_bio(.BIO* bio, .TS_REQ* a);
 
 /* Function declarations for TS_RESP defined in ts/ts_resp_utils.c */
 
@@ -714,7 +717,7 @@ int TS_RESP_CTX_add_failure_info(.TS_RESP_CTX* ctx, int failure);
  * In case of errors it sets the status info properly.
  * Returns null only in case of memory allocation/fatal error.
  */
-.TS_RESP* TS_RESP_create_response(.TS_RESP_CTX* ctx, libressl_d.openssl.bio.BIO* req_bio);
+.TS_RESP* TS_RESP_create_response(.TS_RESP_CTX* ctx, .BIO* req_bio);
 
 /*
  * Declarations related to response verification,
@@ -797,7 +800,7 @@ struct TS_verify_ctx
 	/**
 	 * Must be set only with TS_VFY_DATA.
 	 */
-	libressl_d.openssl.bio.BIO* data;
+	.BIO* data;
 
 	/**
 	 * Must be set only with TS_VFY_TSA_NAME.
@@ -846,17 +849,17 @@ void TS_VERIFY_CTX_cleanup(.TS_VERIFY_CTX* ctx);
 
 /* Function declarations for TS_RESP defined in ts/ts_resp_print.c */
 
-int TS_RESP_print_bio(libressl_d.openssl.bio.BIO* bio, .TS_RESP* a);
-int TS_STATUS_INFO_print_bio(libressl_d.openssl.bio.BIO* bio, .TS_STATUS_INFO* a);
-int TS_TST_INFO_print_bio(libressl_d.openssl.bio.BIO* bio, .TS_TST_INFO* a);
+int TS_RESP_print_bio(.BIO* bio, .TS_RESP* a);
+int TS_STATUS_INFO_print_bio(.BIO* bio, .TS_STATUS_INFO* a);
+int TS_TST_INFO_print_bio(.BIO* bio, .TS_TST_INFO* a);
 
 /* Common utility functions defined in ts/ts_lib.c */
 
-int TS_ASN1_INTEGER_print_bio(libressl_d.openssl.bio.BIO* bio, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* num);
-int TS_OBJ_print_bio(libressl_d.openssl.bio.BIO* bio, const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj);
-int TS_ext_print_bio(libressl_d.openssl.bio.BIO* bio, const (libressl_d.openssl.x509.stack_st_X509_EXTENSION)* extensions);
-int TS_X509_ALGOR_print_bio(libressl_d.openssl.bio.BIO* bio, const (libressl_d.openssl.ossl_typ.X509_ALGOR)* alg);
-int TS_MSG_IMPRINT_print_bio(libressl_d.openssl.bio.BIO* bio, .TS_MSG_IMPRINT* msg);
+int TS_ASN1_INTEGER_print_bio(.BIO* bio, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* num);
+int TS_OBJ_print_bio(.BIO* bio, const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj);
+int TS_ext_print_bio(.BIO* bio, const (libressl_d.openssl.x509.stack_st_X509_EXTENSION)* extensions);
+int TS_X509_ALGOR_print_bio(.BIO* bio, const (libressl_d.openssl.ossl_typ.X509_ALGOR)* alg);
+int TS_MSG_IMPRINT_print_bio(.BIO* bio, .TS_MSG_IMPRINT* msg);
 
 /*
  * Function declarations for handling configuration options,

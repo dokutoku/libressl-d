@@ -67,14 +67,21 @@ private static import libressl_d.openssl.ecdsa;
 private static import libressl_d.openssl.gost;
 private static import libressl_d.openssl.rsa;
 private static import libressl_d.openssl.x509;
-public import libressl_d.openssl.bio;
 public import libressl_d.openssl.objects;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 
 version (OPENSSL_NO_BIO) {
+	private struct bio_st;
+	private alias BIO = .bio_st;
+
+	private struct bio_method_st;
+	private alias BIO_METHOD = .bio_method_st;
 } else {
 	public import libressl_d.openssl.bio;
+
+	private alias BIO = libressl_d.openssl.bio.BIO;
+	private alias BIO_METHOD = libressl_d.openssl.bio.BIO_METHOD;
 }
 
 /*
@@ -947,53 +954,56 @@ alias EVP_SealUpdate = .EVP_EncryptUpdate;
 alias EVP_DigestSignUpdate = .EVP_DigestUpdate;
 alias EVP_DigestVerifyUpdate = .EVP_DigestUpdate;
 
-pragma(inline, true)
-core.stdc.config.c_long BIO_set_md(libressl_d.openssl.bio.BIO* b, char* md)
+version (OPENSSL_NO_BIO) {
+} else {
+	pragma(inline, true)
+	core.stdc.config.c_long BIO_set_md(.BIO* b, char* md)
 
-	do
-	{
-		return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_SET_MD, 0, md);
-	}
+		do
+		{
+			return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_SET_MD, 0, md);
+		}
 
-pragma(inline, true)
-core.stdc.config.c_long BIO_get_md(libressl_d.openssl.bio.BIO* b, char* mdp)
+	pragma(inline, true)
+	core.stdc.config.c_long BIO_get_md(.BIO* b, char* mdp)
 
-	do
-	{
-		return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_MD, 0, mdp);
-	}
+		do
+		{
+			return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_MD, 0, mdp);
+		}
 
-pragma(inline, true)
-core.stdc.config.c_long BIO_get_md_ctx(libressl_d.openssl.bio.BIO* b, char* mdcp)
+	pragma(inline, true)
+	core.stdc.config.c_long BIO_get_md_ctx(.BIO* b, char* mdcp)
 
-	do
-	{
-		return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_MD_CTX, 0, mdcp);
-	}
+		do
+		{
+			return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_MD_CTX, 0, mdcp);
+		}
 
-pragma(inline, true)
-core.stdc.config.c_long BIO_set_md_ctx(libressl_d.openssl.bio.BIO* b, char* mdcp)
+	pragma(inline, true)
+	core.stdc.config.c_long BIO_set_md_ctx(.BIO* b, char* mdcp)
 
-	do
-	{
-		return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_SET_MD_CTX, 0, mdcp);
-	}
+		do
+		{
+			return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_SET_MD_CTX, 0, mdcp);
+		}
 
-pragma(inline, true)
-core.stdc.config.c_long BIO_get_cipher_status(libressl_d.openssl.bio.BIO* b)
+	pragma(inline, true)
+	core.stdc.config.c_long BIO_get_cipher_status(.BIO* b)
 
-	do
-	{
-		return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_CIPHER_STATUS, 0, null);
-	}
+		do
+		{
+			return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_CIPHER_STATUS, 0, null);
+		}
 
-pragma(inline, true)
-core.stdc.config.c_long BIO_get_cipher_ctx(libressl_d.openssl.bio.BIO* b, char* c_pp)
+	pragma(inline, true)
+	core.stdc.config.c_long BIO_get_cipher_ctx(.BIO* b, char* c_pp)
 
-	do
-	{
-		return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_CIPHER_CTX, 0, c_pp);
-	}
+		do
+		{
+			return libressl_d.openssl.bio.BIO_ctrl(b, libressl_d.openssl.bio.BIO_C_GET_CIPHER_CTX, 0, c_pp);
+		}
+}
 
 int EVP_Cipher(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* c, ubyte* out_, const (ubyte)* in_, uint inl);
 
@@ -1109,10 +1119,10 @@ int EVP_CIPHER_CTX_rand_key(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, uby
 
 version (OPENSSL_NO_BIO) {
 } else {
-	const (libressl_d.openssl.bio.BIO_METHOD)* BIO_f_md();
-	const (libressl_d.openssl.bio.BIO_METHOD)* BIO_f_base64();
-	const (libressl_d.openssl.bio.BIO_METHOD)* BIO_f_cipher();
-	int BIO_set_cipher(libressl_d.openssl.bio.BIO* b, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* c, const (ubyte)* k, const (ubyte)* i, int enc);
+	const (.BIO_METHOD)* BIO_f_md();
+	const (.BIO_METHOD)* BIO_f_base64();
+	const (.BIO_METHOD)* BIO_f_cipher();
+	int BIO_set_cipher(.BIO* b, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* c, const (ubyte)* k, const (ubyte)* i, int enc);
 }
 
 const (libressl_d.openssl.ossl_typ.EVP_MD)* EVP_md_null();
@@ -1434,9 +1444,9 @@ int EVP_PKEY_cmp_parameters(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* a, con
 
 int EVP_PKEY_cmp(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* a, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* b);
 
-int EVP_PKEY_print_public(libressl_d.openssl.bio.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx);
-int EVP_PKEY_print_private(libressl_d.openssl.bio.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx);
-int EVP_PKEY_print_params(libressl_d.openssl.bio.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx);
+int EVP_PKEY_print_public(.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx);
+int EVP_PKEY_print_private(.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx);
+int EVP_PKEY_print_params(.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx);
 
 int EVP_PKEY_get_default_digest_nid(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, int* pnid);
 
@@ -1500,9 +1510,9 @@ const (libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* EVP_PKEY_get0_asn1(con
 libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* EVP_PKEY_asn1_new(int id, int flags, const (char)* pem_str, const (char)* info);
 void EVP_PKEY_asn1_copy(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* dst, const (libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* src);
 void EVP_PKEY_asn1_free(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth);
-void EVP_PKEY_asn1_set_public(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* pk, libressl_d.openssl.ossl_typ.X509_PUBKEY* pub) pub_decode, int function(libressl_d.openssl.ossl_typ.X509_PUBKEY* pub, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) pub_encode, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* a, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* b) pub_cmp, int function(libressl_d.openssl.bio.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx) pub_print, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) pkey_size, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) pkey_bits);
-void EVP_PKEY_asn1_set_private(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* pk, const (libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO)* p8inf) priv_decode, int function(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) priv_encode, int function(libressl_d.openssl.bio.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx) priv_print);
-void EVP_PKEY_asn1_set_param(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (ubyte)** pder, int derlen) param_decode, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, ubyte** pder) param_encode, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) param_missing, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* to, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* from) param_copy, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* a, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* b) param_cmp, int function(libressl_d.openssl.bio.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx) param_print);
+void EVP_PKEY_asn1_set_public(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* pk, libressl_d.openssl.ossl_typ.X509_PUBKEY* pub) pub_decode, int function(libressl_d.openssl.ossl_typ.X509_PUBKEY* pub, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) pub_encode, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* a, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* b) pub_cmp, int function(.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx) pub_print, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) pkey_size, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) pkey_bits);
+void EVP_PKEY_asn1_set_private(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* pk, const (libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO)* p8inf) priv_decode, int function(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) priv_encode, int function(.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx) priv_print);
+void EVP_PKEY_asn1_set_param(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (ubyte)** pder, int derlen) param_decode, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, ubyte** pder) param_encode, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pk) param_missing, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* to, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* from) param_copy, int function(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* a, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* b) param_cmp, int function(.BIO* out_, const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, int indent, libressl_d.openssl.ossl_typ.ASN1_PCTX* pctx) param_print);
 
 void EVP_PKEY_asn1_set_free(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, void function(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey) pkey_free);
 void EVP_PKEY_asn1_set_ctrl(libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD* ameth, int function(libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, int op, core.stdc.config.c_long arg1, void* arg2) pkey_ctrl);

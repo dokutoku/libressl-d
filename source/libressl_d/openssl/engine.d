@@ -65,8 +65,6 @@ module libressl_d.openssl.engine;
 
 private static import core.stdc.config;
 private static import libressl_d.openssl.crypto;
-public import libressl_d.openssl.ec;
-public import libressl_d.openssl.err;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 public import libressl_d.openssl.x509;
@@ -76,6 +74,8 @@ version (OPENSSL_NO_ENGINE) {
 }
 
 version (OPENSSL_NO_DEPRECATED) {
+	private struct ec_key_method_st;
+	private alias EC_KEY_METHOD = .ec_key_method_st;
 } else {
 	public import libressl_d.openssl.bn;
 
@@ -105,8 +105,12 @@ version (OPENSSL_NO_DEPRECATED) {
 	}
 
 	version (OPENSSL_NO_EC) {
+		private struct ec_key_method_st;
+		private alias EC_KEY_METHOD = .ec_key_method_st;
 	} else {
 		public import libressl_d.openssl.ec;
+
+		private alias EC_KEY_METHOD = libressl_d.openssl.ec.EC_KEY_METHOD;
 	}
 
 	public import libressl_d.openssl.err;
@@ -592,7 +596,7 @@ int ENGINE_set_RSA(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.open
 int ENGINE_set_DSA(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.DSA_METHOD)* dsa_meth);
 int ENGINE_set_ECDH(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.ECDH_METHOD)* ecdh_meth);
 int ENGINE_set_ECDSA(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ecdsa_meth);
-int ENGINE_set_EC(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ec.EC_KEY_METHOD)* ec_meth);
+int ENGINE_set_EC(libressl_d.openssl.ossl_typ.ENGINE* e, const (.EC_KEY_METHOD)* ec_meth);
 int ENGINE_set_DH(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.DH_METHOD)* dh_meth);
 int ENGINE_set_RAND(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.RAND_METHOD)* rand_meth);
 int ENGINE_set_STORE(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.STORE_METHOD)* store_meth);
@@ -635,7 +639,7 @@ const (libressl_d.openssl.ossl_typ.RSA_METHOD)* ENGINE_get_RSA(const (libressl_d
 const (libressl_d.openssl.ossl_typ.DSA_METHOD)* ENGINE_get_DSA(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
 const (libressl_d.openssl.ossl_typ.ECDH_METHOD)* ENGINE_get_ECDH(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
 const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ENGINE_get_ECDSA(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ec.EC_KEY_METHOD)* ENGINE_get_EC(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
+const (.EC_KEY_METHOD)* ENGINE_get_EC(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
 const (libressl_d.openssl.ossl_typ.DH_METHOD)* ENGINE_get_DH(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
 const (libressl_d.openssl.ossl_typ.RAND_METHOD)* ENGINE_get_RAND(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
 const (libressl_d.openssl.ossl_typ.STORE_METHOD)* ENGINE_get_STORE(const (libressl_d.openssl.ossl_typ.ENGINE)* e);

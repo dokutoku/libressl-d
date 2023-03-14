@@ -68,14 +68,11 @@ private static import libressl_d.compat.stdio;
 private static import libressl_d.compat.time;
 private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.bio;
 public import libressl_d.openssl.ec;
-public import libressl_d.openssl.evp;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.ossl_typ;
 public import libressl_d.openssl.pkcs7;
 public import libressl_d.openssl.safestack;
-public import libressl_d.openssl.sha;
 public import libressl_d.openssl.stack;
 public import libressl_d.openssl.x509_vfy;
 
@@ -87,13 +84,21 @@ version (OPENSSL_NO_BUFFER) {
 }
 
 version (OPENSSL_NO_EVP) {
+	private struct evp_cipher_info_st;
+	private alias EVP_CIPHER_INFO = .evp_cipher_info_st;
 } else {
 	public import libressl_d.openssl.evp;
+
+	private alias EVP_CIPHER_INFO = libressl_d.openssl.evp.EVP_CIPHER_INFO;
 }
 
 version (OPENSSL_NO_BIO) {
+	private struct bio_st;
+	private alias BIO = .bio_st;
 } else {
 	public import libressl_d.openssl.bio;
+
+	private alias BIO = libressl_d.openssl.bio.BIO;
 }
 
 version (OPENSSL_NO_EC) {
@@ -709,7 +714,7 @@ struct private_key_st
 	int key_free;
 
 	/* expanded version of 'enc_algor' */
-	libressl_d.openssl.evp.EVP_CIPHER_INFO cipher;
+	.EVP_CIPHER_INFO cipher;
 
 	int references;
 }
@@ -717,6 +722,7 @@ struct private_key_st
 alias X509_PKEY = .private_key_st;
 
 version (OPENSSL_NO_EVP) {
+	struct X509_info_st;
 } else {
 	struct X509_info_st
 	{
@@ -724,14 +730,12 @@ version (OPENSSL_NO_EVP) {
 		libressl_d.openssl.ossl_typ.X509_CRL* crl;
 		.X509_PKEY* x_pkey;
 
-		libressl_d.openssl.evp.EVP_CIPHER_INFO enc_cipher;
+		.EVP_CIPHER_INFO enc_cipher;
 		int enc_len;
 		char* enc_data;
 
 		int references;
 	}
-
-	alias X509_INFO = .X509_info_st;
 
 	//DECLARE_STACK_OF(X509_INFO)
 	struct stack_st_X509_INFO
@@ -739,6 +743,8 @@ version (OPENSSL_NO_EVP) {
 		libressl_d.openssl.stack._STACK stack;
 	}
 }
+
+alias X509_INFO = .X509_info_st;
 
 /**
  * The next 2 structures and their 8 routines were sent to me by
@@ -904,10 +910,10 @@ version (OPENSSL_NO_EVP) {
 	libressl_d.openssl.ossl_typ.EVP_PKEY* NETSCAPE_SPKI_get_pubkey(.NETSCAPE_SPKI* x);
 	int NETSCAPE_SPKI_set_pubkey(.NETSCAPE_SPKI* x, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
 
-	int NETSCAPE_SPKI_print(libressl_d.openssl.bio.BIO* out_, .NETSCAPE_SPKI* spki);
+	int NETSCAPE_SPKI_print(.BIO* out_, .NETSCAPE_SPKI* spki);
 
-	int X509_signature_dump(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* sig, int indent);
-	int X509_signature_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.X509_ALGOR)* alg, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* sig);
+	int X509_signature_dump(.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* sig, int indent);
+	int X509_signature_print(.BIO* bp, const (libressl_d.openssl.ossl_typ.X509_ALGOR)* alg, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* sig);
 
 	int X509_sign(libressl_d.openssl.ossl_typ.X509* x, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl_d.openssl.ossl_typ.EVP_MD)* md);
 	int X509_sign_ctx(libressl_d.openssl.ossl_typ.X509* x, libressl_d.openssl.ossl_typ.EVP_MD_CTX* ctx);
@@ -969,48 +975,48 @@ libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PUBKEY_fp(libressl_d.compat.stdio.FILE
 
 version (OPENSSL_NO_BIO) {
 } else {
-	libressl_d.openssl.ossl_typ.X509* d2i_X509_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509** x509);
-	int i2d_X509_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509* x509);
-	libressl_d.openssl.ossl_typ.X509_CRL* d2i_X509_CRL_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509_CRL** crl);
-	int i2d_X509_CRL_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509_CRL* crl);
-	.X509_REQ* d2i_X509_REQ_bio(libressl_d.openssl.bio.BIO* bp, .X509_REQ** req);
-	int i2d_X509_REQ_bio(libressl_d.openssl.bio.BIO* bp, .X509_REQ* req);
+	libressl_d.openssl.ossl_typ.X509* d2i_X509_bio(.BIO* bp, libressl_d.openssl.ossl_typ.X509** x509);
+	int i2d_X509_bio(.BIO* bp, libressl_d.openssl.ossl_typ.X509* x509);
+	libressl_d.openssl.ossl_typ.X509_CRL* d2i_X509_CRL_bio(.BIO* bp, libressl_d.openssl.ossl_typ.X509_CRL** crl);
+	int i2d_X509_CRL_bio(.BIO* bp, libressl_d.openssl.ossl_typ.X509_CRL* crl);
+	.X509_REQ* d2i_X509_REQ_bio(.BIO* bp, .X509_REQ** req);
+	int i2d_X509_REQ_bio(.BIO* bp, .X509_REQ* req);
 
 	version (OPENSSL_NO_RSA) {
 	} else {
-		libressl_d.openssl.ossl_typ.RSA* d2i_RSAPrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.RSA** rsa);
-		int i2d_RSAPrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.RSA* rsa);
-		libressl_d.openssl.ossl_typ.RSA* d2i_RSAPublicKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.RSA** rsa);
-		int i2d_RSAPublicKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.RSA* rsa);
-		libressl_d.openssl.ossl_typ.RSA* d2i_RSA_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.RSA** rsa);
-		int i2d_RSA_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.RSA* rsa);
+		libressl_d.openssl.ossl_typ.RSA* d2i_RSAPrivateKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.RSA** rsa);
+		int i2d_RSAPrivateKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.RSA* rsa);
+		libressl_d.openssl.ossl_typ.RSA* d2i_RSAPublicKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.RSA** rsa);
+		int i2d_RSAPublicKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.RSA* rsa);
+		libressl_d.openssl.ossl_typ.RSA* d2i_RSA_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ossl_typ.RSA** rsa);
+		int i2d_RSA_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ossl_typ.RSA* rsa);
 	}
 
 	version (OPENSSL_NO_DSA) {
 	} else {
-		libressl_d.openssl.ossl_typ.DSA* d2i_DSA_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DSA** dsa);
-		int i2d_DSA_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DSA* dsa);
-		libressl_d.openssl.ossl_typ.DSA* d2i_DSAPrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DSA** dsa);
-		int i2d_DSAPrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DSA* dsa);
+		libressl_d.openssl.ossl_typ.DSA* d2i_DSA_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA** dsa);
+		int i2d_DSA_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA* dsa);
+		libressl_d.openssl.ossl_typ.DSA* d2i_DSAPrivateKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA** dsa);
+		int i2d_DSAPrivateKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA* dsa);
 	}
 
 	version (OPENSSL_NO_EC) {
 	} else {
-		libressl_d.openssl.ec.EC_KEY* d2i_EC_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ec.EC_KEY** eckey);
-		int i2d_EC_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ec.EC_KEY* eckey);
-		libressl_d.openssl.ec.EC_KEY* d2i_ECPrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ec.EC_KEY** eckey);
-		int i2d_ECPrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ec.EC_KEY* eckey);
+		libressl_d.openssl.ec.EC_KEY* d2i_EC_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ec.EC_KEY** eckey);
+		int i2d_EC_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ec.EC_KEY* eckey);
+		libressl_d.openssl.ec.EC_KEY* d2i_ECPrivateKey_bio(.BIO* bp, libressl_d.openssl.ec.EC_KEY** eckey);
+		int i2d_ECPrivateKey_bio(.BIO* bp, libressl_d.openssl.ec.EC_KEY* eckey);
 	}
 
-	.X509_SIG* d2i_PKCS8_bio(libressl_d.openssl.bio.BIO* bp, .X509_SIG** p8);
-	int i2d_PKCS8_bio(libressl_d.openssl.bio.BIO* bp, .X509_SIG* p8);
-	libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* d2i_PKCS8_PRIV_KEY_INFO_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO** p8inf);
-	int i2d_PKCS8_PRIV_KEY_INFO_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8inf);
-	int i2d_PKCS8PrivateKeyInfo_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* key);
-	int i2d_PrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-	libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PrivateKey_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY** a);
-	int i2d_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-	libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PUBKEY_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY** a);
+	.X509_SIG* d2i_PKCS8_bio(.BIO* bp, .X509_SIG** p8);
+	int i2d_PKCS8_bio(.BIO* bp, .X509_SIG* p8);
+	libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* d2i_PKCS8_PRIV_KEY_INFO_bio(.BIO* bp, libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO** p8inf);
+	int i2d_PKCS8_PRIV_KEY_INFO_bio(.BIO* bp, libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8inf);
+	int i2d_PKCS8PrivateKeyInfo_bio(.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* key);
+	int i2d_PrivateKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PrivateKey_bio(.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY** a);
+	int i2d_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
+	libressl_d.openssl.ossl_typ.EVP_PKEY* d2i_PUBKEY_bio(.BIO* bp, libressl_d.openssl.ossl_typ.EVP_PKEY** a);
 }
 
 libressl_d.openssl.ossl_typ.X509* X509_dup(libressl_d.openssl.ossl_typ.X509* x509);
@@ -1332,15 +1338,15 @@ int X509_NAME_print_ex_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.op
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int X509_NAME_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.X509_NAME)* name, int obase);
-	int X509_NAME_print_ex(libressl_d.openssl.bio.BIO* out_, const (libressl_d.openssl.ossl_typ.X509_NAME)* nm, int indent, core.stdc.config.c_ulong flags);
-	int X509_print_ex(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509* x, core.stdc.config.c_ulong nmflag, core.stdc.config.c_ulong cflag);
-	int X509_print(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509* x);
-	int X509_ocspid_print(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509* x);
-	int X509_CERT_AUX_print(libressl_d.openssl.bio.BIO* bp, .X509_CERT_AUX* x, int indent);
-	int X509_CRL_print(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.X509_CRL* x);
-	int X509_REQ_print_ex(libressl_d.openssl.bio.BIO* bp, .X509_REQ* x, core.stdc.config.c_ulong nmflag, core.stdc.config.c_ulong cflag);
-	int X509_REQ_print(libressl_d.openssl.bio.BIO* bp, .X509_REQ* req);
+	int X509_NAME_print(.BIO* bp, const (libressl_d.openssl.ossl_typ.X509_NAME)* name, int obase);
+	int X509_NAME_print_ex(.BIO* out_, const (libressl_d.openssl.ossl_typ.X509_NAME)* nm, int indent, core.stdc.config.c_ulong flags);
+	int X509_print_ex(.BIO* bp, libressl_d.openssl.ossl_typ.X509* x, core.stdc.config.c_ulong nmflag, core.stdc.config.c_ulong cflag);
+	int X509_print(.BIO* bp, libressl_d.openssl.ossl_typ.X509* x);
+	int X509_ocspid_print(.BIO* bp, libressl_d.openssl.ossl_typ.X509* x);
+	int X509_CERT_AUX_print(.BIO* bp, .X509_CERT_AUX* x, int indent);
+	int X509_CRL_print(.BIO* bp, libressl_d.openssl.ossl_typ.X509_CRL* x);
+	int X509_REQ_print_ex(.BIO* bp, .X509_REQ* x, core.stdc.config.c_ulong nmflag, core.stdc.config.c_ulong cflag);
+	int X509_REQ_print(.BIO* bp, .X509_REQ* req);
 }
 
 int X509_NAME_entry_count(const (libressl_d.openssl.ossl_typ.X509_NAME)* name);

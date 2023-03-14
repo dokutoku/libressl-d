@@ -58,7 +58,6 @@
 module libressl_d.openssl.ssl23;
 
 
-private static import core.stdc.config;
 private static import libressl_d.openssl.ssl;
 
 extern (C):

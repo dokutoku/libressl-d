@@ -65,9 +65,7 @@ module libressl_d.openssl.lhash;
 
 private static import core.stdc.config;
 private static import libressl_d.openssl.asn1;
-private static import libressl_d.openssl.bio;
 public import libressl_d.compat.stdio;
-public import libressl_d.openssl.bio;
 public import libressl_d.openssl.opensslconf;
 
 version (OPENSSL_NO_BIO) {
