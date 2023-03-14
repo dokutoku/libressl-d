@@ -1,4 +1,4 @@
-/* $OpenBSD: dh.h,v 1.25 2018/02/22 16:41:04 jsing Exp $ */
+/* $OpenBSD: dh.h,v 1.35 2022/07/12 14:42:49 kn Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -102,75 +102,6 @@ enum DH_FLAG_NON_FIPS_ALLOW = 0x0400;
 extern (C):
 nothrow @nogc:
 
-/* Already defined in ossl_typ.h */
-/* alias DH = .dh_st; */
-/* alias DH_METHOD = .dh_method; */
-
-struct dh_method
-{
-	const (char)* name;
-	/* Methods here */
-	int function(libressl_d.openssl.ossl_typ.DH* dh) generate_key;
-	int function(ubyte* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* pub_key, libressl_d.openssl.ossl_typ.DH* dh) compute_key;
-
-	/**
-	 * Can be null
-	 */
-	int function(const (libressl_d.openssl.ossl_typ.DH)* dh, libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BN_MONT_CTX* m_ctx) bn_mod_exp;
-
-	int function(libressl_d.openssl.ossl_typ.DH* dh) init;
-	int function(libressl_d.openssl.ossl_typ.DH* dh) finish;
-	int flags;
-	char* app_data;
-
-	/**
-	 * If this is non-null, it will be used to generate parameters
-	 */
-	int function(libressl_d.openssl.ossl_typ.DH* dh, int prime_len, int generator, libressl_d.openssl.ossl_typ.BN_GENCB* cb) generate_params;
-}
-
-struct dh_st
-{
-	/**
-	 * This first argument is used to pick up errors when
-	 * a DH is passed instead of a EVP_PKEY
-	 */
-	int pad;
-
-	int version_;
-	libressl_d.openssl.ossl_typ.BIGNUM* p;
-	libressl_d.openssl.ossl_typ.BIGNUM* g;
-
-	/**
-	 * optional
-	 */
-	core.stdc.config.c_long length_;
-
-	/**
-	 * g^x
-	 */
-	libressl_d.openssl.ossl_typ.BIGNUM* pub_key;
-
-	/**
-	 * x
-	 */
-	libressl_d.openssl.ossl_typ.BIGNUM* priv_key;
-
-	int flags;
-	libressl_d.openssl.ossl_typ.BN_MONT_CTX* method_mont_p;
-	/* Place holders if we want to do X9.42 DH */
-	libressl_d.openssl.ossl_typ.BIGNUM* q;
-	libressl_d.openssl.ossl_typ.BIGNUM* j;
-	ubyte* seed;
-	int seedlen;
-	libressl_d.openssl.ossl_typ.BIGNUM* counter;
-
-	int references;
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
-	const (libressl_d.openssl.ossl_typ.DH_METHOD)* meth;
-	libressl_d.openssl.ossl_typ.ENGINE* engine;
-}
-
 enum DH_GENERATOR_2 = 2;
 /* enum DH_GENERATOR_3 = 3; */
 enum DH_GENERATOR_5 = 5;
@@ -180,10 +111,14 @@ enum DH_CHECK_P_NOT_PRIME = 0x01;
 enum DH_CHECK_P_NOT_SAFE_PRIME = 0x02;
 enum DH_UNABLE_TO_CHECK_GENERATOR = 0x04;
 enum DH_NOT_SUITABLE_GENERATOR = 0x08;
+enum DH_CHECK_Q_NOT_PRIME = 0x10;
+enum DH_CHECK_INVALID_Q_VALUE = 0x20;
+enum DH_CHECK_INVALID_J_VALUE = 0x40;
 
 /* DH_check_pub_key error codes */
 enum DH_CHECK_PUBKEY_TOO_SMALL = 0x01;
 enum DH_CHECK_PUBKEY_TOO_LARGE = 0x02;
+enum DH_CHECK_PUBKEY_INVALID = 0x04;
 
 /**
  * primes p where (p-1)/2 is prime too are called "safe"; we define
@@ -191,8 +126,8 @@ enum DH_CHECK_PUBKEY_TOO_LARGE = 0x02;
  */
 enum DH_CHECK_P_NOT_STRONG_PRIME = .DH_CHECK_P_NOT_SAFE_PRIME;
 
-libressl_d.openssl.ossl_typ.DH* d2i_DHparams_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DH** a);
-int i2d_DHparams_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.DH* a);
+libressl_d.openssl.ossl_typ.DH* d2i_DHparams_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.DH** a);
+int i2d_DHparams_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.DH* a);
 libressl_d.openssl.ossl_typ.DH* d2i_DHparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DH** a);
 int i2d_DHparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DH* a);
 
@@ -213,15 +148,22 @@ int DH_bits(const (libressl_d.openssl.ossl_typ.DH)* dh);
 int DH_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int DH_set_ex_data(libressl_d.openssl.ossl_typ.DH* d, int idx, void* arg);
 void* DH_get_ex_data(libressl_d.openssl.ossl_typ.DH* d, int idx);
+int DH_security_bits(const (libressl_d.openssl.ossl_typ.DH)* dh);
 
 libressl_d.openssl.ossl_typ.ENGINE* DH_get0_engine(libressl_d.openssl.ossl_typ.DH* d);
 void DH_get0_pqg(const (libressl_d.openssl.ossl_typ.DH)* dh, const (libressl_d.openssl.ossl_typ.BIGNUM)** p, const (libressl_d.openssl.ossl_typ.BIGNUM)** q, const (libressl_d.openssl.ossl_typ.BIGNUM)** g);
 int DH_set0_pqg(libressl_d.openssl.ossl_typ.DH* dh, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* q, libressl_d.openssl.ossl_typ.BIGNUM* g);
 void DH_get0_key(const (libressl_d.openssl.ossl_typ.DH)* dh, const (libressl_d.openssl.ossl_typ.BIGNUM)** pub_key, const (libressl_d.openssl.ossl_typ.BIGNUM)** priv_key);
 int DH_set0_key(libressl_d.openssl.ossl_typ.DH* dh, libressl_d.openssl.ossl_typ.BIGNUM* pub_key, libressl_d.openssl.ossl_typ.BIGNUM* priv_key);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DH_get0_p(const (libressl_d.openssl.ossl_typ.DH)* dh);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DH_get0_q(const (libressl_d.openssl.ossl_typ.DH)* dh);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DH_get0_g(const (libressl_d.openssl.ossl_typ.DH)* dh);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DH_get0_priv_key(const (libressl_d.openssl.ossl_typ.DH)* dh);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DH_get0_pub_key(const (libressl_d.openssl.ossl_typ.DH)* dh);
 void DH_clear_flags(libressl_d.openssl.ossl_typ.DH* dh, int flags);
 int DH_test_flags(const (libressl_d.openssl.ossl_typ.DH)* dh, int flags);
 void DH_set_flags(libressl_d.openssl.ossl_typ.DH* dh, int flags);
+core.stdc.config.c_long DH_get_length(const (libressl_d.openssl.ossl_typ.DH)* dh);
 int DH_set_length(libressl_d.openssl.ossl_typ.DH* dh, core.stdc.config.c_long length_);
 
 /* Deprecated version */
@@ -244,7 +186,7 @@ int DHparams_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openss
 version(OPENSSL_NO_BIO) {
 	int DHparams_print(char* bp, const (libressl_d.openssl.ossl_typ.DH)* x);
 } else {
-	int DHparams_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.DH)* x);
+	int DHparams_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.DH)* x);
 }
 
 pragma(inline, true)
@@ -266,11 +208,6 @@ int EVP_PKEY_CTX_set_dh_paramgen_generator(libressl_d.openssl.ossl_typ.EVP_PKEY_
 enum EVP_PKEY_CTRL_DH_PARAMGEN_PRIME_LEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
 enum EVP_PKEY_CTRL_DH_PARAMGEN_GENERATOR = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_DH_strings();
 
 /* Error codes for the DH functions. */
@@ -307,3 +244,14 @@ enum DH_R_NON_FIPS_METHOD = 111;
 enum DH_R_NO_PARAMETERS_SET = 107;
 enum DH_R_NO_PRIVATE_VALUE = 100;
 enum DH_R_PARAMETER_ENCODING_ERROR = 105;
+enum DH_R_CHECK_INVALID_J_VALUE = 115;
+enum DH_R_CHECK_INVALID_Q_VALUE = 116;
+enum DH_R_CHECK_PUBKEY_INVALID = 122;
+enum DH_R_CHECK_PUBKEY_TOO_LARGE = 123;
+enum DH_R_CHECK_PUBKEY_TOO_SMALL = 124;
+enum DH_R_CHECK_P_NOT_PRIME = 117;
+enum DH_R_CHECK_P_NOT_SAFE_PRIME = 118;
+enum DH_R_CHECK_Q_NOT_PRIME = 119;
+enum DH_R_MISSING_PUBKEY = 125;
+enum DH_R_NOT_SUITABLE_GENERATOR = 120;
+enum DH_R_UNABLE_TO_CHECK_GENERATOR = 121;

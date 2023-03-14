@@ -1,4 +1,4 @@
-/* $OpenBSD: dsa.h,v 1.30 2018/03/17 15:19:12 tb Exp $ */
+/* $OpenBSD: dsa.h,v 1.39 2022/07/12 14:42:49 kn Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -77,12 +77,8 @@ version (OPENSSL_NO_DSA) {
 }
 
 version (OPENSSL_NO_BIO) {
-	private struct bio_st;
-	private alias BIO = .bio_st;
 } else {
 	public import libressl_d.openssl.bio;
-
-	private alias BIO = libressl_d.openssl.bio.BIO;
 }
 
 version (OPENSSL_NO_DEPRECATED) {
@@ -120,101 +116,11 @@ enum DSA_FLAG_NON_FIPS_ALLOW = 0x0400;
 extern (C):
 nothrow @nogc:
 
-/* Already defined in ossl_typ.h */
-/* alias DSA = .dsa.dsa_st; */
-/* alias DSA_METHOD = .dsa_method; */
-
-struct DSA_SIG_st
-{
-	libressl_d.openssl.ossl_typ.BIGNUM* r;
-	libressl_d.openssl.ossl_typ.BIGNUM* s;
-}
-
+struct DSA_SIG_st;
 alias DSA_SIG = .DSA_SIG_st;
 
-struct dsa_method
-{
-	const (char)* name;
-	.DSA_SIG* function(const (ubyte)* dgst, int dlen, libressl_d.openssl.ossl_typ.DSA* dsa) dsa_do_sign;
-	int function(libressl_d.openssl.ossl_typ.DSA* dsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx_in, libressl_d.openssl.ossl_typ.BIGNUM** kinvp, libressl_d.openssl.ossl_typ.BIGNUM** rp) dsa_sign_setup;
-	int function(const (ubyte)* dgst, int dgst_len, .DSA_SIG* sig, libressl_d.openssl.ossl_typ.DSA* dsa) dsa_do_verify;
-	int function(libressl_d.openssl.ossl_typ.DSA* dsa, libressl_d.openssl.ossl_typ.BIGNUM* rr, libressl_d.openssl.ossl_typ.BIGNUM* a1, libressl_d.openssl.ossl_typ.BIGNUM* p1, libressl_d.openssl.ossl_typ.BIGNUM* a2, libressl_d.openssl.ossl_typ.BIGNUM* p2, libressl_d.openssl.ossl_typ.BIGNUM* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BN_MONT_CTX* in_mont) dsa_mod_exp;
-
-	/**
-	 * Can be null
-	 */
-	int function(libressl_d.openssl.ossl_typ.DSA* dsa, libressl_d.openssl.ossl_typ.BIGNUM* r, libressl_d.openssl.ossl_typ.BIGNUM* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BN_MONT_CTX* m_ctx) bn_mod_exp;
-
-	int function(libressl_d.openssl.ossl_typ.DSA* dsa) init;
-	int function(libressl_d.openssl.ossl_typ.DSA* dsa) finish;
-	int flags;
-	char* app_data;
-
-	/**
-	 * If this is non-null, it is used to generate DSA parameters
-	 */
-	int function(libressl_d.openssl.ossl_typ.DSA* dsa, int bits, const (ubyte)* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, libressl_d.openssl.ossl_typ.BN_GENCB* cb) dsa_paramgen;
-
-	/**
-	 * If this is non-null, it is used to generate DSA keys
-	 */
-	int function(libressl_d.openssl.ossl_typ.DSA* dsa) dsa_keygen;
-}
-
-struct dsa_st
-{
-	/**
-	 * This first variable is used to pick up errors where
-	 * a DSA is passed instead of of a EVP_PKEY
-	 */
-	int pad;
-
-	core.stdc.config.c_long version_;
-	int write_params;
-	libressl_d.openssl.ossl_typ.BIGNUM* p;
-
-	/**
-	 * == 20
-	 */
-	libressl_d.openssl.ossl_typ.BIGNUM* q;
-
-	libressl_d.openssl.ossl_typ.BIGNUM* g;
-
-	/**
-	 * y public key
-	 */
-	libressl_d.openssl.ossl_typ.BIGNUM* pub_key;
-
-	/**
-	 * x private key
-	 */
-	libressl_d.openssl.ossl_typ.BIGNUM* priv_key;
-
-	/**
-	 * Signing pre-calc
-	 */
-	libressl_d.openssl.ossl_typ.BIGNUM* kinv;
-
-	/**
-	 * Signing pre-calc
-	 */
-	libressl_d.openssl.ossl_typ.BIGNUM* r;
-
-	int flags;
-	/* Normally used to cache montgomery values */
-	libressl_d.openssl.ossl_typ.BN_MONT_CTX* method_mont_p;
-	int references;
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
-	const (libressl_d.openssl.ossl_typ.DSA_METHOD)* meth;
-
-	/**
-	 * functional reference if 'meth' is ENGINE-provided
-	 */
-	libressl_d.openssl.ossl_typ.ENGINE* engine;
-}
-
-libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA** a);
-int i2d_DSAparams_bio(.BIO* bp, libressl_d.openssl.ossl_typ.DSA* a);
+libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.DSA** a);
+int i2d_DSAparams_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.DSA* a);
 libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DSA** a);
 int i2d_DSAparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DSA* a);
 
@@ -241,6 +147,7 @@ void DSA_free(libressl_d.openssl.ossl_typ.DSA* r);
 /* "up" the DSA object's reference count */
 int DSA_up_ref(libressl_d.openssl.ossl_typ.DSA* r);
 int DSA_size(const (libressl_d.openssl.ossl_typ.DSA)*);
+int DSA_bits(const (libressl_d.openssl.ossl_typ.DSA)* d);
 /* next 4 return -1 on error */
 int DSA_sign_setup(libressl_d.openssl.ossl_typ.DSA* dsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx_in, libressl_d.openssl.ossl_typ.BIGNUM** kinvp, libressl_d.openssl.ossl_typ.BIGNUM** rp);
 int DSA_sign(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, libressl_d.openssl.ossl_typ.DSA* dsa);
@@ -248,6 +155,7 @@ int DSA_verify(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbu
 int DSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int DSA_set_ex_data(libressl_d.openssl.ossl_typ.DSA* d, int idx, void* arg);
 void* DSA_get_ex_data(libressl_d.openssl.ossl_typ.DSA* d, int idx);
+int DSA_security_bits(const (libressl_d.openssl.ossl_typ.DSA)* d);
 
 libressl_d.openssl.ossl_typ.DSA* d2i_DSAPublicKey(libressl_d.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 int i2d_DSAPublicKey(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
@@ -274,18 +182,20 @@ int DSA_generate_key(libressl_d.openssl.ossl_typ.DSA* a);
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int DSAparams_print(.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x);
-	int DSA_print(.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
+	int DSAparams_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x);
+	int DSA_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
 }
 
 int DSAparams_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.DSA)* x);
 int DSA_print_fp(libressl_d.compat.stdio.FILE* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
 
-enum DSS_prime_checks = 50;
-/*
- * Primality test according to FIPS PUB 186[-1], Appendix 2.1:
- * 50 rounds of Rabin-Miller
+/**
+ * Primality test according to FIPS PUB 186-4, Appendix C.3. Set the number
+ * to 64 rounds of Miller-Rabin, which corresponds to 128 bits of security.
+ * This is necessary for keys of size >= 3072.
  */
+enum DSS_prime_checks = 64;
+
 version (OPENSSL_NO_DEPRECATED) {
 } else {
 	pragma(inline, true)
@@ -310,6 +220,11 @@ void DSA_get0_pqg(const (libressl_d.openssl.ossl_typ.DSA)* d, const (libressl_d.
 int DSA_set0_pqg(libressl_d.openssl.ossl_typ.DSA* d, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* q, libressl_d.openssl.ossl_typ.BIGNUM* g);
 void DSA_get0_key(const (libressl_d.openssl.ossl_typ.DSA)* d, const (libressl_d.openssl.ossl_typ.BIGNUM)** pub_key, const (libressl_d.openssl.ossl_typ.BIGNUM)** priv_key);
 int DSA_set0_key(libressl_d.openssl.ossl_typ.DSA* d, libressl_d.openssl.ossl_typ.BIGNUM* pub_key, libressl_d.openssl.ossl_typ.BIGNUM* priv_key);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_p(const (libressl_d.openssl.ossl_typ.DSA)* d);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_q(const (libressl_d.openssl.ossl_typ.DSA)* d);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_g(const (libressl_d.openssl.ossl_typ.DSA)* d);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_pub_key(const (libressl_d.openssl.ossl_typ.DSA)* d);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_priv_key(const (libressl_d.openssl.ossl_typ.DSA)* d);
 void DSA_clear_flags(libressl_d.openssl.ossl_typ.DSA* d, int flags);
 int DSA_test_flags(const (libressl_d.openssl.ossl_typ.DSA)* d, int flags);
 void DSA_set_flags(libressl_d.openssl.ossl_typ.DSA* d, int flags);
@@ -318,6 +233,8 @@ libressl_d.openssl.ossl_typ.ENGINE* DSA_get0_engine(libressl_d.openssl.ossl_typ.
 libressl_d.openssl.ossl_typ.DSA_METHOD* DSA_meth_new(const (char)* name, int flags);
 void DSA_meth_free(libressl_d.openssl.ossl_typ.DSA_METHOD* meth);
 libressl_d.openssl.ossl_typ.DSA_METHOD* DSA_meth_dup(const (libressl_d.openssl.ossl_typ.DSA_METHOD)* meth);
+const (char)* DSA_meth_get0_name(const (libressl_d.openssl.ossl_typ.DSA_METHOD)* meth);
+int DSA_meth_set1_name(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, const (char)* name);
 int DSA_meth_set_sign(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, DSA_SIG* function(const (ubyte)*, int, libressl_d.openssl.ossl_typ.DSA*) sign);
 int DSA_meth_set_finish(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, int function(libressl_d.openssl.ossl_typ.DSA*) finish);
 
@@ -333,11 +250,6 @@ enum EVP_PKEY_CTRL_DSA_PARAMGEN_BITS = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL 
 enum EVP_PKEY_CTRL_DSA_PARAMGEN_Q_BITS = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
 enum EVP_PKEY_CTRL_DSA_PARAMGEN_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_DSA_strings();
 
 /* Error codes for the DSA functions. */

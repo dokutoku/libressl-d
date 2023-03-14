@@ -1,4 +1,4 @@
-/* $OpenBSD: asn1t.h,v 1.15 2019/08/20 13:10:09 inoguchi Exp $ */
+/* $OpenBSD: asn1t.h,v 1.22 2022/09/03 16:01:23 jsing Exp $ */
 /* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 2000.
  */
@@ -61,7 +61,6 @@ module libressl_d.openssl.asn1t;
 private static import core.stdc.config;
 private static import libressl_d.openssl.stack;
 private static import libressl_d.openssl.ossl_typ;
-private static import libressl_d.openssl.bio;
 public import libressl_d.openssl.opensslconf;
 public import libressl_d.openssl.asn1;
 public import core.stdc.stddef;
@@ -131,8 +130,6 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define ASN1_SEQUENCE_cb(tname, cb) static const .ASN1_AUX tname##_aux = {null, 0, 0, 0, cb, 0}; .ASN1_SEQUENCE(tname)
 
-	//#define ASN1_BROKEN_SEQUENCE(tname) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_BROKEN, 0, 0, 0, 0}; .ASN1_SEQUENCE(tname)
-
 	//#define ASN1_SEQUENCE_ref(tname, cb, lck) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_REFCOUNT, offsetof(tname, references), lck, cb, 0}; .ASN1_SEQUENCE(tname)
 
 	//#define ASN1_SEQUENCE_enc(tname, enc, cb) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_ENCODING, 0, 0, cb, offsetof(tname, enc)}; .ASN1_SEQUENCE(tname)
@@ -140,8 +137,6 @@ version (LIBRESSL_INTERNAL) {
 	//#define ASN1_NDEF_SEQUENCE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
 
 	//#define static_ASN1_NDEF_SEQUENCE_END(tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
-
-	//#define ASN1_BROKEN_SEQUENCE_END(stname) .ASN1_SEQUENCE_END_ref(stname, stname)
 
 	//#define ASN1_SEQUENCE_END_enc(stname, tname) .ASN1_SEQUENCE_END_ref(stname, tname)
 
@@ -207,10 +202,6 @@ version (LIBRESSL_INTERNAL) {
 	/* used to declare other types */
 
 	//#define ASN1_EX_TYPE(flags, tag, stname, field, type) { (flags), (tag), offsetof(stname, field), #field, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
-
-	/* used when the structure is combined with the parent */
-
-	//#define ASN1_EX_COMBINE(flags, tag, type) { (flags) | .ASN1_TFLG_COMBINE, (tag), 0, null, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
 
 	/* implicit and explicit helper macros */
 
@@ -309,13 +300,10 @@ struct ASN1_TEMPLATE_st
 	 */
 	core.stdc.config.c_ulong offset;
 
-	version (NO_ASN1_FIELD_NAMES) {
-	} else {
-		/**
-		 * Field name
-		 */
-		const (char)* field_name;
-	}
+	/**
+	 * Field name
+	 */
+	const (char)* field_name;
 
 	/**
 	 * Relevant ASN1_ITEM or ASN1_ADB
@@ -369,11 +357,6 @@ struct ASN1_ADB_st
 	 * Offset of selector field
 	 */
 	core.stdc.config.c_ulong offset;
-
-	/**
-	 * Application defined items
-	 */
-	.stack_st_ASN1_ADB_TABLE** app_items;
 
 	/**
 	 * Table of possible types
@@ -466,10 +449,9 @@ enum ASN1_TFLG_IMPLICIT = .ASN1_TFLG_IMPTAG | .ASN1_TFLG_CONTEXT;
 enum ASN1_TFLG_EXPLICIT = .ASN1_TFLG_EXPTAG | .ASN1_TFLG_CONTEXT;
 
 /*
- * If tagging is in force these determine the
- * type of tag to use. Otherwise the tag is
- * determined by the underlying type. These
- * values reflect the actual octet format.
+ * If tagging is in force these determine the type of tag to use. Otherwiser
+ * the tag is determined by the underlying type. These values reflect the
+ * actual octet format.
  */
 
 /**
@@ -506,16 +488,6 @@ enum ASN1_TFLG_ADB_MASK = 0x03 << 8;
 enum ASN1_TFLG_ADB_OID = 0x01 << 8;
 
 enum ASN1_TFLG_ADB_INT = 0x01 << 9;
-
-/**
- * This flag means a parent structure is passed
- * instead of the field: this is useful is a
- * SEQUENCE is being combined with a CHOICE for
- * example. Since this means the structure and
- * item name will differ we need to use the
- * ASN1_CHOICE_END_name() macro for example.
- */
-enum ASN1_TFLG_COMBINE = 0x01 << 10;
 
 /**
  * This flag when present in a SEQUENCE OF, SET OF
@@ -559,13 +531,10 @@ struct ASN1_ITEM_st
 	 */
 	core.stdc.config.c_long size;
 
-	version (NO_ASN1_FIELD_NAMES) {
-	} else {
-		/**
-		 * Structure name
-		 */
-		const (char)* sname;
-	}
+	/**
+	 * Structure name
+	 */
+	const (char)* sname;
 }
 
 /*
@@ -670,11 +639,11 @@ private alias ASN1_ex_i2d = /* Not a function pointer type */ extern (C) nothrow
 private alias ASN1_ex_new_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
 private alias ASN1_ex_free_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
 
-private alias ASN1_ex_print_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, int indent, const (char)* fname, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+private alias ASN1_ex_print_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, int indent, const (char)* fname, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 private alias ASN1_primitive_i2c = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte* cont, int* putype, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
 private alias ASN1_primitive_c2i = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)* cont, int len, int utype, char* free_cont, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-private alias ASN1_primitive_print = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+private alias ASN1_primitive_print = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 struct ASN1_EXTERN_FUNCS_st
 {
@@ -753,7 +722,7 @@ alias ASN1_AUX = .ASN1_AUX_st;
  */
 struct ASN1_PRINT_ARG_st
 {
-	libressl_d.openssl.bio.BIO* out_;
+	libressl_d.openssl.ossl_typ.BIO* out_;
 	int indent;
 	const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx;
 }
@@ -768,12 +737,12 @@ struct ASN1_STREAM_ARG_st
 	/**
 	 * BIO to stream through
 	 */
-	libressl_d.openssl.bio.BIO* out_;
+	libressl_d.openssl.ossl_typ.BIO* out_;
 
 	/**
 	 * BIO with filters appended
 	 */
-	libressl_d.openssl.bio.BIO* ndef_bio;
+	libressl_d.openssl.ossl_typ.BIO* ndef_bio;
 
 	/**
 	 * Streaming I/O boundary
@@ -794,11 +763,6 @@ enum ASN1_AFLG_REFCOUNT = 1;
  * Save the encoding of structure (useful for signatures)
  */
 enum ASN1_AFLG_ENCODING = 2;
-
-/**
- * The Sequence length is invalid
- */
-enum ASN1_AFLG_BROKEN = 4;
 
 /* operation values for asn1_cb */
 
@@ -859,7 +823,7 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define IMPLEMENT_ASN1_PRINT_FUNCTION(stname) .IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, stname, stname)
 
-	//#define IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, itname, fname) int fname##_print_ctx(libressl_d.openssl.bio.BIO* out_, stname* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx) { return libressl_d.openssl.asn1.ASN1_item_print(out_, cast(libressl_d.openssl.asn1.ASN1_VALUE*)(x), indent, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname), pctx); }
+	//#define IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, itname, fname) int fname##_print_ctx(libressl_d.openssl.ossl_typ.BIO* out_, stname* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx) { return libressl_d.openssl.asn1.ASN1_item_print(out_, cast(libressl_d.openssl.asn1.ASN1_VALUE*)(x), indent, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname), pctx); }
 
 	//#define IMPLEMENT_ASN1_FUNCTIONS_const(name) .IMPLEMENT_ASN1_FUNCTIONS_const_fname(name, name, name)
 
@@ -872,10 +836,14 @@ extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BOOLEAN_it;
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_TBOOLEAN_it;
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_FBOOLEAN_it;
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CBIGNUM_it;
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM BIGNUM_it;
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM LONG_it;
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ZLONG_it;
+
+version (LIBRESSL_INTERNAL) {
+} else {
+	extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CBIGNUM_it;
+}
 
 //DECLARE_STACK_OF(ASN1_VALUE)
 struct stack_st_ASN1_VALUE
@@ -897,19 +865,3 @@ int ASN1_item_ex_d2i(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** 
 int ASN1_item_ex_i2d(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass);
 int ASN1_template_i2d(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* tt);
 void ASN1_primitive_free(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-
-int asn1_ex_c2i(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)* cont, int len, int utype, char* free_cont, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-
-int asn1_get_choice_selector(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-int asn1_set_choice_selector(libressl_d.openssl.asn1.ASN1_VALUE** pval, int value, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-
-libressl_d.openssl.asn1.ASN1_VALUE** asn1_get_field_ptr(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* tt);
-
-const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* asn1_do_adb(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* tt, int nullerr);
-
-int asn1_do_lock(libressl_d.openssl.asn1.ASN1_VALUE** pval, int op, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-
-void asn1_enc_init(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-void asn1_enc_free(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-int asn1_enc_restore(int* len, ubyte** out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-int asn1_enc_save(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)* in_, int inlen, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);

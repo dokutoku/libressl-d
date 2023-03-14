@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl.h,v 1.209 2021/09/14 23:07:18 inoguchi Exp $ */
+/* $OpenBSD: ssl.h,v 1.229 2022/09/11 17:39:46 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -147,12 +147,10 @@ private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.asn1;
 private static import libressl_d.openssl.crypto;
 private static import libressl_d.openssl.ec;
-private static import libressl_d.openssl.evp;
 private static import libressl_d.openssl.opensslfeatures;
 private static import libressl_d.openssl.ossl_typ;
 private static import libressl_d.openssl.stack;
 private static import libressl_d.openssl.x509;
-private static import libressl_d.openssl.x509_vfy;
 public import core.stdc.stdint;
 public import libressl_d.openssl.bio;
 public import libressl_d.openssl.dtls1;
@@ -165,6 +163,12 @@ public import libressl_d.openssl.ssl23;
 public import libressl_d.openssl.ssl2;
 public import libressl_d.openssl.ssl3;
 public import libressl_d.openssl.tls1;
+
+version (LIBRESSL_HAS_QUIC) {
+	version = LIBRESSL_HAS_QUIC_OR_LIBRESSL_INTERNAL;
+} else version (LIBRESSL_INTERNAL) {
+	version = LIBRESSL_HAS_QUIC_OR_LIBRESSL_INTERNAL;
+}
 
 version (OPENSSL_NO_DEPRECATED) {
 	private struct stack_st_X509_NAME;
@@ -432,11 +436,7 @@ enum SSL_FILETYPE_PEM = libressl_d.openssl.x509.X509_FILETYPE_PEM;
  * 'struct ssl_st *' function parameters used to prototype callbacks
  * in SSL_CTX.
  */
-alias ssl_crock_st = .ssl_st*;
-
-version (LIBRESSL_INTERNAL) {
-	alias TLS_SESSION_TICKET_EXT = libressl_d.openssl.tls1.tls_session_ticket_ext_st;
-}
+alias ssl_crock_st = libressl_d.openssl.ossl_typ.ssl_st*;
 
 version (all) {
 	struct ssl_method_st;
@@ -735,6 +735,16 @@ core.stdc.config.c_long SSL_set_msg_callback_arg(libressl_d.openssl.ossl_typ.SSL
 		return .SSL_ctrl(ssl, .SSL_CTRL_SET_MSG_CALLBACK_ARG, 0, arg);
 	}
 
+alias SSL_CTX_keylog_cb_func = extern (C) nothrow @nogc void function(const (libressl_d.openssl.ossl_typ.SSL)* ssl, const (char)* line);
+void SSL_CTX_set_keylog_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_keylog_cb_func cb);
+.SSL_CTX_keylog_cb_func SSL_CTX_get_keylog_callback(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
+int SSL_set_num_tickets(libressl_d.openssl.ossl_typ.SSL* s, size_t num_tickets);
+size_t SSL_get_num_tickets(const (libressl_d.openssl.ossl_typ.SSL)* s);
+int SSL_CTX_set_num_tickets(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, size_t num_tickets);
+size_t SSL_CTX_get_num_tickets(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
+
+.stack_st_X509* SSL_get0_verified_chain(const (libressl_d.openssl.ossl_typ.SSL)* s);
+
 version (LIBRESSL_INTERNAL) {
 } else {
 	struct ssl_aead_ctx_st;
@@ -765,15 +775,10 @@ enum SSL_SESSION_CACHE_MAX_SIZE_DEFAULT = 1024 * 20;
  */
 alias GEN_SESSION_CB = extern (C) nothrow @nogc int function(const (libressl_d.openssl.ossl_typ.SSL)* ssl, ubyte* id, uint* id_len);
 
+struct ssl_comp_st;
 alias SSL_COMP = .ssl_comp_st;
 
 version (LIBRESSL_INTERNAL) {
-	struct ssl_comp_st
-	{
-		int id;
-		const (char)* name;
-	}
-
 	//DECLARE_STACK_OF(SSL_COMP)
 	struct stack_st_SSL_COMP
 	{
@@ -784,53 +789,8 @@ version (LIBRESSL_INTERNAL) {
 	{
 		int dummy;
 	}
-
-	struct ssl_ctx_internal_st;
-
-	struct ssl_ctx_st
-	{
-		const (.SSL_METHOD)* method;
-
-		.stack_st_SSL_CIPHER* cipher_list;
-
-		libressl_d.openssl.x509_vfy.x509_store_st /* X509_STORE */* cert_store;
-
-		/*
-		 * If timeout is not 0, it is the default timeout value set
-		 * when SSL_new() is called.  This has been put in to make
-		 * life easier to set things up
-		 */
-		core.stdc.config.c_long session_timeout;
-
-		int references;
-
-		/* Default values to use in SSL structures follow (these are copied by SSL_new) */
-
-		.stack_st_X509* extra_certs;
-
-		int verify_mode;
-		uint sid_ctx_length;
-		ubyte[.SSL_MAX_SID_CTX_LENGTH] sid_ctx;
-
-		libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* param;
-
-		/*
-		 * XXX
-		 * default_passwd_cb used by python and openvpn, need to keep it until we
-		 * add an accessor
-		 */
-		/* Default password callback. */
-		libressl_d.openssl.pem.pem_password_cb default_passwd_callback;
-
-		/* Default password callback user data. */
-		void* default_passwd_callback_userdata;
-
-		.ssl_ctx_internal_st* internal;
-	}
 } else {
-	struct ssl_comp_st;
 	struct lhash_st_SSL_SESSION;
-	struct ssl_ctx_st;
 }
 
 enum SSL_SESS_CACHE_OFF = 0x0000;
@@ -941,12 +901,12 @@ core.stdc.config.c_long SSL_CTX_sess_cache_full(libressl_d.openssl.ossl_typ.SSL_
 		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CACHE_FULL, 0, null);
 	}
 
-void SSL_CTX_sess_set_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(.ssl_st* ssl, .SSL_SESSION* sess) new_session_cb);
-//int (*SSL_CTX_sess_get_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(.ssl_st* ssl, .SSL_SESSION* sess);
-void SSL_CTX_sess_set_remove_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void function(.ssl_ctx_st* ctx, .SSL_SESSION* sess) remove_session_cb);
-//void (*SSL_CTX_sess_get_remove_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(.ssl_ctx_st* ctx, .SSL_SESSION* sess);
-void SSL_CTX_sess_set_get_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_SESSION* function(.ssl_st* ssl, const (ubyte)* data, int len, int* copy) get_session_cb);
-//.SSL_SESSION* (*SSL_CTX_sess_get_get_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(.ssl_st* ssl, const (ubyte)* data, int len, int* copy);
+void SSL_CTX_sess_set_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.ssl_st* ssl, .SSL_SESSION* sess) new_session_cb);
+//int (*SSL_CTX_sess_get_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(libressl_d.openssl.ossl_typ.ssl_st* ssl, .SSL_SESSION* sess);
+void SSL_CTX_sess_set_remove_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void function(libressl_d.openssl.ossl_typ.ssl_ctx_st* ctx, .SSL_SESSION* sess) remove_session_cb);
+//void (*SSL_CTX_sess_get_remove_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(libressl_d.openssl.ossl_typ.ssl_ctx_st* ctx, .SSL_SESSION* sess);
+void SSL_CTX_sess_set_get_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_SESSION* function(libressl_d.openssl.ossl_typ.ssl_st* ssl, const (ubyte)* data, int len, int* copy) get_session_cb);
+//.SSL_SESSION* (*SSL_CTX_sess_get_get_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(libressl_d.openssl.ossl_typ.ssl_st* ssl, const (ubyte)* data, int len, int* copy);
 void SSL_CTX_set_info_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void function(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val) cb);
 //void (*SSL_CTX_get_info_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val);
 void SSL_CTX_set_client_cert_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.X509** x509, libressl_d.openssl.ossl_typ.EVP_PKEY** pkey) client_cert_cb);
@@ -1019,153 +979,6 @@ bool SSL_want_x509_lookup(const (libressl_d.openssl.ossl_typ.SSL)* s)
 
 enum SSL_MAC_FLAG_READ_MAC_STREAM = 1;
 enum SSL_MAC_FLAG_WRITE_MAC_STREAM = 2;
-
-version (LIBRESSL_INTERNAL) {
-	struct ssl_internal_st;
-	struct cert_st;
-	struct dtls1_state_st;
-	struct ssl3_state_st;
-
-	struct ssl_st
-	{
-		/**
-		 * protocol version
-		 * (one of SSL2_VERSION, SSL3_VERSION, TLS1_VERSION, DTLS1_VERSION)
-		 */
-		int version_;
-
-		/**
-		 * SSLv3
-		 */
-		const (.SSL_METHOD)* method;
-
-		/*
-		 * There are 2 BIO's even though they are normally both the
-		 * same.  This is so data can be read and written to different
-		 * handlers
-		 */
-
-		/**
-		 * used by SSL_read
-		 */
-		libressl_d.openssl.bio.BIO* rbio;
-
-		/**
-		 * used by SSL_write
-		 */
-		libressl_d.openssl.bio.BIO* wbio;
-
-		/**
-		 * used during session-id reuse to concatenate
-		 * messages
-		 */
-		libressl_d.openssl.bio.BIO* bbio;
-
-		/**
-		 * are we the server side? - mostly used by SSL_clear
-		 */
-		int server;
-
-		/**
-		 * SSLv3 variables
-		 */
-		.ssl3_state_st* s3;
-
-		/**
-		 * DTLSv1 variables
-		 */
-		.dtls1_state_st* d1;
-
-		libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* param;
-
-		/**
-		 * crypto
-		 */
-		.stack_st_SSL_CIPHER* cipher_list;
-
-		/**
-		 * This is used to hold the server certificate used
-		 */
-		.cert_st /* CERT */* cert;
-
-		/*
-		 * the session_id_context is used to ensure sessions are only reused
-		 * in the appropriate context
-		 */
-		uint sid_ctx_length;
-		ubyte[.SSL_MAX_SID_CTX_LENGTH] sid_ctx;
-
-		/* This can also be in the session once a session is established */
-		.SSL_SESSION* session;
-
-		/* Used in SSL2 and SSL3 */
-
-		/**
-		 * 0 don't care about verify failure.
-		 * 1 fail if verify fails
-		 */
-		int verify_mode;
-
-		/**
-		 * error bytes to be written
-		 */
-		int error;
-
-		/**
-		 * actual code
-		 */
-		int error_code;
-
-		libressl_d.openssl.ossl_typ.SSL_CTX* ctx;
-
-		core.stdc.config.c_long verify_result;
-
-		int references;
-
-		/**
-		 * what was passed, used for
-		 * SSLv3/TLS rollback check
-		 */
-		int client_version;
-
-		uint max_send_fragment;
-
-		char* tlsext_hostname;
-
-		/* certificate status request info */
-		/**
-		 * Status type or -1 if no status type
-		 */
-		int tlsext_status_type;
-
-		/**
-		 * initial ctx, used to store sessions
-		 */
-		libressl_d.openssl.ossl_typ.SSL_CTX* initial_ctx;
-
-		alias session_ctx = initial_ctx;
-
-		/*
-		 * XXX really should be internal, but is
-		 * touched unnaturally by wpa-supplicant
-		 * and freeradius and other perversions
-		 */
-
-		/**
-		 * cryptographic state
-		 */
-		libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* enc_read_ctx;
-
-		/**
-		 * used for mac generation
-		 */
-		libressl_d.openssl.ossl_typ.EVP_MD_CTX* read_hash;
-
-		.ssl_internal_st* internal;
-	}
-} else {
-	struct ssl_st;
-}
 
 /* compatibility */
 
@@ -1374,9 +1187,9 @@ alias SSL_set_timeout = .SSL_SESSION_set_timeout;
 //#define d2i_SSL_SESSION_bio(bp, s_id) libressl_d.openssl.asn1.ASN1_d2i_bio_of(.SSL_SESSION, .SSL_SESSION_new, .d2i_SSL_SESSION, bp, s_id)
 //#define i2d_SSL_SESSION_bio(bp, s_id) libressl_d.openssl.asn1.ASN1_i2d_bio_of(.SSL_SESSION, .i2d_SSL_SESSION, bp, s_id)
 
-.SSL_SESSION* PEM_read_bio_SSL_SESSION(libressl_d.openssl.bio.BIO* bp, .SSL_SESSION** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
+.SSL_SESSION* PEM_read_bio_SSL_SESSION(libressl_d.openssl.ossl_typ.BIO* bp, .SSL_SESSION** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
 .SSL_SESSION* PEM_read_SSL_SESSION(libressl_d.compat.stdio.FILE* fp, .SSL_SESSION** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
-int PEM_write_bio_SSL_SESSION(libressl_d.openssl.bio.BIO* bp, .SSL_SESSION* x);
+int PEM_write_bio_SSL_SESSION(libressl_d.openssl.ossl_typ.BIO* bp, .SSL_SESSION* x);
 int PEM_write_SSL_SESSION(libressl_d.compat.stdio.FILE* fp, .SSL_SESSION* x);
 
 /*
@@ -1452,15 +1265,13 @@ enum SSL_ERROR_SSL = 1;
 enum SSL_ERROR_WANT_READ = 2;
 enum SSL_ERROR_WANT_WRITE = 3;
 enum SSL_ERROR_WANT_X509_LOOKUP = 4;
-
-/**
- * look at error stack/return value/errno
- */
 enum SSL_ERROR_SYSCALL = 5;
-
 enum SSL_ERROR_ZERO_RETURN = 6;
 enum SSL_ERROR_WANT_CONNECT = 7;
 enum SSL_ERROR_WANT_ACCEPT = 8;
+enum SSL_ERROR_WANT_ASYNC = 9;
+enum SSL_ERROR_WANT_ASYNC_JOB = 10;
+enum SSL_ERROR_WANT_CLIENT_HELLO_CB = 11;
 
 enum SSL_CTRL_NEED_TMP_RSA = 1;
 enum SSL_CTRL_SET_TMP_RSA = 2;
@@ -1559,7 +1370,7 @@ enum SSL_CTRL_CHAIN_CERT = 89;
 
 enum SSL_CTRL_SET_GROUPS = 91;
 enum SSL_CTRL_SET_GROUPS_LIST = 92;
-
+enum SSL_CTRL_GET_SHARED_GROUP = 93;
 enum SSL_CTRL_SET_ECDH_AUTO = 94;
 
 static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
@@ -1811,6 +1622,16 @@ core.stdc.config.c_long SSL_CTX_clear_extra_chain_certs(libressl_d.openssl.ossl_
 	}
 
 pragma(inline, true)
+core.stdc.config.c_long SSL_get_shared_group(libressl_d.openssl.ossl_typ.SSL* s, core.stdc.config.c_long n)
+
+	do
+	{
+		return .SSL_ctrl(s, .SSL_CTRL_GET_SHARED_GROUP, n, null);
+	}
+
+alias SSL_get_shared_curve = .SSL_get_shared_group;
+
+pragma(inline, true)
 core.stdc.config.c_long SSL_get_server_tmp_key(libressl_d.openssl.ossl_typ.SSL* s, void* pk)
 
 	do
@@ -1884,11 +1705,11 @@ version (LIBRESSL_INTERNAL) {
 }
 
 const (libressl_d.openssl.bio.BIO_METHOD)* BIO_f_ssl();
-libressl_d.openssl.bio.BIO* BIO_new_ssl(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int client);
-libressl_d.openssl.bio.BIO* BIO_new_ssl_connect(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
-libressl_d.openssl.bio.BIO* BIO_new_buffer_ssl_connect(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
-int BIO_ssl_copy_session_id(libressl_d.openssl.bio.BIO* to, libressl_d.openssl.bio.BIO* from);
-void BIO_ssl_shutdown(libressl_d.openssl.bio.BIO* ssl_bio);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_ssl(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int client);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_ssl_connect(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_buffer_ssl_connect(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
+int BIO_ssl_copy_session_id(libressl_d.openssl.ossl_typ.BIO* to, libressl_d.openssl.ossl_typ.BIO* from);
+void BIO_ssl_shutdown(libressl_d.openssl.ossl_typ.BIO* ssl_bio);
 
 .stack_st_SSL_CIPHER* SSL_CTX_get_ciphers(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
 int SSL_CTX_set_cipher_list(libressl_d.openssl.ossl_typ.SSL_CTX*, const (char)* str);
@@ -1936,10 +1757,10 @@ int SSL_pending(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_set_fd(libressl_d.openssl.ossl_typ.SSL* s, int fd);
 int SSL_set_rfd(libressl_d.openssl.ossl_typ.SSL* s, int fd);
 int SSL_set_wfd(libressl_d.openssl.ossl_typ.SSL* s, int fd);
-void SSL_set_bio(libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.bio.BIO* rbio, libressl_d.openssl.bio.BIO* wbio);
-libressl_d.openssl.bio.BIO* SSL_get_rbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
-void SSL_set0_rbio(libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.bio.BIO* rbio);
-libressl_d.openssl.bio.BIO* SSL_get_wbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
+void SSL_set_bio(libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.ossl_typ.BIO* rbio, libressl_d.openssl.ossl_typ.BIO* wbio);
+libressl_d.openssl.ossl_typ.BIO* SSL_get_rbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
+void SSL_set0_rbio(libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.ossl_typ.BIO* rbio);
+libressl_d.openssl.ossl_typ.BIO* SSL_get_wbio(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_set_cipher_list(libressl_d.openssl.ossl_typ.SSL* s, const (char)* str);
 
 static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
@@ -2013,7 +1834,7 @@ core.stdc.config.c_ulong SSL_SESSION_get_ticket_lifetime_hint(const (.SSL_SESSIO
 int SSL_SESSION_has_ticket(const (.SSL_SESSION)* s);
 uint SSL_SESSION_get_compress_id(const (.SSL_SESSION)* ss);
 int SSL_SESSION_print_fp(libressl_d.compat.stdio.FILE* fp, const (.SSL_SESSION)* ses);
-int SSL_SESSION_print(libressl_d.openssl.bio.BIO* fp, const (.SSL_SESSION)* ses);
+int SSL_SESSION_print(libressl_d.openssl.ossl_typ.BIO* fp, const (.SSL_SESSION)* ses);
 int i2d_SSL_SESSION(.SSL_SESSION* in_, ubyte** pp);
 int SSL_set_session(libressl_d.openssl.ossl_typ.SSL* to, .SSL_SESSION* session);
 int SSL_CTX_add_session(libressl_d.openssl.ossl_typ.SSL_CTX* s, .SSL_SESSION* c);
@@ -2068,10 +1889,10 @@ int SSL_set1_host(libressl_d.openssl.ossl_typ.SSL* s, const (char)* hostname);
 void SSL_set_hostflags(libressl_d.openssl.ossl_typ.SSL* s, uint flags);
 const (char)* SSL_get0_peername(libressl_d.openssl.ossl_typ.SSL* s);
 
-libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* SSL_CTX_get0_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
-int SSL_CTX_set1_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* vpm);
-libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* SSL_get0_param(libressl_d.openssl.ossl_typ.SSL* ssl);
-int SSL_set1_param(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.x509_vfy.X509_VERIFY_PARAM* vpm);
+libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* SSL_CTX_get0_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
+int SSL_CTX_set1_param(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* vpm);
+libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* SSL_get0_param(libressl_d.openssl.ossl_typ.SSL* ssl);
+int SSL_set1_param(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* vpm);
 
 libressl_d.openssl.ossl_typ.SSL* SSL_new(libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
 void SSL_free(libressl_d.openssl.ossl_typ.SSL* ssl);
@@ -2083,6 +1904,9 @@ int SSL_is_server(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_read(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
 int SSL_peek(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, int num);
 int SSL_write(libressl_d.openssl.ossl_typ.SSL* ssl, const (void)* buf, int num);
+int SSL_read_ex(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, size_t num, size_t* bytes_read);
+int SSL_peek_ex(libressl_d.openssl.ossl_typ.SSL* ssl, void* buf, size_t num, size_t* bytes_peeked);
+int SSL_write_ex(libressl_d.openssl.ossl_typ.SSL* ssl, const (void)* buf, size_t num, size_t* bytes_written);
 
 static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
 	core.stdc.stdint.uint32_t SSL_CTX_get_max_early_data(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
@@ -2242,7 +2066,7 @@ libressl_d.openssl.ossl_typ.SSL* SSL_dup(libressl_d.openssl.ossl_typ.SSL* ssl);
 libressl_d.openssl.ossl_typ.X509* SSL_get_certificate(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
 
 /* libressl_d.openssl.ossl_typ.EVP_PKEY */
-libressl_d.openssl.evp.evp_pkey_st* SSL_get_privatekey(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
+libressl_d.openssl.ossl_typ.evp_pkey_st* SSL_get_privatekey(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
 
 void SSL_CTX_set_quiet_shutdown(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int mode);
 int SSL_CTX_get_quiet_shutdown(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
@@ -2420,11 +2244,313 @@ int SSL_set_session_secret_cb(libressl_d.openssl.ossl_typ.SSL* s, .tls_session_s
 void SSL_set_debug(libressl_d.openssl.ossl_typ.SSL* s, int debug_);
 int SSL_cache_hit(libressl_d.openssl.ossl_typ.SSL* s);
 
-/* BEGIN ERROR CODES */
+/* What the "other" parameter contains in security callback */
+/* Mask for type */
+enum SSL_SECOP_OTHER_TYPE = 0xFFFF0000;
+enum SSL_SECOP_OTHER_NONE = 0;
+enum SSL_SECOP_OTHER_CIPHER = 1 << 16;
+enum SSL_SECOP_OTHER_CURVE = 2 << 16;
+enum SSL_SECOP_OTHER_DH = 3 << 16;
+enum SSL_SECOP_OTHER_PKEY = 4 << 16;
+enum SSL_SECOP_OTHER_SIGALG = 5 << 16;
+enum SSL_SECOP_OTHER_CERT = 6 << 16;
+
+/* Indicated operation refers to peer key or certificate */
+enum SSL_SECOP_PEER = 0x1000;
+
+/* Values for "op" parameter in security callback */
+
+/* Called to filter ciphers */
+/* Ciphers client supports */
+enum SSL_SECOP_CIPHER_SUPPORTED = 1 | .SSL_SECOP_OTHER_CIPHER;
+
+/* Cipher shared by client/server */
+enum SSL_SECOP_CIPHER_SHARED = 2 | .SSL_SECOP_OTHER_CIPHER;
+
+/* Sanity check of cipher server selects */
+enum SSL_SECOP_CIPHER_CHECK = 3 | .SSL_SECOP_OTHER_CIPHER;
+
+/* Curves supported by client */
+enum SSL_SECOP_CURVE_SUPPORTED = 4 | .SSL_SECOP_OTHER_CURVE;
+
+/* Curves shared by client/server */
+enum SSL_SECOP_CURVE_SHARED = 5 | .SSL_SECOP_OTHER_CURVE;
+
+/* Sanity check of curve server selects */
+enum SSL_SECOP_CURVE_CHECK = 6 | .SSL_SECOP_OTHER_CURVE;
+/* Temporary DH key */
 /*
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
+ * XXX: changed in OpenSSL e2b420fdd70 to (7 | SSL_SECOP_OTHER_PKEY)
+ * Needs switching internal use of DH to EVP_PKEY. The code is not reachable
+ * from outside the library as core.stdc.config.c_long as we do not expose the callback in the API.
  */
+enum SSL_SECOP_TMP_DH = 7 | .SSL_SECOP_OTHER_DH;
+
+/* SSL/TLS version */
+enum SSL_SECOP_VERSION = 9 | .SSL_SECOP_OTHER_NONE;
+
+/* Session tickets */
+enum SSL_SECOP_TICKET = 10 | .SSL_SECOP_OTHER_NONE;
+
+/* Supported signature algorithms sent to peer */
+enum SSL_SECOP_SIGALG_SUPPORTED = 11 | .SSL_SECOP_OTHER_SIGALG;
+
+/* Shared signature algorithm */
+enum SSL_SECOP_SIGALG_SHARED = 12 | .SSL_SECOP_OTHER_SIGALG;
+
+/* Sanity check signature algorithm allowed */
+enum SSL_SECOP_SIGALG_CHECK = 13 | .SSL_SECOP_OTHER_SIGALG;
+
+/* Used to get mask of supported public key signature algorithms */
+enum SSL_SECOP_SIGALG_MASK = 14 | .SSL_SECOP_OTHER_SIGALG;
+
+/* Use to see if compression is allowed */
+enum SSL_SECOP_COMPRESSION = 15 | .SSL_SECOP_OTHER_NONE;
+
+/* EE key in certificate */
+enum SSL_SECOP_EE_KEY = 16 | .SSL_SECOP_OTHER_CERT;
+
+/* CA key in certificate */
+enum SSL_SECOP_CA_KEY = 17 | .SSL_SECOP_OTHER_CERT;
+
+/* CA digest algorithm in certificate */
+enum SSL_SECOP_CA_MD = 18 | .SSL_SECOP_OTHER_CERT;
+
+/* Peer EE key in certificate */
+enum SSL_SECOP_PEER_EE_KEY = .SSL_SECOP_EE_KEY | .SSL_SECOP_PEER;
+
+/* Peer CA key in certificate */
+enum SSL_SECOP_PEER_CA_KEY = .SSL_SECOP_CA_KEY | .SSL_SECOP_PEER;
+
+/* Peer CA digest algorithm in certificate */
+enum SSL_SECOP_PEER_CA_MD = .SSL_SECOP_CA_MD | .SSL_SECOP_PEER;
+
+void SSL_set_security_level(libressl_d.openssl.ossl_typ.SSL* ssl, int level);
+int SSL_get_security_level(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
+
+void SSL_CTX_set_security_level(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int level);
+int SSL_CTX_get_security_level(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
+
+version (LIBRESSL_HAS_QUIC_OR_LIBRESSL_INTERNAL) {
+	/*
+	 * QUIC integration.
+	 *
+	 * QUIC acts as an underlying transport for the TLS 1.3 handshake. The following
+	 * functions allow a QUIC implementation to serve as the underlying transport as
+	 * described in RFC 9001.
+	 *
+	 * When configured for QUIC, |SSL_do_handshake| will drive the handshake as
+	 * before, but it will not use the configured |BIO|. It will call functions on
+	 * |SSL_QUIC_METHOD| to configure secrets and send data. If data is needed from
+	 * the peer, it will return |SSL_ERROR_WANT_READ|. As the caller receives data
+	 * it can decrypt, it calls |SSL_provide_quic_data|. Subsequent
+	 * |SSL_do_handshake| calls will then consume that data and progress the
+	 * handshake. After the handshake is complete, the caller should continue to
+	 * call |SSL_provide_quic_data| for any post-handshake data, followed by
+	 * |SSL_process_quic_post_handshake| to process it. It is an error to call
+	 * |SSL_peek|, |SSL_read| and |SSL_write| in QUIC.
+	 *
+	 * To avoid DoS attacks, the QUIC implementation must limit the amount of data
+	 * being queued up. The implementation can call
+	 * |SSL_quic_max_handshake_flight_len| to get the maximum buffer length at each
+	 * encryption level.
+	 *
+	 * QUIC implementations must additionally configure transport parameters with
+	 * |SSL_set_quic_transport_params|. |SSL_get_peer_quic_transport_params| may be
+	 * used to query the value received from the peer. This extension is handled
+	 * as an opaque byte string, which the caller is responsible for serializing
+	 * and parsing. See RFC 9000 section 7.4 for further details.
+	 */
+
+	/**
+	 * ssl_encryption_level_t specifies the QUIC encryption level used to transmit
+	 * handshake messages.
+	 */
+	enum ssl_encryption_level_t
+	{
+		ssl_encryption_initial = 0,
+		ssl_encryption_early_data,
+		ssl_encryption_handshake,
+		ssl_encryption_application,
+	}
+
+	////Declaration name in C language
+	enum
+	{
+		ssl_encryption_initial = .ssl_encryption_level_t.ssl_encryption_initial,
+		ssl_encryption_early_data = .ssl_encryption_level_t.ssl_encryption_early_data,
+		ssl_encryption_handshake = .ssl_encryption_level_t.ssl_encryption_handshake,
+		ssl_encryption_application = .ssl_encryption_level_t.ssl_encryption_application,
+	}
+
+	alias OSSL_ENCRYPTION_LEVEL = .ssl_encryption_level_t;
+
+	/**
+	 * ssl_quic_method_st (aka |SSL_QUIC_METHOD|) describes custom QUIC hooks.
+	 *
+	 * Note that we provide both the new (BoringSSL) secrets interface
+	 * (set_read_secret/set_write_secret) along with the old interface
+	 * (set_encryption_secrets), which quictls is still using.
+	 *
+	 * Since some consumers fail to use named initialisers, the order of these
+	 * functions is important. Hopefully all of these consumers use the old version.
+	 */
+	struct ssl_quic_method_st
+	{
+		/**
+		 * set_encryption_secrets configures the read and write secrets for the
+		 * given encryption level. This function will always be called before an
+		 * encryption level other than |ssl_encryption_initial| is used.
+		 *
+		 * When reading packets at a given level, the QUIC implementation must
+		 * send ACKs at the same level, so this function provides read and write
+		 * secrets together. The exception is |ssl_encryption_early_data|, where
+		 * secrets are only available in the client to server direction. The
+		 * other secret will be null. The server acknowledges such data at
+		 * |ssl_encryption_application|, which will be configured in the same
+		 * |SSL_do_handshake| call.
+		 *
+		 * This function should use |SSL_get_current_cipher| to determine the TLS
+		 * cipher suite.
+		 */
+		int function(libressl_d.openssl.ossl_typ.SSL* ssl, .ssl_encryption_level_t level, const (core.stdc.stdint.uint8_t)* read_secret, const (core.stdc.stdint.uint8_t)* write_secret, size_t secret_len) set_encryption_secrets;
+
+		/**
+		 * add_handshake_data adds handshake data to the current flight at the
+		 * given encryption level. It returns one on success and zero on error.
+		 * Callers should defer writing data to the network until |flush_flight|
+		 * to better pack QUIC packets into transport datagrams.
+		 *
+		 * If |level| is not |ssl_encryption_initial|, this function will not be
+		 * called before |level| is initialized with |set_write_secret|.
+		 */
+		int function(libressl_d.openssl.ossl_typ.SSL* ssl, .ssl_encryption_level_t level, const (core.stdc.stdint.uint8_t)* data, size_t len) add_handshake_data;
+
+		/**
+		 * flush_flight is called when the current flight is complete and should
+		 * be written to the transport. Note a flight may contain data at
+		 * several encryption levels. It returns one on success and zero on
+		 * error.
+		 */
+		int function(libressl_d.openssl.ossl_typ.SSL* ssl) flush_flight;
+
+		/**
+		 * send_alert sends a fatal alert at the specified encryption level. It
+		 * returns one on success and zero on error.
+		 *
+		 * If |level| is not |ssl_encryption_initial|, this function will not be
+		 * called before |level| is initialized with |set_write_secret|.
+		 */
+		int function(libressl_d.openssl.ossl_typ.SSL* ssl, .ssl_encryption_level_t level, core.stdc.stdint.uint8_t alert) send_alert;
+
+		/**
+		 * set_read_secret configures the read secret and cipher suite for the
+		 * given encryption level. It returns one on success and zero to
+		 * terminate the handshake with an error. It will be called at most once
+		 * per encryption level.
+		 *
+		 * Read keys will not be released before QUIC may use them. Once a level
+		 * has been initialized, QUIC may begin processing data from it.
+		 * Handshake data should be passed to |SSL_provide_quic_data| and
+		 * application data (if |level| is |ssl_encryption_early_data| or
+		 * |ssl_encryption_application|) may be processed according to the rules
+		 * of the QUIC protocol.
+		 */
+		int function(libressl_d.openssl.ossl_typ.SSL* ssl, .ssl_encryption_level_t level, const (.SSL_CIPHER)* cipher, const (core.stdc.stdint.uint8_t)* secret, size_t secret_len) set_read_secret;
+
+		/**
+		 * set_write_secret behaves like |set_read_secret| but configures the
+		 * write secret and cipher suite for the given encryption level. It will
+		 * be called at most once per encryption level.
+		 *
+		 * Write keys will not be released before QUIC may use them. If |level|
+		 * is |ssl_encryption_early_data| or |ssl_encryption_application|, QUIC
+		 * may begin sending application data at |level|.
+		 */
+		int function(libressl_d.openssl.ossl_typ.SSL* ssl, .ssl_encryption_level_t level, const (.SSL_CIPHER)* cipher, const (core.stdc.stdint.uint8_t)* secret, size_t secret_len) set_write_secret;
+	}
+
+	alias SSL_QUIC_METHOD = .ssl_quic_method_st;
+
+	/**
+	 * SSL_CTX_set_quic_method configures the QUIC hooks. This should only be
+	 * configured with a minimum version of TLS 1.3. |quic_method| must remain valid
+	 * for the lifetime of |ctx|. It returns one on success and zero on error.
+	 */
+	int SSL_CTX_set_quic_method(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (.SSL_QUIC_METHOD)* quic_method);
+
+	/**
+	 * SSL_set_quic_method configures the QUIC hooks. This should only be
+	 * configured with a minimum version of TLS 1.3. |quic_method| must remain valid
+	 * for the lifetime of |ssl|. It returns one on success and zero on error.
+	 */
+	int SSL_set_quic_method(libressl_d.openssl.ossl_typ.SSL* ssl, const (.SSL_QUIC_METHOD)* quic_method);
+
+	/**
+	 * SSL_is_quic returns true if an SSL has been configured for use with QUIC.
+	 */
+	int SSL_is_quic(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
+
+	/**
+	 * SSL_quic_max_handshake_flight_len returns returns the maximum number of bytes
+	 * that may be received at the given encryption level. This function should be
+	 * used to limit buffering in the QUIC implementation. See RFC 9000 section 7.5.
+	 */
+	size_t SSL_quic_max_handshake_flight_len(const (libressl_d.openssl.ossl_typ.SSL)* ssl, .ssl_encryption_level_t level);
+
+	/**
+	 * SSL_quic_read_level returns the current read encryption level.
+	 */
+	.ssl_encryption_level_t SSL_quic_read_level(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
+
+	/**
+	 * SSL_quic_write_level returns the current write encryption level.
+	 */
+	.ssl_encryption_level_t SSL_quic_write_level(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
+
+	/**
+	 * SSL_provide_quic_data provides data from QUIC at a particular encryption
+	 * level |level|. It returns one on success and zero on error. Note this
+	 * function will return zero if the handshake is not expecting data from |level|
+	 * at this time. The QUIC implementation should then close the connection with
+	 * an error.
+	 */
+	int SSL_provide_quic_data(libressl_d.openssl.ossl_typ.SSL* ssl, .ssl_encryption_level_t level, const (core.stdc.stdint.uint8_t)* data, size_t len);
+
+	/**
+	 * SSL_process_quic_post_handshake processes any data that QUIC has provided
+	 * after the handshake has completed. This includes NewSessionTicket messages
+	 * sent by the server. It returns one on success and zero on error.
+	 */
+	int SSL_process_quic_post_handshake(libressl_d.openssl.ossl_typ.SSL* ssl);
+
+	/**
+	 * SSL_set_quic_transport_params configures |ssl| to send |params| (of length
+	 * |params_len|) in the quic_transport_parameters extension in either the
+	 * ClientHello or EncryptedExtensions handshake message. It is an error to set
+	 * transport parameters if |ssl| is not configured for QUIC. The buffer pointed
+	 * to by |params| only need be valid for the duration of the call to this
+	 * function. This function returns 1 on success and 0 on failure.
+	 */
+	int SSL_set_quic_transport_params(libressl_d.openssl.ossl_typ.SSL* ssl, const (core.stdc.stdint.uint8_t)* params, size_t params_len);
+
+	/**
+	 * SSL_get_peer_quic_transport_params provides the caller with the value of the
+	 * quic_transport_parameters extension sent by the peer. A pointer to the buffer
+	 * containing the TransportParameters will be put in |*out_params|, and its
+	 * length in |*params_len|. This buffer will be valid for the lifetime of the
+	 * |SSL|. If no params were received from the peer, |*out_params_len| will be 0.
+	 */
+	void SSL_get_peer_quic_transport_params(const (libressl_d.openssl.ossl_typ.SSL)* ssl, const (core.stdc.stdint.uint8_t)** out_params, size_t* out_params_len);
+
+	/**
+	 * SSL_set_quic_use_legacy_codepoint configures whether to use the legacy QUIC
+	 * extension codepoint 0xFFa5 as opposed to the official value 57. This is
+	 * unsupported in LibreSSL.
+	 */
+	void SSL_set_quic_use_legacy_codepoint(libressl_d.openssl.ossl_typ.SSL* ssl, int use_legacy);
+}
+
 void ERR_load_SSL_strings();
 
 /* Error codes for the SSL functions. */
@@ -2701,6 +2827,8 @@ enum SSL_R_BLOCK_CIPHER_PAD_IS_WRONG = 129;
 enum SSL_R_BN_LIB = 130;
 enum SSL_R_CA_DN_LENGTH_MISMATCH = 131;
 enum SSL_R_CA_DN_TOO_LONG = 132;
+enum SSL_R_CA_KEY_TOO_SMALL = 397;
+enum SSL_R_CA_MD_TOO_WEAK = 398;
 enum SSL_R_CCS_RECEIVED_EARLY = 133;
 enum SSL_R_CERTIFICATE_VERIFY_FAILED = 134;
 enum SSL_R_CERT_LENGTH_MISMATCH = 135;
@@ -2722,6 +2850,7 @@ enum SSL_R_DATA_BETWEEN_CCS_AND_FINISHED = 145;
 enum SSL_R_DATA_LENGTH_TOO_LONG = 146;
 enum SSL_R_DECRYPTION_FAILED = 147;
 enum SSL_R_DECRYPTION_FAILED_OR_BAD_RECORD_MAC = 281;
+enum SSL_R_DH_KEY_TOO_SMALL = 394;
 enum SSL_R_DH_PUBLIC_VALUE_LENGTH_IS_WRONG = 148;
 enum SSL_R_DIGEST_CHECK_FAILED = 149;
 enum SSL_R_DTLS_MESSAGE_TOO_BIG = 334;
@@ -2731,6 +2860,7 @@ enum SSL_R_ECC_CERT_NOT_FOR_SIGNING = 318;
 enum SSL_R_ECC_CERT_SHOULD_HAVE_RSA_SIGNATURE = 322;
 enum SSL_R_ECC_CERT_SHOULD_HAVE_SHA1_SIGNATURE = 323;
 enum SSL_R_ECGROUP_TOO_LARGE_FOR_CIPHER = 310;
+enum SSL_R_EE_KEY_TOO_SMALL = 399;
 enum SSL_R_EMPTY_SRTP_PROTECTION_PROFILE_LIST = 354;
 enum SSL_R_ENCRYPTED_LENGTH_TOO_LONG = 150;
 enum SSL_R_ERROR_GENERATING_TMP_RSA_KEY = 282;
@@ -2945,6 +3075,7 @@ enum SSL_R_UNSUPPORTED_PROTOCOL = 258;
 enum SSL_R_UNSUPPORTED_SSL_VERSION = 259;
 enum SSL_R_UNSUPPORTED_STATUS_TYPE = 329;
 enum SSL_R_USE_SRTP_NOT_NEGOTIATED = 369;
+enum SSL_R_VERSION_TOO_LOW = 396;
 enum SSL_R_WRITE_BIO_NOT_SET = 260;
 enum SSL_R_WRONG_CIPHER_RETURNED = 261;
 enum SSL_R_WRONG_CURVE = 378;
@@ -2958,6 +3089,8 @@ enum SSL_R_WRONG_VERSION_NUMBER = 267;
 enum SSL_R_X509_LIB = 268;
 enum SSL_R_X509_VERIFICATION_SETUP_PROBLEMS = 269;
 enum SSL_R_PEER_BEHAVING_BADLY = 666;
+enum SSL_R_QUIC_INTERNAL_ERROR = 667;
+enum SSL_R_WRONG_ENCRYPTION_LEVEL_RECEIVED = 668;
 enum SSL_R_UNKNOWN = 999;
 
 /*

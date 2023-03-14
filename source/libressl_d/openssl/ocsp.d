@@ -1,4 +1,4 @@
-/* $OpenBSD: ocsp.h,v 1.16 2018/08/24 20:03:21 tb Exp $ */
+/* $OpenBSD: ocsp.h,v 1.20 2022/07/12 14:42:49 kn Exp $ */
 /* Written by Tom Titchener <Tom_Titchener@groove.net> for the OpenSSL
  * project.
  */
@@ -68,7 +68,6 @@ module libressl_d.openssl.ocsp;
 
 private static import core.stdc.config;
 private static import libressl_d.openssl.asn1;
-private static import libressl_d.openssl.bio;
 private static import libressl_d.openssl.pem;
 private static import libressl_d.openssl.stack;
 public import libressl_d.openssl.ossl_typ;
@@ -78,314 +77,6 @@ public import libressl_d.openssl.x509v3;
 
 extern (C):
 nothrow @nogc:
-
-/* Various flags and values */
-
-enum OCSP_DEFAULT_NONCE_LENGTH = 16;
-
-enum OCSP_NOCERTS = 0x01;
-enum OCSP_NOINTERN = 0x02;
-enum OCSP_NOSIGS = 0x04;
-enum OCSP_NOCHAIN = 0x08;
-enum OCSP_NOVERIFY = 0x10;
-enum OCSP_NOEXPLICIT = 0x20;
-enum OCSP_NOCASIGN = 0x40;
-enum OCSP_NODELEGATED = 0x80;
-enum OCSP_NOCHECKS = 0x0100;
-enum OCSP_TRUSTOTHER = 0x0200;
-enum OCSP_RESPID_KEY = 0x0400;
-enum OCSP_NOTIME = 0x0800;
-
-/*
- * CertID ::= SEQUENCE {
- *       hashAlgorithm            AlgorithmIdentifier,
- *       issuerNameHash     OCTET STRING, -- Hash of Issuer's DN
- *       issuerKeyHash      OCTET STRING, -- Hash of Issuers public key (excluding the tag & length fields)
- *       serialNumber       CertificateSerialNumber }
- */
-struct ocsp_cert_id_st
-{
-	libressl_d.openssl.ossl_typ.X509_ALGOR* hashAlgorithm;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* issuerNameHash;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* issuerKeyHash;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* serialNumber;
-}
-
-alias OCSP_CERTID = .ocsp_cert_id_st;
-
-//DECLARE_STACK_OF(OCSP_CERTID)
-struct stack_st_OCSP_CERTID
-{
-	libressl_d.openssl.stack._STACK stack;
-}
-
-/*
- * Request ::=     SEQUENCE {
- *       reqCert                    CertID,
- *       singleRequestExtensions    [0] EXPLICIT Extensions OPTIONAL }
- */
-struct ocsp_one_request_st
-{
-	.OCSP_CERTID* reqCert;
-	libressl_d.openssl.x509.stack_st_X509_EXTENSION* singleRequestExtensions;
-}
-
-alias OCSP_ONEREQ = .ocsp_one_request_st;
-
-//DECLARE_STACK_OF(OCSP_ONEREQ)
-struct stack_st_OCSP_ONEREQ
-{
-	libressl_d.openssl.stack._STACK stack;
-}
-
-/*
- * TBSRequest      ::=     SEQUENCE {
- *       version             [0] EXPLICIT Version DEFAULT v1,
- *       requestorName       [1] EXPLICIT GeneralName OPTIONAL,
- *       requestList             SEQUENCE OF Request,
- *       requestExtensions   [2] EXPLICIT Extensions OPTIONAL }
- */
-struct ocsp_req_info_st
-{
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
-	libressl_d.openssl.x509v3.GENERAL_NAME* requestorName;
-	.stack_st_OCSP_ONEREQ* requestList;
-	libressl_d.openssl.x509.stack_st_X509_EXTENSION* requestExtensions;
-}
-
-alias OCSP_REQINFO = .ocsp_req_info_st;
-
-/*
- * Signature       ::=     SEQUENCE {
- *       signatureAlgorithm   AlgorithmIdentifier,
- *       signature            BIT STRING,
- *       certs                [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
- */
-struct ocsp_signature_st
-{
-	libressl_d.openssl.ossl_typ.X509_ALGOR* signatureAlgorithm;
-	libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* signature;
-	libressl_d.openssl.x509.stack_st_X509* certs;
-}
-
-alias OCSP_SIGNATURE = .ocsp_signature_st;
-
-/*
- * OCSPRequest     ::=     SEQUENCE {
- *       tbsRequest                  TBSRequest,
- *       optionalSignature   [0]     EXPLICIT Signature OPTIONAL }
- */
-struct ocsp_request_st
-{
-	.OCSP_REQINFO* tbsRequest;
-
-	/**
-	 * OPTIONAL
-	 */
-	.OCSP_SIGNATURE* optionalSignature;
-}
-
-alias OCSP_REQUEST = .ocsp_request_st;
-
-/*
- * OCSPResponseStatus ::= ENUMERATED {
- *       successful            (0),      --Response has valid confirmations
- *       malformedRequest      (1),      --Illegal confirmation request
- *       internalError         (2),      --Internal error in issuer
- *       tryLater              (3),      --Try again later
- *                                       --(4) is not used
- *       sigRequired           (5),      --Must sign the request
- *       unauthorized          (6)       --Request unauthorized
- *   }
- */
-enum OCSP_RESPONSE_STATUS_SUCCESSFUL = 0;
-enum OCSP_RESPONSE_STATUS_MALFORMEDREQUEST = 1;
-enum OCSP_RESPONSE_STATUS_INTERNALERROR = 2;
-enum OCSP_RESPONSE_STATUS_TRYLATER = 3;
-enum OCSP_RESPONSE_STATUS_SIGREQUIRED = 5;
-enum OCSP_RESPONSE_STATUS_UNAUTHORIZED = 6;
-
-/*
- * ResponseBytes ::=       SEQUENCE {
- *       responseType   OBJECT IDENTIFIER,
- *       response       OCTET STRING }
- */
-struct ocsp_resp_bytes_st
-{
-	libressl_d.openssl.asn1.ASN1_OBJECT* responseType;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* response;
-}
-
-alias OCSP_RESPBYTES = .ocsp_resp_bytes_st;
-
-/*
- * OCSPResponse ::= SEQUENCE {
- *      responseStatus         OCSPResponseStatus,
- *      responseBytes          [0] EXPLICIT ResponseBytes OPTIONAL }
- */
-struct ocsp_response_st
-{
-	libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* responseStatus;
-	.OCSP_RESPBYTES* responseBytes;
-}
-
-/*
- * ResponderID ::= CHOICE {
- *      byName   [1] Name,
- *      byKey    [2] KeyHash }
- */
-enum V_OCSP_RESPID_NAME = 0;
-enum V_OCSP_RESPID_KEY = 1;
-
-struct ocsp_responder_id_st
-{
-	int type;
-
-	union value_
-	{
-		libressl_d.openssl.ossl_typ.X509_NAME* byName;
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* byKey;
-	}
-
-	value_ value;
-}
-
-//DECLARE_STACK_OF(OCSP_RESPID)
-struct stack_st_OCSP_RESPID
-{
-	libressl_d.openssl.stack._STACK stack;
-}
-
-libressl_d.openssl.ossl_typ.OCSP_RESPID* OCSP_RESPID_new();
-void OCSP_RESPID_free(libressl_d.openssl.ossl_typ.OCSP_RESPID* a);
-libressl_d.openssl.ossl_typ.OCSP_RESPID* d2i_OCSP_RESPID(libressl_d.openssl.ossl_typ.OCSP_RESPID** a, const (ubyte)** in_, core.stdc.config.c_long len);
-int i2d_OCSP_RESPID(libressl_d.openssl.ossl_typ.OCSP_RESPID* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM OCSP_RESPID_it;
-
-/*
- * KeyHash ::= OCTET STRING --SHA-1 hash of responder's public key
- *                            --(excluding the tag and length fields)
- */
-
-/*
- * RevokedInfo ::= SEQUENCE {
- *       revocationTime              GeneralizedTime,
- *       revocationReason    [0]     EXPLICIT CRLReason OPTIONAL }
- */
-struct ocsp_revoked_info_st
-{
-	libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* revocationTime;
-	libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* revocationReason;
-}
-
-alias OCSP_REVOKEDINFO = .ocsp_revoked_info_st;
-
-/*
- * CertStatus ::= CHOICE {
- *       good                [0]     IMPLICIT null,
- *       revoked             [1]     IMPLICIT RevokedInfo,
- *       unknown             [2]     IMPLICIT UnknownInfo }
- */
-enum V_OCSP_CERTSTATUS_GOOD = 0;
-enum V_OCSP_CERTSTATUS_REVOKED = 1;
-enum V_OCSP_CERTSTATUS_UNKNOWN = 2;
-
-struct ocsp_cert_status_st
-{
-	int type;
-
-	union value_
-	{
-		libressl_d.openssl.ossl_typ.ASN1_NULL* good;
-		.OCSP_REVOKEDINFO* revoked;
-		libressl_d.openssl.ossl_typ.ASN1_NULL* unknown;
-	}
-
-	value_ value;
-}
-
-alias OCSP_CERTSTATUS = .ocsp_cert_status_st;
-
-/*
- * SingleResponse ::= SEQUENCE {
- *      certID                       CertID,
- *      certStatus                   CertStatus,
- *      thisUpdate                   GeneralizedTime,
- *      nextUpdate           [0]     EXPLICIT GeneralizedTime OPTIONAL,
- *      singleExtensions     [1]     EXPLICIT Extensions OPTIONAL }
- */
-struct ocsp_single_response_st
-{
-	.OCSP_CERTID* certId;
-	.OCSP_CERTSTATUS* certStatus;
-	libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* thisUpdate;
-	libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* nextUpdate;
-	libressl_d.openssl.x509.stack_st_X509_EXTENSION* singleExtensions;
-}
-
-alias OCSP_SINGLERESP = .ocsp_single_response_st;
-
-//DECLARE_STACK_OF(OCSP_SINGLERESP)
-struct stack_st_OCSP_SINGLERESP
-{
-	libressl_d.openssl.stack._STACK stack;
-}
-
-/*
- * ResponseData ::= SEQUENCE {
- *      version              [0] EXPLICIT Version DEFAULT v1,
- *      responderID              ResponderID,
- *      producedAt               GeneralizedTime,
- *      responses                SEQUENCE OF SingleResponse,
- *      responseExtensions   [1] EXPLICIT Extensions OPTIONAL }
- */
-struct ocsp_response_data_st
-{
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
-	libressl_d.openssl.ossl_typ.OCSP_RESPID* responderId;
-	libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* producedAt;
-	.stack_st_OCSP_SINGLERESP* responses;
-	libressl_d.openssl.x509.stack_st_X509_EXTENSION* responseExtensions;
-}
-
-alias OCSP_RESPDATA = .ocsp_response_data_st;
-
-/*
- * BasicOCSPResponse       ::= SEQUENCE {
- *      tbsResponseData      ResponseData,
- *      signatureAlgorithm   AlgorithmIdentifier,
- *      signature            BIT STRING,
- *      certs                [0] EXPLICIT SEQUENCE OF Certificate OPTIONAL }
- */
-/*
- * Note 1:
- * The value for "signature" is specified in the OCSP rfc2560 as follows:
- * "The value for the signature SHALL be computed on the hash of the DER
- * encoding ResponseData."  This means that you must hash the DER-encoded
- * tbsResponseData, and then run it through a crypto-signing function, which
- * will (at least w/RSA) do a hash-'n'-private-encrypt operation.  This seems
- * a bit odd, but that's the spec.  Also note that the data structures do not
- * leave anywhere to independently specify the algorithm used for the initial
- * hash. So, we look at the signature-specification algorithm, and try to do
- * something intelligent.	-- Kathy Weinhold, CertCo
- */
-/*
- * Note 2:
- * It seems that the mentioned passage from RFC 2560 (section 4.2.1) is open
- * for interpretation.  I've done tests against another responder, and found
- * that it doesn't do the double hashing that the RFC seems to say one
- * should.  Therefore, all relevant functions take a flag saying which
- * variant should be used.	-- Richard Levitte, OpenSSL team and CeloCom
- */
-struct ocsp_basic_response_st
-{
-	.OCSP_RESPDATA* tbsResponseData;
-	libressl_d.openssl.ossl_typ.X509_ALGOR* signatureAlgorithm;
-	libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* signature;
-	libressl_d.openssl.x509.stack_st_X509* certs;
-}
-
-alias OCSP_BASICRESP = .ocsp_basic_response_st;
 
 /*
  *   CRLReason ::= ENUMERATED {
@@ -408,32 +99,120 @@ enum OCSP_REVOKED_STATUS_CESSATIONOFOPERATION = 5;
 enum OCSP_REVOKED_STATUS_CERTIFICATEHOLD = 6;
 enum OCSP_REVOKED_STATUS_REMOVEFROMCRL = 8;
 
-/*
- * CrlID ::= SEQUENCE {
- *     crlUrl               [0]     EXPLICIT IA5String OPTIONAL,
- *     crlNum               [1]     EXPLICIT INTEGER OPTIONAL,
- *     crlTime              [2]     EXPLICIT GeneralizedTime OPTIONAL }
- */
-struct ocsp_crl_id_st
+/* Various flags and values */
+
+enum OCSP_DEFAULT_NONCE_LENGTH = 16;
+
+enum OCSP_NOCERTS = 0x01;
+enum OCSP_NOINTERN = 0x02;
+enum OCSP_NOSIGS = 0x04;
+enum OCSP_NOCHAIN = 0x08;
+enum OCSP_NOVERIFY = 0x10;
+enum OCSP_NOEXPLICIT = 0x20;
+enum OCSP_NOCASIGN = 0x40;
+enum OCSP_NODELEGATED = 0x80;
+enum OCSP_NOCHECKS = 0x0100;
+enum OCSP_TRUSTOTHER = 0x0200;
+enum OCSP_RESPID_KEY = 0x0400;
+enum OCSP_NOTIME = 0x0800;
+
+struct ocsp_cert_id_st;
+alias OCSP_CERTID = .ocsp_cert_id_st;
+
+//DECLARE_STACK_OF(OCSP_CERTID)
+struct stack_st_OCSP_CERTID
 {
-	libressl_d.openssl.ossl_typ.ASN1_IA5STRING* crlUrl;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* crlNum;
-	libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* crlTime;
+	libressl_d.openssl.stack._STACK stack;
 }
 
+struct ocsp_one_request_st;
+alias OCSP_ONEREQ = .ocsp_one_request_st;
+
+//DECLARE_STACK_OF(OCSP_ONEREQ)
+struct stack_st_OCSP_ONEREQ
+{
+	libressl_d.openssl.stack._STACK stack;
+}
+
+struct ocsp_req_info_st;
+alias OCSP_REQINFO = .ocsp_req_info_st;
+
+struct ocsp_signature_st;
+alias OCSP_SIGNATURE = .ocsp_signature_st;
+
+struct ocsp_request_st;
+alias OCSP_REQUEST = .ocsp_request_st;
+
+/*
+ * OCSPResponseStatus ::= ENUMERATED {
+ *       successful            (0),      --Response has valid confirmations
+ *       malformedRequest      (1),      --Illegal confirmation request
+ *       internalError         (2),      --Internal error in issuer
+ *       tryLater              (3),      --Try again later
+ *                                       --(4) is not used
+ *       sigRequired           (5),      --Must sign the request
+ *       unauthorized          (6)       --Request unauthorized
+ *   }
+ */
+enum OCSP_RESPONSE_STATUS_SUCCESSFUL = 0;
+enum OCSP_RESPONSE_STATUS_MALFORMEDREQUEST = 1;
+enum OCSP_RESPONSE_STATUS_INTERNALERROR = 2;
+enum OCSP_RESPONSE_STATUS_TRYLATER = 3;
+enum OCSP_RESPONSE_STATUS_SIGREQUIRED = 5;
+enum OCSP_RESPONSE_STATUS_UNAUTHORIZED = 6;
+
+struct ocsp_resp_bytes_st;
+alias OCSP_RESPBYTES = .ocsp_resp_bytes_st;
+
+enum V_OCSP_RESPID_NAME = 0;
+enum V_OCSP_RESPID_KEY = 1;
+
+//DECLARE_STACK_OF(OCSP_RESPID)
+struct stack_st_OCSP_RESPID
+{
+	libressl_d.openssl.stack._STACK stack;
+}
+
+libressl_d.openssl.ossl_typ.OCSP_RESPID* OCSP_RESPID_new();
+void OCSP_RESPID_free(libressl_d.openssl.ossl_typ.OCSP_RESPID* a);
+libressl_d.openssl.ossl_typ.OCSP_RESPID* d2i_OCSP_RESPID(libressl_d.openssl.ossl_typ.OCSP_RESPID** a, const (ubyte)** in_, core.stdc.config.c_long len);
+int i2d_OCSP_RESPID(libressl_d.openssl.ossl_typ.OCSP_RESPID* a, ubyte** out_);
+extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM OCSP_RESPID_it;
+
+/*
+ * KeyHash ::= OCTET STRING --SHA-1 hash of responder's public key
+ *                            --(excluding the tag and length fields)
+ */
+
+struct ocsp_revoked_info_st;
+alias OCSP_REVOKEDINFO = .ocsp_revoked_info_st;
+
+enum V_OCSP_CERTSTATUS_GOOD = 0;
+enum V_OCSP_CERTSTATUS_REVOKED = 1;
+enum V_OCSP_CERTSTATUS_UNKNOWN = 2;
+
+struct ocsp_cert_status_st;
+alias OCSP_CERTSTATUS = .ocsp_cert_status_st;
+
+struct ocsp_single_response_st;
+alias OCSP_SINGLERESP = .ocsp_single_response_st;
+
+//DECLARE_STACK_OF(OCSP_SINGLERESP)
+struct stack_st_OCSP_SINGLERESP
+{
+	libressl_d.openssl.stack._STACK stack;
+}
+
+struct ocsp_response_data_st;
+alias OCSP_RESPDATA = .ocsp_response_data_st;
+
+struct ocsp_basic_response_st;
+alias OCSP_BASICRESP = .ocsp_basic_response_st;
+
+struct ocsp_crl_id_st;
 alias OCSP_CRLID = .ocsp_crl_id_st;
 
-/*
- * ServiceLocator ::= SEQUENCE {
- *      issuer    Name,
- *      locator   AuthorityInfoAccessSyntax OPTIONAL }
- */
-struct ocsp_service_locator_st
-{
-	libressl_d.openssl.ossl_typ.X509_NAME* issuer;
-	libressl_d.openssl.x509v3.stack_st_ACCESS_DESCRIPTION* locator;
-}
-
+struct ocsp_service_locator_st;
 alias OCSP_SERVICELOC = .ocsp_service_locator_st;
 
 enum PEM_STRING_OCSP_REQUEST = "OCSP REQUEST";
@@ -447,22 +226,14 @@ enum PEM_STRING_OCSP_RESPONSE = "OCSP RESPONSE";
 
 //#define PEM_write_bio_OCSP_RESPONSE(bp, o) libressl_d.openssl.pem.PEM_ASN1_write_bio((int (*)()) .i2d_OCSP_RESPONSE, .PEM_STRING_OCSP_RESPONSE, bp, cast(char*)(o), null, null, 0, null, null)
 
-//#define OCSP_REQUEST_sign(o, pkey, md) libressl_d.openssl.x509.ASN1_item_sign(&OCSP_REQINFO_it, o.optionalSignature.signatureAlgorithm, null, o.optionalSignature.signature, o.tbsRequest, pkey, md)
-
-//#define OCSP_BASICRESP_sign(o, pkey, md, d) libressl_d.openssl.x509.ASN1_item_sign(&OCSP_RESPDATA_it, o.signatureAlgorithm, null, o.signature, o.tbsResponseData, pkey, md)
-
-//#define OCSP_REQUEST_verify(a, r) libressl_d.openssl.x509.ASN1_item_verify(&OCSP_REQINFO_it, a.optionalSignature.signatureAlgorithm, a.optionalSignature.signature, a.tbsRequest, r)
-
-//#define OCSP_BASICRESP_verify(a, r, d) libressl_d.openssl.x509.ASN1_item_verify(&OCSP_RESPDATA_it, a.signatureAlgorithm, a.signature, a.tbsResponseData, r)
-
 //#define ASN1_BIT_STRING_digest(data, type, md, len) libressl_d.openssl.x509.ASN1_item_digest(&ASN1_BIT_STRING_it, type, data, md, len)
 
 //#define OCSP_CERTSTATUS_dup(cs) libressl_d.openssl.asn1.ASN1_item_dup(&OCSP_CERTSTATUS_it, cs)
 
 .OCSP_CERTID* OCSP_CERTID_dup(.OCSP_CERTID* id);
 
-libressl_d.openssl.ossl_typ.OCSP_RESPONSE* OCSP_sendreq_bio(libressl_d.openssl.bio.BIO* b, const (char)* path, .OCSP_REQUEST* req);
-libressl_d.openssl.ossl_typ.OCSP_REQ_CTX* OCSP_sendreq_new(libressl_d.openssl.bio.BIO* io, const (char)* path, .OCSP_REQUEST* req, int maxline);
+libressl_d.openssl.ossl_typ.OCSP_RESPONSE* OCSP_sendreq_bio(libressl_d.openssl.ossl_typ.BIO* b, const (char)* path, .OCSP_REQUEST* req);
+libressl_d.openssl.ossl_typ.OCSP_REQ_CTX* OCSP_sendreq_new(libressl_d.openssl.ossl_typ.BIO* io, const (char)* path, .OCSP_REQUEST* req, int maxline);
 int OCSP_sendreq_nbio(libressl_d.openssl.ossl_typ.OCSP_RESPONSE** presp, libressl_d.openssl.ossl_typ.OCSP_REQ_CTX* rctx);
 void OCSP_REQ_CTX_free(libressl_d.openssl.ossl_typ.OCSP_REQ_CTX* rctx);
 int OCSP_REQ_CTX_set1_req(libressl_d.openssl.ossl_typ.OCSP_REQ_CTX* rctx, .OCSP_REQUEST* req);
@@ -487,8 +258,17 @@ int OCSP_request_sign(.OCSP_REQUEST* req, libressl_d.openssl.ossl_typ.X509* sign
 int OCSP_response_status(libressl_d.openssl.ossl_typ.OCSP_RESPONSE* resp);
 .OCSP_BASICRESP* OCSP_response_get1_basic(libressl_d.openssl.ossl_typ.OCSP_RESPONSE* resp);
 
+const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)* OCSP_resp_get0_signature(const (.OCSP_BASICRESP)* bs);
+const (libressl_d.openssl.ossl_typ.X509_ALGOR)* OCSP_resp_get0_tbs_sigalg(const (.OCSP_BASICRESP)* bs);
+const (.OCSP_RESPDATA)* OCSP_resp_get0_respdata(const (.OCSP_BASICRESP)* bs);
+int OCSP_resp_get0_signer(.OCSP_BASICRESP* bs, libressl_d.openssl.ossl_typ.X509** signer, libressl_d.openssl.x509.stack_st_X509* extra_certs);
+
 int OCSP_resp_count(.OCSP_BASICRESP* bs);
 .OCSP_SINGLERESP* OCSP_resp_get0(.OCSP_BASICRESP* bs, int idx);
+const (libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME)* OCSP_resp_get0_produced_at(const (.OCSP_BASICRESP)* bs);
+const (libressl_d.openssl.x509.stack_st_X509)* OCSP_resp_get0_certs(const (.OCSP_BASICRESP)* bs);
+int OCSP_resp_get0_id(const (.OCSP_BASICRESP)* bs, const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)** pid, const (libressl_d.openssl.ossl_typ.X509_NAME)** pname);
+
 int OCSP_resp_find(.OCSP_BASICRESP* bs, .OCSP_CERTID* id, int last);
 int OCSP_single_get0_status(.OCSP_SINGLERESP* single, int* reason, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** revtime, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** thisupd, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** nextupd);
 int OCSP_resp_find_status(.OCSP_BASICRESP* bs, .OCSP_CERTID* id, int* status, int* reason, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** revtime, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** thisupd, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** nextupd);
@@ -504,7 +284,7 @@ int OCSP_id_cmp(.OCSP_CERTID* a, .OCSP_CERTID* b);
 int OCSP_request_onereq_count(.OCSP_REQUEST* req);
 .OCSP_ONEREQ* OCSP_request_onereq_get0(.OCSP_REQUEST* req, int i);
 .OCSP_CERTID* OCSP_onereq_get0_id(.OCSP_ONEREQ* one);
-int OCSP_id_get0_info(libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** piNameHash, libressl_d.openssl.asn1.ASN1_OBJECT** pmd, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** pikeyHash, libressl_d.openssl.ossl_typ.ASN1_INTEGER** pserial, .OCSP_CERTID* cid);
+int OCSP_id_get0_info(libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** piNameHash, libressl_d.openssl.ossl_typ.ASN1_OBJECT** pmd, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** pikeyHash, libressl_d.openssl.ossl_typ.ASN1_INTEGER** pserial, .OCSP_CERTID* cid);
 int OCSP_request_is_signed(.OCSP_REQUEST* req);
 libressl_d.openssl.ossl_typ.OCSP_RESPONSE* OCSP_response_create(int status, .OCSP_BASICRESP* bs);
 .OCSP_SINGLERESP* OCSP_basic_add1_status(.OCSP_BASICRESP* rsp, .OCSP_CERTID* cid, int status, int reason, libressl_d.openssl.ossl_typ.ASN1_TIME* revtime, libressl_d.openssl.ossl_typ.ASN1_TIME* thisupd, libressl_d.openssl.ossl_typ.ASN1_TIME* nextupd);
@@ -521,7 +301,7 @@ libressl_d.openssl.x509.X509_EXTENSION* OCSP_url_svcloc_new(libressl_d.openssl.o
 
 int OCSP_REQUEST_get_ext_count(.OCSP_REQUEST* x);
 int OCSP_REQUEST_get_ext_by_NID(.OCSP_REQUEST* x, int nid, int lastpos);
-int OCSP_REQUEST_get_ext_by_OBJ(.OCSP_REQUEST* x, const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj, int lastpos);
+int OCSP_REQUEST_get_ext_by_OBJ(.OCSP_REQUEST* x, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
 int OCSP_REQUEST_get_ext_by_critical(.OCSP_REQUEST* x, int crit, int lastpos);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_REQUEST_get_ext(.OCSP_REQUEST* x, int loc);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_REQUEST_delete_ext(.OCSP_REQUEST* x, int loc);
@@ -531,7 +311,7 @@ int OCSP_REQUEST_add_ext(.OCSP_REQUEST* x, libressl_d.openssl.x509.X509_EXTENSIO
 
 int OCSP_ONEREQ_get_ext_count(.OCSP_ONEREQ* x);
 int OCSP_ONEREQ_get_ext_by_NID(.OCSP_ONEREQ* x, int nid, int lastpos);
-int OCSP_ONEREQ_get_ext_by_OBJ(.OCSP_ONEREQ* x, const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj, int lastpos);
+int OCSP_ONEREQ_get_ext_by_OBJ(.OCSP_ONEREQ* x, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
 int OCSP_ONEREQ_get_ext_by_critical(.OCSP_ONEREQ* x, int crit, int lastpos);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_ONEREQ_get_ext(.OCSP_ONEREQ* x, int loc);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_ONEREQ_delete_ext(.OCSP_ONEREQ* x, int loc);
@@ -541,7 +321,7 @@ int OCSP_ONEREQ_add_ext(.OCSP_ONEREQ* x, libressl_d.openssl.x509.X509_EXTENSION*
 
 int OCSP_BASICRESP_get_ext_count(.OCSP_BASICRESP* x);
 int OCSP_BASICRESP_get_ext_by_NID(.OCSP_BASICRESP* x, int nid, int lastpos);
-int OCSP_BASICRESP_get_ext_by_OBJ(.OCSP_BASICRESP* x, const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj, int lastpos);
+int OCSP_BASICRESP_get_ext_by_OBJ(.OCSP_BASICRESP* x, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
 int OCSP_BASICRESP_get_ext_by_critical(.OCSP_BASICRESP* x, int crit, int lastpos);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_BASICRESP_get_ext(.OCSP_BASICRESP* x, int loc);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_BASICRESP_delete_ext(.OCSP_BASICRESP* x, int loc);
@@ -551,7 +331,7 @@ int OCSP_BASICRESP_add_ext(.OCSP_BASICRESP* x, libressl_d.openssl.x509.X509_EXTE
 
 int OCSP_SINGLERESP_get_ext_count(.OCSP_SINGLERESP* x);
 int OCSP_SINGLERESP_get_ext_by_NID(.OCSP_SINGLERESP* x, int nid, int lastpos);
-int OCSP_SINGLERESP_get_ext_by_OBJ(.OCSP_SINGLERESP* x, const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj, int lastpos);
+int OCSP_SINGLERESP_get_ext_by_OBJ(.OCSP_SINGLERESP* x, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
 int OCSP_SINGLERESP_get_ext_by_critical(.OCSP_SINGLERESP* x, int crit, int lastpos);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_SINGLERESP_get_ext(.OCSP_SINGLERESP* x, int loc);
 libressl_d.openssl.x509.X509_EXTENSION* OCSP_SINGLERESP_delete_ext(.OCSP_SINGLERESP* x, int loc);
@@ -598,8 +378,8 @@ libressl_d.openssl.ossl_typ.OCSP_RESPONSE* OCSP_RESPONSE_new();
 void OCSP_RESPONSE_free(libressl_d.openssl.ossl_typ.OCSP_RESPONSE* a);
 libressl_d.openssl.ossl_typ.OCSP_RESPONSE* d2i_OCSP_RESPONSE(libressl_d.openssl.ossl_typ.OCSP_RESPONSE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_OCSP_RESPONSE(libressl_d.openssl.ossl_typ.OCSP_RESPONSE* a, ubyte** out_);
-libressl_d.openssl.ossl_typ.OCSP_RESPONSE* d2i_OCSP_RESPONSE_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.OCSP_RESPONSE** a);
-int i2d_OCSP_RESPONSE_bio(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.OCSP_RESPONSE* a);
+libressl_d.openssl.ossl_typ.OCSP_RESPONSE* d2i_OCSP_RESPONSE_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.OCSP_RESPONSE** a);
+int i2d_OCSP_RESPONSE_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.OCSP_RESPONSE* a);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM OCSP_RESPONSE_it;
 .OCSP_RESPBYTES* OCSP_RESPBYTES_new();
 void OCSP_RESPBYTES_free(.OCSP_RESPBYTES* a);
@@ -620,8 +400,8 @@ extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM OCSP_CERTID_it;
 void OCSP_REQUEST_free(.OCSP_REQUEST* a);
 .OCSP_REQUEST* d2i_OCSP_REQUEST(.OCSP_REQUEST** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_OCSP_REQUEST(.OCSP_REQUEST* a, ubyte** out_);
-.OCSP_REQUEST* d2i_OCSP_REQUEST_bio(libressl_d.openssl.bio.BIO* bp, .OCSP_REQUEST** a);
-int i2d_OCSP_REQUEST_bio(libressl_d.openssl.bio.BIO* bp, .OCSP_REQUEST* a);
+.OCSP_REQUEST* d2i_OCSP_REQUEST_bio(libressl_d.openssl.ossl_typ.BIO* bp, .OCSP_REQUEST** a);
+int i2d_OCSP_REQUEST_bio(libressl_d.openssl.ossl_typ.BIO* bp, .OCSP_REQUEST* a);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM OCSP_REQUEST_it;
 .OCSP_SIGNATURE* OCSP_SIGNATURE_new();
 void OCSP_SIGNATURE_free(.OCSP_SIGNATURE* a);
@@ -648,16 +428,11 @@ const (char)* OCSP_response_status_str(core.stdc.config.c_long s);
 const (char)* OCSP_cert_status_str(core.stdc.config.c_long s);
 const (char)* OCSP_crl_reason_str(core.stdc.config.c_long s);
 
-int OCSP_REQUEST_print(libressl_d.openssl.bio.BIO* bp, .OCSP_REQUEST* a, core.stdc.config.c_ulong flags);
-int OCSP_RESPONSE_print(libressl_d.openssl.bio.BIO* bp, libressl_d.openssl.ossl_typ.OCSP_RESPONSE* o, core.stdc.config.c_ulong flags);
+int OCSP_REQUEST_print(libressl_d.openssl.ossl_typ.BIO* bp, .OCSP_REQUEST* a, core.stdc.config.c_ulong flags);
+int OCSP_RESPONSE_print(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.OCSP_RESPONSE* o, core.stdc.config.c_ulong flags);
 
 int OCSP_basic_verify(.OCSP_BASICRESP* bs, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.X509_STORE* st, core.stdc.config.c_ulong flags);
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_OCSP_strings();
 
 /* Error codes for the OCSP functions. */

@@ -1,4 +1,4 @@
-/* $OpenBSD: rsa.h,v 1.51 2019/11/04 12:30:56 jsing Exp $ */
+/* $OpenBSD: rsa.h,v 1.58 2022/07/12 14:42:50 kn Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -83,10 +83,6 @@ version (OPENSSL_NO_RSA) {
 extern (C):
 nothrow @nogc:
 
-/* Declared already in ossl_typ.h */
-/* alias RSA = .rsa_st; */
-/* alias RSA_METHOD = .rsa_meth_st; */
-
 struct rsa_pss_params_st
 {
 	libressl_d.openssl.ossl_typ.X509_ALGOR* hashAlgorithm;
@@ -98,7 +94,7 @@ struct rsa_pss_params_st
 	libressl_d.openssl.ossl_typ.X509_ALGOR* maskHash;
 }
 
-alias RSA_PSS_PARAMS = .rsa_pss_params_st;
+/* alias RSA_PSS_PARAMS = .rsa_pss_params_st; */
 
 struct rsa_oaep_params_st
 {
@@ -111,110 +107,6 @@ struct rsa_oaep_params_st
 }
 
 alias RSA_OAEP_PARAMS = .rsa_oaep_params_st;
-
-struct rsa_meth_st
-{
-	const (char)* name;
-	int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) rsa_pub_enc;
-	int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) rsa_pub_dec;
-	int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) rsa_priv_enc;
-	int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) rsa_priv_dec;
-
-	/**
-	 * Can be null
-	 */
-	int function(libressl_d.openssl.ossl_typ.BIGNUM* r0, const (libressl_d.openssl.ossl_typ.BIGNUM)* I, libressl_d.openssl.ossl_typ.RSA* rsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx) rsa_mod_exp;
-
-	///Ditto
-	int function(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BN_MONT_CTX* m_ctx) bn_mod_exp;
-
-	/**
-	 * called at new
-	 */
-	int function(libressl_d.openssl.ossl_typ.RSA* rsa) init;
-
-	/**
-	 * called at free
-	 */
-	int function(libressl_d.openssl.ossl_typ.RSA* rsa) finish;
-
-	/**
-	 * RSA_METHOD_FLAG_* things
-	 */
-	int flags;
-
-	/**
-	 * may be needed!
-	 */
-	char* app_data;
-
-	/*
-	 * New sign and verify functions: some libraries don't allow arbitrary data
-	 * to be signed/verified: this allows them to be used. Note: for this to work
-	 * the RSA_public_decrypt() and RSA_private_encrypt() should *NOT* be used
-	 * RSA_sign(), RSA_verify() should be used instead. Note: for backwards
-	 * compatibility this functionality is only enabled if the RSA_FLAG_SIGN_VER
-	 * option is set in 'flags'.
-	 */
-	int function(int type, const (ubyte)* m, uint m_length, ubyte* sigret, uint* siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa) rsa_sign;
-	int function(int dtype, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa) rsa_verify;
-
-	/**
-	 * If this callback is null, the builtin software RSA key-gen will be used. This
-	 * is for behavioural compatibility whilst the code gets rewired, but one day
-	 * it would be nice to assume there are no such things as "builtin software"
-	 * implementations.
-	 */
-	int function(libressl_d.openssl.ossl_typ.RSA* rsa, int bits, libressl_d.openssl.ossl_typ.BIGNUM* e, libressl_d.openssl.ossl_typ.BN_GENCB* cb) rsa_keygen;
-}
-
-struct rsa_st
-{
-	/**
-	 * The first parameter is used to pickup errors where
-	 * this is passed instead of aEVP_PKEY, it is set to 0
-	 */
-	int pad;
-
-	core.stdc.config.c_long version_;
-	const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth;
-
-	/**
-	 * functional reference if 'meth' is ENGINE-provided
-	 */
-	libressl_d.openssl.ossl_typ.ENGINE* engine;
-
-	libressl_d.openssl.ossl_typ.BIGNUM* n;
-	libressl_d.openssl.ossl_typ.BIGNUM* e;
-	libressl_d.openssl.ossl_typ.BIGNUM* d;
-	libressl_d.openssl.ossl_typ.BIGNUM* p;
-	libressl_d.openssl.ossl_typ.BIGNUM* q;
-	libressl_d.openssl.ossl_typ.BIGNUM* dmp1;
-	libressl_d.openssl.ossl_typ.BIGNUM* dmq1;
-	libressl_d.openssl.ossl_typ.BIGNUM* iqmp;
-
-	/**
-	 * Parameter restrictions for PSS only keys.
-	 */
-	.RSA_PSS_PARAMS* pss;
-
-	/* be careful using this if the RSA structure is shared */
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
-	int references;
-	int flags;
-
-	/* Used to cache montgomery values */
-	libressl_d.openssl.ossl_typ.BN_MONT_CTX* _method_mod_n;
-	libressl_d.openssl.ossl_typ.BN_MONT_CTX* _method_mod_p;
-	libressl_d.openssl.ossl_typ.BN_MONT_CTX* _method_mod_q;
-
-	/*
-	 * all BIGNUM values are actually in the following data, if it is not
-	 * null
-	 */
-	libressl_d.openssl.ossl_typ.BN_BLINDING* blinding;
-	libressl_d.openssl.ossl_typ.BN_BLINDING* mt_blinding;
-}
 
 //#if !defined(OPENSSL_RSA_MAX_MODULUS_BITS)
 	enum OPENSSL_RSA_MAX_MODULUS_BITS = 16384;
@@ -491,10 +383,10 @@ libressl_d.openssl.ossl_typ.RSA* d2i_RSAPrivateKey(libressl_d.openssl.ossl_typ.R
 int i2d_RSAPrivateKey(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM RSAPrivateKey_it;
 
-.RSA_PSS_PARAMS* RSA_PSS_PARAMS_new();
-void RSA_PSS_PARAMS_free(.RSA_PSS_PARAMS* a);
-.RSA_PSS_PARAMS* d2i_RSA_PSS_PARAMS(.RSA_PSS_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
-int i2d_RSA_PSS_PARAMS(.RSA_PSS_PARAMS* a, ubyte** out_);
+libressl_d.openssl.ossl_typ.RSA_PSS_PARAMS* RSA_PSS_PARAMS_new();
+void RSA_PSS_PARAMS_free(libressl_d.openssl.ossl_typ.RSA_PSS_PARAMS* a);
+libressl_d.openssl.ossl_typ.RSA_PSS_PARAMS* d2i_RSA_PSS_PARAMS(libressl_d.openssl.ossl_typ.RSA_PSS_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
+int i2d_RSA_PSS_PARAMS(libressl_d.openssl.ossl_typ.RSA_PSS_PARAMS* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM RSA_PSS_PARAMS_it;
 
 .RSA_OAEP_PARAMS* RSA_OAEP_PARAMS_new();
@@ -507,16 +399,7 @@ int RSA_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.oss
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int RSA_print(libressl_d.openssl.bio.BIO* bp, const (libressl_d.openssl.ossl_typ.RSA)* r, int offset);
-}
-
-version (OPENSSL_NO_RC4) {
-} else {
-	int i2d_RSA_NET(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** pp, int function(char* buf, int len, const (char)* prompt, int verify) cb, int sgckey);
-	libressl_d.openssl.ossl_typ.RSA* d2i_RSA_NET(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** pp, core.stdc.config.c_long length_, int function(char* buf, int len, const (char)* prompt, int verify) cb, int sgckey);
-
-	int i2d_Netscape_RSA(const (libressl_d.openssl.ossl_typ.RSA)* a, ubyte** pp, int function(char* buf, int len, const (char)* prompt, int verify) cb);
-	libressl_d.openssl.ossl_typ.RSA* d2i_Netscape_RSA(libressl_d.openssl.ossl_typ.RSA** a, const (ubyte)** pp, core.stdc.config.c_long length_, int function(char* buf, int len, const (char)* prompt, int verify) cb);
+	int RSA_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.RSA)* r, int offset);
 }
 
 /*
@@ -563,12 +446,23 @@ int RSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.op
 int RSA_set_ex_data(libressl_d.openssl.ossl_typ.RSA* r, int idx, void* arg);
 void* RSA_get_ex_data(const (libressl_d.openssl.ossl_typ.RSA)* r, int idx);
 
+int RSA_security_bits(const (libressl_d.openssl.ossl_typ.RSA)* rsa);
+
 void RSA_get0_key(const (libressl_d.openssl.ossl_typ.RSA)* r, const (libressl_d.openssl.ossl_typ.BIGNUM)** n, const (libressl_d.openssl.ossl_typ.BIGNUM)** e, const (libressl_d.openssl.ossl_typ.BIGNUM)** d);
 int RSA_set0_key(libressl_d.openssl.ossl_typ.RSA* r, libressl_d.openssl.ossl_typ.BIGNUM* n, libressl_d.openssl.ossl_typ.BIGNUM* e, libressl_d.openssl.ossl_typ.BIGNUM* d);
 void RSA_get0_crt_params(const (libressl_d.openssl.ossl_typ.RSA)* r, const (libressl_d.openssl.ossl_typ.BIGNUM)** dmp1, const (libressl_d.openssl.ossl_typ.BIGNUM)** dmq1, const (libressl_d.openssl.ossl_typ.BIGNUM)** iqmp);
 int RSA_set0_crt_params(libressl_d.openssl.ossl_typ.RSA* r, libressl_d.openssl.ossl_typ.BIGNUM* dmp1, libressl_d.openssl.ossl_typ.BIGNUM* dmq1, libressl_d.openssl.ossl_typ.BIGNUM* iqmp);
 void RSA_get0_factors(const (libressl_d.openssl.ossl_typ.RSA)* r, const (libressl_d.openssl.ossl_typ.BIGNUM)** p, const (libressl_d.openssl.ossl_typ.BIGNUM)** q);
 int RSA_set0_factors(libressl_d.openssl.ossl_typ.RSA* r, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* q);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_n(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_e(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_d(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_p(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_q(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_dmp1(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_dmq1(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.BIGNUM)* RSA_get0_iqmp(const (libressl_d.openssl.ossl_typ.RSA)* r);
+const (libressl_d.openssl.ossl_typ.RSA_PSS_PARAMS)* RSA_get0_pss_params(const (libressl_d.openssl.ossl_typ.RSA)* r);
 void RSA_clear_flags(libressl_d.openssl.ossl_typ.RSA* r, int flags);
 int RSA_test_flags(const (libressl_d.openssl.ossl_typ.RSA)* r, int flags);
 void RSA_set_flags(libressl_d.openssl.ossl_typ.RSA* r, int flags);
@@ -629,11 +523,6 @@ int RSA_meth_set_sign(libressl_d.openssl.ossl_typ.RSA_METHOD* rsa, int function(
 //int (*RSA_meth_get_verify(const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth))(int dtype, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa);
 int RSA_meth_set_verify(libressl_d.openssl.ossl_typ.RSA_METHOD* rsa, int function(int dtype, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa) verify);
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_RSA_strings();
 
 /* Error codes for the RSA functions. */

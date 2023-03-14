@@ -1,4 +1,4 @@
-/* $OpenBSD: ossl_typ.h,v 1.13 2015/09/30 04:10:07 doug Exp $ */
+/* $OpenBSD: ossl_typ.h,v 1.21 2022/01/14 08:59:30 tb Exp $ */
 /* ====================================================================
  * Copyright (c) 1998-2001 The OpenSSL Project.  All rights reserved.
  *
@@ -58,20 +58,13 @@ module libressl_d.openssl.ossl_typ;
 private static import core.stdc.config;
 private static import libressl_d.openssl.asn1;
 private static import libressl_d.openssl.asn1t;
-private static import libressl_d.openssl.bn;
 private static import libressl_d.openssl.buffer;
 private static import libressl_d.openssl.conf;
 private static import libressl_d.openssl.crypto;
-private static import libressl_d.openssl.dh;
-private static import libressl_d.openssl.dsa;
 private static import libressl_d.openssl.ecdsa;
-private static import libressl_d.openssl.evp;
-private static import libressl_d.openssl.ocsp;
 private static import libressl_d.openssl.rand;
 private static import libressl_d.openssl.rsa;
-private static import libressl_d.openssl.ssl;
 private static import libressl_d.openssl.x509;
-private static import libressl_d.openssl.x509_vfy;
 private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.opensslconf;
 
@@ -94,6 +87,9 @@ alias ASN1_STRING = libressl_d.openssl.asn1.asn1_string_st;
 alias ASN1_BOOLEAN = int;
 alias ASN1_NULL = int;
 
+struct asn1_object_st;
+alias ASN1_OBJECT = .asn1_object_st;
+
 alias ASN1_ITEM = libressl_d.openssl.asn1t.ASN1_ITEM_st;
 struct asn1_pctx_st;
 alias ASN1_PCTX = .asn1_pctx_st;
@@ -112,7 +108,8 @@ alias ASN1_PCTX = .asn1_pctx_st;
 	//#undef PKCS7_ISSUER_AND_SERIAL
 //#endif
 
-alias BIGNUM = libressl_d.openssl.bn.bignum_st;
+struct bignum_st;
+alias BIGNUM = .bignum_st;
 
 struct bignum_ctx;
 alias BN_CTX = .bignum_ctx;
@@ -120,18 +117,40 @@ alias BN_CTX = .bignum_ctx;
 struct bn_blinding_st;
 alias BN_BLINDING = .bn_blinding_st;
 
-alias BN_MONT_CTX = libressl_d.openssl.bn.bn_mont_ctx_st;
-alias BN_RECP_CTX = libressl_d.openssl.bn.bn_recp_ctx_st;
-alias BN_GENCB = libressl_d.openssl.bn.bn_gencb_st;
+struct bn_mont_ctx_st;
+alias BN_MONT_CTX = .bn_mont_ctx_st;
+
+struct bn_recp_ctx_st;
+alias BN_RECP_CTX = .bn_recp_ctx_st;
+
+struct bn_gencb_st;
+alias BN_GENCB = .bn_gencb_st;
+
+struct bio_st;
+alias BIO = .bio_st;
 
 alias BUF_MEM = libressl_d.openssl.buffer.buf_mem_st;
 
-alias EVP_CIPHER = libressl_d.openssl.evp.evp_cipher_st;
+struct comp_ctx_st;
+alias COMP_CTX = .comp_ctx_st;
 
-alias EVP_CIPHER_CTX = libressl_d.openssl.evp.evp_cipher_ctx_st;
-alias EVP_MD = libressl_d.openssl.evp.env_md_st;
-alias EVP_MD_CTX = libressl_d.openssl.evp.env_md_ctx_st;
-alias EVP_PKEY = libressl_d.openssl.evp.evp_pkey_st;
+struct comp_method_st;
+alias COMP_METHOD = .comp_method_st;
+
+struct evp_cipher_st;
+alias EVP_CIPHER = .evp_cipher_st;
+
+struct evp_cipher_ctx_st;
+alias EVP_CIPHER_CTX = .evp_cipher_ctx_st;
+
+struct env_md_st;
+alias EVP_MD = .env_md_st;
+
+struct env_md_ctx_st;
+alias EVP_MD_CTX = .env_md_ctx_st;
+
+struct evp_pkey_st;
+alias EVP_PKEY = .evp_pkey_st;
 
 struct evp_pkey_asn1_method_st;
 alias EVP_PKEY_ASN1_METHOD = .evp_pkey_asn1_method_st;
@@ -142,14 +161,31 @@ alias EVP_PKEY_METHOD = .evp_pkey_method_st;
 struct evp_pkey_ctx_st;
 alias EVP_PKEY_CTX = .evp_pkey_ctx_st;
 
-alias DH = libressl_d.openssl.dh.dh_st;
-alias DH_METHOD = libressl_d.openssl.dh.dh_method;
+struct evp_Encode_Ctx_st;
+alias EVP_ENCODE_CTX = .evp_Encode_Ctx_st;
 
-alias DSA = libressl_d.openssl.dsa.dsa_st;
-alias DSA_METHOD = libressl_d.openssl.dsa.dsa_method;
+struct hmac_ctx_st;
+alias HMAC_CTX = .hmac_ctx_st;
 
-alias RSA = libressl_d.openssl.rsa.rsa_st;
-alias RSA_METHOD = libressl_d.openssl.rsa.rsa_meth_st;
+struct dh_st;
+alias DH = .dh_st;
+
+struct dh_method;
+alias DH_METHOD = .dh_method;
+
+struct dsa_st;
+alias DSA = .dsa_st;
+
+struct dsa_method;
+alias DSA_METHOD = .dsa_method;
+
+struct rsa_st;
+alias RSA = .rsa_st;
+
+struct rsa_meth_st;
+alias RSA_METHOD = .rsa_meth_st;
+
+alias RSA_PSS_PARAMS = libressl_d.openssl.rsa.rsa_pss_params_st;
 
 alias RAND_METHOD = libressl_d.openssl.rand.rand_meth_st;
 
@@ -158,18 +194,46 @@ alias ECDH_METHOD = .ecdh_method;
 
 alias ECDSA_METHOD = libressl_d.openssl.ecdsa.ecdsa_method;
 
-alias X509 = libressl_d.openssl.x509.x509_st;
+struct x509_st;
+alias X509 = .x509_st;
+
 alias X509_ALGOR = libressl_d.openssl.x509.X509_algor_st;
-alias X509_CRL = libressl_d.openssl.x509.X509_crl_st;
+
+struct X509_crl_st;
+alias X509_CRL = .X509_crl_st;
+
 struct x509_crl_method_st;
 alias X509_CRL_METHOD = .x509_crl_method_st;
-alias X509_REVOKED = libressl_d.openssl.x509.x509_revoked_st;
-alias X509_NAME = libressl_d.openssl.x509.X509_name_st;
-alias X509_PUBKEY = libressl_d.openssl.x509.X509_pubkey_st;
-alias X509_STORE = libressl_d.openssl.x509_vfy.x509_store_st;
-alias X509_STORE_CTX = libressl_d.openssl.x509_vfy.x509_store_ctx_st;
 
-alias PKCS8_PRIV_KEY_INFO = libressl_d.openssl.x509.pkcs8_priv_key_info_st;
+struct x509_revoked_st;
+alias X509_REVOKED = .x509_revoked_st;
+
+struct X509_name_st;
+alias X509_NAME = .X509_name_st;
+
+struct X509_pubkey_st;
+alias X509_PUBKEY = .X509_pubkey_st;
+
+struct x509_store_st;
+alias X509_STORE = .x509_store_st;
+
+struct x509_store_ctx_st;
+alias X509_STORE_CTX = .x509_store_ctx_st;
+
+struct x509_object_st;
+alias X509_OBJECT = .x509_object_st;
+
+struct x509_lookup_st;
+alias X509_LOOKUP = .x509_lookup_st;
+
+struct x509_lookup_method_st;
+alias X509_LOOKUP_METHOD = .x509_lookup_method_st;
+
+struct X509_VERIFY_PARAM_st;
+alias X509_VERIFY_PARAM = .X509_VERIFY_PARAM_st;
+
+struct pkcs8_priv_key_info_st;
+alias PKCS8_PRIV_KEY_INFO = .pkcs8_priv_key_info_st;
 
 alias X509V3_CTX = libressl_d.openssl.x509v3.v3_ext_ctx;
 alias CONF = libressl_d.openssl.conf.conf_st;
@@ -190,8 +254,11 @@ alias ERR_FNS = .st_ERR_FNS;
 struct engine_st;
 alias ENGINE = .engine_st;
 
-alias SSL = libressl_d.openssl.ssl.ssl_st;
-alias SSL_CTX = libressl_d.openssl.ssl.ssl_ctx_st;
+struct ssl_st;
+alias SSL = .ssl_st;
+
+struct ssl_ctx_st;
+alias SSL_CTX = .ssl_ctx_st;
 
 struct X509_POLICY_NODE_st;
 alias X509_POLICY_NODE = .X509_POLICY_NODE_st;
@@ -221,5 +288,23 @@ package alias CRYPTO_EX_dup = /* Not a function pointer type */ extern (C) nothr
 struct ocsp_req_ctx_st;
 alias OCSP_REQ_CTX = .ocsp_req_ctx_st;
 
-alias OCSP_RESPONSE = libressl_d.openssl.ocsp.ocsp_response_st;
-alias OCSP_RESPID = libressl_d.openssl.ocsp.ocsp_responder_id_st;
+struct ocsp_response_st;
+alias OCSP_RESPONSE = .ocsp_response_st;
+
+struct ocsp_responder_id_st;
+alias OCSP_RESPID = .ocsp_responder_id_st;
+
+struct sct_st;
+alias SCT = .sct_st;
+
+struct sct_ctx_st;
+alias SCT_CTX = .sct_ctx_st;
+
+struct ctlog_st;
+alias CTLOG = .ctlog_st;
+
+struct ctlog_store_st;
+alias CTLOG_STORE = .ctlog_store_st;
+
+struct ct_policy_eval_ctx_st;
+alias CT_POLICY_EVAL_CTX = .ct_policy_eval_ctx_st;

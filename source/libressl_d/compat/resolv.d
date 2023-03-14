@@ -13,9 +13,9 @@ version (Windows) {
 	} else {
 		//#include <../include/resolv.h>
 	}
-} else {
-	//#include_next <resolv.h>
 }
+//#elif defined(HAVE_RESOLV_H)
+	//#include_next <resolv.h>
 
 extern (C):
 nothrow @nogc:

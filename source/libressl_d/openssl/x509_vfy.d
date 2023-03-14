@@ -1,4 +1,4 @@
-/* $OpenBSD: x509_vfy.h,v 1.32 2021/02/24 18:01:31 tb Exp $ */
+/* $OpenBSD: x509_vfy.h,v 1.54 2022/07/07 13:01:28 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -84,70 +84,37 @@ version (OPENSSL_NO_LHASH) {
 extern (C):
 nothrow @nogc:
 
-struct x509_file_st
-{
-	/**
-	 * number of paths to files or directories
-	 */
-	int num_paths;
 
-	int num_alloced;
-
-	/**
-	 * the list of paths or directories
-	 */
-	char** paths;
-
-	int* path_type;
-}
-
-alias X509_CERT_FILE_CTX = .x509_file_st;
-
-/* ******************************/
 /*
- * SL_CTX . X509_STORE
- *     . X509_LOOKUP
- *         .X509_LOOKUP_METHOD
- *     . X509_LOOKUP
- *         .X509_LOOKUP_METHOD
- *
- * SSL    . X509_STORE_CTX
- *     .X509_STORE
- *
- * The X509_STORE holds the tables etc for verification stuff.
- * A X509_STORE_CTX is used while validating a single certificate.
- * The X509_STORE has X509_LOOKUPs for looking up certs.
- * The X509_STORE then calls a function to actually verify the
- * certificate chain.
- */
-
-enum X509_LU_RETRY = -1;
-enum X509_LU_FAIL = 0;
-enum X509_LU_X509 = 1;
-enum X509_LU_CRL = 2;
-enum X509_LU_PKEY = 3;
-
-struct x509_object_st
+* SSL_CTX -> X509_STORE
+*		-> X509_LOOKUP
+*			->X509_LOOKUP_METHOD
+*		-> X509_LOOKUP
+*			->X509_LOOKUP_METHOD
+*
+* SSL	-> X509_STORE_CTX
+*		->X509_STORE
+*
+* The X509_STORE holds the tables etc for verification stuff.
+* A X509_STORE_CTX is used while validating a single certificate.
+* The X509_STORE has X509_LOOKUPs for looking up certs.
+* The X509_STORE then calls a function to actually verify the
+* certificate chain.
+*/
+enum X509_LOOKUP_TYPE
 {
-	/**
-	 * one of the above types
-	 */
-	int type;
-
-	union data_
-	{
-		char* ptr_;
-		libressl_d.openssl.ossl_typ.X509* x509;
-		libressl_d.openssl.ossl_typ.X509_CRL* crl;
-		libressl_d.openssl.ossl_typ.EVP_PKEY* pkey;
-	}
-
-	data_ data;
+	X509_LU_NONE,
+	X509_LU_X509,
+	X509_LU_CRL,
 }
 
-alias X509_OBJECT = .x509_object_st;
-
-alias X509_LOOKUP = .x509_lookup_st;
+//Declaration name in C language
+enum
+{
+	X509_LU_NONE = .X509_LOOKUP_TYPE.X509_LU_NONE,
+	X509_LU_X509 = .X509_LOOKUP_TYPE.X509_LU_X509,
+	X509_LU_CRL = .X509_LOOKUP_TYPE.X509_LU_CRL,
+}
 
 //DECLARE_STACK_OF(X509_LOOKUP)
 struct stack_st_X509_LOOKUP
@@ -161,365 +128,17 @@ struct stack_st_X509_OBJECT
 	libressl_d.openssl.stack._STACK stack;
 }
 
-/**
- * This is a static that defines the function interface
- */
-struct x509_lookup_method_st
-{
-	const (char)* name;
-	int function(.X509_LOOKUP* ctx) new_item;
-	void function(.X509_LOOKUP* ctx) free;
-	int function(.X509_LOOKUP* ctx) init;
-	int function(.X509_LOOKUP* ctx) shutdown;
-	int function(.X509_LOOKUP* ctx, int cmd, const (char)* argc, core.stdc.config.c_long argl, char** ret) ctrl;
-	int function(.X509_LOOKUP* ctx, int type, libressl_d.openssl.ossl_typ.X509_NAME* name, .X509_OBJECT* ret) get_by_subject;
-	int function(.X509_LOOKUP* ctx, int type, libressl_d.openssl.ossl_typ.X509_NAME* name, libressl_d.openssl.ossl_typ.ASN1_INTEGER* serial, .X509_OBJECT* ret) get_by_issuer_serial;
-	int function(.X509_LOOKUP* ctx, int type, const (ubyte)* bytes, int len, .X509_OBJECT* ret) get_by_fingerprint;
-	int function(.X509_LOOKUP* ctx, int type, const (char)* str, int len, .X509_OBJECT* ret) get_by_alias;
-}
-
-alias X509_LOOKUP_METHOD = .x509_lookup_method_st;
-
-struct X509_VERIFY_PARAM_ID_st;
-alias X509_VERIFY_PARAM_ID = .X509_VERIFY_PARAM_ID_st;
-
-/**
- * This structure hold all parameters associated with a verify operation
- * by including an X509_VERIFY_PARAM structure in related structures the
- * parameters used can be customized
- */
-struct X509_VERIFY_PARAM_st
-{
-	char* name;
-
-	/**
-	 * Time to use
-	 */
-	libressl_d.compat.time.time_t check_time;
-
-	/**
-	 * Inheritance flags
-	 */
-	core.stdc.config.c_ulong inh_flags;
-
-	/**
-	 * Various verify flags
-	 */
-	core.stdc.config.c_ulong flags;
-
-	/**
-	 * purpose to check untrusted certificates
-	 */
-	int purpose;
-
-	/**
-	 * trust setting to check
-	 */
-	int trust;
-
-	/**
-	 * Verify depth
-	 */
-	int depth;
-
-	/**
-	 * Permissible policies
-	 */
-	libressl_d.openssl.asn1.stack_st_ASN1_OBJECT* policies;
-
-	/**
-	 * opaque ID data
-	 */
-	.X509_VERIFY_PARAM_ID* id;
-}
-
-alias X509_VERIFY_PARAM = .X509_VERIFY_PARAM_st;
-
 //DECLARE_STACK_OF(X509_VERIFY_PARAM)
 struct stack_st_X509_VERIFY_PARAM
 {
 	libressl_d.openssl.stack._STACK stack;
 }
 
-/**
- * This is used to hold everything.  It is used for all certificate
- * validation.  Once we have a certificate chain, the 'verify'
- * function is then called to actually check the cert chain.
- */
-struct x509_store_st
-{
-	/* The following is a cache of trusted certs */
-
-	/**
-	 * if true, stash any hits
-	 */
-	int cache;
-
-	/**
-	 * Cache of all objects
-	 */
-	.stack_st_X509_OBJECT* objs;
-
-	/* These are external lookup methods */
-	.stack_st_X509_LOOKUP* get_cert_methods;
-
-	.X509_VERIFY_PARAM* param;
-
-	/* Callbacks for various operations */
-
-	/**
-	 * called to verify a certificate
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) verify;
-
-	/**
-	 * error callback
-	 */
-	int function(int ok, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) verify_cb;
-
-	/**
-	 * get issuers cert from ctx
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509** issuer, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* x) get_issuer;
-
-	/**
-	 * check issued
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* x, libressl_d.openssl.ossl_typ.X509* issuer) check_issued;
-
-	/**
-	 * Check revocation status of chain
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) check_revocation;
-
-	/**
-	 * retrieve CRL
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_CRL** crl, libressl_d.openssl.ossl_typ.X509* x) get_crl;
-
-	/**
-	 * Check CRL validity
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_CRL* crl) check_crl;
-
-	/**
-	 * Check certificate against CRL
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.X509* x) cert_crl;
-
-	libressl_d.openssl.x509.stack_st_X509* function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_NAME* nm) lookup_certs;
-	libressl_d.openssl.x509.stack_st_X509_CRL* function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_NAME* nm) lookup_crls;
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) cleanup;
-
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
-	int references;
-}
+/* unused in OpenSSL */
+struct X509_VERIFY_PARAM_ID_st;
+alias X509_VERIFY_PARAM_ID = .X509_VERIFY_PARAM_ID_st;
 
 int X509_STORE_set_depth(libressl_d.openssl.ossl_typ.X509_STORE* store, int depth);
-
-pragma(inline, true)
-pure nothrow @trusted @nogc @live
-void X509_STORE_set_verify_cb_func(scope libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(int ok, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) func)
-
-	in
-	{
-		assert(ctx != null);
-	}
-
-	do
-	{
-		ctx.verify_cb = func;
-	}
-
-pragma(inline, true)
-pure nothrow @trusted @nogc @live
-void X509_STORE_set_verify_func(scope libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) func)
-
-	in
-	{
-		assert(ctx != null);
-	}
-
-	do
-	{
-		ctx.verify = func;
-	}
-
-/**
- * This is the functions plus an instance of the local variables.
- */
-struct x509_lookup_st
-{
-	/**
-	 * have we been started
-	 */
-	int init;
-
-	/**
-	 * don't use us.
-	 */
-	int skip;
-
-	/**
-	 * the functions
-	 */
-	.X509_LOOKUP_METHOD* method;
-
-	/**
-	 * method data
-	 */
-	char* method_data;
-
-	/**
-	 * who owns us
-	 */
-	libressl_d.openssl.ossl_typ.X509_STORE* store_ctx;
-}
-
-/**
- * This is a used when verifying cert chains.  Since the
- * gathering of the cert chain can take some time \(and have to be
- * 'retried', this needs to be kept and passed around.
- */
-struct x509_store_ctx_st
-{
-	libressl_d.openssl.ossl_typ.X509_STORE* ctx;
-
-	/**
-	 * used when looking up certs
-	 */
-	int current_method;
-
-	/* The following are set by the caller */
-
-	/**
-	 * The cert to check
-	 */
-	libressl_d.openssl.ossl_typ.X509* cert;
-
-	/**
-	 * chain of X509s - untrusted - passed in
-	 */
-	libressl_d.openssl.x509.stack_st_X509* untrusted;
-
-	/**
-	 * set of CRLs passed in
-	 */
-	libressl_d.openssl.x509.stack_st_X509_CRL* crls;
-
-	.X509_VERIFY_PARAM* param;
-
-	/**
-	 * Other info for use with get_issuer()
-	 */
-	void* other_ctx;
-
-	/* Callbacks for various operations */
-
-	/**
-	 * called to verify a certificate
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) verify;
-
-	/**
-	 * error callback
-	 */
-	int function(int ok, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) verify_cb;
-
-	/**
-	 * get issuers cert from ctx
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509** issuer, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* x) get_issuer;
-
-	/**
-	 * check issued
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* x, libressl_d.openssl.ossl_typ.X509* issuer) check_issued;
-
-	/**
-	 * Check revocation status of chain
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) check_revocation;
-
-	/**
-	 * retrieve CRL
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_CRL** crl, libressl_d.openssl.ossl_typ.X509* x) get_crl;
-
-	/**
-	 * Check CRL validity
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_CRL* crl) check_crl;
-
-	/**
-	 * Check certificate against CRL
-	 */
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.X509* x) cert_crl;
-
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) check_policy;
-	libressl_d.openssl.x509.stack_st_X509* function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_NAME* nm) lookup_certs;
-	libressl_d.openssl.x509.stack_st_X509_CRL* function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_NAME* nm) lookup_crls;
-	int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) cleanup;
-
-	/* The following is built up */
-
-	/**
-	 * if 0, rebuild chain
-	 */
-	int valid;
-
-	/**
-	 * XXX: number of untrusted certs in chain!!!
-	 */
-	int last_untrusted;
-
-	/**
-	 * chain of X509s - built up and trusted
-	 */
-	libressl_d.openssl.x509.stack_st_X509* chain;
-
-	/**
-	 * Valid policy tree
-	 */
-	libressl_d.openssl.ossl_typ.X509_POLICY_TREE* tree;
-
-	/**
-	 * Require explicit policy value
-	 */
-	int explicit_policy;
-
-	/* When something goes wrong, this is why */
-	int error_depth;
-	int error;
-	libressl_d.openssl.ossl_typ.X509* current_cert;
-
-	/**
-	 * cert currently being tested as valid issuer
-	 */
-	libressl_d.openssl.ossl_typ.X509* current_issuer;
-
-	/**
-	 * current CRL
-	 */
-	libressl_d.openssl.ossl_typ.X509_CRL* current_crl;
-
-	/**
-	 * score of current CRL
-	 */
-	int current_crl_score;
-
-	/**
-	 * Reason mask
-	 */
-	uint current_reasons;
-
-	/**
-	 * For CRL path validation: parent context
-	 */
-	libressl_d.openssl.ossl_typ.X509_STORE_CTX* parent;
-
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
-}
 
 void X509_STORE_CTX_set_depth(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int depth);
 
@@ -544,7 +163,7 @@ enum X509_L_ADD_DIR = 2;
 enum X509_L_MEM = 3;
 
 pragma(inline, true)
-int X509_LOOKUP_load_file(.X509_LOOKUP* x, const (char)* name, core.stdc.config.c_long type)
+int X509_LOOKUP_load_file(libressl_d.openssl.ossl_typ.X509_LOOKUP* x, const (char)* name, core.stdc.config.c_long type)
 
 	do
 	{
@@ -552,7 +171,7 @@ int X509_LOOKUP_load_file(.X509_LOOKUP* x, const (char)* name, core.stdc.config.
 	}
 
 pragma(inline, true)
-int X509_LOOKUP_add_dir(.X509_LOOKUP* x, const (char)* name, core.stdc.config.c_long type)
+int X509_LOOKUP_add_dir(libressl_d.openssl.ossl_typ.X509_LOOKUP* x, const (char)* name, core.stdc.config.c_long type)
 
 	do
 	{
@@ -560,7 +179,7 @@ int X509_LOOKUP_add_dir(.X509_LOOKUP* x, const (char)* name, core.stdc.config.c_
 	}
 
 pragma(inline, true)
-int X509_LOOKUP_add_mem(.X509_LOOKUP* x, const (char)* iov, core.stdc.config.c_long type)
+int X509_LOOKUP_add_mem(libressl_d.openssl.ossl_typ.X509_LOOKUP* x, const (char)* iov, core.stdc.config.c_long type)
 
 	do
 	{
@@ -646,6 +265,17 @@ enum X509_V_ERR_INVALID_CALL = 65;
  * Issuer lookup error
  */
 enum X509_V_ERR_STORE_LOOKUP = 66;
+
+/**
+ * Security level errors
+ */
+enum X509_V_ERR_EE_KEY_TOO_SMALL = 67;
+
+///Ditto
+enum X509_V_ERR_CA_KEY_TOO_SMALL = 68;
+
+///Ditto
+enum X509_V_ERR_CA_MD_TOO_WEAK = 69;
 
 /* Certificate verify flags */
 
@@ -762,14 +392,15 @@ enum X509_VP_FLAG_ONCE = 0x10;
  */
 enum X509_V_FLAG_POLICY_MASK = .X509_V_FLAG_POLICY_CHECK | .X509_V_FLAG_EXPLICIT_POLICY | .X509_V_FLAG_INHIBIT_ANY | .X509_V_FLAG_INHIBIT_MAP;
 
-int X509_OBJECT_idx_by_subject(.stack_st_X509_OBJECT* h, int type, libressl_d.openssl.ossl_typ.X509_NAME* name);
-.X509_OBJECT* X509_OBJECT_retrieve_by_subject(.stack_st_X509_OBJECT* h, int type, libressl_d.openssl.ossl_typ.X509_NAME* name);
-.X509_OBJECT* X509_OBJECT_retrieve_match(.stack_st_X509_OBJECT * h, .X509_OBJECT* x);
-int X509_OBJECT_up_ref_count(.X509_OBJECT* a);
-int X509_OBJECT_get_type(const (.X509_OBJECT)* a);
-void X509_OBJECT_free_contents(.X509_OBJECT* a);
-libressl_d.openssl.ossl_typ.X509* X509_OBJECT_get0_X509(const (.X509_OBJECT)* xo);
-libressl_d.openssl.ossl_typ.X509_CRL* X509_OBJECT_get0_X509_CRL(.X509_OBJECT* xo);
+libressl_d.openssl.ossl_typ.X509_OBJECT* X509_OBJECT_new();
+void X509_OBJECT_free(libressl_d.openssl.ossl_typ.X509_OBJECT* a);
+int X509_OBJECT_idx_by_subject(.stack_st_X509_OBJECT * h, .X509_LOOKUP_TYPE type, libressl_d.openssl.ossl_typ.X509_NAME* name);
+libressl_d.openssl.ossl_typ.X509_OBJECT* X509_OBJECT_retrieve_by_subject(.stack_st_X509_OBJECT * h, .X509_LOOKUP_TYPE type, libressl_d.openssl.ossl_typ.X509_NAME* name);
+libressl_d.openssl.ossl_typ.X509_OBJECT* X509_OBJECT_retrieve_match(.stack_st_X509_OBJECT * h, libressl_d.openssl.ossl_typ.X509_OBJECT* x);
+int X509_OBJECT_up_ref_count(libressl_d.openssl.ossl_typ.X509_OBJECT* a);
+.X509_LOOKUP_TYPE X509_OBJECT_get_type(const (libressl_d.openssl.ossl_typ.X509_OBJECT)* a);
+libressl_d.openssl.ossl_typ.X509* X509_OBJECT_get0_X509(const (libressl_d.openssl.ossl_typ.X509_OBJECT)* xo);
+libressl_d.openssl.ossl_typ.X509_CRL* X509_OBJECT_get0_X509_CRL(libressl_d.openssl.ossl_typ.X509_OBJECT* xo);
 
 libressl_d.openssl.ossl_typ.X509_STORE* X509_STORE_new();
 void X509_STORE_free(libressl_d.openssl.ossl_typ.X509_STORE* v);
@@ -791,10 +422,16 @@ int X509_STORE_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.o
 int X509_STORE_set_flags(libressl_d.openssl.ossl_typ.X509_STORE* ctx, core.stdc.config.c_ulong flags);
 int X509_STORE_set_purpose(libressl_d.openssl.ossl_typ.X509_STORE* ctx, int purpose);
 int X509_STORE_set_trust(libressl_d.openssl.ossl_typ.X509_STORE* ctx, int trust);
-int X509_STORE_set1_param(libressl_d.openssl.ossl_typ.X509_STORE* ctx, .X509_VERIFY_PARAM* pm);
-.X509_VERIFY_PARAM* X509_STORE_get0_param(libressl_d.openssl.ossl_typ.X509_STORE* ctx);
+int X509_STORE_set1_param(libressl_d.openssl.ossl_typ.X509_STORE* ctx, libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* pm);
+libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* X509_STORE_get0_param(libressl_d.openssl.ossl_typ.X509_STORE* ctx);
+
+alias X509_STORE_CTX_verify_cb = extern (C) nothrow @nogc int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+
+.X509_STORE_CTX_verify_cb X509_STORE_get_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE*);
 
 void X509_STORE_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*) verify_cb);
+
+alias X509_STORE_set_verify_cb_func = X509_STORE_set_verify_cb;
 
 libressl_d.openssl.ossl_typ.X509_STORE_CTX* X509_STORE_CTX_new();
 
@@ -811,31 +448,33 @@ void X509_STORE_CTX_trusted_stack(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ct
 void X509_STORE_CTX_set0_trusted_stack(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.x509.stack_st_X509* sk);
 void X509_STORE_CTX_cleanup(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
 
-.X509_LOOKUP* X509_STORE_add_lookup(libressl_d.openssl.ossl_typ.X509_STORE* v, .X509_LOOKUP_METHOD* m);
+libressl_d.openssl.ossl_typ.X509_LOOKUP* X509_STORE_add_lookup(libressl_d.openssl.ossl_typ.X509_STORE* v, libressl_d.openssl.ossl_typ.X509_LOOKUP_METHOD* m);
 
-.X509_LOOKUP_METHOD* X509_LOOKUP_hash_dir();
-.X509_LOOKUP_METHOD* X509_LOOKUP_file();
-.X509_LOOKUP_METHOD* X509_LOOKUP_mem();
+libressl_d.openssl.ossl_typ.X509_LOOKUP_METHOD* X509_LOOKUP_hash_dir();
+libressl_d.openssl.ossl_typ.X509_LOOKUP_METHOD* X509_LOOKUP_file();
+libressl_d.openssl.ossl_typ.X509_LOOKUP_METHOD* X509_LOOKUP_mem();
 
 int X509_STORE_add_cert(libressl_d.openssl.ossl_typ.X509_STORE* ctx, libressl_d.openssl.ossl_typ.X509* x);
 int X509_STORE_add_crl(libressl_d.openssl.ossl_typ.X509_STORE* ctx, libressl_d.openssl.ossl_typ.X509_CRL* x);
 
-int X509_STORE_get_by_subject(libressl_d.openssl.ossl_typ.X509_STORE_CTX* vs, int type, libressl_d.openssl.ossl_typ.X509_NAME* name, .X509_OBJECT* ret);
+int X509_STORE_CTX_get_by_subject(libressl_d.openssl.ossl_typ.X509_STORE_CTX* vs, .X509_LOOKUP_TYPE type, libressl_d.openssl.ossl_typ.X509_NAME* name, libressl_d.openssl.ossl_typ.X509_OBJECT* ret);
+alias X509_STORE_get_by_subject = .X509_STORE_CTX_get_by_subject;
+libressl_d.openssl.ossl_typ.X509_OBJECT* X509_STORE_CTX_get_obj_by_subject(libressl_d.openssl.ossl_typ.X509_STORE_CTX* vs, .X509_LOOKUP_TYPE type, libressl_d.openssl.ossl_typ.X509_NAME* name);
 
-int X509_LOOKUP_ctrl(.X509_LOOKUP* ctx, int cmd, const (char)* argc, core.stdc.config.c_long argl, char** ret);
+int X509_LOOKUP_ctrl(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, int cmd, const (char)* argc, core.stdc.config.c_long argl, char** ret);
 
-int X509_load_cert_file(.X509_LOOKUP* ctx, const (char)* file, int type);
-int X509_load_crl_file(.X509_LOOKUP* ctx, const (char)* file, int type);
-int X509_load_cert_crl_file(.X509_LOOKUP* ctx, const (char)* file, int type);
+int X509_load_cert_file(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, const (char)* file, int type);
+int X509_load_crl_file(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, const (char)* file, int type);
+int X509_load_cert_crl_file(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, const (char)* file, int type);
 
-.X509_LOOKUP* X509_LOOKUP_new(.X509_LOOKUP_METHOD* method);
-void X509_LOOKUP_free(.X509_LOOKUP* ctx);
-int X509_LOOKUP_init(.X509_LOOKUP* ctx);
-int X509_LOOKUP_by_subject(.X509_LOOKUP* ctx, int type, libressl_d.openssl.ossl_typ.X509_NAME* name, .X509_OBJECT* ret);
-int X509_LOOKUP_by_issuer_serial(.X509_LOOKUP* ctx, int type, libressl_d.openssl.ossl_typ.X509_NAME* name, libressl_d.openssl.ossl_typ.ASN1_INTEGER* serial, .X509_OBJECT* ret);
-int X509_LOOKUP_by_fingerprint(.X509_LOOKUP* ctx, int type, const (ubyte)* bytes, int len, .X509_OBJECT* ret);
-int X509_LOOKUP_by_alias(.X509_LOOKUP* ctx, int type, const (char)* str, int len, .X509_OBJECT* ret);
-int X509_LOOKUP_shutdown(.X509_LOOKUP* ctx);
+libressl_d.openssl.ossl_typ.X509_LOOKUP* X509_LOOKUP_new(libressl_d.openssl.ossl_typ.X509_LOOKUP_METHOD* method);
+void X509_LOOKUP_free(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx);
+int X509_LOOKUP_init(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx);
+int X509_LOOKUP_by_subject(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, .X509_LOOKUP_TYPE type, libressl_d.openssl.ossl_typ.X509_NAME* name, libressl_d.openssl.ossl_typ.X509_OBJECT* ret);
+int X509_LOOKUP_by_issuer_serial(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, .X509_LOOKUP_TYPE type, libressl_d.openssl.ossl_typ.X509_NAME* name, libressl_d.openssl.ossl_typ.ASN1_INTEGER* serial, libressl_d.openssl.ossl_typ.X509_OBJECT* ret);
+int X509_LOOKUP_by_fingerprint(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, .X509_LOOKUP_TYPE type, const (ubyte)* bytes, int len, libressl_d.openssl.ossl_typ.X509_OBJECT* ret);
+int X509_LOOKUP_by_alias(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx, .X509_LOOKUP_TYPE type, const (char)* str, int len, libressl_d.openssl.ossl_typ.X509_OBJECT* ret);
+int X509_LOOKUP_shutdown(libressl_d.openssl.ossl_typ.X509_LOOKUP* ctx);
 
 int X509_STORE_load_locations(libressl_d.openssl.ossl_typ.X509_STORE* ctx, const (char)* file, const (char)* dir);
 int X509_STORE_load_mem(libressl_d.openssl.ossl_typ.X509_STORE* ctx, void* buf, int len);
@@ -847,7 +486,9 @@ void* X509_STORE_CTX_get_ex_data(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx
 int X509_STORE_CTX_get_error(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
 void X509_STORE_CTX_set_error(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int s);
 int X509_STORE_CTX_get_error_depth(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
+void X509_STORE_CTX_set_error_depth(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int depth);
 libressl_d.openssl.ossl_typ.X509* X509_STORE_CTX_get_current_cert(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
+void X509_STORE_CTX_set_current_cert(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* x);
 libressl_d.openssl.ossl_typ.X509* X509_STORE_CTX_get0_current_issuer(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
 libressl_d.openssl.ossl_typ.X509_CRL* X509_STORE_CTX_get0_current_crl(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
 libressl_d.openssl.ossl_typ.X509_STORE_CTX* X509_STORE_CTX_get0_parent_ctx(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
@@ -861,45 +502,67 @@ int X509_STORE_CTX_set_trust(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, in
 int X509_STORE_CTX_purpose_inherit(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int def_purpose, int purpose, int trust);
 void X509_STORE_CTX_set_flags(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, core.stdc.config.c_ulong flags);
 void X509_STORE_CTX_set_time(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, core.stdc.config.c_ulong flags, libressl_d.compat.time.time_t t);
+
+void X509_STORE_CTX_set0_verified_chain(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.x509.stack_st_X509 * sk);
+
+//ToDo:
+//int (*X509_STORE_CTX_get_verify(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx))(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+
+private alias X509_STORE_CTX_set_verify_func = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+void X509_STORE_CTX_set_verify(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, .X509_STORE_CTX_set_verify_func verify);
+
+//ToDo:
+//int (*X509_STORE_CTX_get_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx))(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+
 void X509_STORE_CTX_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*) verify_cb);
+
+alias X509_STORE_CTX_verify_fn = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+
+void X509_STORE_set_verify(libressl_d.openssl.ossl_typ.X509_STORE* ctx, .X509_STORE_CTX_verify_fn verify);
+.X509_STORE_CTX_verify_fn X509_STORE_get_verify(libressl_d.openssl.ossl_typ.X509_STORE* ctx);
+
+alias X509_STORE_set_verify_func = .X509_STORE_set_verify;
 
 libressl_d.openssl.ossl_typ.X509_POLICY_TREE* X509_STORE_CTX_get0_policy_tree(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
 int X509_STORE_CTX_get_explicit_policy(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
+int X509_STORE_CTX_get_num_untrusted(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
 
-.X509_VERIFY_PARAM* X509_STORE_CTX_get0_param(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
-void X509_STORE_CTX_set0_param(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, .X509_VERIFY_PARAM* param);
+libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* X509_STORE_CTX_get0_param(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
+void X509_STORE_CTX_set0_param(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param);
 int X509_STORE_CTX_set_default(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, const (char)* name);
 
 /* X509_VERIFY_PARAM functions */
 
-.X509_VERIFY_PARAM* X509_VERIFY_PARAM_new();
-void X509_VERIFY_PARAM_free(.X509_VERIFY_PARAM* param);
-int X509_VERIFY_PARAM_inherit(.X509_VERIFY_PARAM* to, const (.X509_VERIFY_PARAM)* from);
-int X509_VERIFY_PARAM_set1(.X509_VERIFY_PARAM* to, const (.X509_VERIFY_PARAM)* from);
-int X509_VERIFY_PARAM_set1_name(.X509_VERIFY_PARAM* param, const (char)* name);
-int X509_VERIFY_PARAM_set_flags(.X509_VERIFY_PARAM* param, core.stdc.config.c_ulong flags);
-int X509_VERIFY_PARAM_clear_flags(.X509_VERIFY_PARAM* param, core.stdc.config.c_ulong flags);
-core.stdc.config.c_ulong X509_VERIFY_PARAM_get_flags(.X509_VERIFY_PARAM* param);
-int X509_VERIFY_PARAM_set_purpose(.X509_VERIFY_PARAM* param, int purpose);
-int X509_VERIFY_PARAM_set_trust(.X509_VERIFY_PARAM* param, int trust);
-void X509_VERIFY_PARAM_set_depth(.X509_VERIFY_PARAM* param, int depth);
-void X509_VERIFY_PARAM_set_time(.X509_VERIFY_PARAM* param, libressl_d.compat.time.time_t t);
-int X509_VERIFY_PARAM_add0_policy(.X509_VERIFY_PARAM* param, libressl_d.openssl.asn1.ASN1_OBJECT* policy);
-int X509_VERIFY_PARAM_set1_policies(.X509_VERIFY_PARAM* param, libressl_d.openssl.asn1.stack_st_ASN1_OBJECT* policies);
-int X509_VERIFY_PARAM_get_depth(const (.X509_VERIFY_PARAM)* param);
-int X509_VERIFY_PARAM_set1_host(.X509_VERIFY_PARAM* param, const (char)* name, size_t namelen);
-int X509_VERIFY_PARAM_add1_host(.X509_VERIFY_PARAM* param, const (char)* name, size_t namelen);
-void X509_VERIFY_PARAM_set_hostflags(.X509_VERIFY_PARAM* param, uint flags);
-char* X509_VERIFY_PARAM_get0_peername(.X509_VERIFY_PARAM* param);
-int X509_VERIFY_PARAM_set1_email(.X509_VERIFY_PARAM* param, const (char)* email, size_t emaillen);
-int X509_VERIFY_PARAM_set1_ip(.X509_VERIFY_PARAM* param, const (ubyte)* ip, size_t iplen);
-int X509_VERIFY_PARAM_set1_ip_asc(.X509_VERIFY_PARAM* param, const (char)* ipasc);
-const (char)* X509_VERIFY_PARAM_get0_name(const (.X509_VERIFY_PARAM)* param);
-const (.X509_VERIFY_PARAM)* X509_VERIFY_PARAM_get0(int id);
+libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* X509_VERIFY_PARAM_new();
+void X509_VERIFY_PARAM_free(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param);
+int X509_VERIFY_PARAM_inherit(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* to, const (libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM)* from);
+int X509_VERIFY_PARAM_set1(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* to, const (libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM)* from);
+int X509_VERIFY_PARAM_set1_name(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, const (char)* name);
+int X509_VERIFY_PARAM_set_flags(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, core.stdc.config.c_ulong flags);
+int X509_VERIFY_PARAM_clear_flags(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, core.stdc.config.c_ulong flags);
+core.stdc.config.c_ulong X509_VERIFY_PARAM_get_flags(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param);
+int X509_VERIFY_PARAM_set_purpose(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, int purpose);
+int X509_VERIFY_PARAM_set_trust(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, int trust);
+void X509_VERIFY_PARAM_set_depth(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, int depth);
+void X509_VERIFY_PARAM_set_auth_level(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, int auth_level);
+libressl_d.compat.time.time_t X509_VERIFY_PARAM_get_time(const (libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM)* param);
+void X509_VERIFY_PARAM_set_time(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, libressl_d.compat.time.time_t t);
+int X509_VERIFY_PARAM_add0_policy(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, libressl_d.openssl.ossl_typ.ASN1_OBJECT* policy);
+int X509_VERIFY_PARAM_set1_policies(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, libressl_d.openssl.asn1.stack_st_ASN1_OBJECT* policies);
+int X509_VERIFY_PARAM_get_depth(const (libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM)* param);
+int X509_VERIFY_PARAM_set1_host(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, const (char)* name, size_t namelen);
+int X509_VERIFY_PARAM_add1_host(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, const (char)* name, size_t namelen);
+void X509_VERIFY_PARAM_set_hostflags(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, uint flags);
+char* X509_VERIFY_PARAM_get0_peername(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param);
+int X509_VERIFY_PARAM_set1_email(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, const (char)* email, size_t emaillen);
+int X509_VERIFY_PARAM_set1_ip(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, const (ubyte)* ip, size_t iplen);
+int X509_VERIFY_PARAM_set1_ip_asc(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param, const (char)* ipasc);
+const (char)* X509_VERIFY_PARAM_get0_name(const (libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM)* param);
+const (libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM)* X509_VERIFY_PARAM_get0(int id);
 int X509_VERIFY_PARAM_get_count();
 
-int X509_VERIFY_PARAM_add0_table(.X509_VERIFY_PARAM* param);
-const (.X509_VERIFY_PARAM)* X509_VERIFY_PARAM_lookup(const (char)* name);
+int X509_VERIFY_PARAM_add0_table(libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM* param);
+const (libressl_d.openssl.ossl_typ.X509_VERIFY_PARAM)* X509_VERIFY_PARAM_lookup(const (char)* name);
 void X509_VERIFY_PARAM_table_cleanup();
 
 int X509_policy_check(libressl_d.openssl.ossl_typ.X509_POLICY_TREE** ptree, int* pexplicit_policy, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.asn1.stack_st_ASN1_OBJECT* policy_oids, uint flags);
@@ -917,7 +580,7 @@ int X509_policy_level_node_count(libressl_d.openssl.ossl_typ.X509_POLICY_LEVEL* 
 
 libressl_d.openssl.ossl_typ.X509_POLICY_NODE* X509_policy_level_get0_node(libressl_d.openssl.ossl_typ.X509_POLICY_LEVEL* level, int i);
 
-const (libressl_d.openssl.asn1.ASN1_OBJECT)* X509_policy_node_get0_policy(const (libressl_d.openssl.ossl_typ.X509_POLICY_NODE)* node);
+const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* X509_policy_node_get0_policy(const (libressl_d.openssl.ossl_typ.X509_POLICY_NODE)* node);
 
 libressl_d.openssl.x509v3.stack_st_POLICYQUALINFO* X509_policy_node_get0_qualifiers(const (libressl_d.openssl.ossl_typ.X509_POLICY_NODE)* node);
 const (libressl_d.openssl.ossl_typ.X509_POLICY_NODE)* X509_policy_node_get0_parent(const (libressl_d.openssl.ossl_typ.X509_POLICY_NODE)* node);

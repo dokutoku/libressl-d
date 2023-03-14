@@ -1,4 +1,4 @@
-/* $OpenBSD: asn1.h,v 1.54 2020/12/08 15:06:42 tb Exp $ */
+/* $OpenBSD: asn1.h,v 1.70 2022/09/11 17:22:52 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -59,6 +59,7 @@ module libressl_d.openssl.asn1;
 
 
 private static import core.stdc.config;
+private static import core.stdc.stdint;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.asn1t;
 public import libressl_d.compat.time;
@@ -70,14 +71,10 @@ public import libressl_d.openssl.stack;
 version (OPENSSL_NO_BIO) {
 	private struct bio_method_st;
 	private alias BIO_METHOD = .bio_method_st;
-
-	private struct bio_st;
-	private alias BIO = .bio_st;
 } else {
 	public import libressl_d.openssl.bio;
 
 	private alias BIO_METHOD = libressl_d.openssl.bio.BIO_METHOD;
-	private alias BIO = libressl_d.openssl.bio.BIO;
 }
 
 version (OPENSSL_NO_DEPRECATED) {
@@ -253,176 +250,6 @@ void IMPLEMENT_ASN1_SET_OF(TYPE)(scope const TYPE type)
 	}
 
 /**
- * We MUST make sure that, except for constness, asn1_ctx_st and
- * asn1_const_ctx are exactly the same.  Fortunately, as soon as
- * the old ASN1 parsing macros are gone, we can throw this away
- * as well...
- */
-struct asn1_ctx_st
-{
-	/**
-	 * work char pointer
-	 */
-	ubyte* p;
-
-	/**
-	 * end of sequence read for indefinite encoding
-	 */
-	int eos;
-
-	/**
-	 * error code to use when returning an error
-	 */
-	int error;
-
-	/**
-	 * constructed if 0x20, indefinite is 0x21
-	 */
-	int inf;
-
-	/**
-	 * tag from last 'get object'
-	 */
-	int tag;
-
-	/**
-	 * class from last 'get object'
-	 */
-	int xclass;
-
-	/**
-	 * length of last 'get object'
-	 */
-	core.stdc.config.c_long slen;
-
-	/**
-	 * largest value of p allowed
-	 */
-	ubyte* max;
-
-	/**
-	 * temporary variable
-	 */
-	ubyte* q;
-
-	/**
-	 * variable
-	 */
-	ubyte** pp;
-
-	/**
-	 * used in error processing
-	 */
-	int line;
-}
-
-alias ASN1_CTX = .asn1_ctx_st;
-
-struct asn1_const_ctx_st
-{
-	/**
-	 * work char pointer
-	 */
-	const (ubyte)* p;
-
-	/**
-	 * end of sequence read for indefinite encoding
-	 */
-	int eos;
-
-	/**
-	 * error code to use when returning an error
-	 */
-	int error;
-
-	/**
-	 * constructed if 0x20, indefinite is 0x21
-	 */
-	int inf;
-
-	/**
-	 * tag from last 'get object'
-	 */
-	int tag;
-
-	/**
-	 * class from last 'get object'
-	 */
-	int xclass;
-
-	/**
-	 * length of last 'get object'
-	 */
-	core.stdc.config.c_long slen;
-
-	/**
-	 * largest value of p allowed
-	 */
-	const (ubyte)* max;
-
-	/**
-	 * temporary variable
-	 */
-	const (ubyte)* q;
-
-	/**
-	 * variable
-	 */
-	const (ubyte)** pp;
-
-	/**
-	 * used in error processing
-	 */
-	int line;
-}
-
-alias ASN1_const_CTX = .asn1_const_ctx_st;
-
-/*
- * These are used internally in the ASN1_OBJECT to keep track of
- * whether the names and data need to be free()ed
- */
-
-/**
- * internal use
- */
-enum ASN1_OBJECT_FLAG_DYNAMIC = 0x01;
-
-/**
- * critical x509v3 object id
- */
-enum ASN1_OBJECT_FLAG_CRITICAL = 0x02;
-
-/**
- * internal use
- */
-enum ASN1_OBJECT_FLAG_DYNAMIC_STRINGS = 0x04;
-
-///Ditto
-enum ASN1_OBJECT_FLAG_DYNAMIC_DATA = 0x08;
-
-struct asn1_object_st
-{
-	const (char)* sn;
-	const (char)* ln;
-
-	int nid;
-	int length_;
-
-	/**
-	 * data remains const after init
-	 */
-	const (ubyte)* data;
-
-	/**
-	 * Should we free this one
-	 */
-	int flags;
-}
-
-alias ASN1_OBJECT = .asn1_object_st;
-
-/**
  * Set if 0x07 has bits left value
  */
 enum ASN1_STRING_FLAG_BITS_LEFT = 0x08;
@@ -562,7 +389,7 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define DECLARE_ASN1_PRINT_FUNCTION(stname) .DECLARE_ASN1_PRINT_FUNCTION_fname(stname, stname)
 
-	//#define DECLARE_ASN1_PRINT_FUNCTION_fname(stname, fname) int fname##_print_ctx(.BIO* out_, stname* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+	//#define DECLARE_ASN1_PRINT_FUNCTION_fname(stname, fname) int fname##_print_ctx(libressl_d.openssl.ossl_typ.BIO* out_, stname* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 }
 
 //#define D2I_OF(type) type* (*) (type**, const (ubyte)**, core.stdc.config.c_long)
@@ -751,7 +578,7 @@ struct asn1_type_st
 		char* ptr_;
 		libressl_d.openssl.ossl_typ.ASN1_BOOLEAN boolean;
 		libressl_d.openssl.ossl_typ.ASN1_STRING* asn1_string;
-		.ASN1_OBJECT* object;
+		libressl_d.openssl.ossl_typ.ASN1_OBJECT* object;
 		libressl_d.openssl.ossl_typ.ASN1_INTEGER* integer;
 		libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* enumerated;
 		libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* bit_string;
@@ -794,14 +621,6 @@ extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_ANY_i
 .ASN1_SEQUENCE_ANY* d2i_ASN1_SET_ANY(.ASN1_SEQUENCE_ANY** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_SET_ANY(const (.ASN1_SEQUENCE_ANY)* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SET_ANY_it;
-
-struct NETSCAPE_X509_st
-{
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* header;
-	libressl_d.openssl.ossl_typ.X509* cert;
-}
-
-alias NETSCAPE_X509 = .NETSCAPE_X509_st;
 
 /**
  * This is used to contain a list of bit names
@@ -848,11 +667,10 @@ void ASN1_TYPE_set(.ASN1_TYPE* a, int type, void* value);
 int ASN1_TYPE_set1(.ASN1_TYPE* a, int type, const (void)* value);
 int ASN1_TYPE_cmp(const (.ASN1_TYPE)* a, const (.ASN1_TYPE)* b);
 
-.ASN1_OBJECT* ASN1_OBJECT_new();
-void ASN1_OBJECT_free(.ASN1_OBJECT* a);
-int i2d_ASN1_OBJECT(const (.ASN1_OBJECT)* a, ubyte** pp);
-.ASN1_OBJECT* c2i_ASN1_OBJECT(.ASN1_OBJECT** a, const (ubyte)** pp, core.stdc.config.c_long length_);
-.ASN1_OBJECT* d2i_ASN1_OBJECT(.ASN1_OBJECT** a, const (ubyte)** pp, core.stdc.config.c_long length_);
+libressl_d.openssl.ossl_typ.ASN1_OBJECT* ASN1_OBJECT_new();
+void ASN1_OBJECT_free(libressl_d.openssl.ossl_typ.ASN1_OBJECT* a);
+int i2d_ASN1_OBJECT(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* a, ubyte** pp);
+libressl_d.openssl.ossl_typ.ASN1_OBJECT* d2i_ASN1_OBJECT(libressl_d.openssl.ossl_typ.ASN1_OBJECT** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OBJECT_it;
 
@@ -885,8 +703,6 @@ void ASN1_BIT_STRING_free(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a);
 libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* d2i_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BIT_STRING_it;
-int i2c_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a, ubyte** pp);
-libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* c2i_ASN1_BIT_STRING(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 int ASN1_BIT_STRING_set(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a, ubyte* d, int length_);
 int ASN1_BIT_STRING_set_bit(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* a, int n, int value);
 int ASN1_BIT_STRING_get_bit(const (libressl_d.openssl.ossl_typ.ASN1_BIT_STRING)* a, int n);
@@ -894,22 +710,17 @@ int ASN1_BIT_STRING_check(const (libressl_d.openssl.ossl_typ.ASN1_BIT_STRING)* a
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int ASN1_BIT_STRING_name_print(.BIO* out_, libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* bs, .BIT_STRING_BITNAME* tbl, int indent);
+	int ASN1_BIT_STRING_name_print(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* bs, .BIT_STRING_BITNAME* tbl, int indent);
 }
 
 int ASN1_BIT_STRING_num_asc(const (char)* name, .BIT_STRING_BITNAME* tbl);
 int ASN1_BIT_STRING_set_asc(libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* bs, const (char)* name, int value, .BIT_STRING_BITNAME* tbl);
-
-int i2d_ASN1_BOOLEAN(int a, ubyte** pp);
-int d2i_ASN1_BOOLEAN(int* a, const (ubyte)** pp, core.stdc.config.c_long length_);
 
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* ASN1_INTEGER_new();
 void ASN1_INTEGER_free(libressl_d.openssl.ossl_typ.ASN1_INTEGER* a);
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* d2i_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_INTEGER_it;
-int i2c_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER* a, ubyte** pp);
-libressl_d.openssl.ossl_typ.ASN1_INTEGER* c2i_ASN1_INTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* d2i_ASN1_UINTEGER(libressl_d.openssl.ossl_typ.ASN1_INTEGER** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* ASN1_INTEGER_dup(const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* x);
 int ASN1_INTEGER_cmp(const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* x, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* y);
@@ -1022,6 +833,13 @@ libressl_d.openssl.ossl_typ.ASN1_TIME* d2i_ASN1_TIME(libressl_d.openssl.ossl_typ
 int i2d_ASN1_TIME(libressl_d.openssl.ossl_typ.ASN1_TIME* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_TIME_it;
 
+int ASN1_TIME_to_tm(const (libressl_d.openssl.ossl_typ.ASN1_TIME)* s, libressl_d.compat.time.tm* tm);
+int ASN1_TIME_compare(const (libressl_d.openssl.ossl_typ.ASN1_TIME)* t1, const (libressl_d.openssl.ossl_typ.ASN1_TIME)* t2);
+int ASN1_TIME_cmp_time_t(const (libressl_d.openssl.ossl_typ.ASN1_TIME)* s, libressl_d.compat.time.time_t t2);
+int ASN1_TIME_normalize(libressl_d.openssl.ossl_typ.ASN1_TIME* t);
+int ASN1_TIME_set_string_X509(libressl_d.openssl.ossl_typ.ASN1_TIME* time, const (char)* str);
+int ASN1_TIME_diff(int* pday, int* psec, const (libressl_d.openssl.ossl_typ.ASN1_TIME)* from, const (libressl_d.openssl.ossl_typ.ASN1_TIME)* to);
+
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_OCTET_STRING_NDEF_it;
 
 libressl_d.openssl.ossl_typ.ASN1_TIME* ASN1_TIME_set(libressl_d.openssl.ossl_typ.ASN1_TIME* s, libressl_d.compat.time.time_t t);
@@ -1033,25 +851,31 @@ int ASN1_TIME_set_string(libressl_d.openssl.ossl_typ.ASN1_TIME* s, const (char)*
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int i2a_ASN1_INTEGER(.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* a);
-	int a2i_ASN1_INTEGER(.BIO* bp, libressl_d.openssl.ossl_typ.ASN1_INTEGER* bs, char* buf, int size);
-	int i2a_ASN1_ENUMERATED(.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_ENUMERATED)* a);
-	int a2i_ASN1_ENUMERATED(.BIO* bp, libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* bs, char* buf, int size);
-	int i2a_ASN1_OBJECT(.BIO* bp, const (.ASN1_OBJECT)* a);
-	int a2i_ASN1_STRING(.BIO* bp, libressl_d.openssl.ossl_typ.ASN1_STRING* bs, char* buf, int size);
-	int i2a_ASN1_STRING(.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* a, int type);
+	int i2a_ASN1_INTEGER(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* a);
+	int a2i_ASN1_INTEGER(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.ASN1_INTEGER* bs, char* buf, int size);
+	int i2a_ASN1_ENUMERATED(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_ENUMERATED)* a);
+	int a2i_ASN1_ENUMERATED(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* bs, char* buf, int size);
+	int i2a_ASN1_OBJECT(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* a);
+	int a2i_ASN1_STRING(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.ASN1_STRING* bs, char* buf, int size);
+	int i2a_ASN1_STRING(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* a, int type);
 }
 
-int i2t_ASN1_OBJECT(char* buf, int buf_len, const (.ASN1_OBJECT)* a);
+int i2t_ASN1_OBJECT(char* buf, int buf_len, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* a);
 
 int a2d_ASN1_OBJECT(ubyte* out_, int olen, const (char)* buf, int num);
-.ASN1_OBJECT* ASN1_OBJECT_create(int nid, ubyte* data, int len, const (char)* sn, const (char)* ln);
+libressl_d.openssl.ossl_typ.ASN1_OBJECT* ASN1_OBJECT_create(int nid, ubyte* data, int len, const (char)* sn, const (char)* ln);
 
+int ASN1_INTEGER_get_uint64(core.stdc.stdint.uint64_t* out_val, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* aint);
+int ASN1_INTEGER_set_uint64(libressl_d.openssl.ossl_typ.ASN1_INTEGER* aint, core.stdc.stdint.uint64_t val);
+int ASN1_INTEGER_get_int64(core.stdc.stdint.int64_t* out_val, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* aint);
+int ASN1_INTEGER_set_int64(libressl_d.openssl.ossl_typ.ASN1_INTEGER* aint, core.stdc.stdint.int64_t val);
 int ASN1_INTEGER_set(libressl_d.openssl.ossl_typ.ASN1_INTEGER* a, core.stdc.config.c_long v);
 core.stdc.config.c_long ASN1_INTEGER_get(const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* a);
 libressl_d.openssl.ossl_typ.ASN1_INTEGER* BN_to_ASN1_INTEGER(const (libressl_d.openssl.ossl_typ.BIGNUM)* bn, libressl_d.openssl.ossl_typ.ASN1_INTEGER* ai);
 libressl_d.openssl.ossl_typ.BIGNUM* ASN1_INTEGER_to_BN(const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* ai, libressl_d.openssl.ossl_typ.BIGNUM* bn);
 
+int ASN1_ENUMERATED_get_int64(core.stdc.stdint.int64_t* out_val, const (libressl_d.openssl.ossl_typ.ASN1_ENUMERATED)* aenum);
+int ASN1_ENUMERATED_set_int64(libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* aenum, core.stdc.stdint.int64_t val);
 int ASN1_ENUMERATED_set(libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* a, core.stdc.config.c_long v);
 core.stdc.config.c_long ASN1_ENUMERATED_get(const (libressl_d.openssl.ossl_typ.ASN1_ENUMERATED)* a);
 libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* BN_to_ASN1_ENUMERATED(const (libressl_d.openssl.ossl_typ.BIGNUM)* bn, libressl_d.openssl.ossl_typ.ASN1_ENUMERATED* ai);
@@ -1065,8 +889,6 @@ int ASN1_PRINTABLE_type(const (ubyte)* s, int max);
 
 /* SPECIALS */
 int ASN1_get_object(const (ubyte)** pp, core.stdc.config.c_long* plength, int* ptag, int* pclass, core.stdc.config.c_long omax);
-int ASN1_check_infinite_end(ubyte** p, core.stdc.config.c_long len);
-int ASN1_const_check_infinite_end(const (ubyte)** p, core.stdc.config.c_long len);
 void ASN1_put_object(ubyte** pp, int constructed, int length_, int tag, int xclass);
 int ASN1_put_eoc(ubyte** pp);
 int ASN1_object_size(int constructed, int length_, int tag);
@@ -1099,38 +921,30 @@ int ASN1_STRING_to_UTF8(ubyte** out_, const (libressl_d.openssl.ossl_typ.ASN1_ST
 
 version (OPENSSL_NO_BIO) {
 } else {
-	void* ASN1_d2i_bio(void* function() xnew, d2i_of_void* d2i, .BIO* in_, void** x);
+	void* ASN1_d2i_bio(void* function() xnew, d2i_of_void* d2i, libressl_d.openssl.ossl_typ.BIO* in_, void** x);
 
 	//#define ASN1_d2i_bio_of(type, xnew, d2i, in_, x) ((type*) .ASN1_d2i_bio(.CHECKED_NEW_OF(type, xnew), .CHECKED_D2I_OF(type, d2i), in_, .CHECKED_PPTR_OF(type, x)))
 
-	void* ASN1_item_d2i_bio(const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, .BIO* in_, void* x);
-	int ASN1_i2d_bio(i2d_of_void* i2d, .BIO* out_, ubyte* x);
+	void* ASN1_item_d2i_bio(const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, libressl_d.openssl.ossl_typ.BIO* in_, void* x);
+	int ASN1_i2d_bio(i2d_of_void* i2d, libressl_d.openssl.ossl_typ.BIO* out_, ubyte* x);
 
 	//#define ASN1_i2d_bio_of(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(type, i2d), out_, .CHECKED_PTR_OF(type, x)))
 
 	//#define ASN1_i2d_bio_of_const(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(const type, i2d), out_, .CHECKED_PTR_OF(const type, x)))
 
-	int ASN1_item_i2d_bio(const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, .BIO* out_, void* x);
-	int ASN1_UTCTIME_print(.BIO* fp, const (libressl_d.openssl.ossl_typ.ASN1_UTCTIME)* a);
-	int ASN1_GENERALIZEDTIME_print(.BIO* fp, const (libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME)* a);
-	int ASN1_TIME_print(.BIO* fp, const (libressl_d.openssl.ossl_typ.ASN1_TIME)* a);
-	int ASN1_STRING_print(.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* v);
-	int ASN1_STRING_print_ex(.BIO* out_, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* str, core.stdc.config.c_ulong flags);
-	int ASN1_bn_print(.BIO* bp, const (char)* number, const (libressl_d.openssl.ossl_typ.BIGNUM)* num, ubyte* buf, int off);
-	int ASN1_parse(.BIO* bp, const (ubyte)* pp, core.stdc.config.c_long len, int indent);
-	int ASN1_parse_dump(.BIO* bp, const (ubyte)* pp, core.stdc.config.c_long len, int indent, int dump);
+	int ASN1_item_i2d_bio(const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, libressl_d.openssl.ossl_typ.BIO* out_, void* x);
+	int ASN1_UTCTIME_print(libressl_d.openssl.ossl_typ.BIO* fp, const (libressl_d.openssl.ossl_typ.ASN1_UTCTIME)* a);
+	int ASN1_GENERALIZEDTIME_print(libressl_d.openssl.ossl_typ.BIO* fp, const (libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME)* a);
+	int ASN1_TIME_print(libressl_d.openssl.ossl_typ.BIO* fp, const (libressl_d.openssl.ossl_typ.ASN1_TIME)* a);
+	int ASN1_STRING_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* v);
+	int ASN1_STRING_print_ex(libressl_d.openssl.ossl_typ.BIO* out_, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* str, core.stdc.config.c_ulong flags);
+	int ASN1_bn_print(libressl_d.openssl.ossl_typ.BIO* bp, const (char)* number, const (libressl_d.openssl.ossl_typ.BIGNUM)* num, ubyte* buf, int off);
+	int ASN1_parse(libressl_d.openssl.ossl_typ.BIO* bp, const (ubyte)* pp, core.stdc.config.c_long len, int indent);
+	int ASN1_parse_dump(libressl_d.openssl.ossl_typ.BIO* bp, const (ubyte)* pp, core.stdc.config.c_long len, int indent, int dump);
 }
 
 core.stdc.config.c_ulong ASN1_tag2bit(int tag);
 const (char)* ASN1_tag2str(int tag);
-
-/* Used to load and write netscape format cert */
-
-.NETSCAPE_X509* NETSCAPE_X509_new();
-void NETSCAPE_X509_free(.NETSCAPE_X509* a);
-.NETSCAPE_X509* d2i_NETSCAPE_X509(.NETSCAPE_X509** a, const (ubyte)** in_, core.stdc.config.c_long len);
-int i2d_NETSCAPE_X509(.NETSCAPE_X509* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NETSCAPE_X509_it;
 
 int ASN1_UNIVERSALSTRING_to_string(libressl_d.openssl.ossl_typ.ASN1_UNIVERSALSTRING* s);
 
@@ -1214,7 +1028,7 @@ enum ASN1_PCTX_FLAGS_SHOW_FIELD_STRUCT_NAME = 0x0080;
  */
 enum ASN1_PCTX_FLAGS_NO_STRUCT_NAME = 0x0100;
 
-int ASN1_item_print(.BIO* out_, .ASN1_VALUE* ifld, int indent, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+int ASN1_item_print(libressl_d.openssl.ossl_typ.BIO* out_, .ASN1_VALUE* ifld, int indent, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 libressl_d.openssl.ossl_typ.ASN1_PCTX* ASN1_PCTX_new();
 void ASN1_PCTX_free(libressl_d.openssl.ossl_typ.ASN1_PCTX* p);
 core.stdc.config.c_ulong ASN1_PCTX_get_flags(const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* p);
@@ -1228,22 +1042,20 @@ void ASN1_PCTX_set_oid_flags(libressl_d.openssl.ossl_typ.ASN1_PCTX* p, core.stdc
 core.stdc.config.c_ulong ASN1_PCTX_get_str_flags(const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* p);
 void ASN1_PCTX_set_str_flags(libressl_d.openssl.ossl_typ.ASN1_PCTX* p, core.stdc.config.c_ulong flags);
 
-const (.BIO_METHOD)* BIO_f_asn1();
+version (OPENSSL_NO_BIO) {
+} else {
+	const (.BIO_METHOD)* BIO_f_asn1();
+}
 
-.BIO* BIO_new_NDEF(.BIO* out_, .ASN1_VALUE* val, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_NDEF(libressl_d.openssl.ossl_typ.BIO* out_, .ASN1_VALUE* val, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
 
-int i2d_ASN1_bio_stream(.BIO* out_, .ASN1_VALUE* val, .BIO* in_, int flags, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-int PEM_write_bio_ASN1_stream(.BIO* out_, .ASN1_VALUE* val, .BIO* in_, int flags, const (char)* hdr, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-int SMIME_write_ASN1(.BIO* bio, .ASN1_VALUE* val, .BIO* data, int flags, int ctype_nid, int econt_nid, .stack_st_X509_ALGOR * mdalgs, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-.ASN1_VALUE* SMIME_read_ASN1(.BIO* bio, .BIO** bcont, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-int SMIME_crlf_copy(.BIO* in_, .BIO* out_, int flags);
-int SMIME_text(.BIO* in_, .BIO* out_);
+int i2d_ASN1_bio_stream(libressl_d.openssl.ossl_typ.BIO* out_, .ASN1_VALUE* val, libressl_d.openssl.ossl_typ.BIO* in_, int flags, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+int PEM_write_bio_ASN1_stream(libressl_d.openssl.ossl_typ.BIO* out_, .ASN1_VALUE* val, libressl_d.openssl.ossl_typ.BIO* in_, int flags, const (char)* hdr, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+int SMIME_write_ASN1(libressl_d.openssl.ossl_typ.BIO* bio, .ASN1_VALUE* val, libressl_d.openssl.ossl_typ.BIO* data, int flags, int ctype_nid, int econt_nid, .stack_st_X509_ALGOR * mdalgs, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+.ASN1_VALUE* SMIME_read_ASN1(libressl_d.openssl.ossl_typ.BIO* bio, libressl_d.openssl.ossl_typ.BIO** bcont, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+int SMIME_crlf_copy(libressl_d.openssl.ossl_typ.BIO* in_, libressl_d.openssl.ossl_typ.BIO* out_, int flags);
+int SMIME_text(libressl_d.openssl.ossl_typ.BIO* in_, libressl_d.openssl.ossl_typ.BIO* out_);
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_ASN1_strings();
 
 /* Error codes for the ASN1 functions. */
@@ -1413,6 +1225,7 @@ enum ASN1_R_ILLEGAL_FORMAT = 177;
 enum ASN1_R_ILLEGAL_HEX = 178;
 enum ASN1_R_ILLEGAL_IMPLICIT_TAG = 179;
 enum ASN1_R_ILLEGAL_INTEGER = 180;
+enum ASN1_R_ILLEGAL_NEGATIVE_VALUE = 226;
 enum ASN1_R_ILLEGAL_NESTED_TAGGING = 181;
 enum ASN1_R_ILLEGAL_NULL = 125;
 enum ASN1_R_ILLEGAL_NULL_VALUE = 182;
@@ -1472,8 +1285,11 @@ enum ASN1_R_STRING_TOO_SHORT = 152;
 enum ASN1_R_TAG_VALUE_TOO_HIGH = 153;
 enum ASN1_R_THE_ASN1_OBJECT_IDENTIFIER_IS_NOT_KNOWN_FOR_THIS_MD = 154;
 enum ASN1_R_TIME_NOT_ASCII_FORMAT = 193;
+enum ASN1_R_TOO_LARGE = 223;
 enum ASN1_R_TOO_LONG = 155;
+enum ASN1_R_TOO_SMALL = 224;
 enum ASN1_R_TYPE_NOT_CONSTRUCTED = 156;
+enum ASN1_R_TYPE_NOT_PRIMITIVE = 231;
 enum ASN1_R_UNABLE_TO_DECODE_RSA_KEY = 157;
 enum ASN1_R_UNABLE_TO_DECODE_RSA_PRIVATE_KEY = 158;
 enum ASN1_R_UNEXPECTED_EOC = 159;
@@ -1490,6 +1306,7 @@ enum ASN1_R_UNSUPPORTED_CIPHER = 165;
 enum ASN1_R_UNSUPPORTED_ENCRYPTION_ALGORITHM = 166;
 enum ASN1_R_UNSUPPORTED_PUBLIC_KEY_TYPE = 167;
 enum ASN1_R_UNSUPPORTED_TYPE = 196;
+enum ASN1_R_WRONG_INTEGER_TYPE = 225;
 enum ASN1_R_WRONG_PUBLIC_KEY_TYPE = 200;
 enum ASN1_R_WRONG_TAG = 168;
 enum ASN1_R_WRONG_TYPE = 169;

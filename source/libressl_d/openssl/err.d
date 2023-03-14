@@ -1,4 +1,4 @@
-/* $OpenBSD: err.h,v 1.25 2017/02/20 23:21:19 beck Exp $ */
+/* $OpenBSD: err.h,v 1.28 2022/08/29 06:49:24 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -215,6 +215,8 @@ enum ERR_LIB_TS = 47;
 enum ERR_LIB_HMAC = 48;
 enum ERR_LIB_JPAKE = 49;
 enum ERR_LIB_GOST = 50;
+enum ERR_LIB_CT = 51;
+enum ERR_LIB_KDF = 52;
 
 enum ERR_LIB_USER = 128;
 
@@ -389,6 +391,17 @@ version (LIBRESSL_INTERNAL) {
 	{
 		enum SSLerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_SSL, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
 	}
+
+	template CTerr(string f, string r)
+	{
+		enum CTerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CT, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
+	}
+
+	template KDFerr(string f, string r)
+	{
+		enum KDFerr = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_KDF, " ~ f ~ ", " ~ r ~ ", &(__FILE__[0]), __LINE__);";
+	}
+
 }
 
 version (LIBRESSL_INTERNAL) {
@@ -555,6 +568,16 @@ version (LIBRESSL_INTERNAL) {
 	template GOSTerror(string r)
 	{
 		enum GOSTerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_GOST, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
+	}
+
+	template CTerror(string r)
+	{
+		enum CTerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_CT, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
+	}
+
+	template KDFerror(string r)
+	{
+		enum KDFerror = "libressl_d.openssl.err.ERR_PUT_error(libressl_d.openssl.err.ERR_LIB_KDF, 0x0FFF, " ~ r ~", &(__FILE__[0]), __LINE__);";
 	}
 }
 
@@ -777,6 +800,7 @@ enum ERR_R_SHOULD_NOT_HAVE_BEEN_CALLED = 2 | .ERR_R_FATAL;
 enum ERR_R_PASSED_NULL_PARAMETER = 3 | .ERR_R_FATAL;
 enum ERR_R_INTERNAL_ERROR = 4 | .ERR_R_FATAL;
 enum ERR_R_DISABLED = 5 | .ERR_R_FATAL;
+enum ERR_R_INIT_FAIL = 6 | .ERR_R_FATAL;
 
 /*
  * 99 is the maximum possible ERR_R_... code, higher values
@@ -814,7 +838,7 @@ void ERR_print_errors_fp(libressl_d.compat.stdio.FILE* fp);
 
 version (OPENSSL_NO_BIO) {
 } else {
-	void ERR_print_errors(libressl_d.openssl.bio.BIO* bp);
+	void ERR_print_errors(libressl_d.openssl.ossl_typ.BIO* bp);
 }
 
 void ERR_asprintf_error_data(char* format, ...);

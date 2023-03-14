@@ -1,4 +1,4 @@
-/* $OpenBSD: pkcs7.h,v 1.18 2016/12/27 16:12:47 jsing Exp $ */
+/* $OpenBSD: pkcs7.h,v 1.19 2022/07/12 14:42:50 kn Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -191,7 +191,7 @@ alias PKCS7_SIGNED = .pkcs7_signed_st;
 
 struct pkcs7_enc_content_st
 {
-	libressl_d.openssl.asn1.ASN1_OBJECT* content_type;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* content_type;
 	libressl_d.openssl.ossl_typ.X509_ALGOR* algorithm;
 
 	/**
@@ -300,7 +300,7 @@ struct pkcs7_st
 	/**
 	 * content as defined by the type
 	 */
-	libressl_d.openssl.asn1.ASN1_OBJECT* type;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* type;
 
 	/**
 	 * all encryption/message digests are applied to the 'contents',
@@ -559,10 +559,10 @@ int PKCS7_ISSUER_AND_SERIAL_digest(.PKCS7_ISSUER_AND_SERIAL* data, const (libres
 .PKCS7* d2i_PKCS7_fp(libressl_d.compat.stdio.FILE* fp, .PKCS7** p7);
 int i2d_PKCS7_fp(libressl_d.compat.stdio.FILE* fp, .PKCS7* p7);
 .PKCS7* PKCS7_dup(.PKCS7* p7);
-.PKCS7* d2i_PKCS7_bio(libressl_d.openssl.bio.BIO* bp, .PKCS7** p7);
-int i2d_PKCS7_bio(libressl_d.openssl.bio.BIO* bp, .PKCS7* p7);
-int i2d_PKCS7_bio_stream(libressl_d.openssl.bio.BIO* out_, .PKCS7* p7, libressl_d.openssl.bio.BIO* in_, int flags);
-int PEM_write_bio_PKCS7_stream(libressl_d.openssl.bio.BIO* out_, .PKCS7* p7, libressl_d.openssl.bio.BIO* in_, int flags);
+.PKCS7* d2i_PKCS7_bio(libressl_d.openssl.ossl_typ.BIO* bp, .PKCS7** p7);
+int i2d_PKCS7_bio(libressl_d.openssl.ossl_typ.BIO* bp, .PKCS7* p7);
+int i2d_PKCS7_bio_stream(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* in_, int flags);
+int PEM_write_bio_PKCS7_stream(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* in_, int flags);
 
 .PKCS7_SIGNER_INFO* PKCS7_SIGNER_INFO_new();
 void PKCS7_SIGNER_INFO_free(.PKCS7_SIGNER_INFO* a);
@@ -614,7 +614,7 @@ extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ATTR_SIGN_it;
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ATTR_VERIFY_it;
 
 int i2d_PKCS7_NDEF(.PKCS7* a, ubyte** out_);
-int PKCS7_print_ctx(libressl_d.openssl.bio.BIO* out_, .PKCS7* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+int PKCS7_print_ctx(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 core.stdc.config.c_long PKCS7_ctrl(.PKCS7* p7, int cmd, core.stdc.config.c_long larg, char* parg);
 
@@ -627,12 +627,12 @@ int PKCS7_add_signer(.PKCS7* p7, .PKCS7_SIGNER_INFO* p7i);
 int PKCS7_add_certificate(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509* x509);
 int PKCS7_add_crl(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509_CRL* x509);
 int PKCS7_content_new(.PKCS7* p7, int nid);
-int PKCS7_dataVerify(libressl_d.openssl.ossl_typ.X509_STORE* cert_store, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.bio.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si);
-int PKCS7_signatureVerify(libressl_d.openssl.bio.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.X509* x509);
+int PKCS7_dataVerify(libressl_d.openssl.ossl_typ.X509_STORE* cert_store, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si);
+int PKCS7_signatureVerify(libressl_d.openssl.ossl_typ.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.X509* x509);
 
-libressl_d.openssl.bio.BIO* PKCS7_dataInit(.PKCS7* p7, libressl_d.openssl.bio.BIO* bio);
-int PKCS7_dataFinal(.PKCS7* p7, libressl_d.openssl.bio.BIO* bio);
-libressl_d.openssl.bio.BIO* PKCS7_dataDecode(.PKCS7* p7, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.bio.BIO* in_bio, libressl_d.openssl.ossl_typ.X509* pcert);
+libressl_d.openssl.ossl_typ.BIO* PKCS7_dataInit(.PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* bio);
+int PKCS7_dataFinal(.PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* bio);
+libressl_d.openssl.ossl_typ.BIO* PKCS7_dataDecode(.PKCS7* p7, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ossl_typ.BIO* in_bio, libressl_d.openssl.ossl_typ.X509* pcert);
 
 .PKCS7_SIGNER_INFO* PKCS7_add_signature(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509* x509, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl_d.openssl.ossl_typ.EVP_MD)* dgst);
 libressl_d.openssl.ossl_typ.X509* PKCS7_cert_from_signer_info(.PKCS7* p7, .PKCS7_SIGNER_INFO* si);
@@ -656,34 +656,29 @@ libressl_d.openssl.asn1.ASN1_TYPE* PKCS7_get_signed_attribute(.PKCS7_SIGNER_INFO
 int PKCS7_set_signed_attributes(.PKCS7_SIGNER_INFO* p7si, libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
 int PKCS7_set_attributes(.PKCS7_SIGNER_INFO* p7si, libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
 
-.PKCS7* PKCS7_sign(libressl_d.openssl.ossl_typ.X509* signcert, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.bio.BIO* data, int flags);
+.PKCS7* PKCS7_sign(libressl_d.openssl.ossl_typ.X509* signcert, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.BIO* data, int flags);
 
 .PKCS7_SIGNER_INFO* PKCS7_sign_add_signer(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509* signcert, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, int flags);
 
-int PKCS7_final(.PKCS7* p7, libressl_d.openssl.bio.BIO* data, int flags);
-int PKCS7_verify(.PKCS7* p7, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.X509_STORE* store, libressl_d.openssl.bio.BIO* indata, libressl_d.openssl.bio.BIO* out_, int flags);
+int PKCS7_final(.PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* data, int flags);
+int PKCS7_verify(.PKCS7* p7, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.X509_STORE* store, libressl_d.openssl.ossl_typ.BIO* indata, libressl_d.openssl.ossl_typ.BIO* out_, int flags);
 libressl_d.openssl.x509.stack_st_X509* PKCS7_get0_signers(.PKCS7* p7, libressl_d.openssl.x509.stack_st_X509* certs, int flags);
-.PKCS7* PKCS7_encrypt(libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.bio.BIO* in_, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, int flags);
-int PKCS7_decrypt(.PKCS7* p7, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ossl_typ.X509* cert, libressl_d.openssl.bio.BIO* data, int flags);
+.PKCS7* PKCS7_encrypt(libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.BIO* in_, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, int flags);
+int PKCS7_decrypt(.PKCS7* p7, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ossl_typ.X509* cert, libressl_d.openssl.ossl_typ.BIO* data, int flags);
 
 int PKCS7_add_attrib_smimecap(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.asn1.stack_st_X509_ALGOR* cap);
 libressl_d.openssl.asn1.stack_st_X509_ALGOR* PKCS7_get_smimecap(.PKCS7_SIGNER_INFO* si);
 int PKCS7_simple_smimecap(libressl_d.openssl.asn1.stack_st_X509_ALGOR* sk, int nid, int arg);
 
-int PKCS7_add_attrib_content_type(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.asn1.ASN1_OBJECT* coid);
+int PKCS7_add_attrib_content_type(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.ASN1_OBJECT* coid);
 int PKCS7_add0_attrib_signing_time(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.ASN1_TIME* t);
 int PKCS7_add1_attrib_digest(.PKCS7_SIGNER_INFO* si, const (ubyte)* md, int mdlen);
 
-int SMIME_write_PKCS7(libressl_d.openssl.bio.BIO* bio, .PKCS7* p7, libressl_d.openssl.bio.BIO* data, int flags);
-.PKCS7* SMIME_read_PKCS7(libressl_d.openssl.bio.BIO* bio, libressl_d.openssl.bio.BIO** bcont);
+int SMIME_write_PKCS7(libressl_d.openssl.ossl_typ.BIO* bio, .PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* data, int flags);
+.PKCS7* SMIME_read_PKCS7(libressl_d.openssl.ossl_typ.BIO* bio, libressl_d.openssl.ossl_typ.BIO** bcont);
 
-libressl_d.openssl.bio.BIO* BIO_new_PKCS7(libressl_d.openssl.bio.BIO* out_, .PKCS7* p7);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_PKCS7(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* p7);
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_PKCS7_strings();
 
 /* Error codes for the PKCS7 functions. */

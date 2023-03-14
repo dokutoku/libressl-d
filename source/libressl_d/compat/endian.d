@@ -1,8 +1,8 @@
 /*
  * Public domain
- * machine/endian.h compatibility shim
+ * endian.h compatibility shim
  */
-module libressl_d.compat.machine.endian;
+module libressl_d.compat.endian;
 
 
 version (Windows) {
@@ -18,17 +18,16 @@ version (Windows) {
 	} else {
 		enum BYTE_ORDER = .BIG_ENDIAN;
 	}
-//#elif defined(__linux__) || defined(__midipix__)
-} else version (linux) {
-//	#include <endian.h>
+//#elif defined(HAVE_ENDIAN_H)
+//	#include_next <endian.h>
+//#elif defined(HAVE_MACHINE_ENDIAN_H)
+//	#include_next <machine/endian.h>
 //#elif defined(__sun) || defined(_AIX) || defined(__hpux)
 //	public import core.sys.posix.arpa.nameser_compat;
 //	public import libressl_d.compat.sys.types;
 //#elif defined(__sgi)
 //	#include <standards.h>
 //	public import core.sys.posix.sys.endian;
-} else {
-//	public import core.sys.posix.machine.endian;
 }
 
 //#ifndef __STRICT_ALIGNMENT

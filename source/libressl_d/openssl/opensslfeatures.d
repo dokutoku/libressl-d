@@ -20,6 +20,7 @@ version (LIBRESSL_HAS_TLS1_3) {
 
 version (none):
 
+version = LIBRESSL_HAS_QUIC;
 version = LIBRESSL_HAS_TLS1_3;
 version = LIBRESSL_HAS_DTLS1_2;
 
@@ -101,7 +102,7 @@ version = OPENSSL_NO_PSK;
 /* version = OPENSSL_NO_RC4; */
 version = OPENSSL_NO_RC5;
 /* version = OPENSSL_NO_RDRAND; */
-version = OPENSSL_NO_RFC3779;
+/* version = OPENSSL_NO_RFC3779; */
 /* version = OPENSSL_NO_RMD160; */
 /* version = OPENSSL_NO_RSA; */
 /* version = OPENSSL_NO_SCRYPT; */

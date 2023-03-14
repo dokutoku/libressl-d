@@ -13,6 +13,8 @@ nothrow @nogc:
 
 version (Posix) {
 } else {
+	//#define NEED_SOCKET_FLAGS
+
 	/**
 	 * set FD_CLOEXEC
 	 */

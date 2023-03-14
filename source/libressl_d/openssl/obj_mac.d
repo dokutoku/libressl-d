@@ -883,6 +883,14 @@ enum SN_id_ct_signedChecklist = "id-ct-signedChecklist";
 enum NID_id_ct_signedChecklist = 1014;
 //#define OBJ_id_ct_signedChecklist OBJ_id_smime_ct, 48L
 
+enum SN_id_ct_ASPA = "id-ct-ASPA";
+enum NID_id_ct_ASPA = 1017;
+//#define OBJ_id_ct_ASPA OBJ_id_smime_ct, 49L
+
+enum SN_id_ct_signedTAL = "id-ct-signedTAL";
+enum NID_id_ct_signedTAL = 1024;
+//#define OBJ_id_ct_signedTAL OBJ_id_smime_ct, 50L
+
 enum SN_id_smime_aa_receiptRequest = "id-smime-aa-receiptRequest";
 enum NID_id_smime_aa_receiptRequest = 212;
 //#define OBJ_id_smime_aa_receiptRequest OBJ_id_smime_aa, 1L
@@ -998,6 +1006,10 @@ enum NID_id_smime_aa_signatureType = 239;
 enum SN_id_smime_aa_dvcs_dvc = "id-smime-aa-dvcs-dvc";
 enum NID_id_smime_aa_dvcs_dvc = 240;
 //#define OBJ_id_smime_aa_dvcs_dvc OBJ_id_smime_aa, 29L
+
+enum SN_id_smime_aa_signingCertificateV2 = "id-smime-aa-signingCertificateV2";
+enum NID_id_smime_aa_signingCertificateV2 = 1023;
+//#define OBJ_id_smime_aa_signingCertificateV2 OBJ_id_smime_aa, 47L
 
 enum SN_id_smime_alg_ESDHwith3DES = "id-smime-alg-ESDHwith3DES";
 enum NID_id_smime_alg_ESDHwith3DES = 241;
@@ -1519,6 +1531,11 @@ enum SN_proxyCertInfo = "proxyCertInfo";
 enum LN_proxyCertInfo = "Proxy Certificate Information";
 enum NID_proxyCertInfo = 663;
 //#define OBJ_proxyCertInfo .OBJ_id_pe, 14L
+
+enum SN_tlsfeature = "tlsfeature";
+enum LN_tlsfeature = "TLS Feature";
+enum NID_tlsfeature = 1016;
+//#define OBJ_tlsfeature OBJ_id_pe, 24L
 
 enum SN_sbgp_ipAddrBlockv2 = "sbgp-ipAddrBlockv2";
 enum NID_sbgp_ipAddrBlockv2 = 1006;
@@ -4222,6 +4239,30 @@ enum NID_dh_std_kdf = 990;
 
 enum SN_dh_cofactor_kdf = "dh-cofactor-kdf";
 enum NID_dh_cofactor_kdf = 991;
+
+enum SN_ct_precert_scts = "ct_precert_scts";
+enum LN_ct_precert_scts = "CT Precertificate SCTs";
+enum NID_ct_precert_scts = 1018;
+//#define OBJ_ct_precert_scts 1L, 3L, 6L, 1L, 4L, 1L, 11129L, 2L, 4L, 2L
+
+enum SN_ct_precert_poison = "ct_precert_poison";
+enum LN_ct_precert_poison = "CT Precertificate Poison";
+enum NID_ct_precert_poison = 1019;
+//#define OBJ_ct_precert_poison 1L, 3L, 6L, 1L, 4L, 1L, 11129L, 2L, 4L, 3L
+
+enum SN_ct_precert_signer = "ct_precert_signer";
+enum LN_ct_precert_signer = "CT Precertificate Signer";
+enum NID_ct_precert_signer = 1020;
+//#define OBJ_ct_precert_signer 1L, 3L, 6L, 1L, 4L, 1L, 11129L, 2L, 4L, 4L
+
+enum SN_ct_cert_scts = "ct_cert_scts";
+enum LN_ct_cert_scts = "CT Certificate SCTs";
+enum NID_ct_cert_scts = 1021;
+//#define OBJ_ct_cert_scts 1L, 3L, 6L, 1L, 4L, 1L, 11129L, 2L, 4L, 5L
+
+enum SN_hkdf = "HKDF";
+enum LN_hkdf = "hkdf";
+enum NID_hkdf = 1022;
 
 enum SN_teletrust = "teletrust";
 enum NID_teletrust = 920;

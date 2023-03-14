@@ -1,4 +1,4 @@
-/* $OpenBSD: pkcs12.h,v 1.24 2018/05/30 15:32:11 tb Exp $ */
+/* $OpenBSD: pkcs12.h,v 1.27 2022/09/11 17:30:13 tb Exp $ */
 /* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
@@ -62,7 +62,6 @@ private static import core.stdc.config;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.asn1;
 private static import libressl_d.openssl.evp;
-private static import libressl_d.openssl.objects;
 private static import libressl_d.openssl.ossl_typ;
 private static import libressl_d.openssl.pkcs7;
 private static import libressl_d.openssl.stack;
@@ -102,52 +101,14 @@ version (PBE_UNICODE) {
 enum KEY_EX = 0x10;
 enum KEY_SIG = 0x80;
 
-struct PKCS12_MAC_DATA
-{
-	libressl_d.openssl.x509.X509_SIG* dinfo;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* salt;
+struct PKCS12_MAC_DATA_st;
+alias PKCS12_MAC_DATA = .PKCS12_MAC_DATA_st;
 
-	/**
-	 * defaults to 1
-	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* iter;
-}
+struct PKCS12_st;
+alias PKCS12 = .PKCS12_st;
 
-struct PKCS12
-{
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
-	.PKCS12_MAC_DATA* mac;
-	libressl_d.openssl.pkcs7.PKCS7* authsafes;
-}
-
-struct PKCS12_SAFEBAG
-{
-	libressl_d.openssl.asn1.ASN1_OBJECT* type;
-
-	union value_
-	{
-		/**
-		 * secret, crl and certbag
-		 */
-		.pkcs12_bag_st* bag;
-
-		/**
-		 * keybag
-		 */
-		libressl_d.openssl.x509.pkcs8_priv_key_info_st* keybag;
-
-		/**
-		 * shrouded key bag
-		 */
-		libressl_d.openssl.x509.X509_SIG* shkeybag;
-
-		.stack_st_PKCS12_SAFEBAG* safes;
-		libressl_d.openssl.asn1.ASN1_TYPE* other;
-	}
-
-	value_ value;
-	libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* attrib;
-}
+struct PKCS12_SAFEBAG_st;
+alias PKCS12_SAFEBAG = .PKCS12_SAFEBAG_st;
 
 //DECLARE_STACK_OF(PKCS12_SAFEBAG)
 struct stack_st_PKCS12_SAFEBAG
@@ -157,26 +118,7 @@ struct stack_st_PKCS12_SAFEBAG
 
 //libressl_d.openssl.ossl_typ.DECLARE_PKCS12_STACK_OF(PKCS12_SAFEBAG)
 
-struct pkcs12_bag_st
-{
-	libressl_d.openssl.asn1.ASN1_OBJECT* type;
-
-	union value_
-	{
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* x509cert;
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* x509crl;
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* octet;
-		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* sdsicert;
-
-		/**
-		 * Secret or other bag
-		 */
-		libressl_d.openssl.asn1.ASN1_TYPE* other;
-	}
-
-	value_ value;
-}
-
+struct pkcs12_bag_st;
 alias PKCS12_BAGS = .pkcs12_bag_st;
 
 enum PKCS12_ERROR = 0;
@@ -199,88 +141,50 @@ version (LIBRESSL_INTERNAL) {
 
 	alias M_PKCS12_decrypt_skey = .PKCS12_decrypt_skey;
 	alias M_PKCS8_decrypt = .PKCS8_decrypt;
-
-	pragma(inline, true)
-	int M_PKCS12_bag_type(BG)(const (BG)* bg)
-
-		in
-		{
-			assert(bg != null);
-		}
-
-		do
-		{
-			return libressl_d.openssl.objects.OBJ_obj2nid(bg.type);
-		}
-
-	pragma(inline, true)
-	int M_PKCS12_cert_bag_type(const (.PKCS12_SAFEBAG)* bg)
-
-		in
-		{
-			assert(bg != null);
-			assert(bg.value.bag != null);
-		}
-
-		do
-		{
-			return libressl_d.openssl.objects.OBJ_obj2nid(bg.value.bag.type);
-		}
-
-	alias M_PKCS12_crl_bag_type = .M_PKCS12_cert_bag_type;
 }
 
-pragma(inline, true)
-libressl_d.openssl.asn1.ASN1_TYPE* PKCS12_get_attr(BAG)(BAG* bag, int attr_nid)
+alias M_PKCS12_bag_type = .PKCS12_bag_type;
+alias M_PKCS12_cert_bag_type = .PKCS12_cert_bag_type;
+alias M_PKCS12_crl_bag_type = .PKCS12_cert_bag_type;
 
-	in
-	{
-		assert(bag != null);
-	}
+alias PKCS12_bag_type = .PKCS12_SAFEBAG_get_nid;
+alias PKCS12_cert_bag_type = .PKCS12_SAFEBAG_get_bag_nid;
 
-	do
-	{
-		return .PKCS12_get_attr_gen(bag.attrib, attr_nid);
-	}
+alias PKCS12_certbag2x509 = .PKCS12_SAFEBAG_get1_cert;
+alias PKCS12_certbag2x509crl = .PKCS12_SAFEBAG_get1_crl;
 
-pragma(inline, true)
-libressl_d.openssl.asn1.ASN1_TYPE* PKCS8_get_attr(P8)(P8* p8, int attr_nid)
+alias PKCS12_x5092certbag = .PKCS12_SAFEBAG_create_cert;
+alias PKCS12_x509crl2certbag = .PKCS12_SAFEBAG_create_crl;
+alias PKCS12_MAKE_KEYBAG = .PKCS12_SAFEBAG_create0_p8inf;
+alias PKCS12_MAKE_SHKEYBAG = .PKCS12_SAFEBAG_create_pkcs8_encrypt;
 
-	in
-	{
-		assert(p8 != null);
-	}
+const (libressl_d.openssl.asn1.ASN1_TYPE)* PKCS12_SAFEBAG_get0_attr(const (.PKCS12_SAFEBAG)* bag, int attr_nid);
+const (libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE)* PKCS12_SAFEBAG_get0_attrs(const (.PKCS12_SAFEBAG)* bag);
+int PKCS12_SAFEBAG_get_nid(const (.PKCS12_SAFEBAG)* bag);
+int PKCS12_SAFEBAG_get_bag_nid(const (.PKCS12_SAFEBAG)* bag);
 
-	do
-	{
-		return .PKCS12_get_attr_gen(p8.attributes, attr_nid);
-	}
+libressl_d.openssl.ossl_typ.X509* PKCS12_SAFEBAG_get1_cert(const (.PKCS12_SAFEBAG)* bag);
+libressl_d.openssl.ossl_typ.X509_CRL* PKCS12_SAFEBAG_get1_crl(const (.PKCS12_SAFEBAG)* bag);
 
-pragma(inline, true)
-pure nothrow @trusted @nogc @live
-int PKCS12_mac_present(scope const .PKCS12* p12)
+libressl_d.openssl.asn1.ASN1_TYPE* PKCS8_get_attr(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8, int attr_nid);
+int PKCS12_mac_present(const (.PKCS12)* p12);
+void PKCS12_get0_mac(const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)** pmac, const (libressl_d.openssl.ossl_typ.X509_ALGOR)** pmacalg, const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)** psalt, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)** piter, const (.PKCS12)* p12);
 
-	in
-	{
-		assert(p12 != null);
-	}
+.PKCS12_SAFEBAG* PKCS12_SAFEBAG_create_cert(libressl_d.openssl.ossl_typ.X509* x509);
+.PKCS12_SAFEBAG* PKCS12_SAFEBAG_create_crl(libressl_d.openssl.ossl_typ.X509_CRL* crl);
+.PKCS12_SAFEBAG* PKCS12_SAFEBAG_create0_p8inf(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8);
+.PKCS12_SAFEBAG* PKCS12_SAFEBAG_create0_pkcs8(libressl_d.openssl.x509.X509_SIG* p8);
+.PKCS12_SAFEBAG* PKCS12_SAFEBAG_create_pkcs8_encrypt(int pbe_nid, const (char)* pass, int passlen, ubyte* salt, int saltlen, int iter, libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8);
 
-	do
-	{
-		return (p12.mac) ? (1) : (0);
-	}
-
-.PKCS12_SAFEBAG* PKCS12_x5092certbag(libressl_d.openssl.ossl_typ.X509* x509);
-.PKCS12_SAFEBAG* PKCS12_x509crl2certbag(libressl_d.openssl.ossl_typ.X509_CRL* crl);
-libressl_d.openssl.ossl_typ.X509* PKCS12_certbag2x509(.PKCS12_SAFEBAG* bag);
-libressl_d.openssl.ossl_typ.X509_CRL* PKCS12_certbag2x509crl(.PKCS12_SAFEBAG* bag);
+const (libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO)* PKCS12_SAFEBAG_get0_p8inf(const (.PKCS12_SAFEBAG)* bag);
+const (libressl_d.openssl.x509.X509_SIG)* PKCS12_SAFEBAG_get0_pkcs8(const (.PKCS12_SAFEBAG)* bag);
+const (.stack_st_PKCS12_SAFEBAG)* PKCS12_SAFEBAG_get0_safes(const (.PKCS12_SAFEBAG)* bag);
+const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* PKCS12_SAFEBAG_get0_type(const (.PKCS12_SAFEBAG)* bag);
 
 .PKCS12_SAFEBAG* PKCS12_item_pack_safebag(void* obj, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int nid1, int nid2);
-.PKCS12_SAFEBAG* PKCS12_MAKE_KEYBAG(libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8);
 libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* PKCS8_decrypt(const (libressl_d.openssl.x509.X509_SIG)* p8, const (char)* pass, int passlen);
 libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* PKCS12_decrypt_skey(const (.PKCS12_SAFEBAG)* bag, const (char)* pass, int passlen);
 libressl_d.openssl.x509.X509_SIG* PKCS8_encrypt(int pbe_nid, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (char)* pass, int passlen, ubyte* salt, int saltlen, int iter, libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8);
-.PKCS12_SAFEBAG* PKCS12_MAKE_SHKEYBAG(int pbe_nid, const (char)* pass, int passlen, ubyte* salt, int saltlen, int iter, libressl_d.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO* p8);
 libressl_d.openssl.pkcs7.PKCS7* PKCS12_pack_p7data(.stack_st_PKCS12_SAFEBAG * sk);
 .stack_st_PKCS12_SAFEBAG* PKCS12_unpack_p7data(libressl_d.openssl.pkcs7.PKCS7* p7);
 libressl_d.openssl.pkcs7.PKCS7* PKCS12_pack_p7encdata(int pbe_nid, const (char)* pass, int passlen, ubyte* salt, int saltlen, int iter, .stack_st_PKCS12_SAFEBAG * bags);
@@ -343,17 +247,12 @@ int PKCS12_parse(.PKCS12* p12, const (char)* pass, libressl_d.openssl.ossl_typ.E
 int PKCS12_add_safe(libressl_d.openssl.pkcs7.stack_st_PKCS7** psafes, .stack_st_PKCS12_SAFEBAG * bags, int safe_nid, int iter, const (char)* pass);
 .PKCS12* PKCS12_add_safes(libressl_d.openssl.pkcs7.stack_st_PKCS7* safes, int p7_nid);
 
-int i2d_PKCS12_bio(libressl_d.openssl.bio.BIO* bp, .PKCS12* p12);
+int i2d_PKCS12_bio(libressl_d.openssl.ossl_typ.BIO* bp, .PKCS12* p12);
 int i2d_PKCS12_fp(libressl_d.compat.stdio.FILE* fp, .PKCS12* p12);
-.PKCS12* d2i_PKCS12_bio(libressl_d.openssl.bio.BIO* bp, .PKCS12** p12);
+.PKCS12* d2i_PKCS12_bio(libressl_d.openssl.ossl_typ.BIO* bp, .PKCS12** p12);
 .PKCS12* d2i_PKCS12_fp(libressl_d.compat.stdio.FILE* fp, .PKCS12** p12);
 int PKCS12_newpass(.PKCS12* p12, const (char)* oldpass, const (char)* newpass);
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_PKCS12_strings();
 
 /* Error codes for the PKCS12 functions. */

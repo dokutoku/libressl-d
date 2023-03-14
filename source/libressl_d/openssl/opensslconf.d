@@ -10,7 +10,7 @@ private static import libressl_d.openssl.rc4;
 public import libressl_d.openssl.opensslfeatures;
 /* crypto/opensslconf.h.in */
 
-//#if defined(_MSC_VER) && !defined(__attribute__)
+//#if defined(_MSC_VER) && !defined(__clang__) && !defined(__attribute__)
 	//#define __attribute__(a)
 //#endif
 

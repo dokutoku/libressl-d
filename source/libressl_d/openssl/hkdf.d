@@ -33,7 +33,7 @@ nothrow @nogc:
  * stretching, and as such, is not suited to be used alone to generate
  * a key from a password.
  */
-int HKDF(core.stdc.stdint.uint8_t* out_key, size_t out_len, const (libressl_d.openssl.evp.env_md_st)* digest, const (core.stdc.stdint.uint8_t)* secret, size_t secret_len, const (core.stdc.stdint.uint8_t)* salt, size_t salt_len, const (core.stdc.stdint.uint8_t)* info, size_t info_len);
+int HKDF(core.stdc.stdint.uint8_t* out_key, size_t out_len, const (libressl_d.openssl.ossl_typ.env_md_st)* digest, const (core.stdc.stdint.uint8_t)* secret, size_t secret_len, const (core.stdc.stdint.uint8_t)* salt, size_t salt_len, const (core.stdc.stdint.uint8_t)* info, size_t info_len);
 
 /**
  * HKDF_extract computes a HKDF PRK (as specified by RFC 5869) from
@@ -41,7 +41,7 @@ int HKDF(core.stdc.stdint.uint8_t* out_key, size_t out_len, const (libressl_d.op
  * and outputs |out_len| bytes to |out_key|. The maximum output size
  * is |EVP_MAX_MD_SIZE|.  It returns one on success and zero on error.
  */
-int HKDF_extract(core.stdc.stdint.uint8_t* out_key, size_t* out_len, const (libressl_d.openssl.evp.env_md_st)* digest, const (core.stdc.stdint.uint8_t)* secret, size_t secret_len, const (core.stdc.stdint.uint8_t)* salt, size_t salt_len);
+int HKDF_extract(core.stdc.stdint.uint8_t* out_key, size_t* out_len, const (libressl_d.openssl.ossl_typ.env_md_st)* digest, const (core.stdc.stdint.uint8_t)* secret, size_t secret_len, const (core.stdc.stdint.uint8_t)* salt, size_t salt_len);
 
 /**
  * HKDF_expand computes a HKDF OKM (as specified by RFC 5869) of

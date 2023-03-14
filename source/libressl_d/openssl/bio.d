@@ -1,4 +1,4 @@
-/* $OpenBSD: bio.h,v 1.45 2018/06/02 04:41:12 tb Exp $ */
+/* $OpenBSD: bio.h,v 1.56 2022/09/11 17:26:03 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -384,14 +384,12 @@ enum BIO_FLAGS_BASE64_NO_NL = 0x0100;
  */
 enum BIO_FLAGS_MEM_RDONLY = 0x0200;
 
-alias BIO = .bio_st;
-
-void BIO_set_flags(.BIO* b, int flags);
-int BIO_test_flags(const (.BIO)* b, int flags);
-void BIO_clear_flags(.BIO* b, int flags);
+void BIO_set_flags(libressl_d.openssl.ossl_typ.BIO* b, int flags);
+int BIO_test_flags(const (libressl_d.openssl.ossl_typ.BIO)* b, int flags);
+void BIO_clear_flags(libressl_d.openssl.ossl_typ.BIO* b, int flags);
 
 pragma(inline, true)
-int BIO_get_flags(const (.BIO)* b)
+int BIO_get_flags(const (libressl_d.openssl.ossl_typ.BIO)* b)
 
 	do
 	{
@@ -399,7 +397,7 @@ int BIO_get_flags(const (.BIO)* b)
 	}
 
 pragma(inline, true)
-void BIO_set_retry_special(.BIO* b)
+void BIO_set_retry_special(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -407,7 +405,7 @@ void BIO_set_retry_special(.BIO* b)
 	}
 
 pragma(inline, true)
-void BIO_set_retry_read(.BIO* b)
+void BIO_set_retry_read(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -415,7 +413,7 @@ void BIO_set_retry_read(.BIO* b)
 	}
 
 pragma(inline, true)
-void BIO_set_retry_write(.BIO* b)
+void BIO_set_retry_write(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -424,7 +422,7 @@ void BIO_set_retry_write(.BIO* b)
 
 /* These are normally used internally in BIOs */
 pragma(inline, true)
-void BIO_clear_retry_flags(.BIO* b)
+void BIO_clear_retry_flags(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -432,7 +430,7 @@ void BIO_clear_retry_flags(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_get_retry_flags(const (.BIO)* b)
+int BIO_get_retry_flags(const (libressl_d.openssl.ossl_typ.BIO)* b)
 
 	do
 	{
@@ -441,7 +439,7 @@ int BIO_get_retry_flags(const (.BIO)* b)
 
 /* These should be used by the application to tell why we should retry */
 pragma(inline, true)
-int BIO_should_read(const (.BIO)* a)
+int BIO_should_read(const (libressl_d.openssl.ossl_typ.BIO)* a)
 
 	do
 	{
@@ -449,7 +447,7 @@ int BIO_should_read(const (.BIO)* a)
 	}
 
 pragma(inline, true)
-int BIO_should_write(const (.BIO)* a)
+int BIO_should_write(const (libressl_d.openssl.ossl_typ.BIO)* a)
 
 	do
 	{
@@ -457,7 +455,7 @@ int BIO_should_write(const (.BIO)* a)
 	}
 
 pragma(inline, true)
-int BIO_should_io_special(const (.BIO)* a)
+int BIO_should_io_special(const (libressl_d.openssl.ossl_typ.BIO)* a)
 
 	do
 	{
@@ -465,7 +463,7 @@ int BIO_should_io_special(const (.BIO)* a)
 	}
 
 pragma(inline, true)
-int BIO_retry_type(const (.BIO)* a)
+int BIO_retry_type(const (libressl_d.openssl.ossl_typ.BIO)* a)
 
 	do
 	{
@@ -473,7 +471,7 @@ int BIO_retry_type(const (.BIO)* a)
 	}
 
 pragma(inline, true)
-int BIO_should_retry(const (.BIO)* a)
+int BIO_should_retry(const (libressl_d.openssl.ossl_typ.BIO)* a)
 
 	do
 	{
@@ -483,7 +481,7 @@ int BIO_should_retry(const (.BIO)* a)
 /*
  * The next three are used in conjunction with the
  * BIO_should_io_special() condition.  After this returns true,
- * .BIO* IO_get_retry_BIO(.BIO* io, int* eason); will walk the BIO
+ * libressl_d.openssl.ossl_typ.BIO* IO_get_retry_BIO(libressl_d.openssl.ossl_typ.BIO* io, int* eason); will walk the BIO
  * stack and return the 'reason' for the special and the offending BIO.
  * Given a BIO, BIO_get_retry_reason(bio) will return the code.
  */
@@ -512,7 +510,7 @@ enum BIO_CB_CTRL = 0x06;
 
 /**
  * The callback is called before and after the underling operation,
- * The BIO_CB_RETURN flag indicates if it is after the call
+ * the BIO_CB_RETURN flag indicates if it is after the call.
  */
 enum BIO_CB_RETURN = 0x80;
 
@@ -540,73 +538,30 @@ A BIO_cb_post(A)(A a)
 		return a & .BIO_CB_RETURN;
 	}
 
-//core.stdc.config.c_long (*BIO_get_callback(const (.BIO)* b))(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long);
-void BIO_set_callback(.BIO* b, core.stdc.config.c_long function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long) callback);
-char* BIO_get_callback_arg(const (.BIO)* b);
-void BIO_set_callback_arg(.BIO* b, char* arg);
+alias BIO_callback_fn = extern (C) nothrow @nogc core.stdc.config.c_long function(libressl_d.openssl.ossl_typ.BIO* b, int oper, const (char)* argp, int argi, core.stdc.config.c_long argl, core.stdc.config.c_long ret);
+alias BIO_callback_fn_ex = extern (C) nothrow @nogc core.stdc.config.c_long function(libressl_d.openssl.ossl_typ.BIO* b, int oper, const (char)* argp, size_t len, int argi, core.stdc.config.c_long argl, int ret, size_t* processed);
 
-const (char)* BIO_method_name(const (.BIO)* b);
-int BIO_method_type(const (.BIO)* b);
+.BIO_callback_fn BIO_get_callback(const (libressl_d.openssl.ossl_typ.BIO)* b);
+void BIO_set_callback(libressl_d.openssl.ossl_typ.BIO* b, BIO_callback_fn callback);
 
-private alias bio_info_cb = /* Not a function pointer type */ extern (C) nothrow @nogc void function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long);
-private alias BIO_info_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.BIO*, int, int);
+.BIO_callback_fn_ex BIO_get_callback_ex(const (libressl_d.openssl.ossl_typ.BIO)* b);
+void BIO_set_callback_ex(BIO* b, .BIO_callback_fn_ex callback);
 
-struct bio_method_st
-{
-	int type;
-	const (char)* name;
-	int function(.BIO*, const (char)*, int) bwrite;
-	int function(.BIO*, char*, int) bread;
-	int function(.BIO*, const (char)*) bputs;
-	int function(.BIO*, char*, int) bgets;
-	core.stdc.config.c_long function(.BIO*, int, core.stdc.config.c_long, void*) ctrl;
-	int function(.BIO*) create;
-	int function(.BIO*) destroy;
-	core.stdc.config.c_long function(.BIO*, int, .bio_info_cb) callback_ctrl;
-}
+char* BIO_get_callback_arg(const (libressl_d.openssl.ossl_typ.BIO)* b);
+void BIO_set_callback_arg(libressl_d.openssl.ossl_typ.BIO* b, char* arg);
 
+const (char)* BIO_method_name(const (libressl_d.openssl.ossl_typ.BIO)* b);
+int BIO_method_type(const (libressl_d.openssl.ossl_typ.BIO)* b);
+
+private alias BIO_info_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIO*, int, int);
+
+/*
+ * Compatibility with OpenSSL's backward compatibility.
+ */
+private alias bio_info_cb = /* Not a function pointer type */ .BIO_info_cb;
+
+struct bio_method_st;
 alias BIO_METHOD = .bio_method_st;
-
-struct bio_st
-{
-	const (.BIO_METHOD)* method;
-
-	/**
-	 * bio, mode, argp, argi, argl, ret
-	 */
-	core.stdc.config.c_long function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long) callback;
-
-	/**
-	 * first argument for the callback
-	 */
-	char* cb_arg;
-
-	int init;
-	int shutdown;
-
-	/**
-	 * extra storage
-	 */
-	int flags;
-
-	int retry_reason;
-	int num;
-	void* ptr_;
-
-	/**
-	 * used by filter BIOs
-	 */
-	.bio_st* next_bio;
-
-	///Ditto
-	.bio_st* prev_bio;
-
-	int references;
-	core.stdc.config.c_ulong num_read;
-	core.stdc.config.c_ulong num_write;
-
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
-}
 
 //DECLARE_STACK_OF(BIO)
 struct stack_st_BIO
@@ -614,87 +569,30 @@ struct stack_st_BIO
 	libressl_d.openssl.stack._STACK stack;
 }
 
-struct bio_f_buffer_ctx_struct
-{
-	/*
-	 * Buffers are setup like this:
-	 *
-	 * <---------------------- size ----------------------.
-	 * +---------------------------------------------------+
-	 * | consumed | remaining          | free space        |
-	 * +---------------------------------------------------+
-	 * <-- off -.<------- len ------.
-	 */
-
-	/* .BIO* io; */ /* this is now in the BIO struct */
-
-	/**
-	 * how big is the input buffer
-	 */
-	int ibuf_size;
-
-	/**
-	 * how big is the output buffer
-	 */
-	int obuf_size;
-
-	/**
-	 * the char array
-	 */
-	char* ibuf;
-
-	/**
-	 * how many bytes are in it
-	 */
-	int ibuf_len;
-
-	/**
-	 * write/read offset
-	 */
-	int ibuf_off;
-
-	/**
-	 * the char array
-	 */
-	char* obuf;
-
-	/**
-	 * how many bytes are in it
-	 */
-	int obuf_len;
-
-	/**
-	 * write/read offset
-	 */
-	int obuf_off;
-}
-
-alias BIO_F_BUFFER_CTX = .bio_f_buffer_ctx_struct;
-
 /**
  * Prefix and suffix callback in ASN1 BIO
  */
-private alias asn1_ps_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.BIO* b, ubyte** pbuf, int* plen, void* parg);
+private alias asn1_ps_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIO* b, ubyte** pbuf, int* plen, void* parg);
 
 /* BIO_METHOD accessors */
 .BIO_METHOD* BIO_meth_new(int type, const (char)* name);
 void BIO_meth_free(.BIO_METHOD* biom);
-//int (*BIO_meth_get_write(const (.BIO_METHOD)* biom))(.BIO*, const (char)*, int);
-int BIO_meth_set_write(.BIO_METHOD* biom, int function(.BIO*, const (char)*, int) write);
-//int (*BIO_meth_get_read(const (.BIO_METHOD)* biom))(.BIO*, char*, int);
-int BIO_meth_set_read(.BIO_METHOD* biom, int function(.BIO*, char*, int) read);
-//int (*BIO_meth_get_puts(const (.BIO_METHOD)* biom))(.BIO*, const (char)*);
-int BIO_meth_set_puts(.BIO_METHOD* biom, int function(.BIO*, const (char)*) puts);
-//int (*BIO_meth_get_gets(const (.BIO_METHOD)* biom))(.BIO*, char*, int);
-int BIO_meth_set_gets(.BIO_METHOD* biom, int function(.BIO*, char*, int) gets);
-//core.stdc.config.c_long (*BIO_meth_get_ctrl(const (.BIO_METHOD)* biom))(.BIO*, int, core.stdc.config.c_long, void*);
-int BIO_meth_set_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(.BIO*, int, core.stdc.config.c_long, void*) ctrl);
-//int (*BIO_meth_get_create(const (.BIO_METHOD)* biom))(.BIO*);
-int BIO_meth_set_create(.BIO_METHOD* biom, int function(.BIO*) create);
-//int (*BIO_meth_get_destroy(const (.BIO_METHOD)* biom))(.BIO*);
-int BIO_meth_set_destroy(.BIO_METHOD* biom, int function(.BIO*) destroy);
-//core.stdc.config.c_long (*BIO_meth_get_callback_ctrl(const (.BIO_METHOD)* biom))(.BIO*, int, .BIO_info_cb);
-int BIO_meth_set_callback_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(.BIO*, int, .BIO_info_cb) callback_ctrl);
+//int (*BIO_meth_get_write(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*, const (char)*, int);
+int BIO_meth_set_write(.BIO_METHOD* biom, int function(libressl_d.openssl.ossl_typ.BIO*, const (char)*, int) write);
+//int (*BIO_meth_get_read(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*, char*, int);
+int BIO_meth_set_read(.BIO_METHOD* biom, int function(libressl_d.openssl.ossl_typ.BIO*, char*, int) read);
+//int (*BIO_meth_get_puts(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*, const (char)*);
+int BIO_meth_set_puts(.BIO_METHOD* biom, int function(libressl_d.openssl.ossl_typ.BIO*, const (char)*) puts);
+//int (*BIO_meth_get_gets(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*, char*, int);
+int BIO_meth_set_gets(.BIO_METHOD* biom, int function(libressl_d.openssl.ossl_typ.BIO*, char*, int) gets);
+//core.stdc.config.c_long (*BIO_meth_get_ctrl(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*, int, core.stdc.config.c_long, void*);
+int BIO_meth_set_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(libressl_d.openssl.ossl_typ.BIO*, int, core.stdc.config.c_long, void*) ctrl);
+//int (*BIO_meth_get_create(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*);
+int BIO_meth_set_create(.BIO_METHOD* biom, int function(libressl_d.openssl.ossl_typ.BIO*) create);
+//int (*BIO_meth_get_destroy(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*);
+int BIO_meth_set_destroy(.BIO_METHOD* biom, int function(libressl_d.openssl.ossl_typ.BIO*) destroy);
+//core.stdc.config.c_long (*BIO_meth_get_callback_ctrl(const (.BIO_METHOD)* biom))(libressl_d.openssl.ossl_typ.BIO*, int, .BIO_info_cb);
+int BIO_meth_set_callback_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(libressl_d.openssl.ossl_typ.BIO*, int, .BIO_info_cb) callback_ctrl);
 
 /* connect BIO stuff */
 enum BIO_CONN_S_BEFORE = 1;
@@ -781,7 +679,7 @@ enum BIO_C_SET_EX_ARG = 153;
 enum BIO_C_GET_EX_ARG = 154;
 
 pragma(inline, true)
-int BIO_set_app_data(.BIO* s, void* arg)
+int BIO_set_app_data(libressl_d.openssl.ossl_typ.BIO* s, void* arg)
 
 	do
 	{
@@ -789,7 +687,7 @@ int BIO_set_app_data(.BIO* s, void* arg)
 	}
 
 pragma(inline, true)
-void* BIO_get_app_data(.BIO* s)
+void* BIO_get_app_data(libressl_d.openssl.ossl_typ.BIO* s)
 
 	do
 	{
@@ -798,7 +696,7 @@ void* BIO_get_app_data(.BIO* s)
 
 /* BIO_s_connect() and BIO_s_socks4a_connect() */
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_conn_hostname(.BIO* b, char* name)
+core.stdc.config.c_long BIO_set_conn_hostname(libressl_d.openssl.ossl_typ.BIO* b, char* name)
 
 	do
 	{
@@ -806,7 +704,7 @@ core.stdc.config.c_long BIO_set_conn_hostname(.BIO* b, char* name)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_conn_port(.BIO* b, char* port)
+core.stdc.config.c_long BIO_set_conn_port(libressl_d.openssl.ossl_typ.BIO* b, char* port)
 
 	do
 	{
@@ -814,7 +712,7 @@ core.stdc.config.c_long BIO_set_conn_port(.BIO* b, char* port)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_conn_ip(.BIO* b, char* ip)
+core.stdc.config.c_long BIO_set_conn_ip(libressl_d.openssl.ossl_typ.BIO* b, char* ip)
 
 	do
 	{
@@ -822,7 +720,7 @@ core.stdc.config.c_long BIO_set_conn_ip(.BIO* b, char* ip)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_conn_int_port(.BIO* b, char* port)
+core.stdc.config.c_long BIO_set_conn_int_port(libressl_d.openssl.ossl_typ.BIO* b, char* port)
 
 	do
 	{
@@ -830,7 +728,7 @@ core.stdc.config.c_long BIO_set_conn_int_port(.BIO* b, char* port)
 	}
 
 pragma(inline, true)
-char* BIO_get_conn_hostname(.BIO* b)
+char* BIO_get_conn_hostname(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -838,7 +736,7 @@ char* BIO_get_conn_hostname(.BIO* b)
 	}
 
 pragma(inline, true)
-char* BIO_get_conn_port(.BIO* b)
+char* BIO_get_conn_port(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -846,7 +744,7 @@ char* BIO_get_conn_port(.BIO* b)
 	}
 
 pragma(inline, true)
-char* BIO_get_conn_ip(.BIO* b)
+char* BIO_get_conn_ip(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -854,7 +752,7 @@ char* BIO_get_conn_ip(.BIO* b)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_conn_int_port(.BIO* b)
+core.stdc.config.c_long BIO_get_conn_int_port(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -862,7 +760,7 @@ core.stdc.config.c_long BIO_get_conn_int_port(.BIO* b)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_nbio(.BIO* b, core.stdc.config.c_long n)
+core.stdc.config.c_long BIO_set_nbio(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long n)
 
 	do
 	{
@@ -871,7 +769,7 @@ core.stdc.config.c_long BIO_set_nbio(.BIO* b, core.stdc.config.c_long n)
 
 /* BIO_s_accept_socket() */
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_accept_port(.BIO* b, char* name)
+core.stdc.config.c_long BIO_set_accept_port(libressl_d.openssl.ossl_typ.BIO* b, char* name)
 
 	do
 	{
@@ -879,7 +777,7 @@ core.stdc.config.c_long BIO_set_accept_port(.BIO* b, char* name)
 	}
 
 pragma(inline, true)
-char* BIO_get_accept_port(.BIO* b)
+char* BIO_get_accept_port(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -888,7 +786,7 @@ char* BIO_get_accept_port(.BIO* b)
 
 /*
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_nbio(.BIO* b, core.stdc.config.c_long n)
+core.stdc.config.c_long BIO_set_nbio(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long n)
 
 	do
 	{
@@ -897,7 +795,7 @@ core.stdc.config.c_long BIO_set_nbio(.BIO* b, core.stdc.config.c_long n)
 */
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_nbio_accept(.BIO* b, core.stdc.config.c_long n)
+core.stdc.config.c_long BIO_set_nbio_accept(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long n)
 
 	do
 	{
@@ -905,7 +803,7 @@ core.stdc.config.c_long BIO_set_nbio_accept(.BIO* b, core.stdc.config.c_long n)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_accept_bios(.BIO* b, char* bio)
+core.stdc.config.c_long BIO_set_accept_bios(libressl_d.openssl.ossl_typ.BIO* b, char* bio)
 
 	do
 	{
@@ -917,7 +815,7 @@ enum BIO_BIND_REUSEADDR_IF_UNUSED = 1;
 enum BIO_BIND_REUSEADDR = 2;
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_bind_mode(.BIO* b, core.stdc.config.c_long mode)
+core.stdc.config.c_long BIO_set_bind_mode(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long mode)
 
 	do
 	{
@@ -925,7 +823,7 @@ core.stdc.config.c_long BIO_set_bind_mode(.BIO* b, core.stdc.config.c_long mode)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_bind_mode(.BIO* b, core.stdc.config.c_long mode)
+core.stdc.config.c_long BIO_get_bind_mode(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long mode)
 
 	do
 	{
@@ -936,7 +834,7 @@ alias BIO_do_connect = .BIO_do_handshake;
 alias BIO_do_accept = .BIO_do_handshake;
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_do_handshake(.BIO* b)
+core.stdc.config.c_long BIO_do_handshake(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -945,7 +843,7 @@ core.stdc.config.c_long BIO_do_handshake(.BIO* b)
 
 /* BIO_s_proxy_client() */
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_url(.BIO* b, char* url)
+core.stdc.config.c_long BIO_set_url(libressl_d.openssl.ossl_typ.BIO* b, char* url)
 
 	do
 	{
@@ -953,7 +851,7 @@ core.stdc.config.c_long BIO_set_url(.BIO* b, char* url)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_proxies(.BIO* b, char* p)
+core.stdc.config.c_long BIO_set_proxies(libressl_d.openssl.ossl_typ.BIO* b, char* p)
 
 	do
 	{
@@ -962,18 +860,18 @@ core.stdc.config.c_long BIO_set_proxies(.BIO* b, char* p)
 
 /* BIO_set_nbio(b,n) */
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_filter_bio(.BIO* b, char* s)
+core.stdc.config.c_long BIO_set_filter_bio(libressl_d.openssl.ossl_typ.BIO* b, char* s)
 
 	do
 	{
 		return .BIO_ctrl(b, .BIO_C_SET_PROXY_PARAM, 2, s);
 	}
 
-/* .BIO* IO_get_filter_bio(.BIO* io); */
+/* libressl_d.openssl.ossl_typ.BIO* IO_get_filter_bio(libressl_d.openssl.ossl_typ.BIO* io); */
 //#define BIO_set_proxy_cb(b, cb) .BIO_callback_ctrl(b, .BIO_C_SET_PROXY_PARAM, 3, (void* function() cb))
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_proxy_header(.BIO* b, char* sk)
+core.stdc.config.c_long BIO_set_proxy_header(libressl_d.openssl.ossl_typ.BIO* b, char* sk)
 
 	do
 	{
@@ -981,7 +879,7 @@ core.stdc.config.c_long BIO_set_proxy_header(.BIO* b, char* sk)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_no_connect_return(.BIO* b, int bool_)
+core.stdc.config.c_long BIO_set_no_connect_return(libressl_d.openssl.ossl_typ.BIO* b, int bool_)
 
 	do
 	{
@@ -989,7 +887,7 @@ core.stdc.config.c_long BIO_set_no_connect_return(.BIO* b, int bool_)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_proxy_header(.BIO* b, char* skp)
+core.stdc.config.c_long BIO_get_proxy_header(libressl_d.openssl.ossl_typ.BIO* b, char* skp)
 
 	do
 	{
@@ -997,7 +895,7 @@ core.stdc.config.c_long BIO_get_proxy_header(.BIO* b, char* skp)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_proxies(.BIO* b, char* pxy_p)
+core.stdc.config.c_long BIO_get_proxies(libressl_d.openssl.ossl_typ.BIO* b, char* pxy_p)
 
 	do
 	{
@@ -1005,7 +903,7 @@ core.stdc.config.c_long BIO_get_proxies(.BIO* b, char* pxy_p)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_url(.BIO* b, char* url)
+core.stdc.config.c_long BIO_get_url(libressl_d.openssl.ossl_typ.BIO* b, char* url)
 
 	do
 	{
@@ -1013,7 +911,7 @@ core.stdc.config.c_long BIO_get_url(.BIO* b, char* url)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_no_connect_return(.BIO* b)
+core.stdc.config.c_long BIO_get_no_connect_return(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1021,7 +919,7 @@ core.stdc.config.c_long BIO_get_no_connect_return(.BIO* b)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_fd(.BIO* b, int fd, core.stdc.config.c_long c)
+core.stdc.config.c_long BIO_set_fd(libressl_d.openssl.ossl_typ.BIO* b, int fd, core.stdc.config.c_long c)
 
 	do
 	{
@@ -1029,7 +927,7 @@ core.stdc.config.c_long BIO_set_fd(.BIO* b, int fd, core.stdc.config.c_long c)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_fd(.BIO* b, char* c)
+core.stdc.config.c_long BIO_get_fd(libressl_d.openssl.ossl_typ.BIO* b, char* c)
 
 	do
 	{
@@ -1037,7 +935,7 @@ core.stdc.config.c_long BIO_get_fd(.BIO* b, char* c)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_fp(.BIO* b, char* fp, core.stdc.config.c_long c)
+core.stdc.config.c_long BIO_set_fp(libressl_d.openssl.ossl_typ.BIO* b, char* fp, core.stdc.config.c_long c)
 
 	do
 	{
@@ -1045,7 +943,7 @@ core.stdc.config.c_long BIO_set_fp(.BIO* b, char* fp, core.stdc.config.c_long c)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_fp(.BIO* b, char* fpp)
+core.stdc.config.c_long BIO_get_fp(libressl_d.openssl.ossl_typ.BIO* b, char* fpp)
 
 	do
 	{
@@ -1053,7 +951,7 @@ core.stdc.config.c_long BIO_get_fp(.BIO* b, char* fpp)
 	}
 
 pragma(inline, true)
-int BIO_seek(.BIO* b, core.stdc.config.c_long ofs)
+int BIO_seek(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long ofs)
 
 	do
 	{
@@ -1061,7 +959,7 @@ int BIO_seek(.BIO* b, core.stdc.config.c_long ofs)
 	}
 
 pragma(inline, true)
-int BIO_tell(.BIO* b)
+int BIO_tell(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1073,7 +971,7 @@ int BIO_tell(.BIO* b)
  * so we can do it safely
  */
 pragma(inline, true)
-core.stdc.config.c_long BIO_read_filename(.BIO* b, char* name)
+core.stdc.config.c_long BIO_read_filename(libressl_d.openssl.ossl_typ.BIO* b, char* name)
 
 	do
 	{
@@ -1081,7 +979,7 @@ core.stdc.config.c_long BIO_read_filename(.BIO* b, char* name)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_write_filename(.BIO* b, void* name)
+core.stdc.config.c_long BIO_write_filename(libressl_d.openssl.ossl_typ.BIO* b, void* name)
 
 	do
 	{
@@ -1089,7 +987,7 @@ core.stdc.config.c_long BIO_write_filename(.BIO* b, void* name)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_append_filename(.BIO* b, void* name)
+core.stdc.config.c_long BIO_append_filename(libressl_d.openssl.ossl_typ.BIO* b, void* name)
 
 	do
 	{
@@ -1097,7 +995,7 @@ core.stdc.config.c_long BIO_append_filename(.BIO* b, void* name)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_rw_filename(.BIO* b, void* name)
+core.stdc.config.c_long BIO_rw_filename(libressl_d.openssl.ossl_typ.BIO* b, void* name)
 
 	do
 	{
@@ -1111,7 +1009,7 @@ core.stdc.config.c_long BIO_rw_filename(.BIO* b, void* name)
  * you are doing a BIO_free_all() to catch the underlying BIO.
  */
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_ssl(.BIO* b, char* ssl, core.stdc.config.c_long c)
+core.stdc.config.c_long BIO_set_ssl(libressl_d.openssl.ossl_typ.BIO* b, char* ssl, core.stdc.config.c_long c)
 
 	do
 	{
@@ -1119,7 +1017,7 @@ core.stdc.config.c_long BIO_set_ssl(.BIO* b, char* ssl, core.stdc.config.c_long 
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_ssl(.BIO* b, char* sslp)
+core.stdc.config.c_long BIO_get_ssl(libressl_d.openssl.ossl_typ.BIO* b, char* sslp)
 
 	do
 	{
@@ -1127,7 +1025,7 @@ core.stdc.config.c_long BIO_get_ssl(.BIO* b, char* sslp)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_ssl_mode(.BIO* b, core.stdc.config.c_long client)
+core.stdc.config.c_long BIO_set_ssl_mode(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long client)
 
 	do
 	{
@@ -1135,7 +1033,7 @@ core.stdc.config.c_long BIO_set_ssl_mode(.BIO* b, core.stdc.config.c_long client
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_ssl_renegotiate_bytes(.BIO* b, core.stdc.config.c_long num)
+core.stdc.config.c_long BIO_set_ssl_renegotiate_bytes(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long num)
 
 	do
 	{
@@ -1143,7 +1041,7 @@ core.stdc.config.c_long BIO_set_ssl_renegotiate_bytes(.BIO* b, core.stdc.config.
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_num_renegotiates(.BIO* b)
+core.stdc.config.c_long BIO_get_num_renegotiates(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1151,7 +1049,7 @@ core.stdc.config.c_long BIO_get_num_renegotiates(.BIO* b)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_ssl_renegotiate_timeout(.BIO* b, core.stdc.config.c_long seconds)
+core.stdc.config.c_long BIO_set_ssl_renegotiate_timeout(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long seconds)
 
 	do
 	{
@@ -1161,7 +1059,7 @@ core.stdc.config.c_long BIO_set_ssl_renegotiate_timeout(.BIO* b, core.stdc.confi
 /* defined in evp.h */
 /*
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_md(.BIO* b, char* md)
+core.stdc.config.c_long BIO_set_md(libressl_d.openssl.ossl_typ.BIO* b, char* md)
 
 	do
 	{
@@ -1170,7 +1068,7 @@ core.stdc.config.c_long BIO_set_md(.BIO* b, char* md)
 */
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_mem_data(.BIO* b, char* pp)
+core.stdc.config.c_long BIO_get_mem_data(libressl_d.openssl.ossl_typ.BIO* b, char* pp)
 
 	do
 	{
@@ -1178,7 +1076,7 @@ core.stdc.config.c_long BIO_get_mem_data(.BIO* b, char* pp)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_mem_buf(.BIO* b, char* bm, core.stdc.config.c_long c)
+core.stdc.config.c_long BIO_set_mem_buf(libressl_d.openssl.ossl_typ.BIO* b, char* bm, core.stdc.config.c_long c)
 
 	do
 	{
@@ -1186,7 +1084,7 @@ core.stdc.config.c_long BIO_set_mem_buf(.BIO* b, char* bm, core.stdc.config.c_lo
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_mem_ptr(.BIO* b, char* pp)
+core.stdc.config.c_long BIO_get_mem_ptr(libressl_d.openssl.ossl_typ.BIO* b, char* pp)
 
 	do
 	{
@@ -1194,7 +1092,7 @@ core.stdc.config.c_long BIO_get_mem_ptr(.BIO* b, char* pp)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_mem_eof_return(.BIO* b, core.stdc.config.c_long v)
+core.stdc.config.c_long BIO_set_mem_eof_return(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long v)
 
 	do
 	{
@@ -1203,7 +1101,7 @@ core.stdc.config.c_long BIO_set_mem_eof_return(.BIO* b, core.stdc.config.c_long 
 
 /* For the BIO_f_buffer() type */
 pragma(inline, true)
-core.stdc.config.c_long BIO_get_buffer_num_lines(.BIO* b)
+core.stdc.config.c_long BIO_get_buffer_num_lines(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1211,7 +1109,7 @@ core.stdc.config.c_long BIO_get_buffer_num_lines(.BIO* b)
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_buffer_size(.BIO* b, core.stdc.config.c_long size)
+core.stdc.config.c_long BIO_set_buffer_size(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long size)
 
 	do
 	{
@@ -1219,7 +1117,7 @@ core.stdc.config.c_long BIO_set_buffer_size(.BIO* b, core.stdc.config.c_long siz
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_read_buffer_size(.BIO* b, core.stdc.config.c_long size)
+core.stdc.config.c_long BIO_set_read_buffer_size(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long size)
 
 	do
 	{
@@ -1227,7 +1125,7 @@ core.stdc.config.c_long BIO_set_read_buffer_size(.BIO* b, core.stdc.config.c_lon
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_write_buffer_size(.BIO* b, core.stdc.config.c_long size)
+core.stdc.config.c_long BIO_set_write_buffer_size(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long size)
 
 	do
 	{
@@ -1235,7 +1133,7 @@ core.stdc.config.c_long BIO_set_write_buffer_size(.BIO* b, core.stdc.config.c_lo
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long BIO_set_buffer_read_data(.BIO* b, void* buf, core.stdc.config.c_long num)
+core.stdc.config.c_long BIO_set_buffer_read_data(libressl_d.openssl.ossl_typ.BIO* b, void* buf, core.stdc.config.c_long num)
 
 	do
 	{
@@ -1244,7 +1142,7 @@ core.stdc.config.c_long BIO_set_buffer_read_data(.BIO* b, void* buf, core.stdc.c
 
 /* Don't use the next one unless you know what you are doing :-) */
 pragma(inline, true)
-core.stdc.config.c_long BIO_dup_state(.BIO* b, char* ret)
+core.stdc.config.c_long BIO_dup_state(libressl_d.openssl.ossl_typ.BIO* b, char* ret)
 
 	do
 	{
@@ -1252,7 +1150,7 @@ core.stdc.config.c_long BIO_dup_state(.BIO* b, char* ret)
 	}
 
 pragma(inline, true)
-int BIO_reset(.BIO* b)
+int BIO_reset(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1260,7 +1158,7 @@ int BIO_reset(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_eof(.BIO* b)
+int BIO_eof(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1268,7 +1166,7 @@ int BIO_eof(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_set_close(.BIO* b, core.stdc.config.c_long c)
+int BIO_set_close(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long c)
 
 	do
 	{
@@ -1276,7 +1174,7 @@ int BIO_set_close(.BIO* b, core.stdc.config.c_long c)
 	}
 
 pragma(inline, true)
-int BIO_get_close(.BIO* b)
+int BIO_get_close(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1284,7 +1182,7 @@ int BIO_get_close(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_pending(.BIO* b)
+int BIO_pending(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1292,7 +1190,7 @@ int BIO_pending(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_wpending(.BIO* b)
+int BIO_wpending(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1300,11 +1198,11 @@ int BIO_wpending(.BIO* b)
 	}
 
 /* ...pending macros have inappropriate return type */
-size_t BIO_ctrl_pending(.BIO* b);
-size_t BIO_ctrl_wpending(.BIO* b);
+size_t BIO_ctrl_pending(libressl_d.openssl.ossl_typ.BIO* b);
+size_t BIO_ctrl_wpending(libressl_d.openssl.ossl_typ.BIO* b);
 
 pragma(inline, true)
-int BIO_flush(.BIO* b)
+int BIO_flush(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1312,7 +1210,7 @@ int BIO_flush(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_get_info_callback(.BIO* b, void* cbp)
+int BIO_get_info_callback(libressl_d.openssl.ossl_typ.BIO* b, void* cbp)
 
 	do
 	{
@@ -1320,7 +1218,7 @@ int BIO_get_info_callback(.BIO* b, void* cbp)
 	}
 
 pragma(inline, true)
-int BIO_set_info_callback(.BIO* b, void function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long) cb)
+int BIO_set_info_callback(libressl_d.openssl.ossl_typ.BIO* b, .BIO_info_cb cb)
 
 	do
 	{
@@ -1329,7 +1227,7 @@ int BIO_set_info_callback(.BIO* b, void function(.bio_st*, int, const (char)*, i
 
 /* For the BIO_f_buffer() type */
 pragma(inline, true)
-core.stdc.config.c_long BIO_buffer_get_num_lines(.BIO* b)
+core.stdc.config.c_long BIO_buffer_get_num_lines(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1338,7 +1236,7 @@ core.stdc.config.c_long BIO_buffer_get_num_lines(.BIO* b)
 
 /* For BIO_s_bio() */
 pragma(inline, true)
-int BIO_set_write_buf_size(.BIO* b, core.stdc.config.c_long size)
+int BIO_set_write_buf_size(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long size)
 
 	do
 	{
@@ -1346,7 +1244,7 @@ int BIO_set_write_buf_size(.BIO* b, core.stdc.config.c_long size)
 	}
 
 pragma(inline, true)
-size_t BIO_get_write_buf_size(.BIO* b, core.stdc.config.c_long size)
+size_t BIO_get_write_buf_size(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long size)
 
 	do
 	{
@@ -1354,7 +1252,7 @@ size_t BIO_get_write_buf_size(.BIO* b, core.stdc.config.c_long size)
 	}
 
 pragma(inline, true)
-int BIO_make_bio_pair(.BIO* b1, void* b2)
+int BIO_make_bio_pair(libressl_d.openssl.ossl_typ.BIO* b1, void* b2)
 
 	do
 	{
@@ -1362,7 +1260,7 @@ int BIO_make_bio_pair(.BIO* b1, void* b2)
 	}
 
 pragma(inline, true)
-int BIO_destroy_bio_pair(.BIO* b)
+int BIO_destroy_bio_pair(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1370,7 +1268,7 @@ int BIO_destroy_bio_pair(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_shutdown_wr(.BIO* b)
+int BIO_shutdown_wr(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1379,7 +1277,7 @@ int BIO_shutdown_wr(.BIO* b)
 
 /* macros with inappropriate type -- but ...pending macros use int too: */
 pragma(inline, true)
-int BIO_get_write_guarantee(.BIO* b)
+int BIO_get_write_guarantee(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1387,20 +1285,20 @@ int BIO_get_write_guarantee(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_get_read_request(.BIO* b)
+int BIO_get_read_request(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
 		return cast(int)(.BIO_ctrl(b, .BIO_C_GET_READ_REQUEST, 0, null));
 	}
 
-size_t BIO_ctrl_get_write_guarantee(.BIO* b);
-size_t BIO_ctrl_get_read_request(.BIO* b);
-int BIO_ctrl_reset_read_request(.BIO* b);
+size_t BIO_ctrl_get_write_guarantee(libressl_d.openssl.ossl_typ.BIO* b);
+size_t BIO_ctrl_get_read_request(libressl_d.openssl.ossl_typ.BIO* b);
+int BIO_ctrl_reset_read_request(libressl_d.openssl.ossl_typ.BIO* b);
 
 /* ctrl macros for dgram */
 pragma(inline, true)
-int BIO_ctrl_dgram_connect(.BIO* b, char* peer)
+int BIO_ctrl_dgram_connect(libressl_d.openssl.ossl_typ.BIO* b, char* peer)
 
 	do
 	{
@@ -1408,7 +1306,7 @@ int BIO_ctrl_dgram_connect(.BIO* b, char* peer)
 	}
 
 pragma(inline, true)
-int BIO_ctrl_set_connected(.BIO* b, core.stdc.config.c_long state, char* peer)
+int BIO_ctrl_set_connected(libressl_d.openssl.ossl_typ.BIO* b, core.stdc.config.c_long state, char* peer)
 
 	do
 	{
@@ -1416,7 +1314,7 @@ int BIO_ctrl_set_connected(.BIO* b, core.stdc.config.c_long state, char* peer)
 	}
 
 pragma(inline, true)
-int BIO_dgram_recv_timedout(.BIO* b)
+int BIO_dgram_recv_timedout(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1424,7 +1322,7 @@ int BIO_dgram_recv_timedout(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_dgram_send_timedout(.BIO* b)
+int BIO_dgram_send_timedout(libressl_d.openssl.ossl_typ.BIO* b)
 
 	do
 	{
@@ -1432,7 +1330,7 @@ int BIO_dgram_send_timedout(.BIO* b)
 	}
 
 pragma(inline, true)
-int BIO_dgram_get_peer(.BIO* b, char* peer)
+int BIO_dgram_get_peer(libressl_d.openssl.ossl_typ.BIO* b, char* peer)
 
 	do
 	{
@@ -1440,7 +1338,7 @@ int BIO_dgram_get_peer(.BIO* b, char* peer)
 	}
 
 pragma(inline, true)
-int BIO_dgram_set_peer(.BIO* b, char* peer)
+int BIO_dgram_set_peer(libressl_d.openssl.ossl_typ.BIO* b, char* peer)
 
 	do
 	{
@@ -1448,69 +1346,71 @@ int BIO_dgram_set_peer(.BIO* b, char* peer)
 	}
 
 /* These two aren't currently implemented */
-/* int BIO_get_ex_num(.BIO* io); */
-/* void BIO_set_ex_free_func(.BIO* io,int idx,void function() cb); */
-int BIO_set_ex_data(.BIO* bio, int idx, void* data);
-void* BIO_get_ex_data(.BIO* bio, int idx);
+/* int BIO_get_ex_num(libressl_d.openssl.ossl_typ.BIO* io); */
+/* void BIO_set_ex_free_func(libressl_d.openssl.ossl_typ.BIO* io,int idx,void function() cb); */
+int BIO_set_ex_data(libressl_d.openssl.ossl_typ.BIO* bio, int idx, void* data);
+void* BIO_get_ex_data(libressl_d.openssl.ossl_typ.BIO* bio, int idx);
 int BIO_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
-core.stdc.config.c_ulong BIO_number_read(.BIO* bio);
-core.stdc.config.c_ulong BIO_number_written(.BIO* bio);
+core.stdc.config.c_ulong BIO_number_read(libressl_d.openssl.ossl_typ.BIO* bio);
+core.stdc.config.c_ulong BIO_number_written(libressl_d.openssl.ossl_typ.BIO* bio);
 
 /* For BIO_f_asn1() */
-int BIO_asn1_set_prefix(.BIO* b, .asn1_ps_func prefix, .asn1_ps_func prefix_free);
-int BIO_asn1_get_prefix(.BIO* b, .asn1_ps_func* pprefix, .asn1_ps_func* pprefix_free);
-int BIO_asn1_set_suffix(.BIO* b, .asn1_ps_func suffix, .asn1_ps_func suffix_free);
-int BIO_asn1_get_suffix(.BIO* b, .asn1_ps_func* psuffix, .asn1_ps_func* psuffix_free);
+int BIO_asn1_set_prefix(libressl_d.openssl.ossl_typ.BIO* b, .asn1_ps_func prefix, .asn1_ps_func prefix_free);
+int BIO_asn1_get_prefix(libressl_d.openssl.ossl_typ.BIO* b, .asn1_ps_func* pprefix, .asn1_ps_func* pprefix_free);
+int BIO_asn1_set_suffix(libressl_d.openssl.ossl_typ.BIO* b, .asn1_ps_func suffix, .asn1_ps_func suffix_free);
+int BIO_asn1_get_suffix(libressl_d.openssl.ossl_typ.BIO* b, .asn1_ps_func* psuffix, .asn1_ps_func* psuffix_free);
 
 int BIO_get_new_index();
 const (.BIO_METHOD)* BIO_s_file();
-.BIO* BIO_new_file(const (char)* filename, const (char)* mode);
-.BIO* BIO_new_fp(libressl_d.compat.stdio.FILE* stream, int close_flag);
-alias BIO_s_file_internal = .BIO_s_file;
-.BIO* BIO_new(const (.BIO_METHOD)* type);
-int BIO_set(.BIO* a, const (.BIO_METHOD)* type);
-int BIO_free(.BIO* a);
-int BIO_up_ref(.BIO* bio);
-void* BIO_get_data(.BIO* a);
-void BIO_set_data(.BIO* a, void* ptr_);
-void BIO_set_init(.BIO* a, int init);
-int BIO_get_shutdown(.BIO* a);
-void BIO_set_shutdown(.BIO* a, int shut);
-void BIO_vfree(.BIO* a);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_file(const (char)* filename, const (char)* mode);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_fp(libressl_d.compat.stdio.FILE* stream, int close_flag);
+libressl_d.openssl.ossl_typ.BIO* BIO_new(const (.BIO_METHOD)* type);
+int BIO_set(libressl_d.openssl.ossl_typ.BIO* a, const (.BIO_METHOD)* type);
+int BIO_free(libressl_d.openssl.ossl_typ.BIO* a);
+int BIO_up_ref(libressl_d.openssl.ossl_typ.BIO* bio);
+void* BIO_get_data(libressl_d.openssl.ossl_typ.BIO* a);
+int BIO_get_init(libressl_d.openssl.ossl_typ.BIO* a);
+void BIO_set_data(libressl_d.openssl.ossl_typ.BIO* a, void* ptr_);
+void BIO_set_init(libressl_d.openssl.ossl_typ.BIO* a, int init);
+int BIO_get_shutdown(libressl_d.openssl.ossl_typ.BIO* a);
+void BIO_set_shutdown(libressl_d.openssl.ossl_typ.BIO* a, int shut);
+void BIO_vfree(libressl_d.openssl.ossl_typ.BIO* a);
 
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int BIO_read(.BIO* b, void* data, int len);
+int BIO_read(libressl_d.openssl.ossl_typ.BIO* b, void* data, int len);
 
 //__attribute__((__bounded__(__string__, 2, 3)));
-int BIO_gets(.BIO* bp, char* buf, int size);
+int BIO_gets(libressl_d.openssl.ossl_typ.BIO* bp, char* buf, int size);
 
 //__attribute__((__bounded__(__buffer__, 2, 3)));
-int BIO_write(.BIO* b, const (void)* data, int len);
+int BIO_write(libressl_d.openssl.ossl_typ.BIO* b, const (void)* data, int len);
 
-int BIO_puts(.BIO* bp, const (char)* buf);
-int BIO_indent(.BIO* b, int indent, int max);
-core.stdc.config.c_long BIO_ctrl(.BIO* bp, int cmd, core.stdc.config.c_long larg, void* parg);
-core.stdc.config.c_long BIO_callback_ctrl(.BIO* b, int cmd, void function(.bio_st*, int, const (char)*, int, core.stdc.config.c_long, core.stdc.config.c_long) fp);
-char* BIO_ptr_ctrl(.BIO* bp, int cmd, core.stdc.config.c_long larg);
-core.stdc.config.c_long BIO_int_ctrl(.BIO* bp, int cmd, core.stdc.config.c_long larg, int iarg);
-.BIO* BIO_push(.BIO* b, .BIO* append);
-.BIO* BIO_pop(.BIO* b);
-void BIO_free_all(.BIO* a);
-.BIO* BIO_find_type(.BIO* b, int bio_type);
-.BIO* BIO_next(.BIO* b);
-.BIO* BIO_get_retry_BIO(.BIO* bio, int* reason);
-int BIO_get_retry_reason(.BIO* bio);
-.BIO* BIO_dup_chain(.BIO* in_);
+int BIO_puts(libressl_d.openssl.ossl_typ.BIO* bp, const (char)* buf);
+int BIO_indent(libressl_d.openssl.ossl_typ.BIO* b, int indent, int max);
+core.stdc.config.c_long BIO_ctrl(libressl_d.openssl.ossl_typ.BIO* bp, int cmd, core.stdc.config.c_long larg, void* parg);
+core.stdc.config.c_long BIO_callback_ctrl(libressl_d.openssl.ossl_typ.BIO* b, int cmd, .BIO_info_cb fp);
+char* BIO_ptr_ctrl(libressl_d.openssl.ossl_typ.BIO* bp, int cmd, core.stdc.config.c_long larg);
+core.stdc.config.c_long BIO_int_ctrl(libressl_d.openssl.ossl_typ.BIO* bp, int cmd, core.stdc.config.c_long larg, int iarg);
+libressl_d.openssl.ossl_typ.BIO* BIO_push(libressl_d.openssl.ossl_typ.BIO* b, libressl_d.openssl.ossl_typ.BIO* append);
+libressl_d.openssl.ossl_typ.BIO* BIO_pop(libressl_d.openssl.ossl_typ.BIO* b);
+void BIO_free_all(libressl_d.openssl.ossl_typ.BIO* a);
+libressl_d.openssl.ossl_typ.BIO* BIO_find_type(libressl_d.openssl.ossl_typ.BIO* b, int bio_type);
+libressl_d.openssl.ossl_typ.BIO* BIO_next(libressl_d.openssl.ossl_typ.BIO* b);
+void BIO_set_next(libressl_d.openssl.ossl_typ.BIO* b, libressl_d.openssl.ossl_typ.BIO* next);
+libressl_d.openssl.ossl_typ.BIO* BIO_get_retry_BIO(libressl_d.openssl.ossl_typ.BIO* bio, int* reason);
+int BIO_get_retry_reason(libressl_d.openssl.ossl_typ.BIO* bio);
+void BIO_set_retry_reason(libressl_d.openssl.ossl_typ.BIO* bio, int reason);
+libressl_d.openssl.ossl_typ.BIO* BIO_dup_chain(libressl_d.openssl.ossl_typ.BIO* in_);
 
-int BIO_nread0(.BIO* bio, char** buf);
-int BIO_nread(.BIO* bio, char** buf, int num);
-int BIO_nwrite0(.BIO* bio, char** buf);
-int BIO_nwrite(.BIO* bio, char** buf, int num);
+int BIO_nread0(libressl_d.openssl.ossl_typ.BIO* bio, char** buf);
+int BIO_nread(libressl_d.openssl.ossl_typ.BIO* bio, char** buf, int num);
+int BIO_nwrite0(libressl_d.openssl.ossl_typ.BIO* bio, char** buf);
+int BIO_nwrite(libressl_d.openssl.ossl_typ.BIO* bio, char** buf, int num);
 
-core.stdc.config.c_long BIO_debug_callback(.BIO* bio, int cmd, const (char)* argp, int argi, core.stdc.config.c_long argl, core.stdc.config.c_long ret);
+core.stdc.config.c_long BIO_debug_callback(libressl_d.openssl.ossl_typ.BIO* bio, int cmd, const (char)* argp, int argi, core.stdc.config.c_long argl, core.stdc.config.c_long ret);
 
 const (.BIO_METHOD)* BIO_s_mem();
-.BIO* BIO_new_mem_buf(const (void)* buf, int len);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_mem_buf(const (void)* buf, int len);
 const (.BIO_METHOD)* BIO_s_socket();
 const (.BIO_METHOD)* BIO_s_connect();
 const (.BIO_METHOD)* BIO_s_accept();
@@ -1537,8 +1437,8 @@ int BIO_fd_should_retry(int i);
 int BIO_fd_non_fatal_error(int _error);
 int BIO_dump_cb(int function(const (void)* data, size_t len, void* u) cb, void* u, const (char)* s, int len);
 int BIO_dump_indent_cb(int function(const (void)* data, size_t len, void* u) cb, void* u, const (char)* s, int len, int indent);
-int BIO_dump(.BIO* b, const (char)* bytes, int len);
-int BIO_dump_indent(.BIO* b, const (char)* bytes, int len, int indent);
+int BIO_dump(libressl_d.openssl.ossl_typ.BIO* b, const (char)* bytes, int len);
+int BIO_dump_indent(libressl_d.openssl.ossl_typ.BIO* b, const (char)* bytes, int len, int indent);
 int BIO_dump_fp(libressl_d.compat.stdio.FILE* fp, const (char)* s, int len);
 int BIO_dump_indent_fp(libressl_d.compat.stdio.FILE* fp, const (char)* s, int len, int indent);
 libressl_d.compat.netdb.hostent* BIO_gethostbyname(const (char)* name);
@@ -1561,29 +1461,29 @@ int BIO_sock_init();
 void BIO_sock_cleanup();
 int BIO_set_tcp_ndelay(int sock, int turn_on);
 
-.BIO* BIO_new_socket(int sock, int close_flag);
-.BIO* BIO_new_dgram(int fd, int close_flag);
-.BIO* BIO_new_fd(int fd, int close_flag);
-.BIO* BIO_new_connect(const (char)* host_port);
-.BIO* BIO_new_accept(const (char)* host_port);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_socket(int sock, int close_flag);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_dgram(int fd, int close_flag);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_fd(int fd, int close_flag);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_connect(const (char)* host_port);
+libressl_d.openssl.ossl_typ.BIO* BIO_new_accept(const (char)* host_port);
 
-int BIO_new_bio_pair(.BIO** bio1, size_t writebuf1, .BIO** bio2, size_t writebuf2);
+int BIO_new_bio_pair(libressl_d.openssl.ossl_typ.BIO** bio1, size_t writebuf1, libressl_d.openssl.ossl_typ.BIO** bio2, size_t writebuf2);
 /*
  * If successful, returns 1 and in *bio1, *bio2 two BIO pair endpoints.
  * Otherwise returns 0 and sets *bio1 and *bio2 to null.
  * Size 0 uses default value.
  */
 
-void BIO_copy_next_retry(.BIO* b);
+void BIO_copy_next_retry(libressl_d.openssl.ossl_typ.BIO* b);
 
 /*core.stdc.config.c_long BIO_ghbn_ctrl(int cmd, int iarg, char* arg); */
 
 version (__MINGW_PRINTF_FORMAT) {
 	//__attribute__((__format__(__MINGW_PRINTF_FORMAT, 2, 3), __nonnull__(2)));
-	int BIO_printf(.BIO* bio, const (char)* format, ...);
+	int BIO_printf(libressl_d.openssl.ossl_typ.BIO* bio, const (char)* format, ...);
 
 	//__attribute__((__format__(__MINGW_PRINTF_FORMAT, 2, 0), __nonnull__(2)));
-	int BIO_vprintf(.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args);
+	int BIO_vprintf(libressl_d.openssl.ossl_typ.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args);
 
 	//__attribute__((__deprecated__, __format__(__MINGW_PRINTF_FORMAT, 3, 4), __nonnull__(3)));
 	int BIO_snprintf(char* buf, size_t n, const (char)* format, ...);
@@ -1592,10 +1492,10 @@ version (__MINGW_PRINTF_FORMAT) {
 	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args);
 } else {
 	//__attribute__((__format__(__printf__, 2, 3), __nonnull__(2)));
-	int BIO_printf(.BIO* bio, const (char)* format, ...);
+	int BIO_printf(libressl_d.openssl.ossl_typ.BIO* bio, const (char)* format, ...);
 
 	//__attribute__((__format__(__printf__, 2, 0), __nonnull__(2)));
-	int BIO_vprintf(.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args);
+	int BIO_vprintf(libressl_d.openssl.ossl_typ.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args);
 
 	//__attribute__((__deprecated__, __format__(__printf__, 3, 4), __nonnull__(3)));
 	int BIO_snprintf(char* buf, size_t n, const (char)* format, ...);
@@ -1604,11 +1504,6 @@ version (__MINGW_PRINTF_FORMAT) {
 	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args);
 }
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_BIO_strings();
 
 /* Error codes for the BIO functions. */
@@ -1664,6 +1559,7 @@ enum BIO_R_INVALID_IP_ADDRESS = 108;
 enum BIO_R_INVALID_PORT_NUMBER = 129;
 enum BIO_R_IN_USE = 123;
 enum BIO_R_KEEPALIVE = 109;
+enum BIO_R_LENGTH_TOO_LONG = 130;
 enum BIO_R_NBIO_CONNECT_ERROR = 110;
 enum BIO_R_NO_ACCEPT_PORT_SPECIFIED = 111;
 enum BIO_R_NO_HOSTNAME_SPECIFIED = 112;

@@ -1,4 +1,4 @@
-/* $OpenBSD: objects.h,v 1.12 2017/01/21 04:53:22 jsing Exp $ */
+/* $OpenBSD: objects.h,v 1.18 2022/07/12 14:42:49 kn Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -59,6 +59,7 @@ module libressl_d.openssl.objects;
 
 
 private static import core.stdc.config;
+private static import libressl_d.openssl.ossl_typ;
 public import libressl_d.openssl.asn1;
 public import libressl_d.openssl.bio;
 
@@ -1005,82 +1006,42 @@ void OBJ_NAME_cleanup(int type);
 void OBJ_NAME_do_all(int type, void function(const (.OBJ_NAME)*, void* arg) fn, void* arg);
 void OBJ_NAME_do_all_sorted(int type, void function(const (.OBJ_NAME)*, void* arg) fn, void* arg);
 
-libressl_d.openssl.asn1.ASN1_OBJECT* OBJ_dup(const (libressl_d.openssl.asn1.ASN1_OBJECT)* o);
-libressl_d.openssl.asn1.ASN1_OBJECT* OBJ_nid2obj(int n);
+libressl_d.openssl.ossl_typ.ASN1_OBJECT* OBJ_dup(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* o);
+libressl_d.openssl.ossl_typ.ASN1_OBJECT* OBJ_nid2obj(int n);
 const (char)* OBJ_nid2ln(int n);
 const (char)* OBJ_nid2sn(int n);
-int OBJ_obj2nid(const (libressl_d.openssl.asn1.ASN1_OBJECT)* o);
-libressl_d.openssl.asn1.ASN1_OBJECT* OBJ_txt2obj(const (char)* s, int no_name);
-int OBJ_obj2txt(char* buf, int buf_len, const (libressl_d.openssl.asn1.ASN1_OBJECT)* a, int no_name);
+int OBJ_obj2nid(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* o);
+libressl_d.openssl.ossl_typ.ASN1_OBJECT* OBJ_txt2obj(const (char)* s, int no_name);
+int OBJ_obj2txt(char* buf, int buf_len, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* a, int no_name);
 int OBJ_txt2nid(const (char)* s);
 int OBJ_ln2nid(const (char)* s);
 int OBJ_sn2nid(const (char)* s);
-int OBJ_cmp(const (libressl_d.openssl.asn1.ASN1_OBJECT)* a, const (libressl_d.openssl.asn1.ASN1_OBJECT)* b);
-const (void)* OBJ_bsearch_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) cmp);
-const (void)* OBJ_bsearch_ex_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) cmp, int flags);
+int OBJ_cmp(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* a, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* b);
 
 version (LIBRESSL_INTERNAL) {
-} else {
-	//#define _DECLARE_OBJ_BSEARCH_CMP_FN(scope, type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)*, const (void)*); static int nm##_cmp(type1 const*, type2 const*); scope type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num)
-
-	//#define DECLARE_OBJ_BSEARCH_CMP_FN(type1, type2, cmp) ._DECLARE_OBJ_BSEARCH_CMP_FN(static, type1, type2, cmp)
-	//#define DECLARE_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm) type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num)
-
-	/*
-	 * Unsolved problem: if a type is actually a pointer type, like
-	 * nid_triple is, then its impossible to get a const where you need
-	 * it. Consider:
-	 *
-	 * typedef int nid_triple[3];
-	 * const (void)* a_;
-	 * const nid_triple const *a = a_;
-	 *
-	 * The assignement discards a const because what you really want is:
-	 *
-	 * const int const * const *a = a_;
-	 *
-	 * But if you do that, you lose the fact that a is an array of 3 ints,
-	 * which breaks comparison functions.
-	 *
-	 * Thus we end up having to cast, sadly, or unpack the
-	 * declarations. Or, as I finally did in this case, delcare nid_triple
-	 * to be a struct, which it should have been in the first place.
-	 *
-	 * Ben, August 2008.
-	 *
-	 * Also, strictly speaking not all types need be const, but handling
-	 * the non-constness means a lot of complication, and in practice
-	 * comparison routines do always not touch their arguments.
-	 */
-
-	//#define IMPLEMENT_OBJ_BSEARCH_CMP_FN(type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)* a_, const (void)* b_) { type1 const* a = a_; type2 const* b = b_; return nm##_cmp(a, b); } static type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num) { return (type2*) .OBJ_bsearch_(key, base, num, type2.sizeof, nm##_cmp_BSEARCH_CMP_FN); } extern void dummy_prototype(void)
-
-	//#define IMPLEMENT_OBJ_BSEARCH_GLOBAL_CMP_FN(type1, type2, nm) static int nm##_cmp_BSEARCH_CMP_FN(const (void)* a_, const (void)* b_) { type1 const* a = a_; type2 const* b = b_; return nm##_cmp(a, b); } type2* OBJ_bsearch_##nm(type1* key, type2 const* base, int num) { return (type2*) .OBJ_bsearch_(key, base, num, type2.sizeof, nm##_cmp_BSEARCH_CMP_FN); } extern void dummy_prototype(void)
-
-	//#define OBJ_bsearch(type1, key, type2, base, num, cmp) ((type2*) .OBJ_bsearch_(libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, key), libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, base), num, type2.sizeof, ((void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, cmp##_type_1), (void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, cmp##_type_2), cmp##_BSEARCH_CMP_FN)))
-
-	//#define OBJ_bsearch_ex(type1, key, type2, base, num, cmp, flags) ((type2*) .OBJ_bsearch_ex_(libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, key), libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, base), num, type2.sizeof, ((void) libressl_d.openssl.asn1.CHECKED_PTR_OF(type1, cmp##_type_1), (void) type_2 = libressl_d.openssl.asn1.CHECKED_PTR_OF(type2, cmp##_type_2), cmp##_BSEARCH_CMP_FN)), flags)
+	const (void)* OBJ_bsearch_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) cmp);
+	const (void)* OBJ_bsearch_ex_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) cmp, int flags);
 }
 
 int OBJ_new_nid(int num);
-int OBJ_add_object(const (libressl_d.openssl.asn1.ASN1_OBJECT)* obj);
+int OBJ_add_object(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj);
 int OBJ_create(const (char)* oid, const (char)* sn, const (char)* ln);
 void OBJ_cleanup();
-int OBJ_create_objects(libressl_d.openssl.bio.BIO* in_);
+int OBJ_create_objects(libressl_d.openssl.ossl_typ.BIO* in_);
+
+size_t OBJ_length(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj);
+const (ubyte)* OBJ_get0_data(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj);
 
 int OBJ_find_sigid_algs(int signid, int* pdig_nid, int* ppkey_nid);
 int OBJ_find_sigid_by_algs(int* psignid, int dig_nid, int pkey_nid);
 int OBJ_add_sigid(int signid, int dig_id, int pkey_id);
 void OBJ_sigid_free();
 
-extern __gshared int obj_cleanup_defer;
-void check_defer(int nid);
+version (LIBRESSL_CRYPTO_INTERNAL) {
+	extern __gshared int obj_cleanup_defer;
+	void check_defer(int nid);
+}
 
-/* BEGIN ERROR CODES */
-/*
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_OBJ_strings();
 
 /* Error codes for the OBJ functions. */

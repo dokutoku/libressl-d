@@ -65,6 +65,7 @@ module libressl_d.openssl.lhash;
 
 private static import core.stdc.config;
 private static import libressl_d.openssl.asn1;
+private static import libressl_d.openssl.ossl_typ;
 public import libressl_d.compat.stdio;
 public import libressl_d.openssl.opensslconf;
 
@@ -202,9 +203,9 @@ void lh_node_usage_stats(const (._LHASH)* lh, libressl_d.compat.stdio.FILE* out_
 
 version (OPENSSL_NO_BIO) {
 } else {
-	void lh_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
-	void lh_node_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
-	void lh_node_usage_stats_bio(const (._LHASH)* lh, libressl_d.openssl.bio.BIO* out_);
+	void lh_stats_bio(const (._LHASH)* lh, libressl_d.openssl.ossl_typ.BIO* out_);
+	void lh_node_stats_bio(const (._LHASH)* lh, libressl_d.openssl.ossl_typ.BIO* out_);
+	void lh_node_usage_stats_bio(const (._LHASH)* lh, libressl_d.openssl.ossl_typ.BIO* out_);
 }
 
 /* Type checking... */

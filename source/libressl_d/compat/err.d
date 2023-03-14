@@ -88,6 +88,19 @@ version (Posix) {
 
 		pragma(inline, true)
 		nothrow
+		void vwarnx(const (char)* fmt, core.stdc.stdarg.va_list args)
+
+			do
+			{
+				if (fmt != null) {
+					libressl_d.compat.stdio.vfprintf(libressl_d.compat.stdio.stderr, fmt, args);
+				}
+
+				libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, "\n");
+			}
+
+		pragma(inline, true)
+		nothrow
 		void warnx(const (char)* fmt, ...)
 
 			do
@@ -95,13 +108,8 @@ version (Posix) {
 				core.stdc.stdarg.va_list ap;
 
 				core.stdc.stdarg.va_start(ap, fmt);
-
-				if (fmt != null) {
-					libressl_d.compat.stdio.vfprintf(libressl_d.compat.stdio.stderr, fmt, ap);
-				}
-
+				.vwarnx(fmt, ap);
 				core.stdc.stdarg.va_end(ap);
-				libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, "\n");
 			}
 	}
 }

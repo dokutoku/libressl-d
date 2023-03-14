@@ -1,4 +1,4 @@
-/* $OpenBSD: tls1.h,v 1.49 2021/09/10 14:57:31 tb Exp $ */
+/* $OpenBSD: tls1.h,v 1.56 2022/07/17 14:39:09 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -157,8 +157,15 @@ private static import libressl_d.openssl.ssl;
 public import libressl_d.openssl.buffer;
 public import libressl_d.openssl.opensslconf;
 
+version (LIBRESSL_HAS_QUIC) {
+	version = LIBRESSL_HAS_QUIC_OR_LIBRESSL_INTERNAL;
+} else version (LIBRESSL_INTERNAL) {
+	version = LIBRESSL_HAS_QUIC_OR_LIBRESSL_INTERNAL;
+}
 extern (C):
 nothrow @nogc:
+
+enum OPENSSL_TLS_SECURITY_LEVEL = 1;
 
 enum TLS1_ALLOW_EXPERIMENTAL_CIPHERSUITES = 0;
 
@@ -321,6 +328,13 @@ static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl
 	enum TLSEXT_TYPE_post_handshake_auth = 49;
 	enum TLSEXT_TYPE_signature_algorithms_cert = 50;
 	enum TLSEXT_TYPE_key_share = 51;
+}
+
+/*
+ * ExtensionType value from RFC 9001 section 8.2
+ */
+version (LIBRESSL_HAS_QUIC_OR_LIBRESSL_INTERNAL) {
+	enum TLSEXT_TYPE_quic_transport_parameters = 57;
 }
 
 /*
@@ -894,6 +908,12 @@ static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl
 	enum TLS1_3_TXT_CHACHA20_POLY1305_SHA256 = "AEAD-CHACHA20-POLY1305-SHA256";
 	enum TLS1_3_TXT_AES_128_CCM_SHA256 = "AEAD-AES128-CCM-SHA256";
 	enum TLS1_3_TXT_AES_128_CCM_8_SHA256 = "AEAD-AES128-CCM-8-SHA256";
+
+	enum TLS1_3_RFC_AES_128_GCM_SHA256 = "TLS_AES_128_GCM_SHA256";
+	enum TLS1_3_RFC_AES_256_GCM_SHA384 = "TLS_AES_256_GCM_SHA384";
+	enum TLS1_3_RFC_CHACHA20_POLY1305_SHA256 = "TLS_CHACHA20_POLY1305_SHA256";
+	enum TLS1_3_RFC_AES_128_CCM_SHA256 = "TLS_AES_128_CCM_SHA256";
+	enum TLS1_3_RFC_AES_128_CCM_8_SHA256 = "TLS_AES_128_CCM_8_SHA256";
 }
 
 enum TLS_CT_RSA_SIGN = 1;
@@ -945,14 +965,3 @@ enum TLS_MD_IV_BLOCK_CONST = "IV block";
 enum TLS_MD_IV_BLOCK_CONST_SIZE = 8;
 enum TLS_MD_MASTER_SECRET_CONST = "master secret";
 enum TLS_MD_MASTER_SECRET_CONST_SIZE = 13;
-
-version (LIBRESSL_INTERNAL) {
-	/**
-	 * TLS Session Ticket extension struct.
-	 */
-	struct tls_session_ticket_ext_st
-	{
-		ushort length_;
-		void* data;
-	}
-}

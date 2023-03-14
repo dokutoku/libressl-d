@@ -1,4 +1,4 @@
-/* $OpenBSD: x509v3.h,v 1.5 2021/09/02 13:48:39 job Exp $ */
+/* $OpenBSD: x509v3.h,v 1.15 2022/07/12 14:42:50 kn Exp $ */
 /* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */
@@ -59,6 +59,7 @@ module libressl_d.openssl.x509v3;
 
 
 private static import core.stdc.config;
+private static import core.stdc.stdint;
 private static import libressl_d.compat.stdio;
 private static import libressl_d.openssl.asn1;
 private static import libressl_d.openssl.err;
@@ -85,7 +86,7 @@ alias X509V3_EXT_I2V = extern (C) nothrow @nogc libressl_d.openssl.conf.stack_st
 alias X509V3_EXT_V2I = extern (C) nothrow @nogc void* function(const (.v3_ext_method)* method, .v3_ext_ctx* ctx, libressl_d.openssl.conf.stack_st_CONF_VALUE* values);
 alias X509V3_EXT_I2S = extern (C) nothrow @nogc char* function(const (.v3_ext_method)* method, void* ext);
 alias X509V3_EXT_S2I = extern (C) nothrow @nogc void* function(const (.v3_ext_method)* method, .v3_ext_ctx* ctx, const (char)* str);
-alias X509V3_EXT_I2R = extern (C) nothrow @nogc int function(const (.v3_ext_method)* method, void* ext, libressl_d.openssl.bio.BIO* out_, int indent);
+alias X509V3_EXT_I2R = extern (C) nothrow @nogc int function(const (.v3_ext_method)* method, void* ext, libressl_d.openssl.ossl_typ.BIO* out_, int indent);
 alias X509V3_EXT_R2I = extern (C) nothrow @nogc void* function(const (.v3_ext_method)* method, .v3_ext_ctx* ctx, const (char)* str);
 
 /* V3 extension structure */
@@ -180,7 +181,7 @@ alias PKEY_USAGE_PERIOD = .PKEY_USAGE_PERIOD_st;
 
 struct otherName_st
 {
-	libressl_d.openssl.asn1.ASN1_OBJECT* type_id;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* type_id;
 	libressl_d.openssl.asn1.ASN1_TYPE* value;
 }
 
@@ -224,7 +225,7 @@ struct GENERAL_NAME_st
 		.EDIPARTYNAME* ediPartyName;
 		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* uniformResourceIdentifier;
 		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* iPAddress;
-		libressl_d.openssl.asn1.ASN1_OBJECT* registeredID;
+		libressl_d.openssl.ossl_typ.ASN1_OBJECT* registeredID;
 
 		/* Old names */
 
@@ -246,7 +247,7 @@ struct GENERAL_NAME_st
 		/**
 		 * registeredID
 		 */
-		libressl_d.openssl.asn1.ASN1_OBJECT* rid;
+		libressl_d.openssl.ossl_typ.ASN1_OBJECT* rid;
 
 		/**
 		 * x400Address
@@ -259,11 +260,9 @@ struct GENERAL_NAME_st
 
 alias GENERAL_NAME = .GENERAL_NAME_st;
 
-alias GENERAL_NAMES = .stack_st_GENERAL_NAME;
-
 struct ACCESS_DESCRIPTION_st
 {
-	libressl_d.openssl.asn1.ASN1_OBJECT* method;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* method;
 	.GENERAL_NAME* location;
 }
 
@@ -275,6 +274,14 @@ alias EXTENDED_KEY_USAGE = libressl_d.openssl.asn1.stack_st_ASN1_OBJECT;
 
 //DECLARE_STACK_OF(GENERAL_NAME)
 struct stack_st_GENERAL_NAME
+{
+	libressl_d.openssl.stack._STACK stack;
+}
+
+alias GENERAL_NAMES = .stack_st_GENERAL_NAME;
+
+//DECLARE_STACK_OF(GENERAL_NAMES)
+struct stack_st_GENERAL_NAMES
 {
 	libressl_d.openssl.stack._STACK stack;
 }
@@ -387,7 +394,7 @@ alias USERNOTICE = .USERNOTICE_st;
 
 struct POLICYQUALINFO_st
 {
-	libressl_d.openssl.asn1.ASN1_OBJECT* pqualid;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* pqualid;
 
 	union d_
 	{
@@ -409,7 +416,7 @@ struct stack_st_POLICYQUALINFO
 
 struct POLICYINFO_st
 {
-	libressl_d.openssl.asn1.ASN1_OBJECT* policyid;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* policyid;
 	.stack_st_POLICYQUALINFO* qualifiers;
 }
 
@@ -425,8 +432,8 @@ struct stack_st_POLICYINFO
 
 struct POLICY_MAPPING_st
 {
-	libressl_d.openssl.asn1.ASN1_OBJECT* issuerDomainPolicy;
-	libressl_d.openssl.asn1.ASN1_OBJECT* subjectDomainPolicy;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* issuerDomainPolicy;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* subjectDomainPolicy;
 }
 
 alias POLICY_MAPPING = .POLICY_MAPPING_st;
@@ -471,7 +478,7 @@ alias POLICY_CONSTRAINTS = .POLICY_CONSTRAINTS_st;
 /* Proxy certificate structures, see RFC 3820 */
 struct PROXY_POLICY_st
 {
-	libressl_d.openssl.asn1.ASN1_OBJECT* policyLanguage;
+	libressl_d.openssl.ossl_typ.ASN1_OBJECT* policyLanguage;
 	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* policy;
 }
 
@@ -637,6 +644,7 @@ enum XKU_SGC = 0x10;
 enum XKU_OCSP_SIGN = 0x20;
 enum XKU_TIMESTAMP = 0x40;
 enum XKU_DVCS = 0x80;
+enum XKU_ANYEKU = 0x0100;
 
 enum X509_PURPOSE_DYNAMIC = 0x01;
 enum X509_PURPOSE_DYNAMIC_NAME = 0x02;
@@ -762,7 +770,7 @@ libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* v2i_ASN1_BIT_STRING(.X509V3_EXT_MET
 libressl_d.openssl.conf.stack_st_CONF_VALUE* i2v_ASN1_BIT_STRING(.X509V3_EXT_METHOD* method, libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* bits, libressl_d.openssl.conf.stack_st_CONF_VALUE* extlist);
 
 libressl_d.openssl.conf.stack_st_CONF_VALUE* i2v_GENERAL_NAME(.X509V3_EXT_METHOD* method, .GENERAL_NAME* gen, libressl_d.openssl.conf.stack_st_CONF_VALUE* ret);
-int GENERAL_NAME_print(libressl_d.openssl.bio.BIO* out_, .GENERAL_NAME* gen);
+int GENERAL_NAME_print(libressl_d.openssl.ossl_typ.BIO* out_, .GENERAL_NAME* gen);
 
 .GENERAL_NAMES* GENERAL_NAMES_new();
 void GENERAL_NAMES_free(.GENERAL_NAMES* a);
@@ -786,8 +794,8 @@ extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM EDIPARTYNAME_it;
 int OTHERNAME_cmp(.OTHERNAME* a, .OTHERNAME* b);
 void GENERAL_NAME_set0_value(.GENERAL_NAME* a, int type, void* value);
 void* GENERAL_NAME_get0_value(.GENERAL_NAME* a, int* ptype);
-int GENERAL_NAME_set0_othername(.GENERAL_NAME* gen, libressl_d.openssl.asn1.ASN1_OBJECT* oid, libressl_d.openssl.asn1.ASN1_TYPE* value);
-int GENERAL_NAME_get0_otherName(.GENERAL_NAME* gen, libressl_d.openssl.asn1.ASN1_OBJECT** poid, libressl_d.openssl.asn1.ASN1_TYPE** pvalue);
+int GENERAL_NAME_set0_othername(.GENERAL_NAME* gen, libressl_d.openssl.ossl_typ.ASN1_OBJECT* oid, libressl_d.openssl.asn1.ASN1_TYPE* value);
+int GENERAL_NAME_get0_otherName(.GENERAL_NAME* gen, libressl_d.openssl.ossl_typ.ASN1_OBJECT** poid, libressl_d.openssl.asn1.ASN1_TYPE** pvalue);
 
 char* i2s_ASN1_OCTET_STRING(.X509V3_EXT_METHOD* method, const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)* ia5);
 libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* s2i_ASN1_OCTET_STRING(.X509V3_EXT_METHOD* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* str);
@@ -797,7 +805,7 @@ void EXTENDED_KEY_USAGE_free(.EXTENDED_KEY_USAGE* a);
 .EXTENDED_KEY_USAGE* d2i_EXTENDED_KEY_USAGE(.EXTENDED_KEY_USAGE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_EXTENDED_KEY_USAGE(.EXTENDED_KEY_USAGE* a, ubyte** out_);
 extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM EXTENDED_KEY_USAGE_it;
-int i2a_ACCESS_DESCRIPTION(libressl_d.openssl.bio.BIO* bp, const (.ACCESS_DESCRIPTION)* a);
+int i2a_ACCESS_DESCRIPTION(libressl_d.openssl.ossl_typ.BIO* bp, const (.ACCESS_DESCRIPTION)* a);
 
 .CERTIFICATEPOLICIES* CERTIFICATEPOLICIES_new();
 void CERTIFICATEPOLICIES_free(.CERTIFICATEPOLICIES* a);
@@ -935,13 +943,12 @@ int X509V3_add1_i2d(libressl_d.openssl.x509.stack_st_X509_EXTENSION** x, int nid
 
 char* hex_to_string(const (ubyte)* buffer, core.stdc.config.c_long len);
 ubyte* string_to_hex(const (char)* str, core.stdc.config.c_long* len);
-int name_cmp(const (char)* name, const (char)* cmp);
 
-void X509V3_EXT_val_prn(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.conf.stack_st_CONF_VALUE* val, int indent, int ml);
-int X509V3_EXT_print(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.x509.X509_EXTENSION* ext, core.stdc.config.c_ulong flag, int indent);
+void X509V3_EXT_val_prn(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.conf.stack_st_CONF_VALUE* val, int indent, int ml);
+int X509V3_EXT_print(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.x509.X509_EXTENSION* ext, core.stdc.config.c_ulong flag, int indent);
 int X509V3_EXT_print_fp(libressl_d.compat.stdio.FILE* out_, libressl_d.openssl.x509.X509_EXTENSION* ext, int flag, int indent);
 
-int X509V3_extensions_print(libressl_d.openssl.bio.BIO* out_, const (char)* title, const (libressl_d.openssl.x509.stack_st_X509_EXTENSION)* exts, core.stdc.config.c_ulong flag, int indent);
+int X509V3_extensions_print(libressl_d.openssl.ossl_typ.BIO* out_, const (char)* title, const (libressl_d.openssl.x509.stack_st_X509_EXTENSION)* exts, core.stdc.config.c_ulong flag, int indent);
 
 int X509_check_ca(libressl_d.openssl.ossl_typ.X509* x);
 int X509_check_purpose(libressl_d.openssl.ossl_typ.X509* x, int id, int ca);
@@ -959,6 +966,9 @@ char* X509_PURPOSE_get0_sname(const (.X509_PURPOSE)* xp);
 int X509_PURPOSE_get_trust(const (.X509_PURPOSE)* xp);
 void X509_PURPOSE_cleanup();
 int X509_PURPOSE_get_id(const (.X509_PURPOSE)*);
+core.stdc.stdint.uint32_t X509_get_extension_flags(libressl_d.openssl.ossl_typ.X509* x);
+core.stdc.stdint.uint32_t X509_get_key_usage(libressl_d.openssl.ossl_typ.X509* x);
+core.stdc.stdint.uint32_t X509_get_extended_key_usage(libressl_d.openssl.ossl_typ.X509* x);
 
 libressl_d.openssl.safestack.stack_st_OPENSSL_STRING* X509_get1_email(libressl_d.openssl.ossl_typ.X509* x);
 libressl_d.openssl.safestack.stack_st_OPENSSL_STRING* X509_REQ_get1_email(libressl_d.openssl.x509.X509_REQ* x);
@@ -1013,7 +1023,7 @@ libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* a2i_IPADDRESS_NC(const (char)* ip
 int a2i_ipadd(ubyte* ipout, const (char)* ipasc);
 int X509V3_NAME_from_section(libressl_d.openssl.ossl_typ.X509_NAME* nm, libressl_d.openssl.conf.stack_st_CONF_VALUE* dn_sk, core.stdc.config.c_ulong chtype);
 
-void X509_POLICY_NODE_print(libressl_d.openssl.bio.BIO* out_, libressl_d.openssl.ossl_typ.X509_POLICY_NODE* node, int indent);
+void X509_POLICY_NODE_print(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.ossl_typ.X509_POLICY_NODE* node, int indent);
 
 //DECLARE_STACK_OF(X509_POLICY_NODE)
 struct stack_st_X509_POLICY_NODE
@@ -1021,244 +1031,237 @@ struct stack_st_X509_POLICY_NODE
 	libressl_d.openssl.stack._STACK stack;
 }
 
-version (LIBRESSL_INTERNAL) {
-	version (OPENSSL_NO_RFC3779) {
-	} else {
-		struct ASRange_st
-		{
-			libressl_d.openssl.ossl_typ.ASN1_INTEGER* min;
-			libressl_d.openssl.ossl_typ.ASN1_INTEGER* max;
-		}
-
-		alias ASRange = .ASRange_st;
-
-		enum ASIdOrRange_id = 0;
-		enum ASIdOrRange_range = 1;
-
-		struct ASIdOrRange_st
-		{
-			int type;
-
-			union u_
-			{
-				libressl_d.openssl.ossl_typ.ASN1_INTEGER* id;
-				.ASRange* range;
-			}
-
-			u_ u;
-		}
-
-		alias ASIdOrRange = .ASIdOrRange_st;
-
-		//DECLARE_STACK_OF(ASIdOrRange)
-		struct stack_st_ASIdOrRange
-		{
-			libressl_d.openssl.stack._STACK stack;
-		}
-
-		alias ASIdOrRanges = .stack_st_ASIdOrRange;
-
-		enum ASIdentifierChoice_inherit = 0;
-		enum ASIdentifierChoice_asIdsOrRanges = 1;
-
-		struct ASIdentifierChoice_st
-		{
-			int type;
-
-			union u_
-			{
-				libressl_d.openssl.ossl_typ.ASN1_NULL* inherit;
-				.ASIdOrRanges* asIdsOrRanges;
-			}
-
-			u_ u;
-		}
-
-		alias ASIdentifierChoice = .ASIdentifierChoice_st;
-
-		struct ASIdentifiers_st
-		{
-			.ASIdentifierChoice* asnum;
-			.ASIdentifierChoice* rdi;
-		}
-
-		alias ASIdentifiers = .ASIdentifiers_st;
-
-		.ASRange* ASRange_new();
-		void ASRange_free(.ASRange* a);
-		.ASRange* d2i_ASRange(.ASRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_ASRange(.ASRange* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM ASRange_it;
-
-		.ASIdOrRange* ASIdOrRange_new();
-		void ASIdOrRange_free(.ASIdOrRange* a);
-		.ASIdOrRange* d2i_ASIdOrRange(.ASIdOrRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_ASIdOrRange(.ASIdOrRange* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM ASIdOrRange_it;
-
-		.ASIdentifierChoice* ASIdentifierChoice_new();
-		void ASIdentifierChoice_free(.ASIdentifierChoice* a);
-		.ASIdentifierChoice* d2i_ASIdentifierChoice(.ASIdentifierChoice** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_ASIdentifierChoice(.ASIdentifierChoice* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM ASIdentifierChoice_it;
-
-		.ASIdentifiers* ASIdentifiers_new();
-		void ASIdentifiers_free(.ASIdentifiers* a);
-		.ASIdentifiers* d2i_ASIdentifiers(.ASIdentifiers** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_ASIdentifiers(.ASIdentifiers* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM ASIdentifiers_it;
-
-		struct IPAddressRange_st
-		{
-			libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* min;
-			libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* max;
-		}
-
-		alias IPAddressRange = .IPAddressRange_st;
-
-		enum IPAddressOrRange_addressPrefix = 0;
-		enum IPAddressOrRange_addressRange = 1;
-
-		struct IPAddressOrRange_st
-		{
-			int type;
-
-			union u_
-			{
-				libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* addressPrefix;
-				.IPAddressRange* addressRange;
-			}
-
-			u_ u;
-		}
-
-		alias IPAddressOrRange = .IPAddressOrRange_st;
-
-		//DECLARE_STACK_OF(IPAddressOrRange)
-		struct stack_st_IPAddressOrRange
-		{
-			libressl_d.openssl.stack._STACK stack;
-		}
-
-		alias IPAddressOrRanges = .stack_st_IPAddressOrRange;
-
-		enum IPAddressChoice_inherit = 0;
-		enum IPAddressChoice_addressesOrRanges = 1;
-
-		struct IPAddressChoice_st
-		{
-			int type;
-
-			union u_
-			{
-				libressl_d.openssl.ossl_typ.ASN1_NULL* inherit;
-				.IPAddressOrRanges* addressesOrRanges;
-			}
-
-			u_ u;
-		}
-
-		alias IPAddressChoice = .IPAddressChoice_st;
-
-		struct IPAddressFamily_st
-		{
-			libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* addressFamily;
-			.IPAddressChoice* ipAddressChoice;
-		}
-
-		alias IPAddressFamily = .IPAddressFamily_st;
-
-		//DECLARE_STACK_OF(IPAddressFamily)
-		struct stack_st_IPAddressFamily
-		{
-			libressl_d.openssl.stack._STACK stack;
-		}
-
-		alias IPAddrBlocks = .stack_st_IPAddressFamily;
-
-		.IPAddressRange* IPAddressRange_new();
-		void IPAddressRange_free(.IPAddressRange* a);
-		.IPAddressRange* d2i_IPAddressRange(.IPAddressRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_IPAddressRange(.IPAddressRange* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM IPAddressRange_it;
-
-		.IPAddressOrRange* IPAddressOrRange_new();
-		void IPAddressOrRange_free(.IPAddressOrRange* a);
-		.IPAddressOrRange* d2i_IPAddressOrRange(.IPAddressOrRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_IPAddressOrRange(.IPAddressOrRange* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM IPAddressOrRange_it;
-
-		.IPAddressChoice* IPAddressChoice_new();
-		void IPAddressChoice_free(.IPAddressChoice* a);
-		.IPAddressChoice* d2i_IPAddressChoice(.IPAddressChoice** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_IPAddressChoice(.IPAddressChoice* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM IPAddressChoice_it;
-
-		.IPAddressFamily* IPAddressFamily_new();
-		void IPAddressFamily_free(.IPAddressFamily* a);
-		.IPAddressFamily* d2i_IPAddressFamily(.IPAddressFamily** a, const (ubyte)** in_, core.stdc.config.c_long len);
-		int i2d_IPAddressFamily(.IPAddressFamily* a, ubyte** out_);
-		extern __gshared const ASN1_ITEM IPAddressFamily_it;
-
-		/*
-		 * API tag for elements of the ASIdentifer SEQUENCE.
-		 */
-		enum V3_ASID_ASNUM = 0;
-		enum V3_ASID_RDI = 1;
-
-		/*
-		 * AFI values, assigned by IANA.  It'd be nice to make the AFI
-		 * handling code totally generic, but there are too many little things
-		 * that would need to be defined for other address families for it to
-		 * be worth the trouble.
-		 */
-		enum IANA_AFI_IPV4 = 1;
-		enum IANA_AFI_IPV6 = 2;
-
-		/*
-		 * Utilities to construct and extract values from RFC3779 extensions,
-		 * since some of the encodings (particularly for IP address prefixes
-		 * and ranges) are a bit tedious to work with directly.
-		 */
-		int X509v3_asid_add_inherit(.ASIdentifiers* asid, int which);
-		int X509v3_asid_add_id_or_range(.ASIdentifiers* asid, int which, libressl_d.openssl.ossl_typ.ASN1_INTEGER* min, libressl_d.openssl.ossl_typ.ASN1_INTEGER* max);
-		int X509v3_addr_add_inherit(.IPAddrBlocks* addr, const uint afi, const (uint)* safi);
-		int X509v3_addr_add_prefix(.IPAddrBlocks* addr, const uint afi, const (uint)* safi, ubyte* a, const int prefixlen);
-		int X509v3_addr_add_range(.IPAddrBlocks* addr, const uint afi, const (uint)* safi, ubyte* min, ubyte* max);
-		uint X509v3_addr_get_afi(const (.IPAddressFamily)* f);
-		int X509v3_addr_get_range(.IPAddressOrRange* aor, const uint afi, ubyte* min, ubyte* max, const int length);
-
-		/*
-		 * Canonical forms.
-		 */
-		int X509v3_asid_is_canonical(.ASIdentifiers* asid);
-		int X509v3_addr_is_canonical(.IPAddrBlocks* addr);
-		int X509v3_asid_canonize(.ASIdentifiers* asid);
-		int X509v3_addr_canonize(.IPAddrBlocks* addr);
-
-		/*
-		 * Tests for inheritance and containment.
-		 */
-		int X509v3_asid_inherits(.ASIdentifiers* asid);
-		int X509v3_addr_inherits(.IPAddrBlocks* addr);
-		int X509v3_asid_subset(.ASIdentifiers* a, .ASIdentifiers* b);
-		int X509v3_addr_subset(.IPAddrBlocks* a, .IPAddrBlocks* b);
-
-		/*
-		 * Check whether RFC 3779 extensions nest properly in chains.
-		 */
-		int X509v3_asid_validate_path(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
-		int X509v3_addr_validate_path(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
-		int X509v3_asid_validate_resource_set(libressl_d.openssl.x509.stack_st_X509* chain, .ASIdentifiers* ext, int allow_inheritance);
-		int X509v3_addr_validate_resource_set(libressl_d.openssl.x509.stack_st_X509* chain, .IPAddrBlocks* ext, int allow_inheritance);
+version (OPENSSL_NO_RFC3779) {
+} else {
+	struct ASRange_st
+	{
+		libressl_d.openssl.ossl_typ.ASN1_INTEGER* min;
+		libressl_d.openssl.ossl_typ.ASN1_INTEGER* max;
 	}
+
+	alias ASRange = .ASRange_st;
+
+	enum ASIdOrRange_id = 0;
+	enum ASIdOrRange_range = 1;
+
+	struct ASIdOrRange_st
+	{
+		int type;
+
+		union u_
+		{
+			libressl_d.openssl.ossl_typ.ASN1_INTEGER* id;
+			.ASRange* range;
+		}
+
+		u_ u;
+	}
+
+	alias ASIdOrRange = .ASIdOrRange_st;
+
+	//DECLARE_STACK_OF(ASIdOrRange)
+	struct stack_st_ASIdOrRange
+	{
+		libressl_d.openssl.stack._STACK stack;
+	}
+
+	alias ASIdOrRanges = .stack_st_ASIdOrRange;
+
+	enum ASIdentifierChoice_inherit = 0;
+	enum ASIdentifierChoice_asIdsOrRanges = 1;
+
+	struct ASIdentifierChoice_st
+	{
+		int type;
+
+		union u_
+		{
+			libressl_d.openssl.ossl_typ.ASN1_NULL* inherit;
+			.ASIdOrRanges* asIdsOrRanges;
+		}
+
+		u_ u;
+	}
+
+	alias ASIdentifierChoice = .ASIdentifierChoice_st;
+
+	struct ASIdentifiers_st
+	{
+		.ASIdentifierChoice* asnum;
+		.ASIdentifierChoice* rdi;
+	}
+
+	alias ASIdentifiers = .ASIdentifiers_st;
+
+	.ASRange* ASRange_new();
+	void ASRange_free(.ASRange* a);
+	.ASRange* d2i_ASRange(.ASRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_ASRange(.ASRange* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM ASRange_it;
+
+	.ASIdOrRange* ASIdOrRange_new();
+	void ASIdOrRange_free(.ASIdOrRange* a);
+	.ASIdOrRange* d2i_ASIdOrRange(.ASIdOrRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_ASIdOrRange(.ASIdOrRange* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM ASIdOrRange_it;
+
+	.ASIdentifierChoice* ASIdentifierChoice_new();
+	void ASIdentifierChoice_free(.ASIdentifierChoice* a);
+	.ASIdentifierChoice* d2i_ASIdentifierChoice(.ASIdentifierChoice** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_ASIdentifierChoice(.ASIdentifierChoice* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM ASIdentifierChoice_it;
+
+	.ASIdentifiers* ASIdentifiers_new();
+	void ASIdentifiers_free(.ASIdentifiers* a);
+	.ASIdentifiers* d2i_ASIdentifiers(.ASIdentifiers** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_ASIdentifiers(.ASIdentifiers* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM ASIdentifiers_it;
+
+	struct IPAddressRange_st
+	{
+		libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* min;
+		libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* max;
+	}
+
+	alias IPAddressRange = .IPAddressRange_st;
+
+	enum IPAddressOrRange_addressPrefix = 0;
+	enum IPAddressOrRange_addressRange = 1;
+
+	struct IPAddressOrRange_st
+	{
+		int type;
+
+		union u_
+		{
+			libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* addressPrefix;
+			.IPAddressRange* addressRange;
+		}
+
+		u_ u;
+	}
+
+	alias IPAddressOrRange = .IPAddressOrRange_st;
+
+	//DECLARE_STACK_OF(IPAddressOrRange)
+	struct stack_st_IPAddressOrRange
+	{
+		libressl_d.openssl.stack._STACK stack;
+	}
+
+	alias IPAddressOrRanges = .stack_st_IPAddressOrRange;
+
+	enum IPAddressChoice_inherit = 0;
+	enum IPAddressChoice_addressesOrRanges = 1;
+
+	struct IPAddressChoice_st
+	{
+		int type;
+
+		union u_
+		{
+			libressl_d.openssl.ossl_typ.ASN1_NULL* inherit;
+			.IPAddressOrRanges* addressesOrRanges;
+		}
+
+		u_ u;
+	}
+
+	alias IPAddressChoice = .IPAddressChoice_st;
+
+	struct IPAddressFamily_st
+	{
+		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* addressFamily;
+		.IPAddressChoice* ipAddressChoice;
+	}
+
+	alias IPAddressFamily = .IPAddressFamily_st;
+
+	//DECLARE_STACK_OF(IPAddressFamily)
+	struct stack_st_IPAddressFamily
+	{
+		libressl_d.openssl.stack._STACK stack;
+	}
+
+	alias IPAddrBlocks = .stack_st_IPAddressFamily;
+
+	.IPAddressRange* IPAddressRange_new();
+	void IPAddressRange_free(.IPAddressRange* a);
+	.IPAddressRange* d2i_IPAddressRange(.IPAddressRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_IPAddressRange(.IPAddressRange* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM IPAddressRange_it;
+
+	.IPAddressOrRange* IPAddressOrRange_new();
+	void IPAddressOrRange_free(.IPAddressOrRange* a);
+	.IPAddressOrRange* d2i_IPAddressOrRange(.IPAddressOrRange** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_IPAddressOrRange(.IPAddressOrRange* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM IPAddressOrRange_it;
+
+	.IPAddressChoice* IPAddressChoice_new();
+	void IPAddressChoice_free(.IPAddressChoice* a);
+	.IPAddressChoice* d2i_IPAddressChoice(.IPAddressChoice** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_IPAddressChoice(.IPAddressChoice* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM IPAddressChoice_it;
+
+	.IPAddressFamily* IPAddressFamily_new();
+	void IPAddressFamily_free(.IPAddressFamily* a);
+	.IPAddressFamily* d2i_IPAddressFamily(.IPAddressFamily** a, const (ubyte)** in_, core.stdc.config.c_long len);
+	int i2d_IPAddressFamily(.IPAddressFamily* a, ubyte** out_);
+	extern __gshared const ASN1_ITEM IPAddressFamily_it;
+
+	/*
+	 * API tag for elements of the ASIdentifer SEQUENCE.
+	 */
+	enum V3_ASID_ASNUM = 0;
+	enum V3_ASID_RDI = 1;
+
+	/*
+	 * AFI values, assigned by IANA.  It'd be nice to make the AFI
+	 * handling code totally generic, but there are too many little things
+	 * that would need to be defined for other address families for it to
+	 * be worth the trouble.
+	 */
+	enum IANA_AFI_IPV4 = 1;
+	enum IANA_AFI_IPV6 = 2;
+
+	/*
+	 * Utilities to construct and extract values from RFC3779 extensions,
+	 * since some of the encodings (particularly for IP address prefixes
+	 * and ranges) are a bit tedious to work with directly.
+	 */
+	int X509v3_asid_add_inherit(.ASIdentifiers* asid, int which);
+	int X509v3_asid_add_id_or_range(.ASIdentifiers* asid, int which, libressl_d.openssl.ossl_typ.ASN1_INTEGER* min, libressl_d.openssl.ossl_typ.ASN1_INTEGER* max);
+	int X509v3_addr_add_inherit(.IPAddrBlocks* addr, const uint afi, const (uint)* safi);
+	int X509v3_addr_add_prefix(.IPAddrBlocks* addr, const uint afi, const (uint)* safi, ubyte* a, const int prefixlen);
+	int X509v3_addr_add_range(.IPAddrBlocks* addr, const uint afi, const (uint)* safi, ubyte* min, ubyte* max);
+	uint X509v3_addr_get_afi(const (.IPAddressFamily)* f);
+	int X509v3_addr_get_range(.IPAddressOrRange* aor, const uint afi, ubyte* min, ubyte* max, const int length);
+
+	/*
+	 * Canonical forms.
+	 */
+	int X509v3_asid_is_canonical(.ASIdentifiers* asid);
+	int X509v3_addr_is_canonical(.IPAddrBlocks* addr);
+	int X509v3_asid_canonize(.ASIdentifiers* asid);
+	int X509v3_addr_canonize(.IPAddrBlocks* addr);
+
+	/*
+	 * Tests for inheritance and containment.
+	 */
+	int X509v3_asid_inherits(.ASIdentifiers* asid);
+	int X509v3_addr_inherits(.IPAddrBlocks* addr);
+	int X509v3_asid_subset(.ASIdentifiers* a, .ASIdentifiers* b);
+	int X509v3_addr_subset(.IPAddrBlocks* a, .IPAddrBlocks* b);
+
+	/*
+	 * Check whether RFC 3779 extensions nest properly in chains.
+	 */
+	int X509v3_asid_validate_path(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+	int X509v3_addr_validate_path(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+	int X509v3_asid_validate_resource_set(libressl_d.openssl.x509.stack_st_X509* chain, .ASIdentifiers* ext, int allow_inheritance);
+	int X509v3_addr_validate_resource_set(libressl_d.openssl.x509.stack_st_X509* chain, .IPAddrBlocks* ext, int allow_inheritance);
 }
 
-/* BEGIN ERROR CODES */
-/**
- * The following lines are auto generated by the script mkerr.pl. Any changes
- * made after this point may be overwritten when the script is next run.
- */
 void ERR_load_X509V3_strings();
 
 /* Error codes for the X509V3 functions. */
