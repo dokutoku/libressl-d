@@ -1,4 +1,4 @@
-/* $OpenBSD: asn1.h,v 1.70 2022/09/11 17:22:52 tb Exp $ */
+/* $OpenBSD: asn1.h,v 1.72 2022/11/13 13:59:46 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -939,6 +939,7 @@ version (OPENSSL_NO_BIO) {
 	int ASN1_STRING_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* v);
 	int ASN1_STRING_print_ex(libressl_d.openssl.ossl_typ.BIO* out_, const (libressl_d.openssl.ossl_typ.ASN1_STRING)* str, core.stdc.config.c_ulong flags);
 	int ASN1_bn_print(libressl_d.openssl.ossl_typ.BIO* bp, const (char)* number, const (libressl_d.openssl.ossl_typ.BIGNUM)* num, ubyte* buf, int off);
+	int ASN1_buf_print(libressl_d.openssl.ossl_typ.BIO* bp, const (ubyte)* buf, size_t buflen, int indent);
 	int ASN1_parse(libressl_d.openssl.ossl_typ.BIO* bp, const (ubyte)* pp, core.stdc.config.c_long len, int indent);
 	int ASN1_parse_dump(libressl_d.openssl.ossl_typ.BIO* bp, const (ubyte)* pp, core.stdc.config.c_long len, int indent, int dump);
 }

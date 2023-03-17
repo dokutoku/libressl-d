@@ -1,4 +1,4 @@
-/* $OpenBSD: bn.h,v 1.55 2022/07/12 14:42:48 kn Exp $ */
+/* $OpenBSD: bn.h,v 1.56 2022/11/30 01:47:19 jsing Exp $ */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -136,19 +136,6 @@ enum HEADER_BN_H = true;
 
 extern (C):
 nothrow @nogc:
-
-/*
- * These preprocessor symbols control various aspects of the bignum headers and
- * library code. They're not defined by any "normal" configuration, as they are
- * intended for development and testing purposes. NB: defining all three can be
- * useful for debugging application code as well as openssl itself.
- *
- * BN_DEBUG - turn on various debugging alterations to the bignum code
- * BN_DEBUG_RAND - uses random poisoning of unused words to trip up
- * mismanagement of bignum internals. You must also define BN_DEBUG.
- */
-/* version = BN_DEBUG; */
-/* version = BN_DEBUG_RAND; */
 
 version (OPENSSL_SMALL_FOOTPRINT) {
 } else {

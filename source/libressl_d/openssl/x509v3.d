@@ -1,4 +1,4 @@
-/* $OpenBSD: x509v3.h,v 1.15 2022/07/12 14:42:50 kn Exp $ */
+/* $OpenBSD: x509v3.h,v 1.16 2022/11/07 19:42:24 schwarze Exp $ */
 /* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */

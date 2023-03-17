@@ -1,4 +1,4 @@
-/* $OpenBSD: x509_vfy.h,v 1.54 2022/07/07 13:01:28 tb Exp $ */
+/* $OpenBSD: x509_vfy.h,v 1.56 2022/12/01 05:27:04 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -67,6 +67,12 @@ private static import libressl_d.openssl.x509v3;
 public import libressl_d.openssl.bio;
 public import libressl_d.openssl.crypto;
 public import libressl_d.openssl.opensslconf;
+
+version (LIBRESSL_INTERNAL) {
+	version = LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API;
+} else version (LIBRESSL_NEXT_API) {
+	version = LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API;
+}
 
 /*
  * openssl/x509.h ends up #include-ing this file at about the only
@@ -280,9 +286,9 @@ enum X509_V_ERR_CA_MD_TOO_WEAK = 69;
 /* Certificate verify flags */
 
 /**
- * Send issuer+subject checks to verify_cb
+ * Deprecated in 1.1.0, has no effect. Various FFI bindings still expose it.
  */
-enum X509_V_FLAG_CB_ISSUER_CHECK = 0x01;
+enum X509_V_FLAG_CB_ISSUER_CHECK = 0x00;
 
 /**
  * Use check time instead of current time
@@ -432,6 +438,14 @@ alias X509_STORE_CTX_verify_cb = extern (C) nothrow @nogc int function(int, libr
 void X509_STORE_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*) verify_cb);
 
 alias X509_STORE_set_verify_cb_func = X509_STORE_set_verify_cb;
+
+version (LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API) {
+	alias X509_STORE_CTX_check_issued_fn = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* subject, libressl_d.openssl.ossl_typ.X509* issuer);
+
+	.X509_STORE_CTX_check_issued_fn X509_STORE_get_check_issued(libressl_d.openssl.ossl_typ.X509_STORE* store);
+	void X509_STORE_set_check_issued(libressl_d.openssl.ossl_typ.X509_STORE* store, .X509_STORE_CTX_check_issued_fn check_issued);
+	.X509_STORE_CTX_check_issued_fn X509_STORE_CTX_get_check_issued(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
+}
 
 libressl_d.openssl.ossl_typ.X509_STORE_CTX* X509_STORE_CTX_new();
 

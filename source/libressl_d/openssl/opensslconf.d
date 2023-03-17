@@ -14,6 +14,20 @@ public import libressl_d.openssl.opensslfeatures;
 	//#define __attribute__(a)
 //#endif
 
+version (LIBRESSL_INTERNAL) {
+	version (LIBRESSL_NAMESPACE) {
+	} else {
+		//#define LCRYPTO_UNUSED(x)
+		//#define LCRYPTO_USED(x)
+		//#define LCRYPTO_ALIAS1(pre, x)
+		//#define LCRYPTO_ALIAS(x)
+
+		//#define LSSL_UNUSED(x)
+		//#define LSSL_USED(x)
+		//#define LSSL_ALIAS(x)
+	}
+}
+
 //#if defined(HEADER_CRYPTLIB_H) && !defined(OPENSSLDIR)
 	enum OPENSSLDIR = "/etc/ssl";
 //#endif

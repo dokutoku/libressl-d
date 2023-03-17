@@ -1,4 +1,4 @@
-/* $OpenBSD: evp.h,v 1.107 2022/09/11 17:29:24 tb Exp $ */
+/* $OpenBSD: evp.h,v 1.112 2022/11/13 14:04:13 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -130,6 +130,8 @@ alias EVP_PKEY_CMAC = libressl_d.openssl.objects.NID_cmac;
 alias EVP_PKEY_HKDF = libressl_d.openssl.obj_mac.NID_hkdf;
 alias EVP_PKEY_GOSTR12_256 = libressl_d.openssl.objects.NID_id_tc26_gost3410_2012_256;
 alias EVP_PKEY_GOSTR12_512 = libressl_d.openssl.objects.NID_id_tc26_gost3410_2012_512;
+alias EVP_PKEY_ED25519 = libressl_d.openssl.objects.NID_ED25519;
+alias EVP_PKEY_X25519 = libressl_d.openssl.obj_mac.NID_X25519;
 
 extern (C):
 nothrow @nogc:
@@ -431,6 +433,12 @@ enum EVP_CCM8_TLS_TAG_LEN = 8;
  */
 enum EVP_CHACHAPOLY_TLS_TAG_LEN = 16;
 
+/* XXX - do we want to expose these? */
+version (LIBRESSL_INTERNAL) {
+	enum ED25519_KEYLEN = 32;
+	enum X25519_KEYLEN = 32;
+}
+
 struct evp_cipher_info_st
 {
 	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher;
@@ -665,6 +673,11 @@ core.stdc.config.c_ulong EVP_CIPHER_CTX_mode(const (libressl_d.openssl.ossl_typ.
 	{
 		return .EVP_CIPHER_CTX_flags(e) & .EVP_CIPH_MODE;
 	}
+
+libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new_raw_private_key(int type, libressl_d.openssl.ossl_typ.ENGINE* engine, const (ubyte)* private_key, size_t len);
+libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new_raw_public_key(int type, libressl_d.openssl.ossl_typ.ENGINE* engine, const (ubyte)* public_key, size_t len);
+int EVP_PKEY_get_raw_private_key(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, ubyte* out_private_key, size_t* out_len);
+int EVP_PKEY_get_raw_public_key(const (libressl_d.openssl.ossl_typ.EVP_PKEY)* pkey, ubyte* out_public_key, size_t* out_len);
 
 pragma(inline, true)
 pure nothrow @safe @nogc @live
@@ -1745,6 +1758,7 @@ enum EVP_R_EXPECTING_A_DSA_KEY = 129;
 enum EVP_R_EXPECTING_A_ECDSA_KEY = 141;
 enum EVP_R_EXPECTING_A_EC_KEY = 142;
 enum EVP_R_FIPS_MODE_NOT_SUPPORTED = 167;
+enum EVP_R_GET_RAW_KEY_FAILED = 182;
 enum EVP_R_INITIALIZATION_ERROR = 134;
 enum EVP_R_INPUT_NOT_INITIALIZED = 111;
 enum EVP_R_INVALID_DIGEST = 152;
@@ -1766,6 +1780,7 @@ enum EVP_R_NO_KEY_SET = 154;
 enum EVP_R_NO_OPERATION_SET = 149;
 enum EVP_R_NO_SIGN_FUNCTION_CONFIGURED = 104;
 enum EVP_R_NO_VERIFY_FUNCTION_CONFIGURED = 105;
+enum EVP_R_ONLY_ONESHOT_SUPPORTED = 177;
 enum EVP_R_OPERATION_NOT_SUPPORTED_FOR_THIS_KEYTYPE = 150;
 enum EVP_R_OPERATON_NOT_INITIALIZED = 151;
 enum EVP_R_OUTPUT_ALIASES_INPUT = 172;

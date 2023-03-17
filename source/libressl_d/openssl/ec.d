@@ -1,4 +1,4 @@
-/* $OpenBSD: ec.h,v 1.28 2022/07/12 14:42:49 kn Exp $ */
+/* $OpenBSD: ec.h,v 1.29 2022/11/10 16:37:51 jsing Exp $ */
 /*
  * Originally written by Bodo Moeller for the OpenSSL project.
  */
@@ -1634,6 +1634,8 @@ enum EC_R_INVALID_ENCODING = 102;
 enum EC_R_INVALID_FIELD = 103;
 enum EC_R_INVALID_FORM = 104;
 enum EC_R_INVALID_GROUP_ORDER = 122;
+enum EC_R_INVALID_KEY = 165;
+enum EC_R_INVALID_PEER_KEY = 152;
 enum EC_R_INVALID_PENTANOMIAL_BASIS = 132;
 enum EC_R_INVALID_PRIVATE_KEY = 123;
 enum EC_R_INVALID_TRINOMIAL_BASIS = 137;
