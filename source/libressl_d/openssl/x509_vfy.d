@@ -522,7 +522,7 @@ void X509_STORE_CTX_set0_verified_chain(libressl_d.openssl.ossl_typ.X509_STORE_C
 //ToDo:
 //int (*X509_STORE_CTX_get_verify(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx))(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
 
-private alias X509_STORE_CTX_set_verify_func = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+private alias X509_STORE_CTX_set_verify_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
 void X509_STORE_CTX_set_verify(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, .X509_STORE_CTX_set_verify_func verify);
 
 //ToDo:

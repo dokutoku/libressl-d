@@ -277,13 +277,13 @@ int BN_GENCB_call(libressl_d.openssl.ossl_typ.BN_GENCB* cb, int a, int b);
  * Populate a BN_GENCB structure with an "old"-style callback
  */
 void BN_GENCB_set_old(libressl_d.openssl.ossl_typ.BN_GENCB* gencb, .BN_GENCB_set_old_callback callback, void* cb_arg);
-private alias BN_GENCB_set_old_callback = extern (C) nothrow @nogc void function(int, int, void*);
+private alias BN_GENCB_set_old_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
 
 /**
  * Populate a BN_GENCB structure with a "new"-style callback
  */
 void BN_GENCB_set(libressl_d.openssl.ossl_typ.BN_GENCB* gencb, .BN_GENCB_set_callback callback, void* cb_arg);
-private alias BN_GENCB_set_callback = extern (C) nothrow @nogc int function(int, int, libressl_d.openssl.ossl_typ.BN_GENCB*);
+private alias BN_GENCB_set_callback = /* Temporary type */ extern (C) nothrow @nogc int function(int, int, libressl_d.openssl.ossl_typ.BN_GENCB*);
 
 void* BN_GENCB_get_arg(libressl_d.openssl.ossl_typ.BN_GENCB* cb);
 
