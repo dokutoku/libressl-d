@@ -55,11 +55,11 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.sha;
+module libressl.openssl.sha;
 
 
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 //#if !defined(HAVE_ATTRIBUTE__BOUNDED__) && !defined(__OpenBSD__)
 	//#define __bounded__(x, y, z)

@@ -73,16 +73,16 @@
  * Sheueling Chang Shantz and Douglas Stebila of Sun Microsystems Laboratories.
  *
  */
-module libressl_d.openssl.ec;
+module libressl.openssl.ec;
 
 
 private static import core.stdc.config;
-private static import libressl_d.compat.stdio;
-private static import libressl_d.openssl.crypto;
-private static import libressl_d.openssl.evp;
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.opensslconf;
+private static import libressl.compat.stdio;
+private static import libressl.openssl.crypto;
+private static import libressl.openssl.evp;
+private static import libressl.openssl.ossl_typ;
+public import libressl.openssl.asn1;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_EC) {
 	static assert(false, "EC is disabled.");
@@ -90,7 +90,7 @@ version (OPENSSL_NO_EC) {
 
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	public import libressl_d.openssl.bn;
+	public import libressl.openssl.bn;
 }
 
 extern (C):
@@ -295,7 +295,7 @@ int EC_METHOD_get_field_type(const (.EC_METHOD)* meth);
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_GROUP_set_generator(.EC_GROUP* group, const (.EC_POINT)* generator, const (libressl_d.openssl.ossl_typ.BIGNUM)* order, const (libressl_d.openssl.ossl_typ.BIGNUM)* cofactor);
+int EC_GROUP_set_generator(.EC_GROUP* group, const (.EC_POINT)* generator, const (libressl.openssl.ossl_typ.BIGNUM)* order, const (libressl.openssl.ossl_typ.BIGNUM)* cofactor);
 
 /**
  * Returns the generator of a EC_GROUP object.
@@ -317,7 +317,7 @@ const (.EC_POINT)* EC_GROUP_get0_generator(const (.EC_GROUP)* group);
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_GROUP_get_order(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* order, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_get_order(const (.EC_GROUP)* group, libressl.openssl.ossl_typ.BIGNUM* order, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 int EC_GROUP_order_bits(const (.EC_GROUP)* group);
 
@@ -331,7 +331,7 @@ int EC_GROUP_order_bits(const (.EC_GROUP)* group);
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_GROUP_get_cofactor(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* cofactor, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_get_cofactor(const (.EC_GROUP)* group, libressl.openssl.ossl_typ.BIGNUM* cofactor, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Sets the name of a EC_GROUP object
@@ -362,8 +362,8 @@ ubyte* EC_GROUP_get0_seed(const (.EC_GROUP)* x);
 size_t EC_GROUP_get_seed_len(const (.EC_GROUP)*);
 size_t EC_GROUP_set_seed(.EC_GROUP*, const (ubyte)*, size_t len);
 
-int EC_GROUP_set_curve(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-int EC_GROUP_get_curve(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_set_curve(.EC_GROUP* group, const (libressl.openssl.ossl_typ.BIGNUM)* p, const (libressl.openssl.ossl_typ.BIGNUM)* a, const (libressl.openssl.ossl_typ.BIGNUM)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_get_curve(const (.EC_GROUP)* group, libressl.openssl.ossl_typ.BIGNUM* p, libressl.openssl.ossl_typ.BIGNUM* a, libressl.openssl.ossl_typ.BIGNUM* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 version (LIBRESSL_INTERNAL) {
 } else {
@@ -379,7 +379,7 @@ version (LIBRESSL_INTERNAL) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_GROUP_set_curve_GFp(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_GROUP_set_curve_GFp(.EC_GROUP* group, const (libressl.openssl.ossl_typ.BIGNUM)* p, const (libressl.openssl.ossl_typ.BIGNUM)* a, const (libressl.openssl.ossl_typ.BIGNUM)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Gets the parameter of the ec over GFp defined by y^2 = x^3 + a*x + b
@@ -393,7 +393,7 @@ version (LIBRESSL_INTERNAL) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_GROUP_get_curve_GFp(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_GROUP_get_curve_GFp(const (.EC_GROUP)* group, libressl.openssl.ossl_typ.BIGNUM* p, libressl.openssl.ossl_typ.BIGNUM* a, libressl.openssl.ossl_typ.BIGNUM* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 	version (OPENSSL_NO_EC2M) {
 	} else {
@@ -409,7 +409,7 @@ version (LIBRESSL_INTERNAL) {
 		 *
 		 * Returns: 1 on success and 0 if an error occurred
 		 */
-		int EC_GROUP_set_curve_GF2m(.EC_GROUP* group, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+		int EC_GROUP_set_curve_GF2m(.EC_GROUP* group, const (libressl.openssl.ossl_typ.BIGNUM)* p, const (libressl.openssl.ossl_typ.BIGNUM)* a, const (libressl.openssl.ossl_typ.BIGNUM)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 		/**
 		 * Gets the parameter of the ec over GF2m defined by y^2 + x*y = x^3 + a*x^2 + b
@@ -423,7 +423,7 @@ version (LIBRESSL_INTERNAL) {
 		 *
 		 * Returns: 1 on success and 0 if an error occurred
 		 */
-		int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* a, libressl_d.openssl.ossl_typ.BIGNUM* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+		int EC_GROUP_get_curve_GF2m(const (.EC_GROUP)* group, libressl.openssl.ossl_typ.BIGNUM* p, libressl.openssl.ossl_typ.BIGNUM* a, libressl.openssl.ossl_typ.BIGNUM* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 	}
 }
 
@@ -446,7 +446,7 @@ int EC_GROUP_get_degree(const (.EC_GROUP)* group);
  *
  * Returns: 1 if group is a valid ec group and 0 otherwise
  */
-int EC_GROUP_check(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_check(const (.EC_GROUP)* group, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Checks whether the discriminant of the elliptic curve is zero or not
@@ -457,7 +457,7 @@ int EC_GROUP_check(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BN_CTX*
  *
  * Returns: 1 if the discriminant is not zero and 0 otherwise
  */
-int EC_GROUP_check_discriminant(const (.EC_GROUP)* group, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_check_discriminant(const (.EC_GROUP)* group, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Compares two EC_GROUP objects
@@ -469,7 +469,7 @@ int EC_GROUP_check_discriminant(const (.EC_GROUP)* group, libressl_d.openssl.oss
  *
  * Returns: 0 if both groups are equal and 1 otherwise
  */
-int EC_GROUP_cmp(const (.EC_GROUP)* a, const (.EC_GROUP)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_cmp(const (.EC_GROUP)* a, const (.EC_GROUP)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /*
  * EC_GROUP_new_GF*() calls EC_GROUP_new() and EC_GROUP_set_GF*()
@@ -487,7 +487,7 @@ int EC_GROUP_cmp(const (.EC_GROUP)* a, const (.EC_GROUP)* b, libressl_d.openssl.
  *
  * Returns: newly created EC_GROUP object with the specified parameters
  */
-.EC_GROUP* EC_GROUP_new_curve_GFp(const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+.EC_GROUP* EC_GROUP_new_curve_GFp(const (libressl.openssl.ossl_typ.BIGNUM)* p, const (libressl.openssl.ossl_typ.BIGNUM)* a, const (libressl.openssl.ossl_typ.BIGNUM)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 version (OPENSSL_NO_EC2M) {
 } else {
@@ -502,7 +502,7 @@ version (OPENSSL_NO_EC2M) {
 	 *
 	 * Returns: newly created EC_GROUP object with the specified parameters
 	 */
-	.EC_GROUP* EC_GROUP_new_curve_GF2m(const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	.EC_GROUP* EC_GROUP_new_curve_GF2m(const (libressl.openssl.ossl_typ.BIGNUM)* p, const (libressl.openssl.ossl_typ.BIGNUM)* a, const (libressl.openssl.ossl_typ.BIGNUM)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 }
 
 /**
@@ -612,13 +612,13 @@ const (.EC_METHOD)* EC_POINT_method_of(const (.EC_POINT)* point);
  */
 int EC_POINT_set_to_infinity(const (.EC_GROUP)* group, .EC_POINT* point);
 
-int EC_POINT_set_affine_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-int EC_POINT_get_affine_coordinates(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-int EC_POINT_set_compressed_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_set_affine_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, const (libressl.openssl.ossl_typ.BIGNUM)* y, libressl.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_get_affine_coordinates(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl.openssl.ossl_typ.BIGNUM* x, libressl.openssl.ossl_typ.BIGNUM* y, libressl.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_set_compressed_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 version (LIBRESSL_INTERNAL) {
-	int EC_POINT_set_Jprojective_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, const (libressl_d.openssl.ossl_typ.BIGNUM)* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-	int EC_POINT_get_Jprojective_coordinates(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BIGNUM* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_set_Jprojective_coordinates(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, const (libressl.openssl.ossl_typ.BIGNUM)* y, const (libressl.openssl.ossl_typ.BIGNUM)* z, libressl.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_get_Jprojective_coordinates(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl.openssl.ossl_typ.BIGNUM* x, libressl.openssl.ossl_typ.BIGNUM* y, libressl.openssl.ossl_typ.BIGNUM* z, libressl.openssl.ossl_typ.BN_CTX* ctx);
 } else {
 	/**
 	 * Sets the jacobian projective coordinates of a EC_POINT over GFp
@@ -633,7 +633,7 @@ version (LIBRESSL_INTERNAL) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_POINT_set_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, const (libressl_d.openssl.ossl_typ.BIGNUM)* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_set_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, const (libressl.openssl.ossl_typ.BIGNUM)* y, const (libressl.openssl.ossl_typ.BIGNUM)* z, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Gets the jacobian projective coordinates of a EC_POINT over GFp
@@ -648,7 +648,7 @@ version (LIBRESSL_INTERNAL) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_POINT_get_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BIGNUM* z, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_get_Jprojective_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl.openssl.ossl_typ.BIGNUM* x, libressl.openssl.ossl_typ.BIGNUM* y, libressl.openssl.ossl_typ.BIGNUM* z, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Sets the affine coordinates of a EC_POINT over GFp
@@ -662,7 +662,7 @@ version (LIBRESSL_INTERNAL) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_POINT_set_affine_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_set_affine_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, const (libressl.openssl.ossl_typ.BIGNUM)* y, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Gets the affine coordinates of a EC_POINT over GFp
@@ -676,7 +676,7 @@ version (LIBRESSL_INTERNAL) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_POINT_get_affine_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_get_affine_coordinates_GFp(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl.openssl.ossl_typ.BIGNUM* x, libressl.openssl.ossl_typ.BIGNUM* y, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 	/**
 	 * Sets the x9.62 compressed coordinates of a EC_POINT over GFp
@@ -690,7 +690,7 @@ version (LIBRESSL_INTERNAL) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_POINT_set_compressed_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+	int EC_POINT_set_compressed_coordinates_GFp(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 	version (OPENSSL_NO_EC2M) {
 	} else {
@@ -706,7 +706,7 @@ version (LIBRESSL_INTERNAL) {
 		 *
 		 * Returns: 1 on success and 0 if an error occurred
 		 */
-		int EC_POINT_set_affine_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, const (libressl_d.openssl.ossl_typ.BIGNUM)* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+		int EC_POINT_set_affine_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, const (libressl.openssl.ossl_typ.BIGNUM)* y, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 		/**
 		 * Gets the affine coordinates of a EC_POINT over GF2m
@@ -720,7 +720,7 @@ version (LIBRESSL_INTERNAL) {
 		 *
 		 * Returns: 1 on success and 0 if an error occurred
 		 */
-		int EC_POINT_get_affine_coordinates_GF2m(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+		int EC_POINT_get_affine_coordinates_GF2m(const (.EC_GROUP)* group, const (.EC_POINT)* p, libressl.openssl.ossl_typ.BIGNUM* x, libressl.openssl.ossl_typ.BIGNUM* y, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 		/**
 		 * Sets the x9.62 compressed coordinates of a EC_POINT over GF2m
@@ -734,7 +734,7 @@ version (LIBRESSL_INTERNAL) {
 		 *
 		 * Returns: 1 on success and 0 if an error occurred
 		 */
-		int EC_POINT_set_compressed_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+		int EC_POINT_set_compressed_coordinates_GF2m(const (.EC_GROUP)* group, .EC_POINT* p, const (libressl.openssl.ossl_typ.BIGNUM)* x, int y_bit, libressl.openssl.ossl_typ.BN_CTX* ctx);
 	}
 }
 
@@ -751,7 +751,7 @@ version (LIBRESSL_INTERNAL) {
  *
  * Returns: the length of the encoded octet string or 0 if an error occurred
  */
-size_t EC_POINT_point2oct(const (.EC_GROUP)* group, const (.EC_POINT)* p, .point_conversion_form_t form, ubyte* buf, size_t len, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+size_t EC_POINT_point2oct(const (.EC_GROUP)* group, const (.EC_POINT)* p, .point_conversion_form_t form, ubyte* buf, size_t len, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Decodes a EC_POINT from a octet string
@@ -765,13 +765,13 @@ size_t EC_POINT_point2oct(const (.EC_GROUP)* group, const (.EC_POINT)* p, .point
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_POINT_oct2point(const (.EC_GROUP)* group, .EC_POINT* p, const (ubyte)* buf, size_t len, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_oct2point(const (.EC_GROUP)* group, .EC_POINT* p, const (ubyte)* buf, size_t len, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /* other interfaces to point2oct/oct2point: */
-libressl_d.openssl.ossl_typ.BIGNUM* EC_POINT_point2bn(const (.EC_GROUP)*, const (.EC_POINT)*, .point_conversion_form_t form, libressl_d.openssl.ossl_typ.BIGNUM*, libressl_d.openssl.ossl_typ.BN_CTX*);
-.EC_POINT* EC_POINT_bn2point(const (.EC_GROUP)*, const (libressl_d.openssl.ossl_typ.BIGNUM)*, .EC_POINT*, libressl_d.openssl.ossl_typ.BN_CTX*);
-char* EC_POINT_point2hex(const (.EC_GROUP)*, const (.EC_POINT)*, .point_conversion_form_t form, libressl_d.openssl.ossl_typ.BN_CTX*);
-.EC_POINT* EC_POINT_hex2point(const (.EC_GROUP)*, const (char)*, .EC_POINT*, libressl_d.openssl.ossl_typ.BN_CTX*);
+libressl.openssl.ossl_typ.BIGNUM* EC_POINT_point2bn(const (.EC_GROUP)*, const (.EC_POINT)*, .point_conversion_form_t form, libressl.openssl.ossl_typ.BIGNUM*, libressl.openssl.ossl_typ.BN_CTX*);
+.EC_POINT* EC_POINT_bn2point(const (.EC_GROUP)*, const (libressl.openssl.ossl_typ.BIGNUM)*, .EC_POINT*, libressl.openssl.ossl_typ.BN_CTX*);
+char* EC_POINT_point2hex(const (.EC_GROUP)*, const (.EC_POINT)*, .point_conversion_form_t form, libressl.openssl.ossl_typ.BN_CTX*);
+.EC_POINT* EC_POINT_hex2point(const (.EC_GROUP)*, const (char)*, .EC_POINT*, libressl.openssl.ossl_typ.BN_CTX*);
 
 /* *******************************************************************/
 /*         functions for doing EC_POINT arithmetic                  */
@@ -789,7 +789,7 @@ char* EC_POINT_point2hex(const (.EC_GROUP)*, const (.EC_POINT)*, .point_conversi
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_POINT_add(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, const (.EC_POINT)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_add(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, const (.EC_POINT)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes the double of a EC_POINT
@@ -802,7 +802,7 @@ int EC_POINT_add(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, c
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_POINT_dbl(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_dbl(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes the inverse of a EC_POINT
@@ -814,7 +814,7 @@ int EC_POINT_dbl(const (.EC_GROUP)* group, .EC_POINT* r, const (.EC_POINT)* a, l
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_POINT_invert(const (.EC_GROUP)* group, .EC_POINT* a, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_invert(const (.EC_GROUP)* group, .EC_POINT* a, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Checks whether the point is the neutral element of the group
@@ -837,7 +837,7 @@ int EC_POINT_is_at_infinity(const (.EC_GROUP)* group, const (.EC_POINT)* p);
  *
  * Returns: 1 if point if on the curve and 0 otherwise
  */
-int EC_POINT_is_on_curve(const (.EC_GROUP)* group, const (.EC_POINT)* point, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_is_on_curve(const (.EC_GROUP)* group, const (.EC_POINT)* point, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Compares two EC_POINTs
@@ -850,10 +850,10 @@ int EC_POINT_is_on_curve(const (.EC_GROUP)* group, const (.EC_POINT)* point, lib
  *
  * Returns: 0 if both points are equal and a value != 0 otherwise
  */
-int EC_POINT_cmp(const (.EC_GROUP)* group, const (.EC_POINT)* a, const (.EC_POINT)* b, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_cmp(const (.EC_GROUP)* group, const (.EC_POINT)* a, const (.EC_POINT)* b, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
-int EC_POINT_make_affine(const (.EC_GROUP)* group, .EC_POINT* point, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
-int EC_POINTs_make_affine(const (.EC_GROUP)* group, size_t num, .EC_POINT** points, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_make_affine(const (.EC_GROUP)* group, .EC_POINT* point, libressl.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINTs_make_affine(const (.EC_GROUP)* group, size_t num, .EC_POINT** points, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes r = generator * n sum_{i=0}^num p[i] * m[i]
@@ -869,7 +869,7 @@ int EC_POINTs_make_affine(const (.EC_GROUP)* group, size_t num, .EC_POINT** poin
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_POINTs_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* n, size_t num, const (.EC_POINT)** p, const (libressl_d.openssl.ossl_typ.BIGNUM)** m, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINTs_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl.openssl.ossl_typ.BIGNUM)* n, size_t num, const (.EC_POINT)** p, const (libressl.openssl.ossl_typ.BIGNUM)** m, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Computes r = generator * n + q * m
@@ -884,7 +884,7 @@ int EC_POINTs_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.open
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_POINT_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* n, const (.EC_POINT)* q, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_POINT_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl.openssl.ossl_typ.BIGNUM)* n, const (.EC_POINT)* q, const (libressl.openssl.ossl_typ.BIGNUM)* m, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Stores multiples of generator for faster point multiplication
@@ -895,7 +895,7 @@ int EC_POINT_mul(const (.EC_GROUP)* group, .EC_POINT* r, const (libressl_d.opens
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_GROUP_precompute_mult(.EC_GROUP* group, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_GROUP_precompute_mult(.EC_GROUP* group, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Reports whether a precomputation has been done
@@ -932,24 +932,24 @@ alias ECPKPARAMETERS = .ecpk_parameters_st;
 .EC_GROUP* d2i_ECPKParameters(.EC_GROUP**, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ECPKParameters(const (.EC_GROUP)*, ubyte** out_);
 
-//#define d2i_ECPKParameters_bio(bp, x) libressl_d.openssl.asn1.ASN1_d2i_bio_of(.EC_GROUP, null, .d2i_ECPKParameters, bp, x)
-//#define i2d_ECPKParameters_bio(bp, x) libressl_d.openssl.asn1.ASN1_i2d_bio_of_const(.EC_GROUP, .i2d_ECPKParameters, bp, x)
-//#define d2i_ECPKParameters_fp(fp, x) cast(.EC_GROUP*)(libressl_d.openssl.asn1.ASN1_d2i_fp(null, (char* (*) ()) .d2i_ECPKParameters, fp, cast(ubyte**)(x)))
+//#define d2i_ECPKParameters_bio(bp, x) libressl.openssl.asn1.ASN1_d2i_bio_of(.EC_GROUP, null, .d2i_ECPKParameters, bp, x)
+//#define i2d_ECPKParameters_bio(bp, x) libressl.openssl.asn1.ASN1_i2d_bio_of_const(.EC_GROUP, .i2d_ECPKParameters, bp, x)
+//#define d2i_ECPKParameters_fp(fp, x) cast(.EC_GROUP*)(libressl.openssl.asn1.ASN1_d2i_fp(null, (char* (*) ()) .d2i_ECPKParameters, fp, cast(ubyte**)(x)))
 
 pragma(inline, true)
-int i2d_ECPKParameters_fp(libressl_d.compat.stdio.FILE* fp, ubyte* x)
+int i2d_ECPKParameters_fp(libressl.compat.stdio.FILE* fp, ubyte* x)
 
 	do
 	{
-		return libressl_d.openssl.asn1.ASN1_i2d_fp(&.i2d_ECPKParameters, fp, x);
+		return libressl.openssl.asn1.ASN1_i2d_fp(&.i2d_ECPKParameters, fp, x);
 	}
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int ECPKParameters_print(libressl_d.openssl.ossl_typ.BIO* bp, const (.EC_GROUP)* x, int off);
+	int ECPKParameters_print(libressl.openssl.ossl_typ.BIO* bp, const (.EC_GROUP)* x, int off);
 }
 
-int ECPKParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_GROUP)* x, int off);
+int ECPKParameters_print_fp(libressl.compat.stdio.FILE* fp, const (.EC_GROUP)* x, int off);
 
 /* *******************************************************************/
 /*                      EC_KEY functions                            */
@@ -1060,7 +1060,7 @@ int EC_KEY_set_group(.EC_KEY* key, const (.EC_GROUP)* group);
  *
  * Returns: a BIGNUM with the private key (possibly null).
  */
-const (libressl_d.openssl.ossl_typ.BIGNUM)* EC_KEY_get0_private_key(const (.EC_KEY)* key);
+const (libressl.openssl.ossl_typ.BIGNUM)* EC_KEY_get0_private_key(const (.EC_KEY)* key);
 
 /**
  * Sets the private key of a EC_KEY object.
@@ -1071,7 +1071,7 @@ const (libressl_d.openssl.ossl_typ.BIGNUM)* EC_KEY_get0_private_key(const (.EC_K
  *
  * Returns: 1 on success and 0 if an error occurred.
  */
-int EC_KEY_set_private_key(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* prv);
+int EC_KEY_set_private_key(.EC_KEY* key, const (libressl.openssl.ossl_typ.BIGNUM)* prv);
 
 /**
  * Returns the public key of a EC_KEY object.
@@ -1134,7 +1134,7 @@ void EC_KEY_set_asn1_flag(.EC_KEY* eckey, int asn1_flag);
  *
  * Returns: 1 on success and 0 if an error occurred.
  */
-int EC_KEY_precompute_mult(.EC_KEY* key, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int EC_KEY_precompute_mult(.EC_KEY* key, libressl.openssl.ossl_typ.BN_CTX* ctx);
 
 /**
  * Creates a new ec private (and optional a new public) key.
@@ -1166,7 +1166,7 @@ int EC_KEY_check_key(const (.EC_KEY)* key);
  *
  * Returns: 1 on success and 0 otherwise.
  */
-int EC_KEY_set_public_key_affine_coordinates(.EC_KEY* key, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y);
+int EC_KEY_set_public_key_affine_coordinates(.EC_KEY* key, libressl.openssl.ossl_typ.BIGNUM* x, libressl.openssl.ossl_typ.BIGNUM* y);
 
 /* *******************************************************************/
 /*        de- and encoding functions for SEC1 ECPrivateKey          */
@@ -1261,7 +1261,7 @@ version (OPENSSL_NO_BIO) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int ECParameters_print(libressl_d.openssl.ossl_typ.BIO* bp, const (.EC_KEY)* key);
+	int ECParameters_print(libressl.openssl.ossl_typ.BIO* bp, const (.EC_KEY)* key);
 
 	/**
 	 * Prints out the contents of a EC_KEY object
@@ -1273,7 +1273,7 @@ version (OPENSSL_NO_BIO) {
 	 *
 	 * Returns: 1 on success and 0 if an error occurred
 	 */
-	int EC_KEY_print(libressl_d.openssl.ossl_typ.BIO* bp, const (.EC_KEY)* key, int off);
+	int EC_KEY_print(libressl.openssl.ossl_typ.BIO* bp, const (.EC_KEY)* key, int off);
 }
 
 /**
@@ -1285,7 +1285,7 @@ version (OPENSSL_NO_BIO) {
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int ECParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key);
+int ECParameters_print_fp(libressl.compat.stdio.FILE* fp, const (.EC_KEY)* key);
 
 /**
  * Prints out the contents of a EC_KEY object
@@ -1297,14 +1297,14 @@ int ECParameters_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key
  *
  * Returns: 1 on success and 0 if an error occurred
  */
-int EC_KEY_print_fp(libressl_d.compat.stdio.FILE* fp, const (.EC_KEY)* key, int off);
+int EC_KEY_print_fp(libressl.compat.stdio.FILE* fp, const (.EC_KEY)* key, int off);
 
 pragma(inline, true)
-int EC_KEY_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl_d.openssl.ossl_typ.CRYPTO_EX_new newf, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dupf, libressl_d.openssl.ossl_typ.CRYPTO_EX_free freef)
+int EC_KEY_get_ex_new_index(core.stdc.config.c_long l, void* p, libressl.openssl.ossl_typ.CRYPTO_EX_new newf, libressl.openssl.ossl_typ.CRYPTO_EX_dup dupf, libressl.openssl.ossl_typ.CRYPTO_EX_free freef)
 
 	do
 	{
-		return libressl_d.openssl.crypto.CRYPTO_get_ex_new_index(libressl_d.openssl.crypto.CRYPTO_EX_INDEX_EC_KEY, l, p, newf, dupf, freef);
+		return libressl.openssl.crypto.CRYPTO_get_ex_new_index(libressl.openssl.crypto.CRYPTO_EX_INDEX_EC_KEY, l, p, newf, dupf, freef);
 	}
 
 int EC_KEY_set_ex_data(.EC_KEY* key, int idx, void* arg);
@@ -1315,7 +1315,7 @@ const (.EC_KEY_METHOD)* EC_KEY_get_default_method();
 void EC_KEY_set_default_method(const (.EC_KEY_METHOD)* meth);
 const (.EC_KEY_METHOD)* EC_KEY_get_method(const (.EC_KEY)* key);
 int EC_KEY_set_method(.EC_KEY* key, const (.EC_KEY_METHOD)* meth);
-.EC_KEY* EC_KEY_new_method(libressl_d.openssl.ossl_typ.ENGINE* engine);
+.EC_KEY* EC_KEY_new_method(libressl.openssl.ossl_typ.ENGINE* engine);
 .EC_KEY_METHOD* EC_KEY_METHOD_new(const (.EC_KEY_METHOD)* meth);
 void EC_KEY_METHOD_free(.EC_KEY_METHOD* meth);
 
@@ -1323,7 +1323,7 @@ private alias EC_KEY_METHOD_set_init_func1 = /* Temporary type */ extern (C) not
 private alias EC_KEY_METHOD_set_init_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(.EC_KEY* key);
 private alias EC_KEY_METHOD_set_init_func3 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* dest, const (.EC_KEY)* src);
 private alias EC_KEY_METHOD_set_init_func4 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_GROUP)* grp);
-private alias EC_KEY_METHOD_set_init_func5 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* priv_key);
+private alias EC_KEY_METHOD_set_init_func5 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (libressl.openssl.ossl_typ.BIGNUM)* priv_key);
 private alias EC_KEY_METHOD_set_init_func6 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_POINT)* pub_key);
 void EC_KEY_METHOD_set_init(.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_init_func1 init, .EC_KEY_METHOD_set_init_func2 finish, .EC_KEY_METHOD_set_init_func3 copy, .EC_KEY_METHOD_set_init_func4 set_group, .EC_KEY_METHOD_set_init_func5 set_private, .EC_KEY_METHOD_set_init_func6 set_public);
 
@@ -1338,7 +1338,7 @@ private alias EC_KEY_METHOD_get_init_func1 = /* Temporary type */ extern (C) not
 private alias EC_KEY_METHOD_get_init_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(.EC_KEY* key);
 private alias EC_KEY_METHOD_get_init_func3 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* dest, const (.EC_KEY)* src);
 private alias EC_KEY_METHOD_get_init_func4 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_GROUP)* grp);
-private alias EC_KEY_METHOD_get_init_func5 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* priv_key);
+private alias EC_KEY_METHOD_get_init_func5 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (libressl.openssl.ossl_typ.BIGNUM)* priv_key);
 private alias EC_KEY_METHOD_get_init_func6 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_POINT)* pub_key);
 void EC_KEY_METHOD_get_init(const (.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_init_func1* pinit, .EC_KEY_METHOD_get_init_func2* pfinish, .EC_KEY_METHOD_get_init_func3* pcopy, .EC_KEY_METHOD_get_init_func4* pset_group, .EC_KEY_METHOD_get_init_func5* pset_private, .EC_KEY_METHOD_get_init_func6* pset_public);
 
@@ -1360,139 +1360,139 @@ void EC_KEY_METHOD_get_compute_key(const (.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_
 //#endif
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_ec_paramgen_curve_nid(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int nid)
+int EVP_PKEY_CTX_set_ec_paramgen_curve_nid(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int nid)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAMGEN_CURVE_NID, nid, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAMGEN_CURVE_NID, nid, null);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_ec_param_enc(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int flag)
+int EVP_PKEY_CTX_set_ec_param_enc(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int flag)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl_d.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAM_ENC, flag, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_PARAMGEN | libressl.openssl.evp.EVP_PKEY_OP_KEYGEN, .EVP_PKEY_CTRL_EC_PARAM_ENC, flag, null);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_ecdh_cofactor_mode(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int flag)
+int EVP_PKEY_CTX_set_ecdh_cofactor_mode(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int flag)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, flag, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, flag, null);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_get_ecdh_cofactor_mode(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx)
+int EVP_PKEY_CTX_get_ecdh_cofactor_mode(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, -2, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_ECDH_COFACTOR, -2, null);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_ecdh_kdf_type(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int kdf)
+int EVP_PKEY_CTX_set_ecdh_kdf_type(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int kdf)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, kdf, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, kdf, null);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_get_ecdh_kdf_type(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx)
+int EVP_PKEY_CTX_get_ecdh_kdf_type(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, -2, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_TYPE, -2, null);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_ecdh_kdf_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* md)
+int EVP_PKEY_CTX_set_ecdh_kdf_md(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* md)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_MD, 0, md);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_MD, 0, md);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_get_ecdh_kdf_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* pmd)
+int EVP_PKEY_CTX_get_ecdh_kdf_md(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* pmd)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_MD, 0, pmd);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_MD, 0, pmd);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_ecdh_kdf_outlen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int len)
+int EVP_PKEY_CTX_set_ecdh_kdf_outlen(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int len)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_OUTLEN, len, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_OUTLEN, len, null);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_get_ecdh_kdf_outlen(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* plen)
+int EVP_PKEY_CTX_get_ecdh_kdf_outlen(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* plen)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_OUTLEN, 0, plen);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_OUTLEN, 0, plen);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set0_ecdh_kdf_ukm(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* p, int plen)
+int EVP_PKEY_CTX_set0_ecdh_kdf_ukm(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* p, int plen)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_UKM, plen, p);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_EC_KDF_UKM, plen, p);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_get0_ecdh_kdf_ukm(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* p)
+int EVP_PKEY_CTX_get0_ecdh_kdf_ukm(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* p)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_EC, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_UKM, 0, p);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_EC, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_GET_EC_KDF_UKM, 0, p);
 	}
 
 /* SM2 will skip the operation check so no need to pass operation here */
 pragma(inline, true)
-int EVP_PKEY_CTX_set1_id(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id, int id_len)
+int EVP_PKEY_CTX_set1_id(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id, int id_len)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_SET1_ID, id_len, id);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_SET1_ID, id_len, id);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_get1_id(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id)
+int EVP_PKEY_CTX_get1_id(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID, 0, id);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID, 0, id);
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_get1_id_len(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id_len)
+int EVP_PKEY_CTX_get1_id_len(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, void* id_len)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID_LEN, 0, id_len);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, -1, -1, .EVP_PKEY_CTRL_GET1_ID_LEN, 0, id_len);
 	}
 
-enum EVP_PKEY_CTRL_EC_PARAMGEN_CURVE_NID = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
-enum EVP_PKEY_CTRL_EC_PARAM_ENC = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
-enum EVP_PKEY_CTRL_EC_ECDH_COFACTOR = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
-enum EVP_PKEY_CTRL_EC_KDF_TYPE = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 4;
-enum EVP_PKEY_CTRL_EC_KDF_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 5;
-enum EVP_PKEY_CTRL_GET_EC_KDF_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 6;
-enum EVP_PKEY_CTRL_EC_KDF_OUTLEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 7;
-enum EVP_PKEY_CTRL_GET_EC_KDF_OUTLEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 8;
-enum EVP_PKEY_CTRL_EC_KDF_UKM = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 9;
-enum EVP_PKEY_CTRL_GET_EC_KDF_UKM = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 10;
-enum EVP_PKEY_CTRL_SET1_ID = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 11;
-enum EVP_PKEY_CTRL_GET1_ID = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 12;
-enum EVP_PKEY_CTRL_GET1_ID_LEN = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 13;
+enum EVP_PKEY_CTRL_EC_PARAMGEN_CURVE_NID = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
+enum EVP_PKEY_CTRL_EC_PARAM_ENC = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
+enum EVP_PKEY_CTRL_EC_ECDH_COFACTOR = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
+enum EVP_PKEY_CTRL_EC_KDF_TYPE = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 4;
+enum EVP_PKEY_CTRL_EC_KDF_MD = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 5;
+enum EVP_PKEY_CTRL_GET_EC_KDF_MD = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 6;
+enum EVP_PKEY_CTRL_EC_KDF_OUTLEN = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 7;
+enum EVP_PKEY_CTRL_GET_EC_KDF_OUTLEN = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 8;
+enum EVP_PKEY_CTRL_EC_KDF_UKM = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 9;
+enum EVP_PKEY_CTRL_GET_EC_KDF_UKM = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 10;
+enum EVP_PKEY_CTRL_SET1_ID = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 11;
+enum EVP_PKEY_CTRL_GET1_ID = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 12;
+enum EVP_PKEY_CTRL_GET1_ID_LEN = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 13;
 
 /* KDF types */
 enum EVP_PKEY_ECDH_KDF_NONE = 1;

@@ -24,7 +24,7 @@
  *
  * $Id: dirent.h,v 1.20 2014/03/19 17:52:23 tronkko Exp $
  */
-module libressl_d.compat.dirent_msvc;
+module libressl.compat.dirent_msvc;
 
 
 private static import core.stdc.config;
@@ -33,16 +33,16 @@ private static import core.sys.windows.basetsd;
 private static import core.sys.windows.winbase;
 private static import core.sys.windows.windef;
 private static import core.sys.windows.winnt;
-private static import libressl_d.compat.limits;
+private static import libressl.compat.limits;
 public import core.stdc.errno;
 public import core.stdc.stdarg;
 public import core.stdc.wchar_;
 public import core.sys.windows.windows;
-public import libressl_d.compat.stdio;
-public import libressl_d.compat.stdlib;
-public import libressl_d.compat.string;
-public import libressl_d.compat.sys.stat;
-public import libressl_d.compat.sys.types;
+public import libressl.compat.stdio;
+public import libressl.compat.stdlib;
+public import libressl.compat.string;
+public import libressl.compat.sys.stat;
+public import libressl.compat.sys.types;
 
 version (Windows):
 extern (C):
@@ -65,15 +65,15 @@ enum _DIRENT_HAVE_D_TYPE = true;
 enum _DIRENT_HAVE_D_NAMLEN = true;
 
 /* Maximum length of file name */
-enum PATH_MAX = libressl_d.compat.limits.PATH_MAX;
+enum PATH_MAX = libressl.compat.limits.PATH_MAX;
 
-static if (!__traits(compiles, libressl_d.compat.stdio.FILENAME_MAX)) {
+static if (!__traits(compiles, libressl.compat.stdio.FILENAME_MAX)) {
 	enum FILENAME_MAX = core.sys.windows.windef.MAX_PATH;
 } else {
-	enum FILENAME_MAX = libressl_d.compat.stdio.FILENAME_MAX;
+	enum FILENAME_MAX = libressl.compat.stdio.FILENAME_MAX;
 }
 
-enum NAME_MAX = libressl_d.compat.limits.NAME_MAX;
+enum NAME_MAX = libressl.compat.limits.NAME_MAX;
 
 /**
  * Return the exact length of d_namlen without zero terminator
@@ -96,7 +96,7 @@ void _D_ALLOC_NAMLEN(P)(P p)
 
 	do
 	{
-		return libressl_d.compat.limits.PATH_MAX;
+		return libressl.compat.limits.PATH_MAX;
 	}
 
 /**
@@ -127,7 +127,7 @@ struct _wdirent
 	/**
 	 * File name
 	 */
-	core.stdc.stddef.wchar_t[libressl_d.compat.limits.PATH_MAX] d_name = '\0';
+	core.stdc.stddef.wchar_t[libressl.compat.limits.PATH_MAX] d_name = '\0';
 }
 
 struct _WDIR
@@ -186,7 +186,7 @@ struct dirent
 	/**
 	 * File name
 	 */
-	char[libressl_d.compat.limits.PATH_MAX] d_name = '\0';
+	char[libressl.compat.limits.PATH_MAX] d_name = '\0';
 }
 
 struct DIR
@@ -212,7 +212,7 @@ struct DIR
 		}
 
 		/* Allocate new _WDIR structure */
-		._WDIR* dirp = cast(._WDIR*)(libressl_d.compat.stdlib.malloc(._WDIR.sizeof));
+		._WDIR* dirp = cast(._WDIR*)(libressl.compat.stdlib.malloc(._WDIR.sizeof));
 
 		int error = void;
 
@@ -226,7 +226,7 @@ struct DIR
 			core.sys.windows.windef.DWORD n = core.sys.windows.winbase.GetFullPathNameW(dirname, 0, null, null);
 
 			/* Allocate room for absolute directory name and search pattern */
-			dirp.patt = cast(core.stdc.stddef.wchar_t*)(libressl_d.compat.stdlib.malloc((core.stdc.stddef.wchar_t.sizeof * n) + 16));
+			dirp.patt = cast(core.stdc.stddef.wchar_t*)(libressl.compat.stdlib.malloc((core.stdc.stddef.wchar_t.sizeof * n) + 16));
 
 			if (dirp.patt != null) {
 				/*
@@ -323,7 +323,7 @@ struct DIR
 			 */
 			size_t n = 0;
 
-			while (((n + 1) < libressl_d.compat.limits.PATH_MAX) && (datap.cFileName[n] != 0)) {
+			while (((n + 1) < libressl.compat.limits.PATH_MAX) && (datap.cFileName[n] != 0)) {
 				entp.d_name[n] = datap.cFileName[n];
 				n++;
 			}
@@ -337,11 +337,11 @@ struct DIR
 			core.sys.windows.windef.DWORD attr = datap.dwFileAttributes;
 
 			if ((attr & core.sys.windows.winnt.FILE_ATTRIBUTE_DEVICE) != 0) {
-				entp.d_type = libressl_d.compat.sys.stat.DT_CHR;
+				entp.d_type = libressl.compat.sys.stat.DT_CHR;
 			} else if ((attr & core.sys.windows.winnt.FILE_ATTRIBUTE_DIRECTORY) != 0) {
-				entp.d_type = libressl_d.compat.sys.stat.DT_DIR;
+				entp.d_type = libressl.compat.sys.stat.DT_DIR;
 			} else {
-				entp.d_type = libressl_d.compat.sys.stat.DT_REG;
+				entp.d_type = libressl.compat.sys.stat.DT_REG;
 			}
 
 			/* Reset dummy fields */
@@ -375,12 +375,12 @@ int _wclosedir(._WDIR* dirp)
 
 			/* Release search pattern */
 			if (dirp.patt != null) {
-				libressl_d.compat.stdlib.free(dirp.patt);
+				libressl.compat.stdlib.free(dirp.patt);
 				dirp.patt = null;
 			}
 
 			/* Release directory structure */
-			libressl_d.compat.stdlib.free(dirp);
+			libressl.compat.stdlib.free(dirp);
 
 			/*success*/
 			ok = 0;
@@ -494,16 +494,16 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 		}
 
 		/* Allocate memory for DIR structure */
-		.DIR* dirp = cast(.DIR*)(libressl_d.compat.stdlib.malloc(.DIR.sizeof));
+		.DIR* dirp = cast(.DIR*)(libressl.compat.stdlib.malloc(.DIR.sizeof));
 
 		int error = void;
 
 		if (dirp != null) {
-			core.stdc.stddef.wchar_t[libressl_d.compat.limits.PATH_MAX] wname = void;
+			core.stdc.stddef.wchar_t[libressl.compat.limits.PATH_MAX] wname = void;
 			size_t n = void;
 
 			/* Convert directory name to wide-character string */
-			error = .dirent_mbstowcs_s(&n, &(wname[0]), libressl_d.compat.limits.PATH_MAX, dirname, libressl_d.compat.limits.PATH_MAX);
+			error = .dirent_mbstowcs_s(&n, &(wname[0]), libressl.compat.limits.PATH_MAX, dirname, libressl.compat.limits.PATH_MAX);
 
 			if (!error) {
 				/* Open directory stream using wide-character name */
@@ -532,7 +532,7 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 
 		/* Clean up in case of error */
 		if ((error) && (dirp != null)) {
-			libressl_d.compat.stdlib.free(dirp);
+			libressl.compat.stdlib.free(dirp);
 			dirp = null;
 		}
 
@@ -570,7 +570,7 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 			size_t n = void;
 
 			/* Attempt to convert file name to multi-byte string */
-			int error = .dirent_wcstombs_s(&n, &(dirp.ent.d_name[0]), libressl_d.compat.limits.PATH_MAX, &(datap.cFileName[0]), libressl_d.compat.limits.PATH_MAX);
+			int error = .dirent_wcstombs_s(&n, &(dirp.ent.d_name[0]), libressl.compat.limits.PATH_MAX, &(datap.cFileName[0]), libressl.compat.limits.PATH_MAX);
 
 			/*
 			 * If the file name cannot be represented by a multi-byte string,
@@ -583,7 +583,7 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 			 * VirtualBox shared folders fail to do this.
 			 */
 			if ((error) && (datap.cAlternateFileName[0] != '\0')) {
-				error = .dirent_wcstombs_s(&n, &(dirp.ent.d_name[0]), libressl_d.compat.limits.PATH_MAX, &(datap.cAlternateFileName[0]), libressl_d.compat.limits.PATH_MAX);
+				error = .dirent_wcstombs_s(&n, &(dirp.ent.d_name[0]), libressl.compat.limits.PATH_MAX, &(datap.cAlternateFileName[0]), libressl.compat.limits.PATH_MAX);
 			}
 
 			if (!error) {
@@ -597,11 +597,11 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 				core.sys.windows.windef.DWORD attr = datap.dwFileAttributes;
 
 				if ((attr & core.sys.windows.winnt.FILE_ATTRIBUTE_DEVICE) != 0) {
-					entp.d_type = libressl_d.compat.sys.stat.DT_CHR;
+					entp.d_type = libressl.compat.sys.stat.DT_CHR;
 				} else if ((attr & core.sys.windows.winnt.FILE_ATTRIBUTE_DIRECTORY) != 0) {
-					entp.d_type = libressl_d.compat.sys.stat.DT_DIR;
+					entp.d_type = libressl.compat.sys.stat.DT_DIR;
 				} else {
-					entp.d_type = libressl_d.compat.sys.stat.DT_REG;
+					entp.d_type = libressl.compat.sys.stat.DT_REG;
 				}
 
 				/* Reset dummy fields */
@@ -618,7 +618,7 @@ core.sys.windows.winbase.WIN32_FIND_DATAW* dirent_next(._WDIR* dirp)
 				entp.d_name[0] = '?';
 				entp.d_name[1] = '\0';
 				entp.d_namlen = 1;
-				entp.d_type = libressl_d.compat.sys.stat.DT_UNKNOWN;
+				entp.d_type = libressl.compat.sys.stat.DT_UNKNOWN;
 				entp.d_ino = 0;
 				entp.d_reclen = 0;
 			}
@@ -645,7 +645,7 @@ int closedir(.DIR* dirp)
 			dirp.wdirp = null;
 
 			/* Release multi-byte character version */
-			libressl_d.compat.stdlib.free(dirp);
+			libressl.compat.stdlib.free(dirp);
 		} else {
 			/* Invalid directory stream */
 			._set_errno(core.stdc.errno.EBADF);

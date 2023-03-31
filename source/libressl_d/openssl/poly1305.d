@@ -14,11 +14,11 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-module libressl_d.openssl.poly1305;
+module libressl.openssl.poly1305;
 
 
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_POLY1305) {
 	static assert(false, "Poly1305 is disabled.");

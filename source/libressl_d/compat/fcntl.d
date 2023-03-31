@@ -2,7 +2,7 @@
  * Public domain
  * fcntl.h compatibility shim
  */
-module libressl_d.compat.fcntl;
+module libressl.compat.fcntl;
 
 
 private static import core.stdcpp.xutility;

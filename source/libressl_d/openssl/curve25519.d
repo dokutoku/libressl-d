@@ -22,11 +22,11 @@
  * See_Also:
  *      https://tools.ietf.org/html/rfc7748
  */
-module libressl_d.openssl.curve25519;
+module libressl.openssl.curve25519;
 
 
 private static import core.stdc.stdint;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 extern (C):
 nothrow @nogc:

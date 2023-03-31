@@ -57,10 +57,10 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.pqueue;
+module libressl.pqueue;
 
 
-private static import libressl_d.openssl.dtls1;
+private static import libressl.openssl.dtls1;
 
 //__BEGIN_HIDDEN_DECLS
 

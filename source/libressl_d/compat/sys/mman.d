@@ -2,7 +2,7 @@
  * Public domain
  * sys/mman.h compatibility shim
  */
-module libressl_d.compat.sys.mman;
+module libressl.compat.sys.mman;
 
 
 public import core.sys.posix.sys.mman;

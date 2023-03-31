@@ -60,18 +60,18 @@
  * Header for dynamic hash table routines
  * Author - Eric Young
  */
-module libressl_d.openssl.lhash;
+module libressl.openssl.lhash;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.asn1;
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.compat.stdio;
-public import libressl_d.openssl.opensslconf;
+private static import libressl.openssl.asn1;
+private static import libressl.openssl.ossl_typ;
+public import libressl.compat.stdio;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_BIO) {
 } else {
-	public import libressl_d.openssl.bio;
+	public import libressl.openssl.bio;
 }
 
 extern (C):
@@ -197,15 +197,15 @@ void lh_doall_arg(._LHASH* lh, .LHASH_DOALL_ARG_FN_TYPE func, void* arg);
 core.stdc.config.c_ulong lh_strhash(const (char)* c);
 core.stdc.config.c_ulong lh_num_items(const (._LHASH)* lh);
 
-void lh_stats(const (._LHASH)* lh, libressl_d.compat.stdio.FILE* out_);
-void lh_node_stats(const (._LHASH)* lh, libressl_d.compat.stdio.FILE* out_);
-void lh_node_usage_stats(const (._LHASH)* lh, libressl_d.compat.stdio.FILE* out_);
+void lh_stats(const (._LHASH)* lh, libressl.compat.stdio.FILE* out_);
+void lh_node_stats(const (._LHASH)* lh, libressl.compat.stdio.FILE* out_);
+void lh_node_usage_stats(const (._LHASH)* lh, libressl.compat.stdio.FILE* out_);
 
 version (OPENSSL_NO_BIO) {
 } else {
-	void lh_stats_bio(const (._LHASH)* lh, libressl_d.openssl.ossl_typ.BIO* out_);
-	void lh_node_stats_bio(const (._LHASH)* lh, libressl_d.openssl.ossl_typ.BIO* out_);
-	void lh_node_usage_stats_bio(const (._LHASH)* lh, libressl_d.openssl.ossl_typ.BIO* out_);
+	void lh_stats_bio(const (._LHASH)* lh, libressl.openssl.ossl_typ.BIO* out_);
+	void lh_node_stats_bio(const (._LHASH)* lh, libressl.openssl.ossl_typ.BIO* out_);
+	void lh_node_usage_stats_bio(const (._LHASH)* lh, libressl.openssl.ossl_typ.BIO* out_);
 }
 
 /* Type checking... */
@@ -214,16 +214,16 @@ version (OPENSSL_NO_BIO) {
 
 //#define DECLARE_LHASH_OF(type) LHASH_OF(type) { int dummy; }
 
-//#define CHECKED_LHASH_OF(type, lh) ((._LHASH*) libressl_d.openssl.asn1.CHECKED_PTR_OF(LHASH_OF(type), lh))
+//#define CHECKED_LHASH_OF(type, lh) ((._LHASH*) libressl.openssl.asn1.CHECKED_PTR_OF(LHASH_OF(type), lh))
 
 /* Define wrapper functions. */
 //#define LHM_lh_new(type, name) ((LHASH_OF(type)*) .lh_new(.LHASH_HASH_FN(name), .LHASH_COMP_FN(name)))
 //#define LHM_lh_error(type, lh) .lh_error(CHECKED_LHASH_OF(type, lh))
-//#define LHM_lh_insert(type, lh, inst) ((type*) .lh_insert(CHECKED_LHASH_OF(type, lh), libressl_d.openssl.asn1.CHECKED_PTR_OF(type, inst)))
-//#define LHM_lh_retrieve(type, lh, inst) ((type*) .lh_retrieve(CHECKED_LHASH_OF(type, lh), libressl_d.openssl.asn1.CHECKED_PTR_OF(type, inst)))
-//#define LHM_lh_delete(type, lh, inst) ((type*) .lh_delete(CHECKED_LHASH_OF(type, lh), libressl_d.openssl.asn1.CHECKED_PTR_OF(type, inst)))
+//#define LHM_lh_insert(type, lh, inst) ((type*) .lh_insert(CHECKED_LHASH_OF(type, lh), libressl.openssl.asn1.CHECKED_PTR_OF(type, inst)))
+//#define LHM_lh_retrieve(type, lh, inst) ((type*) .lh_retrieve(CHECKED_LHASH_OF(type, lh), libressl.openssl.asn1.CHECKED_PTR_OF(type, inst)))
+//#define LHM_lh_delete(type, lh, inst) ((type*) .lh_delete(CHECKED_LHASH_OF(type, lh), libressl.openssl.asn1.CHECKED_PTR_OF(type, inst)))
 //#define LHM_lh_doall(type, lh, fn) .lh_doall(CHECKED_LHASH_OF(type, lh), fn)
-//#define LHM_lh_doall_arg(type, lh, fn, arg_type, arg) .lh_doall_arg(CHECKED_LHASH_OF(type, lh), fn, libressl_d.openssl.asn1.CHECKED_PTR_OF(arg_type, arg))
+//#define LHM_lh_doall_arg(type, lh, fn, arg_type, arg) .lh_doall_arg(CHECKED_LHASH_OF(type, lh), fn, libressl.openssl.asn1.CHECKED_PTR_OF(arg_type, arg))
 //#define LHM_lh_num_items(type, lh) .lh_num_items(CHECKED_LHASH_OF(type, lh))
 //#define LHM_lh_down_load(type, lh) (CHECKED_LHASH_OF(type, lh).down_load)
 //#define LHM_lh_node_stats_bio(type, lh, out_) .lh_node_stats_bio(CHECKED_LHASH_OF(type, lh), out_)

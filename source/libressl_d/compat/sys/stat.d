@@ -2,10 +2,10 @@
  * Public domain
  * sys/stat.h compatibility shim
  */
-module libressl_d.compat.sys.stat;
+module libressl.compat.sys.stat;
 
 
-private static import libressl_d.compat.stdio;
+private static import libressl.compat.stdio;
 public import core.sys.posix.sys.stat;
 public import core.sys.windows.stat;
 public import core.sys.windows.windows;
@@ -93,12 +93,12 @@ version (Posix) {
 		/**
 		 * Read user
 		 */
-		alias S_IRUSR = libressl_d.compat.stdio.S_IREAD;
+		alias S_IRUSR = libressl.compat.stdio.S_IREAD;
 
 		/**
 		 * Write user
 		 */
-		alias S_IWUSR = libressl_d.compat.stdio.S_IWRITE;
+		alias S_IWUSR = libressl.compat.stdio.S_IWRITE;
 
 		/**
 		 * Execute user

@@ -2,11 +2,11 @@
  * Public domain
  * sys/socket.h compatibility shim
  */
-module libressl_d.compat.sys.socket;
+module libressl.compat.sys.socket;
 
 
 public import core.sys.posix.sys.socket;
-public import libressl_d.compat.win32netcompat;
+public import libressl.compat.win32netcompat;
 
 extern (C):
 nothrow @nogc:

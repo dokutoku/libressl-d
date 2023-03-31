@@ -55,21 +55,21 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.x509v3;
+module libressl.openssl.x509v3;
 
 
 private static import core.stdc.config;
 private static import core.stdc.stdint;
-private static import libressl_d.compat.stdio;
-private static import libressl_d.openssl.asn1;
-private static import libressl_d.openssl.err;
-private static import libressl_d.openssl.ossl_typ;
-private static import libressl_d.openssl.safestack;
-private static import libressl_d.openssl.stack;
-public import libressl_d.openssl.bio;
-public import libressl_d.openssl.conf;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.x509;
+private static import libressl.compat.stdio;
+private static import libressl.openssl.asn1;
+private static import libressl.openssl.err;
+private static import libressl.openssl.ossl_typ;
+private static import libressl.openssl.safestack;
+private static import libressl.openssl.stack;
+public import libressl.openssl.bio;
+public import libressl.openssl.conf;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.x509;
 
 enum HEADER_X509V3_H = true;
 
@@ -82,11 +82,11 @@ alias X509V3_EXT_NEW = extern (C) nothrow @nogc void* function();
 alias X509V3_EXT_FREE = extern (C) nothrow @nogc void function(void*);
 alias X509V3_EXT_D2I = extern (C) nothrow @nogc void* function(void*, const (ubyte)**, core.stdc.config.c_long);
 alias X509V3_EXT_I2D = extern (C) nothrow @nogc int function(void*, ubyte**);
-alias X509V3_EXT_I2V = extern (C) nothrow @nogc libressl_d.openssl.conf.stack_st_CONF_VALUE* function(const (.v3_ext_method)* method, void* ext, libressl_d.openssl.conf.stack_st_CONF_VALUE* extlist);
-alias X509V3_EXT_V2I = extern (C) nothrow @nogc void* function(const (.v3_ext_method)* method, .v3_ext_ctx* ctx, libressl_d.openssl.conf.stack_st_CONF_VALUE* values);
+alias X509V3_EXT_I2V = extern (C) nothrow @nogc libressl.openssl.conf.stack_st_CONF_VALUE* function(const (.v3_ext_method)* method, void* ext, libressl.openssl.conf.stack_st_CONF_VALUE* extlist);
+alias X509V3_EXT_V2I = extern (C) nothrow @nogc void* function(const (.v3_ext_method)* method, .v3_ext_ctx* ctx, libressl.openssl.conf.stack_st_CONF_VALUE* values);
 alias X509V3_EXT_I2S = extern (C) nothrow @nogc char* function(const (.v3_ext_method)* method, void* ext);
 alias X509V3_EXT_S2I = extern (C) nothrow @nogc void* function(const (.v3_ext_method)* method, .v3_ext_ctx* ctx, const (char)* str);
-alias X509V3_EXT_I2R = extern (C) nothrow @nogc int function(const (.v3_ext_method)* method, void* ext, libressl_d.openssl.ossl_typ.BIO* out_, int indent);
+alias X509V3_EXT_I2R = extern (C) nothrow @nogc int function(const (.v3_ext_method)* method, void* ext, libressl.openssl.ossl_typ.BIO* out_, int indent);
 alias X509V3_EXT_R2I = extern (C) nothrow @nogc void* function(const (.v3_ext_method)* method, .v3_ext_ctx* ctx, const (char)* str);
 
 /* V3 extension structure */
@@ -96,7 +96,7 @@ struct v3_ext_method
 	int ext_nid;
 	int ext_flags;
 	/* If this is set the following four fields are ignored */
-	libressl_d.openssl.asn1.ASN1_ITEM_EXP* it;
+	libressl.openssl.asn1.ASN1_ITEM_EXP* it;
 	/* Old style ASN1 calls */
 	.X509V3_EXT_NEW ext_new;
 	.X509V3_EXT_FREE ext_free;
@@ -124,9 +124,9 @@ struct v3_ext_method
 struct X509V3_CONF_METHOD_st
 {
 	char* function(void* db, const (char)* section, const (char)* value) get_string;
-	libressl_d.openssl.conf.stack_st_CONF_VALUE* function(void* db, const (char)* section) get_section;
+	libressl.openssl.conf.stack_st_CONF_VALUE* function(void* db, const (char)* section) get_section;
 	void function(void* db, char* string_) free_string;
-	void function(void* db, libressl_d.openssl.conf.stack_st_CONF_VALUE* section) free_section;
+	void function(void* db, libressl.openssl.conf.stack_st_CONF_VALUE* section) free_section;
 }
 
 alias X509V3_CONF_METHOD = .X509V3_CONF_METHOD_st;
@@ -139,10 +139,10 @@ enum CTX_TEST = 0x01;
 struct v3_ext_ctx
 {
 	int flags;
-	libressl_d.openssl.ossl_typ.X509* issuer_cert;
-	libressl_d.openssl.ossl_typ.X509* subject_cert;
-	libressl_d.openssl.x509.X509_REQ* subject_req;
-	libressl_d.openssl.ossl_typ.X509_CRL* crl;
+	libressl.openssl.ossl_typ.X509* issuer_cert;
+	libressl.openssl.ossl_typ.X509* subject_cert;
+	libressl.openssl.x509.X509_REQ* subject_req;
+	libressl.openssl.ossl_typ.X509_CRL* crl;
 	.X509V3_CONF_METHOD* db_meth;
 	void* db;
 	/* Maybe more here */
@@ -153,7 +153,7 @@ alias X509V3_EXT_METHOD = .v3_ext_method;
 //DECLARE_STACK_OF(X509V3_EXT_METHOD)
 struct stack_st_X509V3_EXT_METHOD
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /* ext_flags values */
@@ -161,36 +161,36 @@ enum X509V3_EXT_DYNAMIC = 0x01;
 enum X509V3_EXT_CTX_DEP = 0x02;
 enum X509V3_EXT_MULTILINE = 0x04;
 
-alias ENUMERATED_NAMES = libressl_d.openssl.asn1.BIT_STRING_BITNAME;
+alias ENUMERATED_NAMES = libressl.openssl.asn1.BIT_STRING_BITNAME;
 
 struct BASIC_CONSTRAINTS_st
 {
 	int ca;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* pathlen;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* pathlen;
 }
 
 alias BASIC_CONSTRAINTS = .BASIC_CONSTRAINTS_st;
 
 struct PKEY_USAGE_PERIOD_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* notBefore;
-	libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* notAfter;
+	libressl.openssl.ossl_typ.ASN1_GENERALIZEDTIME* notBefore;
+	libressl.openssl.ossl_typ.ASN1_GENERALIZEDTIME* notAfter;
 }
 
 alias PKEY_USAGE_PERIOD = .PKEY_USAGE_PERIOD_st;
 
 struct otherName_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* type_id;
-	libressl_d.openssl.asn1.ASN1_TYPE* value;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* type_id;
+	libressl.openssl.asn1.ASN1_TYPE* value;
 }
 
 alias OTHERNAME = .otherName_st;
 
 struct EDIPartyName_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_STRING* nameAssigner;
-	libressl_d.openssl.ossl_typ.ASN1_STRING* partyName;
+	libressl.openssl.ossl_typ.ASN1_STRING* nameAssigner;
+	libressl.openssl.ossl_typ.ASN1_STRING* partyName;
 }
 
 alias EDIPARTYNAME = .EDIPartyName_st;
@@ -218,41 +218,41 @@ struct GENERAL_NAME_st
 		 */
 		.OTHERNAME* otherName;
 
-		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* rfc822Name;
-		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* dNSName;
-		libressl_d.openssl.asn1.ASN1_TYPE* x400Address;
-		libressl_d.openssl.ossl_typ.X509_NAME* directoryName;
+		libressl.openssl.ossl_typ.ASN1_IA5STRING* rfc822Name;
+		libressl.openssl.ossl_typ.ASN1_IA5STRING* dNSName;
+		libressl.openssl.asn1.ASN1_TYPE* x400Address;
+		libressl.openssl.ossl_typ.X509_NAME* directoryName;
 		.EDIPARTYNAME* ediPartyName;
-		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* uniformResourceIdentifier;
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* iPAddress;
-		libressl_d.openssl.ossl_typ.ASN1_OBJECT* registeredID;
+		libressl.openssl.ossl_typ.ASN1_IA5STRING* uniformResourceIdentifier;
+		libressl.openssl.ossl_typ.ASN1_OCTET_STRING* iPAddress;
+		libressl.openssl.ossl_typ.ASN1_OBJECT* registeredID;
 
 		/* Old names */
 
 		/**
 		 * iPAddress
 		 */
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* ip;
+		libressl.openssl.ossl_typ.ASN1_OCTET_STRING* ip;
 
 		/**
 		 * dirn
 		 */
-		libressl_d.openssl.ossl_typ.X509_NAME* dirn;
+		libressl.openssl.ossl_typ.X509_NAME* dirn;
 
 		/**
 		 * rfc822Name, dNSName, uniformResourceIdentifier
 		 */
-		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* ia5;
+		libressl.openssl.ossl_typ.ASN1_IA5STRING* ia5;
 
 		/**
 		 * registeredID
 		 */
-		libressl_d.openssl.ossl_typ.ASN1_OBJECT* rid;
+		libressl.openssl.ossl_typ.ASN1_OBJECT* rid;
 
 		/**
 		 * x400Address
 		 */
-		libressl_d.openssl.asn1.ASN1_TYPE* other;
+		libressl.openssl.asn1.ASN1_TYPE* other;
 	}
 
 	d_ d;
@@ -262,7 +262,7 @@ alias GENERAL_NAME = .GENERAL_NAME_st;
 
 struct ACCESS_DESCRIPTION_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* method;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* method;
 	.GENERAL_NAME* location;
 }
 
@@ -270,12 +270,12 @@ alias ACCESS_DESCRIPTION = .ACCESS_DESCRIPTION_st;
 
 alias AUTHORITY_INFO_ACCESS = .stack_st_ACCESS_DESCRIPTION;
 
-alias EXTENDED_KEY_USAGE = libressl_d.openssl.asn1.stack_st_ASN1_OBJECT;
+alias EXTENDED_KEY_USAGE = libressl.openssl.asn1.stack_st_ASN1_OBJECT;
 
 //DECLARE_STACK_OF(GENERAL_NAME)
 struct stack_st_GENERAL_NAME
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 alias GENERAL_NAMES = .stack_st_GENERAL_NAME;
@@ -283,13 +283,13 @@ alias GENERAL_NAMES = .stack_st_GENERAL_NAME;
 //DECLARE_STACK_OF(GENERAL_NAMES)
 struct stack_st_GENERAL_NAMES
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 //DECLARE_STACK_OF(ACCESS_DESCRIPTION)
 struct stack_st_ACCESS_DESCRIPTION
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct DIST_POINT_NAME_st
@@ -299,7 +299,7 @@ struct DIST_POINT_NAME_st
 	union name_
 	{
 		.GENERAL_NAMES* fullname;
-		libressl_d.openssl.x509.stack_st_X509_NAME_ENTRY* relativename;
+		libressl.openssl.x509.stack_st_X509_NAME_ENTRY* relativename;
 	}
 
 	name_ name;
@@ -307,7 +307,7 @@ struct DIST_POINT_NAME_st
 	/**
 	 * If relativename then this contains the full distribution point name
 	 */
-	libressl_d.openssl.ossl_typ.X509_NAME* dpname;
+	libressl.openssl.ossl_typ.X509_NAME* dpname;
 }
 
 alias DIST_POINT_NAME = .DIST_POINT_NAME_st;
@@ -332,7 +332,7 @@ enum CRL_REASON_AA_COMPROMISE = 10;
 struct DIST_POINT_st
 {
 	.DIST_POINT_NAME* distpoint;
-	libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* reasons;
+	libressl.openssl.ossl_typ.ASN1_BIT_STRING* reasons;
 	.GENERAL_NAMES* CRLissuer;
 	int dp_reasons;
 }
@@ -342,22 +342,22 @@ alias CRL_DIST_POINTS = .stack_st_DIST_POINT;
 //DECLARE_STACK_OF(DIST_POINT)
 struct stack_st_DIST_POINT
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct AUTHORITY_KEYID_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* keyid;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* keyid;
 	.GENERAL_NAMES* issuer;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* serial;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* serial;
 }
 
 /* Strong extranet structures */
 
 struct SXNET_ID_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* zone;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* user;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* zone;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* user;
 }
 
 alias SXNETID = .SXNET_ID_st;
@@ -365,12 +365,12 @@ alias SXNETID = .SXNET_ID_st;
 //DECLARE_STACK_OF(SXNETID)
 struct stack_st_SXNETID
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct SXNET_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 	.stack_st_SXNETID* ids;
 }
 
@@ -378,8 +378,8 @@ alias SXNET = .SXNET_st;
 
 struct NOTICEREF_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_STRING* organization;
-	libressl_d.openssl.asn1.stack_st_ASN1_INTEGER* noticenos;
+	libressl.openssl.ossl_typ.ASN1_STRING* organization;
+	libressl.openssl.asn1.stack_st_ASN1_INTEGER* noticenos;
 }
 
 alias NOTICEREF = .NOTICEREF_st;
@@ -387,20 +387,20 @@ alias NOTICEREF = .NOTICEREF_st;
 struct USERNOTICE_st
 {
 	.NOTICEREF* noticeref;
-	libressl_d.openssl.ossl_typ.ASN1_STRING* exptext;
+	libressl.openssl.ossl_typ.ASN1_STRING* exptext;
 }
 
 alias USERNOTICE = .USERNOTICE_st;
 
 struct POLICYQUALINFO_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* pqualid;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* pqualid;
 
 	union d_
 	{
-		libressl_d.openssl.ossl_typ.ASN1_IA5STRING* cpsuri;
+		libressl.openssl.ossl_typ.ASN1_IA5STRING* cpsuri;
 		.USERNOTICE* usernotice;
-		libressl_d.openssl.asn1.ASN1_TYPE* other;
+		libressl.openssl.asn1.ASN1_TYPE* other;
 	}
 
 	d_ d;
@@ -411,12 +411,12 @@ alias POLICYQUALINFO = .POLICYQUALINFO_st;
 //DECLARE_STACK_OF(POLICYQUALINFO)
 struct stack_st_POLICYQUALINFO
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct POLICYINFO_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* policyid;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* policyid;
 	.stack_st_POLICYQUALINFO* qualifiers;
 }
 
@@ -427,13 +427,13 @@ alias CERTIFICATEPOLICIES = .stack_st_POLICYINFO;
 //DECLARE_STACK_OF(POLICYINFO)
 struct stack_st_POLICYINFO
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct POLICY_MAPPING_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* issuerDomainPolicy;
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* subjectDomainPolicy;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* issuerDomainPolicy;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* subjectDomainPolicy;
 }
 
 alias POLICY_MAPPING = .POLICY_MAPPING_st;
@@ -441,7 +441,7 @@ alias POLICY_MAPPING = .POLICY_MAPPING_st;
 //DECLARE_STACK_OF(POLICY_MAPPING)
 struct stack_st_POLICY_MAPPING
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 alias POLICY_MAPPINGS = .stack_st_POLICY_MAPPING;
@@ -449,8 +449,8 @@ alias POLICY_MAPPINGS = .stack_st_POLICY_MAPPING;
 struct GENERAL_SUBTREE_st
 {
 	.GENERAL_NAME* base;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* minimum;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* maximum;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* minimum;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* maximum;
 }
 
 alias GENERAL_SUBTREE = .GENERAL_SUBTREE_st;
@@ -458,7 +458,7 @@ alias GENERAL_SUBTREE = .GENERAL_SUBTREE_st;
 //DECLARE_STACK_OF(GENERAL_SUBTREE)
 struct stack_st_GENERAL_SUBTREE
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct NAME_CONSTRAINTS_st
@@ -469,8 +469,8 @@ struct NAME_CONSTRAINTS_st
 
 struct POLICY_CONSTRAINTS_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* requireExplicitPolicy;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* inhibitPolicyMapping;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* requireExplicitPolicy;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* inhibitPolicyMapping;
 }
 
 alias POLICY_CONSTRAINTS = .POLICY_CONSTRAINTS_st;
@@ -478,15 +478,15 @@ alias POLICY_CONSTRAINTS = .POLICY_CONSTRAINTS_st;
 /* Proxy certificate structures, see RFC 3820 */
 struct PROXY_POLICY_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* policyLanguage;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* policy;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* policyLanguage;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* policy;
 }
 
 alias PROXY_POLICY = .PROXY_POLICY_st;
 
 struct PROXY_CERT_INFO_EXTENSION_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* pcPathLengthConstraint;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* pcPathLengthConstraint;
 	.PROXY_POLICY* proxyPolicy;
 }
 
@@ -496,19 +496,19 @@ alias PROXY_CERT_INFO_EXTENSION = .PROXY_CERT_INFO_EXTENSION_st;
 void PROXY_POLICY_free(.PROXY_POLICY* a);
 .PROXY_POLICY* d2i_PROXY_POLICY(.PROXY_POLICY** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PROXY_POLICY(.PROXY_POLICY* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PROXY_POLICY_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PROXY_POLICY_it;
 .PROXY_CERT_INFO_EXTENSION* PROXY_CERT_INFO_EXTENSION_new();
 void PROXY_CERT_INFO_EXTENSION_free(.PROXY_CERT_INFO_EXTENSION* a);
 .PROXY_CERT_INFO_EXTENSION* d2i_PROXY_CERT_INFO_EXTENSION(.PROXY_CERT_INFO_EXTENSION** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PROXY_CERT_INFO_EXTENSION(.PROXY_CERT_INFO_EXTENSION* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PROXY_CERT_INFO_EXTENSION_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PROXY_CERT_INFO_EXTENSION_it;
 
 struct ISSUING_DIST_POINT_st
 {
 	.DIST_POINT_NAME* distpoint;
 	int onlyuser;
 	int onlyCA;
-	libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* onlysomereasons;
+	libressl.openssl.ossl_typ.ASN1_BIT_STRING* onlysomereasons;
 	int indirectCRL;
 	int onlyattr;
 }
@@ -550,7 +550,7 @@ enum IDP_INDIRECT = 0x20;
 enum IDP_REASONS = 0x40;
 
 pragma(inline, true)
-void X509V3_conf_err(libressl_d.openssl.conf.CONF_VALUE* val)
+void X509V3_conf_err(libressl.openssl.conf.CONF_VALUE* val)
 
 	in
 	{
@@ -559,11 +559,11 @@ void X509V3_conf_err(libressl_d.openssl.conf.CONF_VALUE* val)
 
 	do
 	{
-		libressl_d.openssl.err.ERR_asprintf_error_data(cast(char*)(&("section:%s,name:%s,value:%s\0"[0])), val.section, val.name, val.value);
+		libressl.openssl.err.ERR_asprintf_error_data(cast(char*)(&("section:%s,name:%s,value:%s\0"[0])), val.section, val.name, val.value);
 	}
 
 pragma(inline, true)
-void X509V3_set_ctx_test(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx)
+void X509V3_set_ctx_test(libressl.openssl.ossl_typ.X509V3_CTX* ctx)
 
 	do
 	{
@@ -572,7 +572,7 @@ void X509V3_set_ctx_test(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx)
 
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-void X509V3_set_ctx_nodb(scope libressl_d.openssl.ossl_typ.X509V3_CTX* ctx)
+void X509V3_set_ctx_nodb(scope libressl.openssl.ossl_typ.X509V3_CTX* ctx)
 
 	in
 	{
@@ -659,7 +659,7 @@ struct x509_purpose_st
 	int trust;
 
 	int flags;
-	int function(const (.x509_purpose_st)*, const (libressl_d.openssl.ossl_typ.X509)*, int) check_purpose;
+	int function(const (.x509_purpose_st)*, const (libressl.openssl.ossl_typ.X509)*, int) check_purpose;
 	char* name;
 	char* sname;
 	void* usr_data;
@@ -718,250 +718,250 @@ enum X509V3_ADD_SILENT = 0x10;
 //DECLARE_STACK_OF(X509_PURPOSE)
 struct stack_st_X509_PURPOSE
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 .BASIC_CONSTRAINTS* BASIC_CONSTRAINTS_new();
 void BASIC_CONSTRAINTS_free(.BASIC_CONSTRAINTS* a);
 .BASIC_CONSTRAINTS* d2i_BASIC_CONSTRAINTS(.BASIC_CONSTRAINTS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_BASIC_CONSTRAINTS(.BASIC_CONSTRAINTS* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM BASIC_CONSTRAINTS_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM BASIC_CONSTRAINTS_it;
 
 .SXNET* SXNET_new();
 void SXNET_free(.SXNET* a);
 .SXNET* d2i_SXNET(.SXNET** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_SXNET(.SXNET* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM SXNET_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM SXNET_it;
 .SXNETID* SXNETID_new();
 void SXNETID_free(.SXNETID* a);
 .SXNETID* d2i_SXNETID(.SXNETID** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_SXNETID(.SXNETID* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM SXNETID_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM SXNETID_it;
 
 int SXNET_add_id_asc(.SXNET** psx, const (char)* zone, const (char)* user, int userlen);
 int SXNET_add_id_ulong(.SXNET** psx, core.stdc.config.c_ulong lzone, const (char)* user, int userlen);
-int SXNET_add_id_INTEGER(.SXNET** psx, libressl_d.openssl.ossl_typ.ASN1_INTEGER* izone, const (char)* user, int userlen);
+int SXNET_add_id_INTEGER(.SXNET** psx, libressl.openssl.ossl_typ.ASN1_INTEGER* izone, const (char)* user, int userlen);
 
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* SXNET_get_id_asc(.SXNET* sx, const (char)* zone);
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* SXNET_get_id_ulong(.SXNET* sx, core.stdc.config.c_ulong lzone);
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* SXNET_get_id_INTEGER(.SXNET* sx, libressl_d.openssl.ossl_typ.ASN1_INTEGER* zone);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* SXNET_get_id_asc(.SXNET* sx, const (char)* zone);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* SXNET_get_id_ulong(.SXNET* sx, core.stdc.config.c_ulong lzone);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* SXNET_get_id_INTEGER(.SXNET* sx, libressl.openssl.ossl_typ.ASN1_INTEGER* zone);
 
-libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* AUTHORITY_KEYID_new();
-void AUTHORITY_KEYID_free(libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* a);
-libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* d2i_AUTHORITY_KEYID(libressl_d.openssl.ossl_typ.AUTHORITY_KEYID** a, const (ubyte)** in_, core.stdc.config.c_long len);
-int i2d_AUTHORITY_KEYID(libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM AUTHORITY_KEYID_it;
+libressl.openssl.ossl_typ.AUTHORITY_KEYID* AUTHORITY_KEYID_new();
+void AUTHORITY_KEYID_free(libressl.openssl.ossl_typ.AUTHORITY_KEYID* a);
+libressl.openssl.ossl_typ.AUTHORITY_KEYID* d2i_AUTHORITY_KEYID(libressl.openssl.ossl_typ.AUTHORITY_KEYID** a, const (ubyte)** in_, core.stdc.config.c_long len);
+int i2d_AUTHORITY_KEYID(libressl.openssl.ossl_typ.AUTHORITY_KEYID* a, ubyte** out_);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM AUTHORITY_KEYID_it;
 
 .PKEY_USAGE_PERIOD* PKEY_USAGE_PERIOD_new();
 void PKEY_USAGE_PERIOD_free(.PKEY_USAGE_PERIOD* a);
 .PKEY_USAGE_PERIOD* d2i_PKEY_USAGE_PERIOD(.PKEY_USAGE_PERIOD** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKEY_USAGE_PERIOD(.PKEY_USAGE_PERIOD* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKEY_USAGE_PERIOD_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKEY_USAGE_PERIOD_it;
 
 .GENERAL_NAME* GENERAL_NAME_new();
 void GENERAL_NAME_free(.GENERAL_NAME* a);
 .GENERAL_NAME* d2i_GENERAL_NAME(.GENERAL_NAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_GENERAL_NAME(.GENERAL_NAME* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_NAME_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM GENERAL_NAME_it;
 .GENERAL_NAME* GENERAL_NAME_dup(.GENERAL_NAME* a);
 int GENERAL_NAME_cmp(.GENERAL_NAME* a, .GENERAL_NAME* b);
 
-libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* v2i_ASN1_BIT_STRING(.X509V3_EXT_METHOD* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.stack_st_CONF_VALUE* nval);
-libressl_d.openssl.conf.stack_st_CONF_VALUE* i2v_ASN1_BIT_STRING(.X509V3_EXT_METHOD* method, libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* bits, libressl_d.openssl.conf.stack_st_CONF_VALUE* extlist);
+libressl.openssl.ossl_typ.ASN1_BIT_STRING* v2i_ASN1_BIT_STRING(.X509V3_EXT_METHOD* method, libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.conf.stack_st_CONF_VALUE* nval);
+libressl.openssl.conf.stack_st_CONF_VALUE* i2v_ASN1_BIT_STRING(.X509V3_EXT_METHOD* method, libressl.openssl.ossl_typ.ASN1_BIT_STRING* bits, libressl.openssl.conf.stack_st_CONF_VALUE* extlist);
 
-libressl_d.openssl.conf.stack_st_CONF_VALUE* i2v_GENERAL_NAME(.X509V3_EXT_METHOD* method, .GENERAL_NAME* gen, libressl_d.openssl.conf.stack_st_CONF_VALUE* ret);
-int GENERAL_NAME_print(libressl_d.openssl.ossl_typ.BIO* out_, .GENERAL_NAME* gen);
+libressl.openssl.conf.stack_st_CONF_VALUE* i2v_GENERAL_NAME(.X509V3_EXT_METHOD* method, .GENERAL_NAME* gen, libressl.openssl.conf.stack_st_CONF_VALUE* ret);
+int GENERAL_NAME_print(libressl.openssl.ossl_typ.BIO* out_, .GENERAL_NAME* gen);
 
 .GENERAL_NAMES* GENERAL_NAMES_new();
 void GENERAL_NAMES_free(.GENERAL_NAMES* a);
 .GENERAL_NAMES* d2i_GENERAL_NAMES(.GENERAL_NAMES** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_GENERAL_NAMES(.GENERAL_NAMES* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_NAMES_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM GENERAL_NAMES_it;
 
-libressl_d.openssl.conf.stack_st_CONF_VALUE* i2v_GENERAL_NAMES(.X509V3_EXT_METHOD* method, .GENERAL_NAMES* gen, libressl_d.openssl.conf.stack_st_CONF_VALUE* extlist);
-.GENERAL_NAMES* v2i_GENERAL_NAMES(const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.stack_st_CONF_VALUE* nval);
+libressl.openssl.conf.stack_st_CONF_VALUE* i2v_GENERAL_NAMES(.X509V3_EXT_METHOD* method, .GENERAL_NAMES* gen, libressl.openssl.conf.stack_st_CONF_VALUE* extlist);
+.GENERAL_NAMES* v2i_GENERAL_NAMES(const (.X509V3_EXT_METHOD)* method, libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.conf.stack_st_CONF_VALUE* nval);
 
 .OTHERNAME* OTHERNAME_new();
 void OTHERNAME_free(.OTHERNAME* a);
 .OTHERNAME* d2i_OTHERNAME(.OTHERNAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_OTHERNAME(.OTHERNAME* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM OTHERNAME_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM OTHERNAME_it;
 .EDIPARTYNAME* EDIPARTYNAME_new();
 void EDIPARTYNAME_free(.EDIPARTYNAME* a);
 .EDIPARTYNAME* d2i_EDIPARTYNAME(.EDIPARTYNAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_EDIPARTYNAME(.EDIPARTYNAME* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM EDIPARTYNAME_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM EDIPARTYNAME_it;
 int OTHERNAME_cmp(.OTHERNAME* a, .OTHERNAME* b);
 void GENERAL_NAME_set0_value(.GENERAL_NAME* a, int type, void* value);
 void* GENERAL_NAME_get0_value(.GENERAL_NAME* a, int* ptype);
-int GENERAL_NAME_set0_othername(.GENERAL_NAME* gen, libressl_d.openssl.ossl_typ.ASN1_OBJECT* oid, libressl_d.openssl.asn1.ASN1_TYPE* value);
-int GENERAL_NAME_get0_otherName(.GENERAL_NAME* gen, libressl_d.openssl.ossl_typ.ASN1_OBJECT** poid, libressl_d.openssl.asn1.ASN1_TYPE** pvalue);
+int GENERAL_NAME_set0_othername(.GENERAL_NAME* gen, libressl.openssl.ossl_typ.ASN1_OBJECT* oid, libressl.openssl.asn1.ASN1_TYPE* value);
+int GENERAL_NAME_get0_otherName(.GENERAL_NAME* gen, libressl.openssl.ossl_typ.ASN1_OBJECT** poid, libressl.openssl.asn1.ASN1_TYPE** pvalue);
 
-char* i2s_ASN1_OCTET_STRING(.X509V3_EXT_METHOD* method, const (libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING)* ia5);
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* s2i_ASN1_OCTET_STRING(.X509V3_EXT_METHOD* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* str);
+char* i2s_ASN1_OCTET_STRING(.X509V3_EXT_METHOD* method, const (libressl.openssl.ossl_typ.ASN1_OCTET_STRING)* ia5);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* s2i_ASN1_OCTET_STRING(.X509V3_EXT_METHOD* method, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* str);
 
 .EXTENDED_KEY_USAGE* EXTENDED_KEY_USAGE_new();
 void EXTENDED_KEY_USAGE_free(.EXTENDED_KEY_USAGE* a);
 .EXTENDED_KEY_USAGE* d2i_EXTENDED_KEY_USAGE(.EXTENDED_KEY_USAGE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_EXTENDED_KEY_USAGE(.EXTENDED_KEY_USAGE* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM EXTENDED_KEY_USAGE_it;
-int i2a_ACCESS_DESCRIPTION(libressl_d.openssl.ossl_typ.BIO* bp, const (.ACCESS_DESCRIPTION)* a);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM EXTENDED_KEY_USAGE_it;
+int i2a_ACCESS_DESCRIPTION(libressl.openssl.ossl_typ.BIO* bp, const (.ACCESS_DESCRIPTION)* a);
 
 .CERTIFICATEPOLICIES* CERTIFICATEPOLICIES_new();
 void CERTIFICATEPOLICIES_free(.CERTIFICATEPOLICIES* a);
 .CERTIFICATEPOLICIES* d2i_CERTIFICATEPOLICIES(.CERTIFICATEPOLICIES** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_CERTIFICATEPOLICIES(.CERTIFICATEPOLICIES* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CERTIFICATEPOLICIES_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM CERTIFICATEPOLICIES_it;
 .POLICYINFO* POLICYINFO_new();
 void POLICYINFO_free(.POLICYINFO* a);
 .POLICYINFO* d2i_POLICYINFO(.POLICYINFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_POLICYINFO(.POLICYINFO* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICYINFO_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM POLICYINFO_it;
 .POLICYQUALINFO* POLICYQUALINFO_new();
 void POLICYQUALINFO_free(.POLICYQUALINFO* a);
 .POLICYQUALINFO* d2i_POLICYQUALINFO(.POLICYQUALINFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_POLICYQUALINFO(.POLICYQUALINFO* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICYQUALINFO_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM POLICYQUALINFO_it;
 .USERNOTICE* USERNOTICE_new();
 void USERNOTICE_free(.USERNOTICE* a);
 .USERNOTICE* d2i_USERNOTICE(.USERNOTICE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_USERNOTICE(.USERNOTICE* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM USERNOTICE_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM USERNOTICE_it;
 .NOTICEREF* NOTICEREF_new();
 void NOTICEREF_free(.NOTICEREF* a);
 .NOTICEREF* d2i_NOTICEREF(.NOTICEREF** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_NOTICEREF(.NOTICEREF* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NOTICEREF_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM NOTICEREF_it;
 
 .CRL_DIST_POINTS* CRL_DIST_POINTS_new();
 void CRL_DIST_POINTS_free(.CRL_DIST_POINTS* a);
 .CRL_DIST_POINTS* d2i_CRL_DIST_POINTS(.CRL_DIST_POINTS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_CRL_DIST_POINTS(.CRL_DIST_POINTS* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CRL_DIST_POINTS_it;
-libressl_d.openssl.ossl_typ.DIST_POINT* DIST_POINT_new();
-void DIST_POINT_free(libressl_d.openssl.ossl_typ.DIST_POINT* a);
-libressl_d.openssl.ossl_typ.DIST_POINT* d2i_DIST_POINT(libressl_d.openssl.ossl_typ.DIST_POINT** a, const (ubyte)** in_, core.stdc.config.c_long len);
-int i2d_DIST_POINT(libressl_d.openssl.ossl_typ.DIST_POINT* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DIST_POINT_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM CRL_DIST_POINTS_it;
+libressl.openssl.ossl_typ.DIST_POINT* DIST_POINT_new();
+void DIST_POINT_free(libressl.openssl.ossl_typ.DIST_POINT* a);
+libressl.openssl.ossl_typ.DIST_POINT* d2i_DIST_POINT(libressl.openssl.ossl_typ.DIST_POINT** a, const (ubyte)** in_, core.stdc.config.c_long len);
+int i2d_DIST_POINT(libressl.openssl.ossl_typ.DIST_POINT* a, ubyte** out_);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM DIST_POINT_it;
 .DIST_POINT_NAME* DIST_POINT_NAME_new();
 void DIST_POINT_NAME_free(.DIST_POINT_NAME* a);
 .DIST_POINT_NAME* d2i_DIST_POINT_NAME(.DIST_POINT_NAME** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_DIST_POINT_NAME(.DIST_POINT_NAME* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DIST_POINT_NAME_it;
-libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* ISSUING_DIST_POINT_new();
-void ISSUING_DIST_POINT_free(libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* a);
-libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* d2i_ISSUING_DIST_POINT(libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT** a, const (ubyte)** in_, core.stdc.config.c_long len);
-int i2d_ISSUING_DIST_POINT(libressl_d.openssl.ossl_typ.ISSUING_DIST_POINT* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ISSUING_DIST_POINT_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM DIST_POINT_NAME_it;
+libressl.openssl.ossl_typ.ISSUING_DIST_POINT* ISSUING_DIST_POINT_new();
+void ISSUING_DIST_POINT_free(libressl.openssl.ossl_typ.ISSUING_DIST_POINT* a);
+libressl.openssl.ossl_typ.ISSUING_DIST_POINT* d2i_ISSUING_DIST_POINT(libressl.openssl.ossl_typ.ISSUING_DIST_POINT** a, const (ubyte)** in_, core.stdc.config.c_long len);
+int i2d_ISSUING_DIST_POINT(libressl.openssl.ossl_typ.ISSUING_DIST_POINT* a, ubyte** out_);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM ISSUING_DIST_POINT_it;
 
-int DIST_POINT_set_dpname(.DIST_POINT_NAME* dpn, libressl_d.openssl.ossl_typ.X509_NAME* iname);
+int DIST_POINT_set_dpname(.DIST_POINT_NAME* dpn, libressl.openssl.ossl_typ.X509_NAME* iname);
 
-int NAME_CONSTRAINTS_check(libressl_d.openssl.ossl_typ.X509* x, libressl_d.openssl.ossl_typ.NAME_CONSTRAINTS* nc);
+int NAME_CONSTRAINTS_check(libressl.openssl.ossl_typ.X509* x, libressl.openssl.ossl_typ.NAME_CONSTRAINTS* nc);
 
 .ACCESS_DESCRIPTION* ACCESS_DESCRIPTION_new();
 void ACCESS_DESCRIPTION_free(.ACCESS_DESCRIPTION* a);
 .ACCESS_DESCRIPTION* d2i_ACCESS_DESCRIPTION(.ACCESS_DESCRIPTION** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ACCESS_DESCRIPTION(.ACCESS_DESCRIPTION* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ACCESS_DESCRIPTION_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM ACCESS_DESCRIPTION_it;
 .AUTHORITY_INFO_ACCESS* AUTHORITY_INFO_ACCESS_new();
 void AUTHORITY_INFO_ACCESS_free(.AUTHORITY_INFO_ACCESS* a);
 .AUTHORITY_INFO_ACCESS* d2i_AUTHORITY_INFO_ACCESS(.AUTHORITY_INFO_ACCESS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_AUTHORITY_INFO_ACCESS(.AUTHORITY_INFO_ACCESS* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM AUTHORITY_INFO_ACCESS_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM AUTHORITY_INFO_ACCESS_it;
 
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPING_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPING_it;
 .POLICY_MAPPING* POLICY_MAPPING_new();
 void POLICY_MAPPING_free(.POLICY_MAPPING* a);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPINGS_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM POLICY_MAPPINGS_it;
 
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GENERAL_SUBTREE_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM GENERAL_SUBTREE_it;
 .GENERAL_SUBTREE* GENERAL_SUBTREE_new();
 void GENERAL_SUBTREE_free(.GENERAL_SUBTREE* a);
 
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM NAME_CONSTRAINTS_it;
-libressl_d.openssl.ossl_typ.NAME_CONSTRAINTS* NAME_CONSTRAINTS_new();
-void NAME_CONSTRAINTS_free(libressl_d.openssl.ossl_typ.NAME_CONSTRAINTS* a);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM NAME_CONSTRAINTS_it;
+libressl.openssl.ossl_typ.NAME_CONSTRAINTS* NAME_CONSTRAINTS_new();
+void NAME_CONSTRAINTS_free(libressl.openssl.ossl_typ.NAME_CONSTRAINTS* a);
 
 .POLICY_CONSTRAINTS* POLICY_CONSTRAINTS_new();
 void POLICY_CONSTRAINTS_free(.POLICY_CONSTRAINTS* a);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM POLICY_CONSTRAINTS_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM POLICY_CONSTRAINTS_it;
 
-.GENERAL_NAME* a2i_GENERAL_NAME(.GENERAL_NAME* out_, const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, int gen_type, const (char)* value, int is_nc);
+.GENERAL_NAME* a2i_GENERAL_NAME(.GENERAL_NAME* out_, const (.X509V3_EXT_METHOD)* method, libressl.openssl.ossl_typ.X509V3_CTX* ctx, int gen_type, const (char)* value, int is_nc);
 
-static assert(libressl_d.openssl.conf.HEADER_CONF_H);
-.GENERAL_NAME* v2i_GENERAL_NAME(const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.CONF_VALUE* cnf);
-.GENERAL_NAME* v2i_GENERAL_NAME_ex(.GENERAL_NAME* out_, const (.X509V3_EXT_METHOD)* method, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.CONF_VALUE* cnf, int is_nc);
-void X509V3_conf_free(libressl_d.openssl.conf.CONF_VALUE* val);
+static assert(libressl.openssl.conf.HEADER_CONF_H);
+.GENERAL_NAME* v2i_GENERAL_NAME(const (.X509V3_EXT_METHOD)* method, libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.conf.CONF_VALUE* cnf);
+.GENERAL_NAME* v2i_GENERAL_NAME_ex(.GENERAL_NAME* out_, const (.X509V3_EXT_METHOD)* method, libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.conf.CONF_VALUE* cnf, int is_nc);
+void X509V3_conf_free(libressl.openssl.conf.CONF_VALUE* val);
 
-libressl_d.openssl.x509.X509_EXTENSION* X509V3_EXT_nconf_nid(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, int ext_nid, const (char)* value);
-libressl_d.openssl.x509.X509_EXTENSION* X509V3_EXT_nconf(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* name, const (char)* value);
-int X509V3_EXT_add_nconf_sk(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl_d.openssl.x509.stack_st_X509_EXTENSION** sk);
-int X509V3_EXT_add_nconf(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl_d.openssl.ossl_typ.X509* cert);
-int X509V3_EXT_REQ_add_nconf(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl_d.openssl.x509.X509_REQ* req);
-int X509V3_EXT_CRL_add_nconf(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl_d.openssl.ossl_typ.X509_CRL* crl);
+libressl.openssl.x509.X509_EXTENSION* X509V3_EXT_nconf_nid(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, int ext_nid, const (char)* value);
+libressl.openssl.x509.X509_EXTENSION* X509V3_EXT_nconf(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* name, const (char)* value);
+int X509V3_EXT_add_nconf_sk(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl.openssl.x509.stack_st_X509_EXTENSION** sk);
+int X509V3_EXT_add_nconf(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl.openssl.ossl_typ.X509* cert);
+int X509V3_EXT_REQ_add_nconf(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl.openssl.x509.X509_REQ* req);
+int X509V3_EXT_CRL_add_nconf(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl.openssl.ossl_typ.X509_CRL* crl);
 
-libressl_d.openssl.x509.X509_EXTENSION* X509V3_EXT_conf_nid(libressl_d.openssl.conf.lhash_st_CONF_VALUE* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, int ext_nid, const (char)* value);
-libressl_d.openssl.x509.X509_EXTENSION* X509V3_EXT_conf(libressl_d.openssl.conf.lhash_st_CONF_VALUE* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* name, const (char)* value);
-int X509V3_EXT_add_conf(libressl_d.openssl.conf.lhash_st_CONF_VALUE* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl_d.openssl.ossl_typ.X509* cert);
-int X509V3_EXT_REQ_add_conf(libressl_d.openssl.conf.lhash_st_CONF_VALUE* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl_d.openssl.x509.X509_REQ* req);
-int X509V3_EXT_CRL_add_conf(libressl_d.openssl.conf.lhash_st_CONF_VALUE* conf, libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl_d.openssl.ossl_typ.X509_CRL* crl);
+libressl.openssl.x509.X509_EXTENSION* X509V3_EXT_conf_nid(libressl.openssl.conf.lhash_st_CONF_VALUE* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, int ext_nid, const (char)* value);
+libressl.openssl.x509.X509_EXTENSION* X509V3_EXT_conf(libressl.openssl.conf.lhash_st_CONF_VALUE* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* name, const (char)* value);
+int X509V3_EXT_add_conf(libressl.openssl.conf.lhash_st_CONF_VALUE* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl.openssl.ossl_typ.X509* cert);
+int X509V3_EXT_REQ_add_conf(libressl.openssl.conf.lhash_st_CONF_VALUE* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl.openssl.x509.X509_REQ* req);
+int X509V3_EXT_CRL_add_conf(libressl.openssl.conf.lhash_st_CONF_VALUE* conf, libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section, libressl.openssl.ossl_typ.X509_CRL* crl);
 
-int X509V3_add_value_bool_nf(const (char)* name, int asn1_bool, libressl_d.openssl.conf.stack_st_CONF_VALUE** extlist);
-int X509V3_get_value_bool(const (libressl_d.openssl.conf.CONF_VALUE)* value, int* asn1_bool);
-int X509V3_get_value_int(const (libressl_d.openssl.conf.CONF_VALUE)* value, libressl_d.openssl.ossl_typ.ASN1_INTEGER** aint);
-void X509V3_set_nconf(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.ossl_typ.CONF* conf);
-void X509V3_set_conf_lhash(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.lhash_st_CONF_VALUE* lhash);
+int X509V3_add_value_bool_nf(const (char)* name, int asn1_bool, libressl.openssl.conf.stack_st_CONF_VALUE** extlist);
+int X509V3_get_value_bool(const (libressl.openssl.conf.CONF_VALUE)* value, int* asn1_bool);
+int X509V3_get_value_int(const (libressl.openssl.conf.CONF_VALUE)* value, libressl.openssl.ossl_typ.ASN1_INTEGER** aint);
+void X509V3_set_nconf(libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.ossl_typ.CONF* conf);
+void X509V3_set_conf_lhash(libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.conf.lhash_st_CONF_VALUE* lhash);
 
-char* X509V3_get_string(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* name, const (char)* section);
-libressl_d.openssl.conf.stack_st_CONF_VALUE* X509V3_get_section(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section);
-void X509V3_string_free(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, char* str);
-void X509V3_section_free(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.conf.stack_st_CONF_VALUE* section);
-void X509V3_set_ctx(libressl_d.openssl.ossl_typ.X509V3_CTX* ctx, libressl_d.openssl.ossl_typ.X509* issuer, libressl_d.openssl.ossl_typ.X509* subject, libressl_d.openssl.x509.X509_REQ* req, libressl_d.openssl.ossl_typ.X509_CRL* crl, int flags);
+char* X509V3_get_string(libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* name, const (char)* section);
+libressl.openssl.conf.stack_st_CONF_VALUE* X509V3_get_section(libressl.openssl.ossl_typ.X509V3_CTX* ctx, const (char)* section);
+void X509V3_string_free(libressl.openssl.ossl_typ.X509V3_CTX* ctx, char* str);
+void X509V3_section_free(libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.conf.stack_st_CONF_VALUE* section);
+void X509V3_set_ctx(libressl.openssl.ossl_typ.X509V3_CTX* ctx, libressl.openssl.ossl_typ.X509* issuer, libressl.openssl.ossl_typ.X509* subject, libressl.openssl.x509.X509_REQ* req, libressl.openssl.ossl_typ.X509_CRL* crl, int flags);
 
-int X509V3_add_value(const (char)* name, const (char)* value, libressl_d.openssl.conf.stack_st_CONF_VALUE** extlist);
-int X509V3_add_value_uchar(const (char)* name, const (ubyte)* value, libressl_d.openssl.conf.stack_st_CONF_VALUE** extlist);
-int X509V3_add_value_bool(const (char)* name, int asn1_bool, libressl_d.openssl.conf.stack_st_CONF_VALUE** extlist);
-int X509V3_add_value_int(const (char)* name, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* aint, libressl_d.openssl.conf.stack_st_CONF_VALUE** extlist);
-char* i2s_ASN1_INTEGER(.X509V3_EXT_METHOD* meth, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* aint);
-libressl_d.openssl.ossl_typ.ASN1_INTEGER* s2i_ASN1_INTEGER(.X509V3_EXT_METHOD* meth, const (char)* value);
-char* i2s_ASN1_ENUMERATED(.X509V3_EXT_METHOD* meth, const (libressl_d.openssl.ossl_typ.ASN1_ENUMERATED)* aint);
-char* i2s_ASN1_ENUMERATED_TABLE(.X509V3_EXT_METHOD* meth, const (libressl_d.openssl.ossl_typ.ASN1_ENUMERATED)* aint);
+int X509V3_add_value(const (char)* name, const (char)* value, libressl.openssl.conf.stack_st_CONF_VALUE** extlist);
+int X509V3_add_value_uchar(const (char)* name, const (ubyte)* value, libressl.openssl.conf.stack_st_CONF_VALUE** extlist);
+int X509V3_add_value_bool(const (char)* name, int asn1_bool, libressl.openssl.conf.stack_st_CONF_VALUE** extlist);
+int X509V3_add_value_int(const (char)* name, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* aint, libressl.openssl.conf.stack_st_CONF_VALUE** extlist);
+char* i2s_ASN1_INTEGER(.X509V3_EXT_METHOD* meth, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* aint);
+libressl.openssl.ossl_typ.ASN1_INTEGER* s2i_ASN1_INTEGER(.X509V3_EXT_METHOD* meth, const (char)* value);
+char* i2s_ASN1_ENUMERATED(.X509V3_EXT_METHOD* meth, const (libressl.openssl.ossl_typ.ASN1_ENUMERATED)* aint);
+char* i2s_ASN1_ENUMERATED_TABLE(.X509V3_EXT_METHOD* meth, const (libressl.openssl.ossl_typ.ASN1_ENUMERATED)* aint);
 int X509V3_EXT_add(.X509V3_EXT_METHOD* ext);
 int X509V3_EXT_add_list(.X509V3_EXT_METHOD* extlist);
 int X509V3_EXT_add_alias(int nid_to, int nid_from);
 void X509V3_EXT_cleanup();
 
-const (.X509V3_EXT_METHOD)* X509V3_EXT_get(libressl_d.openssl.x509.X509_EXTENSION* ext);
+const (.X509V3_EXT_METHOD)* X509V3_EXT_get(libressl.openssl.x509.X509_EXTENSION* ext);
 const (.X509V3_EXT_METHOD)* X509V3_EXT_get_nid(int nid);
 int X509V3_add_standard_extensions();
-libressl_d.openssl.conf.stack_st_CONF_VALUE* X509V3_parse_list(const (char)* line);
-void* X509V3_EXT_d2i(libressl_d.openssl.x509.X509_EXTENSION* ext);
-void* X509V3_get_d2i(const (libressl_d.openssl.x509.stack_st_X509_EXTENSION)* x, int nid, int* crit, int* idx);
+libressl.openssl.conf.stack_st_CONF_VALUE* X509V3_parse_list(const (char)* line);
+void* X509V3_EXT_d2i(libressl.openssl.x509.X509_EXTENSION* ext);
+void* X509V3_get_d2i(const (libressl.openssl.x509.stack_st_X509_EXTENSION)* x, int nid, int* crit, int* idx);
 
-libressl_d.openssl.x509.X509_EXTENSION* X509V3_EXT_i2d(int ext_nid, int crit, void* ext_struc);
-int X509V3_add1_i2d(libressl_d.openssl.x509.stack_st_X509_EXTENSION** x, int nid, void* value, int crit, core.stdc.config.c_ulong flags);
+libressl.openssl.x509.X509_EXTENSION* X509V3_EXT_i2d(int ext_nid, int crit, void* ext_struc);
+int X509V3_add1_i2d(libressl.openssl.x509.stack_st_X509_EXTENSION** x, int nid, void* value, int crit, core.stdc.config.c_ulong flags);
 
 char* hex_to_string(const (ubyte)* buffer, core.stdc.config.c_long len);
 ubyte* string_to_hex(const (char)* str, core.stdc.config.c_long* len);
 
-void X509V3_EXT_val_prn(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.conf.stack_st_CONF_VALUE* val, int indent, int ml);
-int X509V3_EXT_print(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.x509.X509_EXTENSION* ext, core.stdc.config.c_ulong flag, int indent);
-int X509V3_EXT_print_fp(libressl_d.compat.stdio.FILE* out_, libressl_d.openssl.x509.X509_EXTENSION* ext, int flag, int indent);
+void X509V3_EXT_val_prn(libressl.openssl.ossl_typ.BIO* out_, libressl.openssl.conf.stack_st_CONF_VALUE* val, int indent, int ml);
+int X509V3_EXT_print(libressl.openssl.ossl_typ.BIO* out_, libressl.openssl.x509.X509_EXTENSION* ext, core.stdc.config.c_ulong flag, int indent);
+int X509V3_EXT_print_fp(libressl.compat.stdio.FILE* out_, libressl.openssl.x509.X509_EXTENSION* ext, int flag, int indent);
 
-int X509V3_extensions_print(libressl_d.openssl.ossl_typ.BIO* out_, const (char)* title, const (libressl_d.openssl.x509.stack_st_X509_EXTENSION)* exts, core.stdc.config.c_ulong flag, int indent);
+int X509V3_extensions_print(libressl.openssl.ossl_typ.BIO* out_, const (char)* title, const (libressl.openssl.x509.stack_st_X509_EXTENSION)* exts, core.stdc.config.c_ulong flag, int indent);
 
-int X509_check_ca(libressl_d.openssl.ossl_typ.X509* x);
-int X509_check_purpose(libressl_d.openssl.ossl_typ.X509* x, int id, int ca);
-int X509_supported_extension(libressl_d.openssl.x509.X509_EXTENSION* ex);
+int X509_check_ca(libressl.openssl.ossl_typ.X509* x);
+int X509_check_purpose(libressl.openssl.ossl_typ.X509* x, int id, int ca);
+int X509_supported_extension(libressl.openssl.x509.X509_EXTENSION* ex);
 int X509_PURPOSE_set(int* p, int purpose);
-int X509_check_issued(libressl_d.openssl.ossl_typ.X509* issuer, libressl_d.openssl.ossl_typ.X509* subject);
-int X509_check_akid(libressl_d.openssl.ossl_typ.X509* issuer, libressl_d.openssl.ossl_typ.AUTHORITY_KEYID* akid);
+int X509_check_issued(libressl.openssl.ossl_typ.X509* issuer, libressl.openssl.ossl_typ.X509* subject);
+int X509_check_akid(libressl.openssl.ossl_typ.X509* issuer, libressl.openssl.ossl_typ.AUTHORITY_KEYID* akid);
 int X509_PURPOSE_get_count();
 .X509_PURPOSE* X509_PURPOSE_get0(int idx);
 int X509_PURPOSE_get_by_sname(const (char)* sname);
 int X509_PURPOSE_get_by_id(int id);
 
-private alias X509_PURPOSE_add_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (.X509_PURPOSE)*, const (libressl_d.openssl.ossl_typ.X509)*, int);
+private alias X509_PURPOSE_add_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (.X509_PURPOSE)*, const (libressl.openssl.ossl_typ.X509)*, int);
 int X509_PURPOSE_add(int id, int trust, int flags, .X509_PURPOSE_add_func ck, const (char)* name, const (char)* sname, void* arg);
 
 char* X509_PURPOSE_get0_name(const (.X509_PURPOSE)* xp);
@@ -969,14 +969,14 @@ char* X509_PURPOSE_get0_sname(const (.X509_PURPOSE)* xp);
 int X509_PURPOSE_get_trust(const (.X509_PURPOSE)* xp);
 void X509_PURPOSE_cleanup();
 int X509_PURPOSE_get_id(const (.X509_PURPOSE)*);
-core.stdc.stdint.uint32_t X509_get_extension_flags(libressl_d.openssl.ossl_typ.X509* x);
-core.stdc.stdint.uint32_t X509_get_key_usage(libressl_d.openssl.ossl_typ.X509* x);
-core.stdc.stdint.uint32_t X509_get_extended_key_usage(libressl_d.openssl.ossl_typ.X509* x);
+core.stdc.stdint.uint32_t X509_get_extension_flags(libressl.openssl.ossl_typ.X509* x);
+core.stdc.stdint.uint32_t X509_get_key_usage(libressl.openssl.ossl_typ.X509* x);
+core.stdc.stdint.uint32_t X509_get_extended_key_usage(libressl.openssl.ossl_typ.X509* x);
 
-libressl_d.openssl.safestack.stack_st_OPENSSL_STRING* X509_get1_email(libressl_d.openssl.ossl_typ.X509* x);
-libressl_d.openssl.safestack.stack_st_OPENSSL_STRING* X509_REQ_get1_email(libressl_d.openssl.x509.X509_REQ* x);
-void X509_email_free(libressl_d.openssl.safestack.stack_st_OPENSSL_STRING* sk);
-libressl_d.openssl.safestack.stack_st_OPENSSL_STRING* X509_get1_ocsp(libressl_d.openssl.ossl_typ.X509* x);
+libressl.openssl.safestack.stack_st_OPENSSL_STRING* X509_get1_email(libressl.openssl.ossl_typ.X509* x);
+libressl.openssl.safestack.stack_st_OPENSSL_STRING* X509_REQ_get1_email(libressl.openssl.x509.X509_REQ* x);
+void X509_email_free(libressl.openssl.safestack.stack_st_OPENSSL_STRING* sk);
+libressl.openssl.safestack.stack_st_OPENSSL_STRING* X509_get1_ocsp(libressl.openssl.ossl_typ.X509* x);
 
 /* Flags for X509_check_* functions */
 /**
@@ -1016,30 +1016,30 @@ enum X509_CHECK_FLAG_NEVER_CHECK_SUBJECT = 0x20;
  */
 enum _X509_CHECK_FLAG_DOT_SUBDOMAINS = 0x8000;
 
-int X509_check_host(libressl_d.openssl.ossl_typ.X509* x, const (char)* chk, size_t chklen, uint flags, char** peername);
-int X509_check_email(libressl_d.openssl.ossl_typ.X509* x, const (char)* chk, size_t chklen, uint flags);
-int X509_check_ip(libressl_d.openssl.ossl_typ.X509* x, const (ubyte)* chk, size_t chklen, uint flags);
-int X509_check_ip_asc(libressl_d.openssl.ossl_typ.X509* x, const (char)* ipasc, uint flags);
+int X509_check_host(libressl.openssl.ossl_typ.X509* x, const (char)* chk, size_t chklen, uint flags, char** peername);
+int X509_check_email(libressl.openssl.ossl_typ.X509* x, const (char)* chk, size_t chklen, uint flags);
+int X509_check_ip(libressl.openssl.ossl_typ.X509* x, const (ubyte)* chk, size_t chklen, uint flags);
+int X509_check_ip_asc(libressl.openssl.ossl_typ.X509* x, const (char)* ipasc, uint flags);
 
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* a2i_IPADDRESS(const (char)* ipasc);
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* a2i_IPADDRESS_NC(const (char)* ipasc);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* a2i_IPADDRESS(const (char)* ipasc);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* a2i_IPADDRESS_NC(const (char)* ipasc);
 int a2i_ipadd(ubyte* ipout, const (char)* ipasc);
-int X509V3_NAME_from_section(libressl_d.openssl.ossl_typ.X509_NAME* nm, libressl_d.openssl.conf.stack_st_CONF_VALUE* dn_sk, core.stdc.config.c_ulong chtype);
+int X509V3_NAME_from_section(libressl.openssl.ossl_typ.X509_NAME* nm, libressl.openssl.conf.stack_st_CONF_VALUE* dn_sk, core.stdc.config.c_ulong chtype);
 
-void X509_POLICY_NODE_print(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.ossl_typ.X509_POLICY_NODE* node, int indent);
+void X509_POLICY_NODE_print(libressl.openssl.ossl_typ.BIO* out_, libressl.openssl.ossl_typ.X509_POLICY_NODE* node, int indent);
 
 //DECLARE_STACK_OF(X509_POLICY_NODE)
 struct stack_st_X509_POLICY_NODE
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 version (OPENSSL_NO_RFC3779) {
 } else {
 	struct ASRange_st
 	{
-		libressl_d.openssl.ossl_typ.ASN1_INTEGER* min;
-		libressl_d.openssl.ossl_typ.ASN1_INTEGER* max;
+		libressl.openssl.ossl_typ.ASN1_INTEGER* min;
+		libressl.openssl.ossl_typ.ASN1_INTEGER* max;
 	}
 
 	alias ASRange = .ASRange_st;
@@ -1053,7 +1053,7 @@ version (OPENSSL_NO_RFC3779) {
 
 		union u_
 		{
-			libressl_d.openssl.ossl_typ.ASN1_INTEGER* id;
+			libressl.openssl.ossl_typ.ASN1_INTEGER* id;
 			.ASRange* range;
 		}
 
@@ -1065,7 +1065,7 @@ version (OPENSSL_NO_RFC3779) {
 	//DECLARE_STACK_OF(ASIdOrRange)
 	struct stack_st_ASIdOrRange
 	{
-		libressl_d.openssl.stack._STACK stack;
+		libressl.openssl.stack._STACK stack;
 	}
 
 	alias ASIdOrRanges = .stack_st_ASIdOrRange;
@@ -1079,7 +1079,7 @@ version (OPENSSL_NO_RFC3779) {
 
 		union u_
 		{
-			libressl_d.openssl.ossl_typ.ASN1_NULL* inherit;
+			libressl.openssl.ossl_typ.ASN1_NULL* inherit;
 			.ASIdOrRanges* asIdsOrRanges;
 		}
 
@@ -1122,8 +1122,8 @@ version (OPENSSL_NO_RFC3779) {
 
 	struct IPAddressRange_st
 	{
-		libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* min;
-		libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* max;
+		libressl.openssl.ossl_typ.ASN1_BIT_STRING* min;
+		libressl.openssl.ossl_typ.ASN1_BIT_STRING* max;
 	}
 
 	alias IPAddressRange = .IPAddressRange_st;
@@ -1137,7 +1137,7 @@ version (OPENSSL_NO_RFC3779) {
 
 		union u_
 		{
-			libressl_d.openssl.ossl_typ.ASN1_BIT_STRING* addressPrefix;
+			libressl.openssl.ossl_typ.ASN1_BIT_STRING* addressPrefix;
 			.IPAddressRange* addressRange;
 		}
 
@@ -1149,7 +1149,7 @@ version (OPENSSL_NO_RFC3779) {
 	//DECLARE_STACK_OF(IPAddressOrRange)
 	struct stack_st_IPAddressOrRange
 	{
-		libressl_d.openssl.stack._STACK stack;
+		libressl.openssl.stack._STACK stack;
 	}
 
 	alias IPAddressOrRanges = .stack_st_IPAddressOrRange;
@@ -1163,7 +1163,7 @@ version (OPENSSL_NO_RFC3779) {
 
 		union u_
 		{
-			libressl_d.openssl.ossl_typ.ASN1_NULL* inherit;
+			libressl.openssl.ossl_typ.ASN1_NULL* inherit;
 			.IPAddressOrRanges* addressesOrRanges;
 		}
 
@@ -1174,7 +1174,7 @@ version (OPENSSL_NO_RFC3779) {
 
 	struct IPAddressFamily_st
 	{
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* addressFamily;
+		libressl.openssl.ossl_typ.ASN1_OCTET_STRING* addressFamily;
 		.IPAddressChoice* ipAddressChoice;
 	}
 
@@ -1183,7 +1183,7 @@ version (OPENSSL_NO_RFC3779) {
 	//DECLARE_STACK_OF(IPAddressFamily)
 	struct stack_st_IPAddressFamily
 	{
-		libressl_d.openssl.stack._STACK stack;
+		libressl.openssl.stack._STACK stack;
 	}
 
 	alias IPAddrBlocks = .stack_st_IPAddressFamily;
@@ -1233,7 +1233,7 @@ version (OPENSSL_NO_RFC3779) {
 	 * and ranges) are a bit tedious to work with directly.
 	 */
 	int X509v3_asid_add_inherit(.ASIdentifiers* asid, int which);
-	int X509v3_asid_add_id_or_range(.ASIdentifiers* asid, int which, libressl_d.openssl.ossl_typ.ASN1_INTEGER* min, libressl_d.openssl.ossl_typ.ASN1_INTEGER* max);
+	int X509v3_asid_add_id_or_range(.ASIdentifiers* asid, int which, libressl.openssl.ossl_typ.ASN1_INTEGER* min, libressl.openssl.ossl_typ.ASN1_INTEGER* max);
 	int X509v3_addr_add_inherit(.IPAddrBlocks* addr, const uint afi, const (uint)* safi);
 	int X509v3_addr_add_prefix(.IPAddrBlocks* addr, const uint afi, const (uint)* safi, ubyte* a, const int prefixlen);
 	int X509v3_addr_add_range(.IPAddrBlocks* addr, const uint afi, const (uint)* safi, ubyte* min, ubyte* max);
@@ -1259,10 +1259,10 @@ version (OPENSSL_NO_RFC3779) {
 	/*
 	 * Check whether RFC 3779 extensions nest properly in chains.
 	 */
-	int X509v3_asid_validate_path(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
-	int X509v3_addr_validate_path(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
-	int X509v3_asid_validate_resource_set(libressl_d.openssl.x509.stack_st_X509* chain, .ASIdentifiers* ext, int allow_inheritance);
-	int X509v3_addr_validate_resource_set(libressl_d.openssl.x509.stack_st_X509* chain, .IPAddrBlocks* ext, int allow_inheritance);
+	int X509v3_asid_validate_path(libressl.openssl.ossl_typ.X509_STORE_CTX*);
+	int X509v3_addr_validate_path(libressl.openssl.ossl_typ.X509_STORE_CTX*);
+	int X509v3_asid_validate_resource_set(libressl.openssl.x509.stack_st_X509* chain, .ASIdentifiers* ext, int allow_inheritance);
+	int X509v3_addr_validate_resource_set(libressl.openssl.x509.stack_st_X509* chain, .IPAddrBlocks* ext, int allow_inheritance);
 }
 
 void ERR_load_X509V3_strings();

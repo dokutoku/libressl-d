@@ -55,13 +55,13 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.des;
+module libressl.openssl.des;
 
 
 enum HEADER_NEW_DES_H = true;
 
 private static import core.stdc.config;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_DES) {
 	static assert(false, "DES is disabled.");
@@ -86,7 +86,7 @@ union ks_
 	 * make sure things are correct size on machines with
 	 * 8 byte longs
 	 */
-	libressl_d.openssl.opensslconf.DES_LONG[2] deslong;
+	libressl.openssl.opensslconf.DES_LONG[2] deslong;
 }
 
 struct DES_ks
@@ -149,7 +149,7 @@ extern __gshared int DES_rw_mode;
 
 const (char)* DES_options();
 void DES_ecb3_encrypt(.const_DES_cblock* input, .DES_cblock* output, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3, int enc);
-libressl_d.openssl.opensslconf.DES_LONG DES_cbc_cksum(const (ubyte)* input, .DES_cblock* output, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .const_DES_cblock* ivec);
+libressl.openssl.opensslconf.DES_LONG DES_cbc_cksum(const (ubyte)* input, .DES_cblock* output, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .const_DES_cblock* ivec);
 /* DES_cbc_encrypt does not update the IV!  Use DES_ncbc_encrypt instead. */
 void DES_cbc_encrypt(const (ubyte)* input, ubyte* output, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .DES_cblock* ivec, int enc);
 void DES_ncbc_encrypt(const (ubyte)* input, ubyte* output, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .DES_cblock* ivec, int enc);
@@ -168,7 +168,7 @@ void DES_ecb_encrypt(.const_DES_cblock* input, .DES_cblock* output, .DES_key_sch
  * DES_key_schedule to use.  enc, is non zero specifies encryption,
  * zero if decryption.
  */
-void DES_encrypt1(libressl_d.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks, int enc);
+void DES_encrypt1(libressl.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks, int enc);
 
 /**
  * This functions is the same as DES_encrypt1() except that the DES
@@ -178,10 +178,10 @@ void DES_encrypt1(libressl_d.openssl.opensslconf.DES_LONG* data, .DES_key_schedu
  * IP() DES_encrypt2() DES_encrypt2() DES_encrypt2() FP() is the same
  * as DES_encrypt1() DES_encrypt1() DES_encrypt1() except faster :-\).
  */
-void DES_encrypt2(libressl_d.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks, int enc);
+void DES_encrypt2(libressl.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks, int enc);
 
-void DES_encrypt3(libressl_d.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3);
-void DES_decrypt3(libressl_d.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3);
+void DES_encrypt3(libressl.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3);
+void DES_decrypt3(libressl.openssl.opensslconf.DES_LONG* data, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3);
 void DES_ede3_cbc_encrypt(const (ubyte)* input, ubyte* output, core.stdc.config.c_long length_, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3, .DES_cblock* ivec, int enc);
 void DES_ede3_cbcm_encrypt(const (ubyte)* in_, ubyte* out_, core.stdc.config.c_long length_, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3, .DES_cblock* ivec1, .DES_cblock* ivec2, int enc);
 void DES_ede3_cfb64_encrypt(const (ubyte)* in_, ubyte* out_, core.stdc.config.c_long length_, .DES_key_schedule* ks1, .DES_key_schedule* ks2, .DES_key_schedule* ks3, .DES_cblock* ivec, int* num, int enc);
@@ -193,7 +193,7 @@ char* DES_fcrypt(const (char)* buf, const (char)* salt, char* ret);
 char* DES_crypt(const (char)* buf, const (char)* salt);
 void DES_ofb_encrypt(const (ubyte)* in_, ubyte* out_, int numbits, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .DES_cblock* ivec);
 void DES_pcbc_encrypt(const (ubyte)* input, ubyte* output, core.stdc.config.c_long length_, .DES_key_schedule* schedule, .DES_cblock* ivec, int enc);
-libressl_d.openssl.opensslconf.DES_LONG DES_quad_cksum(const (ubyte)* input, .DES_cblock* output, core.stdc.config.c_long length_, int out_count, .DES_cblock* seed);
+libressl.openssl.opensslconf.DES_LONG DES_quad_cksum(const (ubyte)* input, .DES_cblock* output, core.stdc.config.c_long length_, int out_count, .DES_cblock* seed);
 int DES_random_key(.DES_cblock* ret);
 void DES_set_odd_parity(.DES_cblock* key);
 int DES_check_key_parity(.const_DES_cblock* key);

@@ -147,15 +147,15 @@
  * OTHER ENTITY BASED ON INFRINGEMENT OF INTELLECTUAL PROPERTY RIGHTS OR
  * OTHERWISE.
  */
-module libressl_d.openssl.tls1;
+module libressl.openssl.tls1;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.opensslfeatures;
-private static import libressl_d.openssl.ossl_typ;
-private static import libressl_d.openssl.ssl;
-public import libressl_d.openssl.buffer;
-public import libressl_d.openssl.opensslconf;
+private static import libressl.openssl.opensslfeatures;
+private static import libressl.openssl.ossl_typ;
+private static import libressl.openssl.ssl;
+public import libressl.openssl.buffer;
+public import libressl.openssl.opensslconf;
 
 version (LIBRESSL_HAS_QUIC) {
 	version = LIBRESSL_HAS_QUIC_OR_LIBRESSL_INTERNAL;
@@ -169,7 +169,7 @@ enum OPENSSL_TLS_SECURITY_LEVEL = 1;
 
 enum TLS1_ALLOW_EXPERIMENTAL_CIPHERSUITES = 0;
 
-static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+static if ((libressl.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
 	enum TLS1_3_VERSION = 0x0304;
 }
 
@@ -317,7 +317,7 @@ enum TLSEXT_TYPE_padding = 21;
 enum TLSEXT_TYPE_session_ticket = 35;
 
 /* ExtensionType values from RFC 8446 section 4.2 */
-static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+static if ((libressl.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
 	enum TLSEXT_TYPE_pre_shared_key = 41;
 	enum TLSEXT_TYPE_early_data = 42;
 	enum TLSEXT_TYPE_supported_versions = 43;
@@ -370,8 +370,8 @@ enum TLSEXT_ECPOINTFORMAT_last = 2;
 
 enum TLSEXT_MAXLEN_host_name = 255;
 
-const (char)* SSL_get_servername(const (libressl_d.openssl.ossl_typ.SSL)* s, const int type);
-int SSL_get_servername_type(const (libressl_d.openssl.ossl_typ.SSL)* s);
+const (char)* SSL_get_servername(const (libressl.openssl.ossl_typ.SSL)* s, const int type);
+int SSL_get_servername_type(const (libressl.openssl.ossl_typ.SSL)* s);
 
 /**
  * SSL_export_keying_material exports a value derived from the master secret,
@@ -381,106 +381,106 @@ int SSL_get_servername_type(const (libressl_d.openssl.ossl_typ.SSL)* s);
  *
  * It returns 1 on success and zero otherwise.
  */
-int SSL_export_keying_material(libressl_d.openssl.ossl_typ.SSL* s, ubyte* out_, size_t olen, const (char)* label, size_t llen, const (ubyte)* p, size_t plen, int use_context);
+int SSL_export_keying_material(libressl.openssl.ossl_typ.SSL* s, ubyte* out_, size_t olen, const (char)* label, size_t llen, const (ubyte)* p, size_t plen, int use_context);
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_host_name(libressl_d.openssl.ossl_typ.SSL* s, char* name)
+core.stdc.config.c_long SSL_set_tlsext_host_name(libressl.openssl.ossl_typ.SSL* s, char* name)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(s, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_HOSTNAME, .TLSEXT_NAMETYPE_host_name, name);
+		return libressl.openssl.ssl.SSL_ctrl(s, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_HOSTNAME, .TLSEXT_NAMETYPE_host_name, name);
 	}
 
 private alias SSL_set_tlsext_debug_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_debug_callback(libressl_d.openssl.ossl_typ.SSL* ssl, .SSL_set_tlsext_debug_callback_func cb)
+core.stdc.config.c_long SSL_set_tlsext_debug_callback(libressl.openssl.ossl_typ.SSL* ssl, .SSL_set_tlsext_debug_callback_func cb)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_callback_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_DEBUG_CB, cb);
+		return libressl.openssl.ssl.SSL_callback_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_DEBUG_CB, cb);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_debug_arg(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+core.stdc.config.c_long SSL_set_tlsext_debug_arg(libressl.openssl.ossl_typ.SSL* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_DEBUG_ARG, 0, arg);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_DEBUG_ARG, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_get_tlsext_status_type(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+core.stdc.config.c_long SSL_get_tlsext_status_type(libressl.openssl.ossl_typ.SSL* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_TYPE, 0, null);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_TYPE, 0, null);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_status_type(libressl_d.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long type)
+core.stdc.config.c_long SSL_set_tlsext_status_type(libressl.openssl.ossl_typ.SSL* ssl, core.stdc.config.c_long type)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_TYPE, type, null);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_TYPE, type, null);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_get_tlsext_status_exts(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+core.stdc.config.c_long SSL_get_tlsext_status_exts(libressl.openssl.ossl_typ.SSL* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_EXTS, 0, arg);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_EXTS, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_status_exts(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+core.stdc.config.c_long SSL_set_tlsext_status_exts(libressl.openssl.ossl_typ.SSL* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_EXTS, 0, arg);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_EXTS, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_get_tlsext_status_ids(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+core.stdc.config.c_long SSL_get_tlsext_status_ids(libressl.openssl.ossl_typ.SSL* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_IDS, 0, arg);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_IDS, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_status_ids(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+core.stdc.config.c_long SSL_set_tlsext_status_ids(libressl.openssl.ossl_typ.SSL* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_IDS, 0, arg);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_IDS, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_get_tlsext_status_ocsp_resp(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg)
+core.stdc.config.c_long SSL_get_tlsext_status_ocsp_resp(libressl.openssl.ossl_typ.SSL* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_OCSP_RESP, 0, arg);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_OCSP_RESP, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_status_ocsp_resp(libressl_d.openssl.ossl_typ.SSL* ssl, void* arg, core.stdc.config.c_long arglen)
+core.stdc.config.c_long SSL_set_tlsext_status_ocsp_resp(libressl.openssl.ossl_typ.SSL* ssl, void* arg, core.stdc.config.c_long arglen)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_OCSP_RESP, arglen, arg);
+		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_OCSP_RESP, arglen, arg);
 	}
 
 private alias SSL_CTX_set_tlsext_servername_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_servername_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_tlsext_servername_callback_func cb)
+core.stdc.config.c_long SSL_CTX_set_tlsext_servername_callback(libressl.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_tlsext_servername_callback_func cb)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_callback_ctrl(ctx, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_SERVERNAME_CB, cb);
+		return libressl.openssl.ssl.SSL_CTX_callback_ctrl(ctx, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_SERVERNAME_CB, cb);
 	}
 
 enum SSL_TLSEXT_ERR_OK = 0;
@@ -489,73 +489,73 @@ enum SSL_TLSEXT_ERR_ALERT_FATAL = 2;
 enum SSL_TLSEXT_ERR_NOACK = 3;
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_servername_arg(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* arg)
+core.stdc.config.c_long SSL_CTX_set_tlsext_servername_arg(libressl.openssl.ossl_typ.SSL_CTX* ctx, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_ctrl(ctx, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_SERVERNAME_ARG, 0, arg);
+		return libressl.openssl.ssl.SSL_CTX_ctrl(ctx, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_SERVERNAME_ARG, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_get_tlsext_ticket_keys(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* keys, core.stdc.config.c_long keylen)
+core.stdc.config.c_long SSL_CTX_get_tlsext_ticket_keys(libressl.openssl.ossl_typ.SSL_CTX* ctx, void* keys, core.stdc.config.c_long keylen)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_ctrl(ctx, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_TICKET_KEYS, keylen, keys);
+		return libressl.openssl.ssl.SSL_CTX_ctrl(ctx, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_TICKET_KEYS, keylen, keys);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_ticket_keys(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* keys, core.stdc.config.c_long keylen)
+core.stdc.config.c_long SSL_CTX_set_tlsext_ticket_keys(libressl.openssl.ossl_typ.SSL_CTX* ctx, void* keys, core.stdc.config.c_long keylen)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_ctrl(ctx, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_TICKET_KEYS, keylen, keys);
+		return libressl.openssl.ssl.SSL_CTX_ctrl(ctx, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_TICKET_KEYS, keylen, keys);
 	}
 
 private alias SSL_CTX_get_tlsext_status_cb_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_get_tlsext_status_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_get_tlsext_status_cb_func cb)
+core.stdc.config.c_long SSL_CTX_get_tlsext_status_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_get_tlsext_status_cb_func cb)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_callback_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB, cb);
+		return libressl.openssl.ssl.SSL_CTX_callback_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB, cb);
 	}
 
 private alias SSL_CTX_set_tlsext_status_cb_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_status_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_set_tlsext_status_cb_func cb)
+core.stdc.config.c_long SSL_CTX_set_tlsext_status_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_set_tlsext_status_cb_func cb)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_callback_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB, cb);
+		return libressl.openssl.ssl.SSL_CTX_callback_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB, cb);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_get_tlsext_status_arg(libressl_d.openssl.ossl_typ.SSL_CTX* ssl, void* arg)
+core.stdc.config.c_long SSL_CTX_get_tlsext_status_arg(libressl.openssl.ossl_typ.SSL_CTX* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB_ARG, 0, arg);
+		return libressl.openssl.ssl.SSL_CTX_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB_ARG, 0, arg);
 	}
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_status_arg(libressl_d.openssl.ossl_typ.SSL_CTX* ssl, void* arg)
+core.stdc.config.c_long SSL_CTX_set_tlsext_status_arg(libressl.openssl.ossl_typ.SSL_CTX* ssl, void* arg)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB_ARG, 0, arg);
+		return libressl.openssl.ssl.SSL_CTX_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB_ARG, 0, arg);
 	}
 
 private alias SSL_CTX_set_tlsext_ticket_key_cb_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_ticket_key_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_set_tlsext_ticket_key_cb_func cb)
+core.stdc.config.c_long SSL_CTX_set_tlsext_ticket_key_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_set_tlsext_ticket_key_cb_func cb)
 
 	do
 	{
-		return libressl_d.openssl.ssl.SSL_CTX_callback_ctrl(ssl, libressl_d.openssl.ssl.SSL_CTRL_SET_TLSEXT_TICKET_KEY_CB, cb);
+		return libressl.openssl.ssl.SSL_CTX_callback_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_TICKET_KEY_CB, cb);
 	}
 
 /* PSK ciphersuites from RFC 4279. */
@@ -673,7 +673,7 @@ enum TLS1_CK_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA256 = 0x030000C4;
 enum TLS1_CK_ADH_WITH_CAMELLIA_256_CBC_SHA256 = 0x030000C5;
 
 /* TLS 1.3 cipher suites from RFC 8446 appendix B.4. */
-static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+static if ((libressl.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
 	enum TLS1_3_CK_AES_128_GCM_SHA256 = 0x03001301;
 	enum TLS1_3_CK_AES_256_GCM_SHA384 = 0x03001302;
 	enum TLS1_3_CK_CHACHA20_POLY1305_SHA256 = 0x03001303;
@@ -912,7 +912,7 @@ enum TLS1_TXT_ECDHE_ECDSA_WITH_CHACHA20_POLY1305 = "ECDHE-ECDSA-CHACHA20-POLY130
 enum TLS1_TXT_DHE_RSA_WITH_CHACHA20_POLY1305 = "DHE-RSA-CHACHA20-POLY1305";
 
 /* TLS 1.3 cipher suites from RFC 8446 appendix B.4. */
-static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
+static if ((libressl.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
 	enum TLS1_3_TXT_AES_128_GCM_SHA256 = "AEAD-AES128-GCM-SHA256";
 	enum TLS1_3_TXT_AES_256_GCM_SHA384 = "AEAD-AES256-GCM-SHA384";
 	enum TLS1_3_TXT_CHACHA20_POLY1305_SHA256 = "AEAD-CHACHA20-POLY1305-SHA256";

@@ -51,22 +51,22 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
  */
-module libressl_d.openssl.cms;
+module libressl.openssl.cms;
 
 
 private static import core.stdc.config;
-private static import libressl_d.compat.stdio;
-private static import libressl_d.compat.sys.types;
-private static import libressl_d.openssl.asn1;
-private static import libressl_d.openssl.ossl_typ;
-private static import libressl_d.openssl.pem;
-private static import libressl_d.openssl.stack;
-public import libressl_d.openssl.opensslconf;
+private static import libressl.compat.stdio;
+private static import libressl.compat.sys.types;
+private static import libressl.openssl.asn1;
+private static import libressl.openssl.ossl_typ;
+private static import libressl.openssl.pem;
+private static import libressl.openssl.stack;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_CMS) {
 } else {
-	public import libressl_d.openssl.x509;
-	public import libressl_d.openssl.x509v3;
+	public import libressl.openssl.x509;
+	public import libressl.openssl.x509v3;
 
 	extern (C):
 	nothrow @nogc:
@@ -93,38 +93,38 @@ version (OPENSSL_NO_CMS) {
 	//DECLARE_STACK_OF(CMS_SignerInfo)
 	struct stack_st_CMS_SignerInfo
 	{
-		libressl_d.openssl.stack._STACK stack;
+		libressl.openssl.stack._STACK stack;
 	}
 
 	//DECLARE_STACK_OF(CMS_RecipientEncryptedKey)
 	struct stack_st_CMS_RecipientEncryptedKey
 	{
-		libressl_d.openssl.stack._STACK stack;
+		libressl.openssl.stack._STACK stack;
 	}
 
 	//DECLARE_STACK_OF(CMS_RecipientInfo)
 	struct stack_st_CMS_RecipientInfo
 	{
-		libressl_d.openssl.stack._STACK stack;
+		libressl.openssl.stack._STACK stack;
 	}
 
 	//DECLARE_STACK_OF(CMS_RevocationInfoChoice)
 	struct stack_st_CMS_RevocationInfoChoice
 	{
-		libressl_d.openssl.stack._STACK stack;
+		libressl.openssl.stack._STACK stack;
 	}
 
 	.CMS_ContentInfo* CMS_ContentInfo_new();
 	void CMS_ContentInfo_free(.CMS_ContentInfo* a);
 	.CMS_ContentInfo* d2i_CMS_ContentInfo(.CMS_ContentInfo** a, const (ubyte)** in_, core.stdc.config.c_long len);
 	int i2d_CMS_ContentInfo(.CMS_ContentInfo* a, ubyte** out_);
-	extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CMS_ContentInfo_it;
+	extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM CMS_ContentInfo_it;
 	.CMS_ReceiptRequest* CMS_ReceiptRequest_new();
 	void CMS_ReceiptRequest_free(.CMS_ReceiptRequest* a);
 	.CMS_ReceiptRequest* d2i_CMS_ReceiptRequest(.CMS_ReceiptRequest** a, const (ubyte)** in_, core.stdc.config.c_long len);
 	int i2d_CMS_ReceiptRequest(.CMS_ReceiptRequest* a, ubyte** out_);
-	extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CMS_ReceiptRequest_it;
-	int CMS_ContentInfo_print_ctx(libressl_d.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+	extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM CMS_ReceiptRequest_it;
+	int CMS_ContentInfo_print_ctx(libressl.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* x, int indent, const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 	enum CMS_SIGNERINFO_ISSUER_SERIAL = 0;
 	enum CMS_SIGNERINFO_KEYIDENTIFIER = 1;
@@ -161,167 +161,167 @@ version (OPENSSL_NO_CMS) {
 	enum CMS_KEY_PARAM = 0x040000;
 	enum CMS_ASCIICRLF = 0x080000;
 
-	const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* CMS_get0_type(const (.CMS_ContentInfo)* cms);
+	const (libressl.openssl.ossl_typ.ASN1_OBJECT)* CMS_get0_type(const (.CMS_ContentInfo)* cms);
 
-	libressl_d.openssl.ossl_typ.BIO* CMS_dataInit(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* icont);
-	int CMS_dataFinal(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* bio);
+	libressl.openssl.ossl_typ.BIO* CMS_dataInit(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* icont);
+	int CMS_dataFinal(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* bio);
 
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** CMS_get0_content(.CMS_ContentInfo* cms);
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING** CMS_get0_content(.CMS_ContentInfo* cms);
 	int CMS_is_detached(.CMS_ContentInfo* cms);
 	int CMS_set_detached(.CMS_ContentInfo* cms, int detached);
 
-	static assert(libressl_d.openssl.pem.HEADER_PEM_H);
-	.CMS_ContentInfo* PEM_read_bio_CMS(libressl_d.openssl.ossl_typ.BIO* bp, .CMS_ContentInfo** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
-	.CMS_ContentInfo* PEM_read_CMS(libressl_d.compat.stdio.FILE* fp, .CMS_ContentInfo** x, libressl_d.openssl.pem.pem_password_cb cb, void* u);
-	int PEM_write_bio_CMS(libressl_d.openssl.ossl_typ.BIO* bp, const (.CMS_ContentInfo)* x);
-	int PEM_write_CMS(libressl_d.compat.stdio.FILE* fp, const (.CMS_ContentInfo)* x);
+	static assert(libressl.openssl.pem.HEADER_PEM_H);
+	.CMS_ContentInfo* PEM_read_bio_CMS(libressl.openssl.ossl_typ.BIO* bp, .CMS_ContentInfo** x, libressl.openssl.pem.pem_password_cb cb, void* u);
+	.CMS_ContentInfo* PEM_read_CMS(libressl.compat.stdio.FILE* fp, .CMS_ContentInfo** x, libressl.openssl.pem.pem_password_cb cb, void* u);
+	int PEM_write_bio_CMS(libressl.openssl.ossl_typ.BIO* bp, const (.CMS_ContentInfo)* x);
+	int PEM_write_CMS(libressl.compat.stdio.FILE* fp, const (.CMS_ContentInfo)* x);
 
 	int CMS_stream(ubyte*** boundary, .CMS_ContentInfo* cms);
-	.CMS_ContentInfo* d2i_CMS_bio(libressl_d.openssl.ossl_typ.BIO* bp, .CMS_ContentInfo** cms);
-	int i2d_CMS_bio(libressl_d.openssl.ossl_typ.BIO* bp, .CMS_ContentInfo* cms);
+	.CMS_ContentInfo* d2i_CMS_bio(libressl.openssl.ossl_typ.BIO* bp, .CMS_ContentInfo** cms);
+	int i2d_CMS_bio(libressl.openssl.ossl_typ.BIO* bp, .CMS_ContentInfo* cms);
 
-	libressl_d.openssl.ossl_typ.BIO* BIO_new_CMS(libressl_d.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* cms);
-	int i2d_CMS_bio_stream(libressl_d.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* in_, int flags);
-	int PEM_write_bio_CMS_stream(libressl_d.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* in_, int flags);
-	.CMS_ContentInfo* SMIME_read_CMS(libressl_d.openssl.ossl_typ.BIO* bio, libressl_d.openssl.ossl_typ.BIO** bcont);
-	int SMIME_write_CMS(libressl_d.openssl.ossl_typ.BIO* bio, .CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* data, int flags);
+	libressl.openssl.ossl_typ.BIO* BIO_new_CMS(libressl.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* cms);
+	int i2d_CMS_bio_stream(libressl.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* in_, int flags);
+	int PEM_write_bio_CMS_stream(libressl.openssl.ossl_typ.BIO* out_, .CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* in_, int flags);
+	.CMS_ContentInfo* SMIME_read_CMS(libressl.openssl.ossl_typ.BIO* bio, libressl.openssl.ossl_typ.BIO** bcont);
+	int SMIME_write_CMS(libressl.openssl.ossl_typ.BIO* bio, .CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* data, int flags);
 
-	int CMS_final(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* data, libressl_d.openssl.ossl_typ.BIO* dcont, uint flags);
+	int CMS_final(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* data, libressl.openssl.ossl_typ.BIO* dcont, uint flags);
 
-	.CMS_ContentInfo* CMS_sign(libressl_d.openssl.ossl_typ.X509* signcert, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.BIO* data, uint flags);
+	.CMS_ContentInfo* CMS_sign(libressl.openssl.ossl_typ.X509* signcert, libressl.openssl.ossl_typ.EVP_PKEY* pkey, libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.BIO* data, uint flags);
 
-	.CMS_ContentInfo* CMS_sign_receipt(.CMS_SignerInfo* si, libressl_d.openssl.ossl_typ.X509* signcert, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.x509.stack_st_X509* certs, uint flags);
+	.CMS_ContentInfo* CMS_sign_receipt(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.X509* signcert, libressl.openssl.ossl_typ.EVP_PKEY* pkey, libressl.openssl.x509.stack_st_X509* certs, uint flags);
 
-	int CMS_data(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* out_, uint flags);
-	.CMS_ContentInfo* CMS_data_create(libressl_d.openssl.ossl_typ.BIO* in_, uint flags);
+	int CMS_data(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* out_, uint flags);
+	.CMS_ContentInfo* CMS_data_create(libressl.openssl.ossl_typ.BIO* in_, uint flags);
 
-	int CMS_digest_verify(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* dcont, libressl_d.openssl.ossl_typ.BIO* out_, uint flags);
-	.CMS_ContentInfo* CMS_digest_create(libressl_d.openssl.ossl_typ.BIO* in_, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, uint flags);
+	int CMS_digest_verify(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* dcont, libressl.openssl.ossl_typ.BIO* out_, uint flags);
+	.CMS_ContentInfo* CMS_digest_create(libressl.openssl.ossl_typ.BIO* in_, const (libressl.openssl.ossl_typ.EVP_MD)* md, uint flags);
 
-	int CMS_EncryptedData_decrypt(.CMS_ContentInfo* cms, const (ubyte)* key, size_t keylen, libressl_d.openssl.ossl_typ.BIO* dcont, libressl_d.openssl.ossl_typ.BIO* out_, uint flags);
+	int CMS_EncryptedData_decrypt(.CMS_ContentInfo* cms, const (ubyte)* key, size_t keylen, libressl.openssl.ossl_typ.BIO* dcont, libressl.openssl.ossl_typ.BIO* out_, uint flags);
 
-	.CMS_ContentInfo* CMS_EncryptedData_encrypt(libressl_d.openssl.ossl_typ.BIO* in_, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, const (ubyte)* key, size_t keylen, uint flags);
+	.CMS_ContentInfo* CMS_EncryptedData_encrypt(libressl.openssl.ossl_typ.BIO* in_, const (libressl.openssl.ossl_typ.EVP_CIPHER)* cipher, const (ubyte)* key, size_t keylen, uint flags);
 
-	int CMS_EncryptedData_set1_key(.CMS_ContentInfo* cms, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* ciph, const (ubyte)* key, size_t keylen);
+	int CMS_EncryptedData_set1_key(.CMS_ContentInfo* cms, const (libressl.openssl.ossl_typ.EVP_CIPHER)* ciph, const (ubyte)* key, size_t keylen);
 
-	int CMS_verify(.CMS_ContentInfo* cms, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.X509_STORE* store, libressl_d.openssl.ossl_typ.BIO* dcont, libressl_d.openssl.ossl_typ.BIO* out_, uint flags);
+	int CMS_verify(.CMS_ContentInfo* cms, libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.X509_STORE* store, libressl.openssl.ossl_typ.BIO* dcont, libressl.openssl.ossl_typ.BIO* out_, uint flags);
 
-	int CMS_verify_receipt(.CMS_ContentInfo* rcms, .CMS_ContentInfo* ocms, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.X509_STORE* store, uint flags);
+	int CMS_verify_receipt(.CMS_ContentInfo* rcms, .CMS_ContentInfo* ocms, libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.X509_STORE* store, uint flags);
 
-	libressl_d.openssl.x509.stack_st_X509* CMS_get0_signers(.CMS_ContentInfo* cms);
+	libressl.openssl.x509.stack_st_X509* CMS_get0_signers(.CMS_ContentInfo* cms);
 
-	.CMS_ContentInfo* CMS_encrypt(libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.BIO* in_, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, uint flags);
+	.CMS_ContentInfo* CMS_encrypt(libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.BIO* in_, const (libressl.openssl.ossl_typ.EVP_CIPHER)* cipher, uint flags);
 
-	int CMS_decrypt(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ossl_typ.X509* cert, libressl_d.openssl.ossl_typ.BIO* dcont, libressl_d.openssl.ossl_typ.BIO* out_, uint flags);
+	int CMS_decrypt(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.EVP_PKEY* pkey, libressl.openssl.ossl_typ.X509* cert, libressl.openssl.ossl_typ.BIO* dcont, libressl.openssl.ossl_typ.BIO* out_, uint flags);
 
-	int CMS_decrypt_set1_pkey(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.EVP_PKEY* pk, libressl_d.openssl.ossl_typ.X509* cert);
+	int CMS_decrypt_set1_pkey(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.EVP_PKEY* pk, libressl.openssl.ossl_typ.X509* cert);
 	int CMS_decrypt_set1_key(.CMS_ContentInfo* cms, ubyte* key, size_t keylen, const (ubyte)* id, size_t idlen);
-	int CMS_decrypt_set1_password(.CMS_ContentInfo* cms, ubyte* pass, libressl_d.compat.sys.types.ssize_t passlen);
+	int CMS_decrypt_set1_password(.CMS_ContentInfo* cms, ubyte* pass, libressl.compat.sys.types.ssize_t passlen);
 
 	.stack_st_CMS_RecipientInfo* CMS_get0_RecipientInfos(.CMS_ContentInfo* cms);
 	int CMS_RecipientInfo_type(.CMS_RecipientInfo* ri);
-	libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* CMS_RecipientInfo_get0_pkey_ctx(.CMS_RecipientInfo* ri);
-	.CMS_ContentInfo* CMS_EnvelopedData_create(const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher);
-	.CMS_RecipientInfo* CMS_add1_recipient_cert(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.X509* recip, uint flags);
-	int CMS_RecipientInfo_set0_pkey(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
-	int CMS_RecipientInfo_ktri_cert_cmp(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.X509* cert);
-	int CMS_RecipientInfo_ktri_get0_algs(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.EVP_PKEY** pk, libressl_d.openssl.ossl_typ.X509** recip, libressl_d.openssl.ossl_typ.X509_ALGOR** palg);
-	int CMS_RecipientInfo_ktri_get0_signer_id(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl_d.openssl.ossl_typ.X509_NAME** issuer, libressl_d.openssl.ossl_typ.ASN1_INTEGER** sno);
+	libressl.openssl.ossl_typ.EVP_PKEY_CTX* CMS_RecipientInfo_get0_pkey_ctx(.CMS_RecipientInfo* ri);
+	.CMS_ContentInfo* CMS_EnvelopedData_create(const (libressl.openssl.ossl_typ.EVP_CIPHER)* cipher);
+	.CMS_RecipientInfo* CMS_add1_recipient_cert(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.X509* recip, uint flags);
+	int CMS_RecipientInfo_set0_pkey(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.EVP_PKEY* pkey);
+	int CMS_RecipientInfo_ktri_cert_cmp(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.X509* cert);
+	int CMS_RecipientInfo_ktri_get0_algs(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.EVP_PKEY** pk, libressl.openssl.ossl_typ.X509** recip, libressl.openssl.ossl_typ.X509_ALGOR** palg);
+	int CMS_RecipientInfo_ktri_get0_signer_id(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl.openssl.ossl_typ.X509_NAME** issuer, libressl.openssl.ossl_typ.ASN1_INTEGER** sno);
 
-	.CMS_RecipientInfo* CMS_add0_recipient_key(.CMS_ContentInfo* cms, int nid, ubyte* key, size_t keylen, ubyte* id, size_t idlen, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME* date, libressl_d.openssl.ossl_typ.ASN1_OBJECT* otherTypeId, libressl_d.openssl.asn1.ASN1_TYPE* otherType);
+	.CMS_RecipientInfo* CMS_add0_recipient_key(.CMS_ContentInfo* cms, int nid, ubyte* key, size_t keylen, ubyte* id, size_t idlen, libressl.openssl.ossl_typ.ASN1_GENERALIZEDTIME* date, libressl.openssl.ossl_typ.ASN1_OBJECT* otherTypeId, libressl.openssl.asn1.ASN1_TYPE* otherType);
 
-	int CMS_RecipientInfo_kekri_get0_id(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.X509_ALGOR** palg, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** pid, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** pdate, libressl_d.openssl.ossl_typ.ASN1_OBJECT** potherid, libressl_d.openssl.asn1.ASN1_TYPE** pothertype);
+	int CMS_RecipientInfo_kekri_get0_id(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.X509_ALGOR** palg, libressl.openssl.ossl_typ.ASN1_OCTET_STRING** pid, libressl.openssl.ossl_typ.ASN1_GENERALIZEDTIME** pdate, libressl.openssl.ossl_typ.ASN1_OBJECT** potherid, libressl.openssl.asn1.ASN1_TYPE** pothertype);
 
 	int CMS_RecipientInfo_set0_key(.CMS_RecipientInfo* ri, ubyte* key, size_t keylen);
 
 	int CMS_RecipientInfo_kekri_id_cmp(.CMS_RecipientInfo* ri, const (ubyte)* id, size_t idlen);
 
-	int CMS_RecipientInfo_set0_password(.CMS_RecipientInfo* ri, ubyte* pass, libressl_d.compat.sys.types.ssize_t passlen);
+	int CMS_RecipientInfo_set0_password(.CMS_RecipientInfo* ri, ubyte* pass, libressl.compat.sys.types.ssize_t passlen);
 
-	.CMS_RecipientInfo* CMS_add0_recipient_password(.CMS_ContentInfo* cms, int iter, int wrap_nid, int pbe_nid, ubyte* pass, libressl_d.compat.sys.types.ssize_t passlen, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* kekciph);
+	.CMS_RecipientInfo* CMS_add0_recipient_password(.CMS_ContentInfo* cms, int iter, int wrap_nid, int pbe_nid, ubyte* pass, libressl.compat.sys.types.ssize_t passlen, const (libressl.openssl.ossl_typ.EVP_CIPHER)* kekciph);
 
 	int CMS_RecipientInfo_decrypt(.CMS_ContentInfo* cms, .CMS_RecipientInfo* ri);
 	int CMS_RecipientInfo_encrypt(.CMS_ContentInfo* cms, .CMS_RecipientInfo* ri);
 
-	int CMS_uncompress(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.BIO* dcont, libressl_d.openssl.ossl_typ.BIO* out_, uint flags);
-	.CMS_ContentInfo* CMS_compress(libressl_d.openssl.ossl_typ.BIO* in_, int comp_nid, uint flags);
+	int CMS_uncompress(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.BIO* dcont, libressl.openssl.ossl_typ.BIO* out_, uint flags);
+	.CMS_ContentInfo* CMS_compress(libressl.openssl.ossl_typ.BIO* in_, int comp_nid, uint flags);
 
-	int CMS_set1_eContentType(.CMS_ContentInfo* cms, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* oid);
-	const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* CMS_get0_eContentType(.CMS_ContentInfo* cms);
+	int CMS_set1_eContentType(.CMS_ContentInfo* cms, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* oid);
+	const (libressl.openssl.ossl_typ.ASN1_OBJECT)* CMS_get0_eContentType(.CMS_ContentInfo* cms);
 
 	.CMS_CertificateChoices* CMS_add0_CertificateChoices(.CMS_ContentInfo* cms);
-	int CMS_add0_cert(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.X509* cert);
-	int CMS_add1_cert(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.X509* cert);
-	libressl_d.openssl.x509.stack_st_X509* CMS_get1_certs(.CMS_ContentInfo* cms);
+	int CMS_add0_cert(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.X509* cert);
+	int CMS_add1_cert(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.X509* cert);
+	libressl.openssl.x509.stack_st_X509* CMS_get1_certs(.CMS_ContentInfo* cms);
 
 	.CMS_RevocationInfoChoice* CMS_add0_RevocationInfoChoice(.CMS_ContentInfo* cms);
-	int CMS_add0_crl(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.X509_CRL* crl);
-	int CMS_add1_crl(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.X509_CRL* crl);
-	libressl_d.openssl.x509.stack_st_X509_CRL* CMS_get1_crls(.CMS_ContentInfo* cms);
+	int CMS_add0_crl(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.X509_CRL* crl);
+	int CMS_add1_crl(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.X509_CRL* crl);
+	libressl.openssl.x509.stack_st_X509_CRL* CMS_get1_crls(.CMS_ContentInfo* cms);
 
 	int CMS_SignedData_init(.CMS_ContentInfo* cms);
-	.CMS_SignerInfo* CMS_add1_signer(.CMS_ContentInfo* cms, libressl_d.openssl.ossl_typ.X509* signer, libressl_d.openssl.ossl_typ.EVP_PKEY* pk, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, uint flags);
-	libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* CMS_SignerInfo_get0_pkey_ctx(.CMS_SignerInfo* si);
-	libressl_d.openssl.ossl_typ.EVP_MD_CTX* CMS_SignerInfo_get0_md_ctx(.CMS_SignerInfo* si);
+	.CMS_SignerInfo* CMS_add1_signer(.CMS_ContentInfo* cms, libressl.openssl.ossl_typ.X509* signer, libressl.openssl.ossl_typ.EVP_PKEY* pk, const (libressl.openssl.ossl_typ.EVP_MD)* md, uint flags);
+	libressl.openssl.ossl_typ.EVP_PKEY_CTX* CMS_SignerInfo_get0_pkey_ctx(.CMS_SignerInfo* si);
+	libressl.openssl.ossl_typ.EVP_MD_CTX* CMS_SignerInfo_get0_md_ctx(.CMS_SignerInfo* si);
 	.stack_st_CMS_SignerInfo* CMS_get0_SignerInfos(.CMS_ContentInfo* cms);
 
-	void CMS_SignerInfo_set1_signer_cert(.CMS_SignerInfo* si, libressl_d.openssl.ossl_typ.X509* signer);
-	int CMS_SignerInfo_get0_signer_id(.CMS_SignerInfo* si, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl_d.openssl.ossl_typ.X509_NAME** issuer, libressl_d.openssl.ossl_typ.ASN1_INTEGER** sno);
-	int CMS_SignerInfo_cert_cmp(.CMS_SignerInfo* si, libressl_d.openssl.ossl_typ.X509* cert);
-	int CMS_set1_signers_certs(.CMS_ContentInfo* cms, libressl_d.openssl.x509.stack_st_X509* certs, uint flags);
-	void CMS_SignerInfo_get0_algs(.CMS_SignerInfo* si, libressl_d.openssl.ossl_typ.EVP_PKEY** pk, libressl_d.openssl.ossl_typ.X509** signer, libressl_d.openssl.ossl_typ.X509_ALGOR** pdig, libressl_d.openssl.ossl_typ.X509_ALGOR** psig);
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* CMS_SignerInfo_get0_signature(.CMS_SignerInfo* si);
+	void CMS_SignerInfo_set1_signer_cert(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.X509* signer);
+	int CMS_SignerInfo_get0_signer_id(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl.openssl.ossl_typ.X509_NAME** issuer, libressl.openssl.ossl_typ.ASN1_INTEGER** sno);
+	int CMS_SignerInfo_cert_cmp(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.X509* cert);
+	int CMS_set1_signers_certs(.CMS_ContentInfo* cms, libressl.openssl.x509.stack_st_X509* certs, uint flags);
+	void CMS_SignerInfo_get0_algs(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.EVP_PKEY** pk, libressl.openssl.ossl_typ.X509** signer, libressl.openssl.ossl_typ.X509_ALGOR** pdig, libressl.openssl.ossl_typ.X509_ALGOR** psig);
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* CMS_SignerInfo_get0_signature(.CMS_SignerInfo* si);
 	int CMS_SignerInfo_sign(.CMS_SignerInfo* si);
 	int CMS_SignerInfo_verify(.CMS_SignerInfo* si);
-	int CMS_SignerInfo_verify_content(.CMS_SignerInfo* si, libressl_d.openssl.ossl_typ.BIO* chain);
+	int CMS_SignerInfo_verify_content(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.BIO* chain);
 
-	int CMS_add_smimecap(.CMS_SignerInfo* si, libressl_d.openssl.asn1.stack_st_X509_ALGOR* algs);
-	int CMS_add_simple_smimecap(libressl_d.openssl.asn1.stack_st_X509_ALGOR** algs, int algnid, int keysize);
-	int CMS_add_standard_smimecap(libressl_d.openssl.asn1.stack_st_X509_ALGOR** smcap);
+	int CMS_add_smimecap(.CMS_SignerInfo* si, libressl.openssl.asn1.stack_st_X509_ALGOR* algs);
+	int CMS_add_simple_smimecap(libressl.openssl.asn1.stack_st_X509_ALGOR** algs, int algnid, int keysize);
+	int CMS_add_standard_smimecap(libressl.openssl.asn1.stack_st_X509_ALGOR** smcap);
 
 	int CMS_signed_get_attr_count(const (.CMS_SignerInfo)* si);
 	int CMS_signed_get_attr_by_NID(const (.CMS_SignerInfo)* si, int nid, int lastpos);
-	int CMS_signed_get_attr_by_OBJ(const (.CMS_SignerInfo)* si, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
-	libressl_d.openssl.x509.X509_ATTRIBUTE* CMS_signed_get_attr(const (.CMS_SignerInfo)* si, int loc);
-	libressl_d.openssl.x509.X509_ATTRIBUTE* CMS_signed_delete_attr(.CMS_SignerInfo* si, int loc);
-	int CMS_signed_add1_attr(.CMS_SignerInfo* si, libressl_d.openssl.x509.X509_ATTRIBUTE* attr);
-	int CMS_signed_add1_attr_by_OBJ(.CMS_SignerInfo* si, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int type, const (void)* bytes, int len);
+	int CMS_signed_get_attr_by_OBJ(const (.CMS_SignerInfo)* si, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
+	libressl.openssl.x509.X509_ATTRIBUTE* CMS_signed_get_attr(const (.CMS_SignerInfo)* si, int loc);
+	libressl.openssl.x509.X509_ATTRIBUTE* CMS_signed_delete_attr(.CMS_SignerInfo* si, int loc);
+	int CMS_signed_add1_attr(.CMS_SignerInfo* si, libressl.openssl.x509.X509_ATTRIBUTE* attr);
+	int CMS_signed_add1_attr_by_OBJ(.CMS_SignerInfo* si, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj, int type, const (void)* bytes, int len);
 	int CMS_signed_add1_attr_by_NID(.CMS_SignerInfo* si, int nid, int type, const (void)* bytes, int len);
 	int CMS_signed_add1_attr_by_txt(.CMS_SignerInfo* si, const (char)* attrname, int type, const (void)* bytes, int len);
-	void* CMS_signed_get0_data_by_OBJ(.CMS_SignerInfo* si, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* oid, int lastpos, int type);
+	void* CMS_signed_get0_data_by_OBJ(.CMS_SignerInfo* si, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* oid, int lastpos, int type);
 
 	int CMS_unsigned_get_attr_count(const (.CMS_SignerInfo)* si);
 	int CMS_unsigned_get_attr_by_NID(const (.CMS_SignerInfo)* si, int nid, int lastpos);
-	int CMS_unsigned_get_attr_by_OBJ(const (.CMS_SignerInfo)* si, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
-	libressl_d.openssl.x509.X509_ATTRIBUTE* CMS_unsigned_get_attr(const (.CMS_SignerInfo)* si, int loc);
-	libressl_d.openssl.x509.X509_ATTRIBUTE* CMS_unsigned_delete_attr(.CMS_SignerInfo* si, int loc);
-	int CMS_unsigned_add1_attr(.CMS_SignerInfo* si, libressl_d.openssl.x509.X509_ATTRIBUTE* attr);
-	int CMS_unsigned_add1_attr_by_OBJ(.CMS_SignerInfo* si, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int type, const (void)* bytes, int len);
+	int CMS_unsigned_get_attr_by_OBJ(const (.CMS_SignerInfo)* si, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
+	libressl.openssl.x509.X509_ATTRIBUTE* CMS_unsigned_get_attr(const (.CMS_SignerInfo)* si, int loc);
+	libressl.openssl.x509.X509_ATTRIBUTE* CMS_unsigned_delete_attr(.CMS_SignerInfo* si, int loc);
+	int CMS_unsigned_add1_attr(.CMS_SignerInfo* si, libressl.openssl.x509.X509_ATTRIBUTE* attr);
+	int CMS_unsigned_add1_attr_by_OBJ(.CMS_SignerInfo* si, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj, int type, const (void)* bytes, int len);
 	int CMS_unsigned_add1_attr_by_NID(.CMS_SignerInfo* si, int nid, int type, const (void)* bytes, int len);
 	int CMS_unsigned_add1_attr_by_txt(.CMS_SignerInfo* si, const (char)* attrname, int type, const (void)* bytes, int len);
-	void* CMS_unsigned_get0_data_by_OBJ(.CMS_SignerInfo* si, libressl_d.openssl.ossl_typ.ASN1_OBJECT* oid, int lastpos, int type);
+	void* CMS_unsigned_get0_data_by_OBJ(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.ASN1_OBJECT* oid, int lastpos, int type);
 
-	static assert(libressl_d.openssl.x509v3.HEADER_X509V3_H);
+	static assert(libressl.openssl.x509v3.HEADER_X509V3_H);
 	struct stack_st_GENERAL_NAMES;
 	int CMS_get1_ReceiptRequest(.CMS_SignerInfo* si, .CMS_ReceiptRequest** prr);
 	.CMS_ReceiptRequest* CMS_ReceiptRequest_create0(ubyte* id, int idlen, int allorfirst, .stack_st_GENERAL_NAMES* receiptList, .stack_st_GENERAL_NAMES* receiptsTo);
 	int CMS_add1_ReceiptRequest(.CMS_SignerInfo* si, .CMS_ReceiptRequest* rr);
-	void CMS_ReceiptRequest_get0_values(.CMS_ReceiptRequest* rr, libressl_d.openssl.ossl_typ.ASN1_STRING** pcid, int* pallorfirst, .stack_st_GENERAL_NAMES** plist, .stack_st_GENERAL_NAMES** prto);
+	void CMS_ReceiptRequest_get0_values(.CMS_ReceiptRequest* rr, libressl.openssl.ossl_typ.ASN1_STRING** pcid, int* pallorfirst, .stack_st_GENERAL_NAMES** plist, .stack_st_GENERAL_NAMES** prto);
 
-	int CMS_RecipientInfo_kari_get0_alg(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.X509_ALGOR** palg, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** pukm);
+	int CMS_RecipientInfo_kari_get0_alg(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.X509_ALGOR** palg, libressl.openssl.ossl_typ.ASN1_OCTET_STRING** pukm);
 	.stack_st_CMS_RecipientEncryptedKey* CMS_RecipientInfo_kari_get0_reks(.CMS_RecipientInfo* ri);
 
-	int CMS_RecipientInfo_kari_get0_orig_id(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.X509_ALGOR** pubalg, libressl_d.openssl.ossl_typ.ASN1_BIT_STRING** pubkey, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl_d.openssl.ossl_typ.X509_NAME** issuer, libressl_d.openssl.ossl_typ.ASN1_INTEGER** sno);
+	int CMS_RecipientInfo_kari_get0_orig_id(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.X509_ALGOR** pubalg, libressl.openssl.ossl_typ.ASN1_BIT_STRING** pubkey, libressl.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl.openssl.ossl_typ.X509_NAME** issuer, libressl.openssl.ossl_typ.ASN1_INTEGER** sno);
 
-	int CMS_RecipientInfo_kari_orig_id_cmp(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.X509* cert);
+	int CMS_RecipientInfo_kari_orig_id_cmp(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.X509* cert);
 
-	int CMS_RecipientEncryptedKey_get0_id(.CMS_RecipientEncryptedKey* rek, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME** tm, .CMS_OtherKeyAttribute** other, libressl_d.openssl.ossl_typ.X509_NAME** issuer, libressl_d.openssl.ossl_typ.ASN1_INTEGER** sno);
-	int CMS_RecipientEncryptedKey_cert_cmp(.CMS_RecipientEncryptedKey* rek, libressl_d.openssl.ossl_typ.X509* cert);
-	int CMS_RecipientInfo_kari_set0_pkey(.CMS_RecipientInfo* ri, libressl_d.openssl.ossl_typ.EVP_PKEY* pk);
-	libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* CMS_RecipientInfo_kari_get0_ctx(.CMS_RecipientInfo* ri);
+	int CMS_RecipientEncryptedKey_get0_id(.CMS_RecipientEncryptedKey* rek, libressl.openssl.ossl_typ.ASN1_OCTET_STRING** keyid, libressl.openssl.ossl_typ.ASN1_GENERALIZEDTIME** tm, .CMS_OtherKeyAttribute** other, libressl.openssl.ossl_typ.X509_NAME** issuer, libressl.openssl.ossl_typ.ASN1_INTEGER** sno);
+	int CMS_RecipientEncryptedKey_cert_cmp(.CMS_RecipientEncryptedKey* rek, libressl.openssl.ossl_typ.X509* cert);
+	int CMS_RecipientInfo_kari_set0_pkey(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.EVP_PKEY* pk);
+	libressl.openssl.ossl_typ.EVP_CIPHER_CTX* CMS_RecipientInfo_kari_get0_ctx(.CMS_RecipientInfo* ri);
 	int CMS_RecipientInfo_kari_decrypt(.CMS_ContentInfo* cms, .CMS_RecipientInfo* ri, .CMS_RecipientEncryptedKey* rek);
 
-	int CMS_SharedInfo_encode(ubyte** pder, libressl_d.openssl.ossl_typ.X509_ALGOR* kekalg, libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* ukm, int keylen);
+	int CMS_SharedInfo_encode(ubyte** pder, libressl.openssl.ossl_typ.X509_ALGOR* kekalg, libressl.openssl.ossl_typ.ASN1_OCTET_STRING* ukm, int keylen);
 
 	/* Backward compatibility for spelling errors. */
 	alias CMS_R_UNKNOWN_DIGEST_ALGORITM = .CMS_R_UNKNOWN_DIGEST_ALGORITHM;

@@ -1,6 +1,6 @@
-module libressl_d.compat.netinet;
+module libressl.compat.netinet;
 
 
-public import libressl_d.compat.netinet.in_;
-public import libressl_d.compat.netinet.ip;
-public import libressl_d.compat.netinet.tcp;
+public import libressl.compat.netinet.in_;
+public import libressl.compat.netinet.ip;
+public import libressl.compat.netinet.tcp;

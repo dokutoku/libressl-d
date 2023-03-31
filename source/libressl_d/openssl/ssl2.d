@@ -55,7 +55,7 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.ssl2;
+module libressl.openssl.ssl2;
 
 
 extern (C):

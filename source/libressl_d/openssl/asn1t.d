@@ -55,14 +55,14 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.asn1t;
+module libressl.openssl.asn1t;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.stack;
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.asn1;
+private static import libressl.openssl.stack;
+private static import libressl.openssl.ossl_typ;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.asn1;
 public import core.stdc.stddef;
 
 /* ASN1 template defines, structures and functions */
@@ -79,13 +79,13 @@ version (LIBRESSL_INTERNAL) {
 
 	/* Macros for start and end of ASN1_ITEM definition */
 
-	//#define ASN1_ITEM_start(itname) const libressl_d.openssl.ossl_typ.ASN1_ITEM itname##_it = {
-	//#define static_ASN1_ITEM_start(itname) static const libressl_d.openssl.ossl_typ.ASN1_ITEM itname##_it = {
+	//#define ASN1_ITEM_start(itname) const libressl.openssl.ossl_typ.ASN1_ITEM itname##_it = {
+	//#define static_ASN1_ITEM_start(itname) static const libressl.openssl.ossl_typ.ASN1_ITEM itname##_it = {
 	//#define ASN1_ITEM_end(itname) } ;
 
 	/* Macros to aid ASN1 template writing */
 
-	//#define ASN1_ITEM_TEMPLATE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_item_tt
+	//#define ASN1_ITEM_TEMPLATE(tname) static const libressl.openssl.asn1.ASN1_TEMPLATE tname##_item_tt
 
 	//#define ASN1_ITEM_TEMPLATE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_PRIMITIVE, -1, &tname##_item_tt, 0, null, 0, #tname .ASN1_ITEM_end(tname)
 
@@ -114,15 +114,15 @@ version (LIBRESSL_INTERNAL) {
 	 *     a structure called stname.
 	 */
 
-	//#define ASN1_SEQUENCE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_seq_tt[]
+	//#define ASN1_SEQUENCE(tname) static const libressl.openssl.asn1.ASN1_TEMPLATE tname##_seq_tt[]
 
 	//#define ASN1_SEQUENCE_END(stname) .ASN1_SEQUENCE_END_name(stname, stname)
 
 	//#define static_ASN1_SEQUENCE_END(stname) .static_ASN1_SEQUENCE_END_name(stname, stname)
 
-	//#define ASN1_SEQUENCE_END_name(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_SEQUENCE_END_name(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-	//#define static_ASN1_SEQUENCE_END_name(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_SEQUENCE_END_name(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
 	//#define ASN1_NDEF_SEQUENCE(tname) .ASN1_SEQUENCE(tname)
 
@@ -134,9 +134,9 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define ASN1_SEQUENCE_enc(tname, enc, cb) static const .ASN1_AUX tname##_aux = {null, .ASN1_AFLG_ENCODING, 0, 0, cb, offsetof(tname, enc)}; .ASN1_SEQUENCE(tname)
 
-	//#define ASN1_NDEF_SEQUENCE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
+	//#define ASN1_NDEF_SEQUENCE_END(tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
 
-	//#define static_ASN1_NDEF_SEQUENCE_END(tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_NDEF_SEQUENCE_END(tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, null, tname.sizeof, #tname .ASN1_ITEM_end(tname)
 
 	//#define ASN1_SEQUENCE_END_enc(stname, tname) .ASN1_SEQUENCE_END_ref(stname, tname)
 
@@ -144,11 +144,11 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define static_ASN1_SEQUENCE_END_cb(stname, tname) .static_ASN1_SEQUENCE_END_ref(stname, tname)
 
-	//#define ASN1_SEQUENCE_END_ref(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_SEQUENCE_END_ref(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-	//#define static_ASN1_SEQUENCE_END_ref(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_SEQUENCE_END_ref(stname, tname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_SEQUENCE, libressl.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-	//#define ASN1_NDEF_SEQUENCE_END_cb(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl_d.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_NDEF_SEQUENCE_END_cb(stname, tname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_NDEF_SEQUENCE, libressl.openssl.asn1.V_ASN1_SEQUENCE, tname##_seq_tt, (tname##_seq_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
 	/*
 	 * This pair helps declare a CHOICE type. We can do:
@@ -175,7 +175,7 @@ version (LIBRESSL_INTERNAL) {
 	 *      ASN1_CHOICE_END_selector() version.
 	 */
 
-	//#define ASN1_CHOICE(tname) static const libressl_d.openssl.asn1.ASN1_TEMPLATE tname##_ch_tt[]
+	//#define ASN1_CHOICE(tname) static const libressl.openssl.asn1.ASN1_TEMPLATE tname##_ch_tt[]
 
 	//#define ASN1_CHOICE_cb(tname, cb) static const .ASN1_AUX tname##_aux = {null, 0, 0, 0, cb, 0}; .ASN1_CHOICE(tname)
 
@@ -187,21 +187,21 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define static_ASN1_CHOICE_END_name(stname, tname) .static_ASN1_CHOICE_END_selector(stname, tname, type)
 
-	//#define ASN1_CHOICE_END_selector(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_CHOICE_END_selector(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-	//#define static_ASN1_CHOICE_END_selector(stname, tname, selname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define static_ASN1_CHOICE_END_selector(stname, tname, selname) ; .static_ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, null, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
-	//#define ASN1_CHOICE_END_cb(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl_d.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
+	//#define ASN1_CHOICE_END_cb(stname, tname, selname) ; .ASN1_ITEM_start(tname) .ASN1_ITYPE_CHOICE, offsetof(stname, selname), tname##_ch_tt, (tname##_ch_tt).sizeof / libressl.openssl.asn1.ASN1_TEMPLATE.sizeof, &tname##_aux, stname.sizeof, #stname .ASN1_ITEM_end(tname)
 
 	/* This helps with the template wrapper form of ASN1_ITEM */
 
-	//#define ASN1_EX_TEMPLATE_TYPE(flags, tag, name, type) { (flags), (tag), 0, #name, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
+	//#define ASN1_EX_TEMPLATE_TYPE(flags, tag, name, type) { (flags), (tag), 0, #name, libressl.openssl.asn1.ASN1_ITEM_ref(type) }
 
 	/* These help with SEQUENCE or CHOICE components */
 
 	/* used to declare other types */
 
-	//#define ASN1_EX_TYPE(flags, tag, stname, field, type) { (flags), (tag), offsetof(stname, field), #field, libressl_d.openssl.asn1.ASN1_ITEM_ref(type) }
+	//#define ASN1_EX_TYPE(flags, tag, stname, field, type) { (flags), (tag), offsetof(stname, field), #field, libressl.openssl.asn1.ASN1_ITEM_ref(type) }
 
 	/* implicit and explicit helper macros */
 
@@ -211,8 +211,8 @@ version (LIBRESSL_INTERNAL) {
 
 	/* Any defined by macros: the field used is in the table itself */
 
-	//#define ASN1_ADB_OBJECT(tblname) { .ASN1_TFLG_ADB_OID, -1, 0, #tblname, (const (libressl_d.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
-	//#define ASN1_ADB_INTEGER(tblname) { .ASN1_TFLG_ADB_INT, -1, 0, #tblname, (const (libressl_d.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
+	//#define ASN1_ADB_OBJECT(tblname) { .ASN1_TFLG_ADB_OID, -1, 0, #tblname, (const (libressl.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
+	//#define ASN1_ADB_INTEGER(tblname) { .ASN1_TFLG_ADB_INT, -1, 0, #tblname, (const (libressl.openssl.ossl_typ.ASN1_ITEM)*) &(tblname##_adb) }
 	/* Plain simple type */
 	//#define ASN1_SIMPLE(stname, field, type) .ASN1_EX_TYPE(0, 0, stname, field, type)
 
@@ -274,7 +274,7 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define ADB_ENTRY(val, template) { val, template }
 
-	//#define ASN1_ADB_TEMPLATE(name) static const libressl_d.openssl.asn1.ASN1_TEMPLATE name##_tt
+	//#define ASN1_ADB_TEMPLATE(name) static const libressl.openssl.asn1.ASN1_TEMPLATE name##_tt
 }
 
 /**
@@ -308,7 +308,7 @@ struct ASN1_TEMPLATE_st
 	/**
 	 * Relevant ASN1_ITEM or ASN1_ADB
 	 */
-	libressl_d.openssl.asn1.ASN1_ITEM_EXP* item;
+	libressl.openssl.asn1.ASN1_ITEM_EXP* item;
 }
 
 /* Macro to extract ASN1_ITEM and ASN1_ADB pointer from ASN1_TEMPLATE */
@@ -371,12 +371,12 @@ struct ASN1_ADB_st
 	/**
 	 * Type to use if no match
 	 */
-	const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* default_tt;
+	const (libressl.openssl.asn1.ASN1_TEMPLATE)* default_tt;
 
 	/**
 	 * Type to use if selector is null
 	 */
-	const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* null_tt;
+	const (libressl.openssl.asn1.ASN1_TEMPLATE)* null_tt;
 }
 
 struct ASN1_ADB_TABLE_st
@@ -389,7 +389,7 @@ struct ASN1_ADB_TABLE_st
 	/**
 	 * item for this value
 	 */
-	const libressl_d.openssl.asn1.ASN1_TEMPLATE tt;
+	const libressl.openssl.asn1.ASN1_TEMPLATE tt;
 }
 
 /* template flags */
@@ -514,7 +514,7 @@ struct ASN1_ITEM_st
 	/**
 	 * If SEQUENCE or CHOICE this contains the contents
 	 */
-	const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* templates;
+	const (libressl.openssl.asn1.ASN1_TEMPLATE)* templates;
 
 	/**
 	 * Number of templates if SEQUENCE or CHOICE
@@ -628,22 +628,22 @@ struct ASN1_TLC_st
 
 /* Typedefs for ASN1 function pointers */
 
-private alias ASN1_new_func = /* Not a function pointer type */ extern (C) nothrow @nogc libressl_d.openssl.asn1.ASN1_VALUE* function();
-private alias ASN1_free_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(libressl_d.openssl.asn1.ASN1_VALUE* a);
-private alias ASN1_d2i_func = /* Not a function pointer type */ extern (C) nothrow @nogc libressl_d.openssl.asn1.ASN1_VALUE* function(libressl_d.openssl.asn1.ASN1_VALUE** a, const (ubyte)** in_, core.stdc.config.c_long length_);
-private alias ASN1_i2d_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE* a, ubyte** in_);
+private alias ASN1_new_func = /* Not a function pointer type */ extern (C) nothrow @nogc libressl.openssl.asn1.ASN1_VALUE* function();
+private alias ASN1_free_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(libressl.openssl.asn1.ASN1_VALUE* a);
+private alias ASN1_d2i_func = /* Not a function pointer type */ extern (C) nothrow @nogc libressl.openssl.asn1.ASN1_VALUE* function(libressl.openssl.asn1.ASN1_VALUE** a, const (ubyte)** in_, core.stdc.config.c_long length_);
+private alias ASN1_i2d_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.asn1.ASN1_VALUE* a, ubyte** in_);
 
-private alias ASN1_ex_d2i = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass, char opt, libressl_d.openssl.asn1.ASN1_TLC* ctx);
+private alias ASN1_ex_d2i = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass, char opt, libressl.openssl.asn1.ASN1_TLC* ctx);
 
-private alias ASN1_ex_i2d = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass);
-private alias ASN1_ex_new_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-private alias ASN1_ex_free_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_ex_i2d = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass);
+private alias ASN1_ex_new_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_ex_free_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);
 
-private alias ASN1_ex_print_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, int indent, const (char)* fname, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+private alias ASN1_ex_print_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO* out_, libressl.openssl.asn1.ASN1_VALUE** pval, int indent, const (char)* fname, const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
-private alias ASN1_primitive_i2c = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte* cont, int* putype, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-private alias ASN1_primitive_c2i = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)* cont, int len, int utype, char* free_cont, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-private alias ASN1_primitive_print = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIO* out_, libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+private alias ASN1_primitive_i2c = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.asn1.ASN1_VALUE** pval, ubyte* cont, int* putype, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_primitive_c2i = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.asn1.ASN1_VALUE** pval, const (ubyte)* cont, int len, int utype, char* free_cont, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);
+private alias ASN1_primitive_print = /* Not a function pointer type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO* out_, libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, int indent, const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 struct ASN1_EXTERN_FUNCS_st
 {
@@ -690,7 +690,7 @@ alias ASN1_PRIMITIVE_FUNCS = .ASN1_PRIMITIVE_FUNCS_st;
  * then an external type is more appropriate.
  */
 
-private alias ASN1_aux_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(int operation, libressl_d.openssl.asn1.ASN1_VALUE** in_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, void* exarg);
+private alias ASN1_aux_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(int operation, libressl.openssl.asn1.ASN1_VALUE** in_, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, void* exarg);
 
 struct ASN1_AUX_st
 {
@@ -722,9 +722,9 @@ alias ASN1_AUX = .ASN1_AUX_st;
  */
 struct ASN1_PRINT_ARG_st
 {
-	libressl_d.openssl.ossl_typ.BIO* out_;
+	libressl.openssl.ossl_typ.BIO* out_;
 	int indent;
-	const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx;
+	const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx;
 }
 
 alias ASN1_PRINT_ARG = .ASN1_PRINT_ARG_st;
@@ -737,12 +737,12 @@ struct ASN1_STREAM_ARG_st
 	/**
 	 * BIO to stream through
 	 */
-	libressl_d.openssl.ossl_typ.BIO* out_;
+	libressl.openssl.ossl_typ.BIO* out_;
 
 	/**
 	 * BIO with filters appended
 	 */
-	libressl_d.openssl.ossl_typ.BIO* ndef_bio;
+	libressl.openssl.ossl_typ.BIO* ndef_bio;
 
 	/**
 	 * Streaming I/O boundary
@@ -788,7 +788,7 @@ version (LIBRESSL_INTERNAL) {
 	//#define IMPLEMENT_ASN1_TYPE_ex(itname, vname, ex) .ASN1_ITEM_start(itname) .ASN1_ITYPE_PRIMITIVE, V_##vname, null, 0, null, ex, #itname .ASN1_ITEM_end(itname)
 
 	/* Macro to implement a multi string type */
-	//#define IMPLEMENT_ASN1_MSTRING(itname, mask) .ASN1_ITEM_start(itname) .ASN1_ITYPE_MSTRING, mask, null, 0, null, libressl_d.openssl.ossl_typ.ASN1_STRING.sizeof, #itname .ASN1_ITEM_end(itname)
+	//#define IMPLEMENT_ASN1_MSTRING(itname, mask) .ASN1_ITEM_start(itname) .ASN1_ITYPE_MSTRING, mask, null, 0, null, libressl.openssl.ossl_typ.ASN1_STRING.sizeof, #itname .ASN1_ITEM_end(itname)
 	//#define IMPLEMENT_EXTERN_ASN1(sname, tag, fptrs) .ASN1_ITEM_start(sname) .ASN1_ITYPE_EXTERN, tag, null, 0, &fptrs, 0, #sname .ASN1_ITEM_end(sname)
 
 	/* Macro to implement standard functions in terms of ASN1_ITEM structures */
@@ -803,27 +803,27 @@ version (LIBRESSL_INTERNAL) {
 
 	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS(stname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, stname, stname)
 
-	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_pfname(pre, stname, itname, fname) pre stname* fname##_new(void) { return (stname*) libressl_d.openssl.asn1.ASN1_item_new(libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } pre void fname##_free(stname* a) { libressl_d.openssl.asn1.ASN1_item_free(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_pfname(pre, stname, itname, fname) pre stname* fname##_new(void) { return (stname*) libressl.openssl.asn1.ASN1_item_new(libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); } pre void fname##_free(stname* a) { libressl.openssl.asn1.ASN1_item_free(cast(libressl.openssl.asn1.ASN1_VALUE*)(a), libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
-	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname) stname* fname##_new(void) { return (stname*) libressl_d.openssl.asn1.ASN1_item_new(libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } void fname##_free(stname* a) { libressl_d.openssl.asn1.ASN1_item_free(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	//#define IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname) stname* fname##_new(void) { return (stname*) libressl.openssl.asn1.ASN1_item_new(libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); } void fname##_free(stname* a) { libressl.openssl.asn1.ASN1_item_free(cast(libressl.openssl.asn1.ASN1_VALUE*)(a), libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
 	//#define IMPLEMENT_ASN1_FUNCTIONS_fname(stname, itname, fname) .IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(stname, itname, fname) .IMPLEMENT_ASN1_ALLOC_FUNCTIONS_fname(stname, itname, fname)
 
-	//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl_d.openssl.asn1.ASN1_item_d2i(cast(libressl_d.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(stname* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl.openssl.asn1.ASN1_item_d2i(cast(libressl.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(stname* a, ubyte** out_) { return libressl.openssl.asn1.ASN1_item_i2d(cast(libressl.openssl.asn1.ASN1_VALUE*)(a), out_, libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
-	//#define IMPLEMENT_ASN1_NDEF_FUNCTION(stname) int i2d_##stname##_NDEF(stname* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_ndef_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(stname)); }
+	//#define IMPLEMENT_ASN1_NDEF_FUNCTION(stname) int i2d_##stname##_NDEF(stname* a, ubyte** out_) { return libressl.openssl.asn1.ASN1_item_ndef_i2d(cast(libressl.openssl.asn1.ASN1_VALUE*)(a), out_, libressl.openssl.asn1.ASN1_ITEM_rptr(stname)); }
 
 	/*
 	 * This includes evil casts to remove const: they will go away when full
 	 * ASN1 constification is done.
 	 */
-	//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl_d.openssl.asn1.ASN1_item_d2i(cast(libressl_d.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(const (stname)* a, ubyte** out_) { return libressl_d.openssl.asn1.ASN1_item_i2d(cast(libressl_d.openssl.asn1.ASN1_VALUE*)(a), out_, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname)); }
+	//#define IMPLEMENT_ASN1_ENCODE_FUNCTIONS_const_fname(stname, itname, fname) stname* d2i_##fname(stname** a, const (ubyte)** in_, core.stdc.config.c_long len) { return (stname*) libressl.openssl.asn1.ASN1_item_d2i(cast(libressl.openssl.asn1.ASN1_VALUE**)(a), in_, len, libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); } int i2d_##fname(const (stname)* a, ubyte** out_) { return libressl.openssl.asn1.ASN1_item_i2d(cast(libressl.openssl.asn1.ASN1_VALUE*)(a), out_, libressl.openssl.asn1.ASN1_ITEM_rptr(itname)); }
 
-	//#define IMPLEMENT_ASN1_DUP_FUNCTION(stname) stname* stname##_dup(stname* x) { return libressl_d.openssl.asn1.ASN1_item_dup(libressl_d.openssl.asn1.ASN1_ITEM_rptr(stname), x); }
+	//#define IMPLEMENT_ASN1_DUP_FUNCTION(stname) stname* stname##_dup(stname* x) { return libressl.openssl.asn1.ASN1_item_dup(libressl.openssl.asn1.ASN1_ITEM_rptr(stname), x); }
 
 	//#define IMPLEMENT_ASN1_PRINT_FUNCTION(stname) .IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, stname, stname)
 
-	//#define IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, itname, fname) int fname##_print_ctx(libressl_d.openssl.ossl_typ.BIO* out_, stname* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx) { return libressl_d.openssl.asn1.ASN1_item_print(out_, cast(libressl_d.openssl.asn1.ASN1_VALUE*)(x), indent, libressl_d.openssl.asn1.ASN1_ITEM_rptr(itname), pctx); }
+	//#define IMPLEMENT_ASN1_PRINT_FUNCTION_fname(stname, itname, fname) int fname##_print_ctx(libressl.openssl.ossl_typ.BIO* out_, stname* x, int indent, const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx) { return libressl.openssl.asn1.ASN1_item_print(out_, cast(libressl.openssl.asn1.ASN1_VALUE*)(x), indent, libressl.openssl.asn1.ASN1_ITEM_rptr(itname), pctx); }
 
 	//#define IMPLEMENT_ASN1_FUNCTIONS_const(name) .IMPLEMENT_ASN1_FUNCTIONS_const_fname(name, name, name)
 
@@ -832,36 +832,36 @@ version (LIBRESSL_INTERNAL) {
 
 /* external definitions for primitive types */
 
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_BOOLEAN_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_TBOOLEAN_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_FBOOLEAN_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM BIGNUM_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM LONG_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM ZLONG_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM ASN1_BOOLEAN_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM ASN1_TBOOLEAN_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM ASN1_FBOOLEAN_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM ASN1_SEQUENCE_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM BIGNUM_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM LONG_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM ZLONG_it;
 
 version (LIBRESSL_INTERNAL) {
 } else {
-	extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM CBIGNUM_it;
+	extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM CBIGNUM_it;
 }
 
 //DECLARE_STACK_OF(ASN1_VALUE)
 struct stack_st_ASN1_VALUE
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /* Functions used internally by the ASN1 code */
 
-int ASN1_item_ex_new(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-void ASN1_item_ex_free(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
-int ASN1_template_new(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* tt);
-int ASN1_primitive_new(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+int ASN1_item_ex_new(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);
+void ASN1_item_ex_free(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);
+int ASN1_template_new(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.asn1.ASN1_TEMPLATE)* tt);
+int ASN1_primitive_new(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);
 
-void ASN1_template_free(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* tt);
-int ASN1_template_d2i(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* tt);
-int ASN1_item_ex_d2i(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass, char opt, libressl_d.openssl.asn1.ASN1_TLC* ctx);
+void ASN1_template_free(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.asn1.ASN1_TEMPLATE)* tt);
+int ASN1_template_d2i(libressl.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl.openssl.asn1.ASN1_TEMPLATE)* tt);
+int ASN1_item_ex_d2i(libressl.openssl.asn1.ASN1_VALUE** pval, const (ubyte)** in_, core.stdc.config.c_long len, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass, char opt, libressl.openssl.asn1.ASN1_TLC* ctx);
 
-int ASN1_item_ex_i2d(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass);
-int ASN1_template_i2d(libressl_d.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl_d.openssl.asn1.ASN1_TEMPLATE)* tt);
-void ASN1_primitive_free(libressl_d.openssl.asn1.ASN1_VALUE** pval, const (libressl_d.openssl.ossl_typ.ASN1_ITEM)* it);
+int ASN1_item_ex_i2d(libressl.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, int tag, int aclass);
+int ASN1_template_i2d(libressl.openssl.asn1.ASN1_VALUE** pval, ubyte** out_, const (libressl.openssl.asn1.ASN1_TEMPLATE)* tt);
+void ASN1_primitive_free(libressl.openssl.asn1.ASN1_VALUE** pval, const (libressl.openssl.ossl_typ.ASN1_ITEM)* it);

@@ -2,13 +2,13 @@
  * Public domain
  * limits.h compatibility shim
  */
-module libressl_d.compat.limits;
+module libressl.compat.limits;
 
 
 public import core.stdc.limits;
 
 version (Windows) {
-	public import libressl_d.compat.stdlib;
+	public import libressl.compat.stdlib;
 
 	private enum _MAX_PATH = 260;
 

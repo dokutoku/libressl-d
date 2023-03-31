@@ -2,8 +2,8 @@
  * Public domain
  * netdb.h compatibility shim
  */
-module libressl_d.compat.netdb;
+module libressl.compat.netdb;
 
 
 public import core.sys.posix.netdb;
-public import libressl_d.compat.win32netcompat;
+public import libressl.compat.win32netcompat;

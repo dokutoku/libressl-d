@@ -31,7 +31,7 @@
  *
  *	@(#)queue.h	8.5 (Berkeley) 8/20/94
  */
-module libressl_d.compat.sys.queue;
+module libressl.compat.sys.queue;
 
 
 //#include <sys/_null.h>

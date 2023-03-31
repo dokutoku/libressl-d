@@ -2,13 +2,13 @@
  * Public domain
  * sys/select.h compatibility shim
  */
-module libressl_d.compat.sys.uio;
+module libressl.compat.sys.uio;
 
 
 public import core.sys.posix.sys.uio;
 
 version (Windows) {
-	public import libressl_d.compat.sys.types;
+	public import libressl.compat.sys.types;
 
 	struct iovec
 	{

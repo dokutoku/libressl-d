@@ -2,12 +2,12 @@
  * Public domain
  * sys/time.h compatibility shim
  */
-module libressl_d.compat.time;
+module libressl.compat.time;
 
 
 public import core.stdc.time;
 public import core.sys.posix.time;
-public import libressl_d.compat.sys.time;
+public import libressl.compat.sys.time;
 
 extern (C):
 nothrow @nogc:
@@ -32,7 +32,7 @@ static if (!__traits(compiles, CLOCK_MONOTONIC)) {
 version (Posix) {
 	static if (!__traits(compiles, clock_gettime)) {
 		alias clockid_t = int;
-		int clock_gettime(.clockid_t clock_id, libressl_d.compat.sys.time.timespec* tp);
+		int clock_gettime(.clockid_t clock_id, libressl.compat.sys.time.timespec* tp);
 	}
 
 	//#if defined(timespecsub)
@@ -43,7 +43,7 @@ version (Posix) {
 	static if (!__traits(compiles, timespecsub)) {
 		pragma(inline, true)
 		pure nothrow @trusted @nogc @live
-		void timespecsub(scope const libressl_d.compat.sys.time.timespec* tsp, scope const libressl_d.compat.sys.time.timespec* usp, scope libressl_d.compat.sys.time.timespec* vsp)
+		void timespecsub(scope const libressl.compat.sys.time.timespec* tsp, scope const libressl.compat.sys.time.timespec* usp, scope libressl.compat.sys.time.timespec* vsp)
 
 			in
 			{

@@ -61,7 +61,7 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.obj_mac;
+module libressl.openssl.obj_mac;
 
 
 enum SN_undef = "UNDEF";

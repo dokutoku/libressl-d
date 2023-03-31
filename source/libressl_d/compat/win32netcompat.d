@@ -4,14 +4,14 @@
  * BSD socket emulation code for Winsock2
  * Brent Cook <bcook@openbsd.org>
  */
-module libressl_d.compat.win32netcompat;
+module libressl.compat.win32netcompat;
 
 
 //#include <ws2tcpip.h>
-private static import libressl_d.compat.sys.types;
+private static import libressl.compat.sys.types;
 public import core.stdc.errno;
 public import core.sys.windows.winsock2;
-public import libressl_d.compat.unistd;
+public import libressl.compat.unistd;
 
 version (Windows):
 
@@ -28,9 +28,9 @@ int posix_open(const (char)* path, ...);
 
 int posix_close(int fd);
 
-libressl_d.compat.sys.types.ssize_t posix_read(int fd, void* buf, size_t count);
+libressl.compat.sys.types.ssize_t posix_read(int fd, void* buf, size_t count);
 
-libressl_d.compat.sys.types.ssize_t posix_write(int fd, const (void)* buf, size_t count);
+libressl.compat.sys.types.ssize_t posix_write(int fd, const (void)* buf, size_t count);
 
 int posix_getsockopt(int sockfd, int level, int optname, void* optval, socklen_t* optlen);
 

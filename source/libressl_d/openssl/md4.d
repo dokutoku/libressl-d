@@ -55,11 +55,11 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.md4;
+module libressl.openssl.md4;
 
 
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 extern (C):
 nothrow @nogc:

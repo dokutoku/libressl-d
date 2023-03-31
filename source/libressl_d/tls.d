@@ -14,13 +14,13 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-module libressl_d.tls;
+module libressl.tls;
 
 
-private static import libressl_d.compat.time;
+private static import libressl.compat.time;
 public import core.stdc.stddef;
 public import core.stdc.stdint;
-public import libressl_d.compat.sys.types;
+public import libressl.compat.sys.types;
 
 extern (C):
 nothrow @nogc:
@@ -70,8 +70,8 @@ enum TLS_TICKET_KEY_SIZE = 48;
 struct tls;
 struct tls_config;
 
-alias tls_read_cb = extern (C) nothrow @nogc libressl_d.compat.sys.types.ssize_t function(.tls* _ctx, void* _buf, size_t _buflen, void* _cb_arg);
-alias tls_write_cb = extern (C) nothrow @nogc libressl_d.compat.sys.types.ssize_t function(.tls* _ctx, const (void)* _buf, size_t _buflen, void* _cb_arg);
+alias tls_read_cb = extern (C) nothrow @nogc libressl.compat.sys.types.ssize_t function(.tls* _ctx, void* _buf, size_t _buflen, void* _cb_arg);
+alias tls_write_cb = extern (C) nothrow @nogc libressl.compat.sys.types.ssize_t function(.tls* _ctx, const (void)* _buf, size_t _buflen, void* _cb_arg);
 
 int tls_init();
 
@@ -145,8 +145,8 @@ int tls_connect_servername(.tls* _ctx, const (char)* _host, const (char)* _port,
 int tls_connect_socket(.tls* _ctx, int _s, const (char)* _servername);
 int tls_connect_cbs(.tls* _ctx, .tls_read_cb _read_cb, .tls_write_cb _write_cb, void* _cb_arg, const (char)* _servername);
 int tls_handshake(.tls* _ctx);
-libressl_d.compat.sys.types.ssize_t tls_read(.tls* _ctx, void* _buf, size_t _buflen);
-libressl_d.compat.sys.types.ssize_t tls_write(.tls* _ctx, const (void)* _buf, size_t _buflen);
+libressl.compat.sys.types.ssize_t tls_read(.tls* _ctx, void* _buf, size_t _buflen);
+libressl.compat.sys.types.ssize_t tls_write(.tls* _ctx, const (void)* _buf, size_t _buflen);
 int tls_close(.tls* _ctx);
 
 int tls_peer_cert_provided(.tls* _ctx);
@@ -155,8 +155,8 @@ int tls_peer_cert_contains_name(.tls* _ctx, const (char)* _name);
 const (char)* tls_peer_cert_hash(.tls* _ctx);
 const (char)* tls_peer_cert_issuer(.tls* _ctx);
 const (char)* tls_peer_cert_subject(.tls* _ctx);
-libressl_d.compat.time.time_t tls_peer_cert_notbefore(.tls* _ctx);
-libressl_d.compat.time.time_t tls_peer_cert_notafter(.tls* _ctx);
+libressl.compat.time.time_t tls_peer_cert_notbefore(.tls* _ctx);
+libressl.compat.time.time_t tls_peer_cert_notafter(.tls* _ctx);
 const (core.stdc.stdint.uint8_t)* tls_peer_cert_chain_pem(.tls* _ctx, size_t* _len);
 
 const (char)* tls_conn_alpn_selected(.tls* _ctx);
@@ -172,9 +172,9 @@ void tls_unload_file(core.stdc.stdint.uint8_t* _buf, size_t len);
 int tls_ocsp_process_response(.tls* _ctx, const (ubyte)* _response, size_t _size);
 int tls_peer_ocsp_cert_status(.tls* _ctx);
 int tls_peer_ocsp_crl_reason(.tls* _ctx);
-libressl_d.compat.time.time_t tls_peer_ocsp_next_update(.tls* _ctx);
+libressl.compat.time.time_t tls_peer_ocsp_next_update(.tls* _ctx);
 int tls_peer_ocsp_response_status(.tls* _ctx);
 const (char)* tls_peer_ocsp_result(.tls* _ctx);
-libressl_d.compat.time.time_t tls_peer_ocsp_revocation_time(.tls* _ctx);
-libressl_d.compat.time.time_t tls_peer_ocsp_this_update(.tls* _ctx);
+libressl.compat.time.time_t tls_peer_ocsp_revocation_time(.tls* _ctx);
+libressl.compat.time.time_t tls_peer_ocsp_this_update(.tls* _ctx);
 const (char)* tls_peer_ocsp_url(.tls* _ctx);

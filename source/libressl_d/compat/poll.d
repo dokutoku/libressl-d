@@ -10,7 +10,7 @@
  * Dongsheng Song <dongsheng.song@gmail.com>
  * Brent Cook <bcook@openbsd.org>
  */
-module libressl_d.compat.poll;
+module libressl.compat.poll;
 
 
 private static import core.stdc.config;

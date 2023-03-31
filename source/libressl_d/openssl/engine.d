@@ -60,14 +60,14 @@
  * ECDH support in OpenSSL originally developed by
  * SUN MICROSYSTEMS, INC., and contributed to the OpenSSL project.
  */
-module libressl_d.openssl.engine;
+module libressl.openssl.engine;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.crypto;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.x509;
+private static import libressl.openssl.crypto;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ossl_typ;
+public import libressl.openssl.x509;
 
 version (OPENSSL_NO_ENGINE) {
 	static assert(false, "ENGINE is disabled.");
@@ -77,44 +77,44 @@ version (OPENSSL_NO_DEPRECATED) {
 	private struct ec_key_method_st;
 	private alias EC_KEY_METHOD = .ec_key_method_st;
 } else {
-	public import libressl_d.openssl.bn;
+	public import libressl.openssl.bn;
 
 	version (OPENSSL_NO_RSA) {
 	} else {
-		public import libressl_d.openssl.rsa;
+		public import libressl.openssl.rsa;
 	}
 
 	version (OPENSSL_NO_DSA) {
 	} else {
-		public import libressl_d.openssl.dsa;
+		public import libressl.openssl.dsa;
 	}
 
 	version (OPENSSL_NO_DH) {
 	} else {
-		public import libressl_d.openssl.dh;
+		public import libressl.openssl.dh;
 	}
 
 	version (OPENSSL_NO_ECDH) {
 	} else {
-		public import libressl_d.openssl.ecdh;
+		public import libressl.openssl.ecdh;
 	}
 
 	version (OPENSSL_NO_ECDSA) {
 	} else {
-		public import libressl_d.openssl.ecdsa;
+		public import libressl.openssl.ecdsa;
 	}
 
 	version (OPENSSL_NO_EC) {
 		private struct ec_key_method_st;
 		private alias EC_KEY_METHOD = .ec_key_method_st;
 	} else {
-		public import libressl_d.openssl.ec;
+		public import libressl.openssl.ec;
 
-		private alias EC_KEY_METHOD = libressl_d.openssl.ec.EC_KEY_METHOD;
+		private alias EC_KEY_METHOD = libressl.openssl.ec.EC_KEY_METHOD;
 	}
 
-	public import libressl_d.openssl.err;
-	public import libressl_d.openssl.ui;
+	public import libressl.openssl.err;
+	public import libressl.openssl.ui;
 }
 
 extern (C):
@@ -376,24 +376,24 @@ alias ENGINE_GEN_FUNC_PTR = extern (C) nothrow @nogc int function();
 /**
  * Generic function pointer taking no arguments
  */
-alias ENGINE_GEN_INT_FUNC_PTR = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE*);
+alias ENGINE_GEN_INT_FUNC_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*);
 
 /**
  * Specific control function pointer
  */
-alias ENGINE_CTRL_FUNC_PTR = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE*, int, core.stdc.config.c_long, void*, void function() f);
+alias ENGINE_CTRL_FUNC_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, int, core.stdc.config.c_long, void*, void function() f);
 
 /**
  * Generic load_key function pointer
  */
-alias ENGINE_LOAD_KEY_PTR = extern (C) nothrow @nogc libressl_d.openssl.ossl_typ.EVP_PKEY* function(libressl_d.openssl.ossl_typ.ENGINE*, const (char)*, libressl_d.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
-alias ENGINE_SSL_CLIENT_CERT_PTR = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE*, libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.x509.stack_st_X509_NAME* ca_dn, libressl_d.openssl.ossl_typ.X509** pcert, libressl_d.openssl.ossl_typ.EVP_PKEY** pkey, libressl_d.openssl.x509.stack_st_X509** pother, libressl_d.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
+alias ENGINE_LOAD_KEY_PTR = extern (C) nothrow @nogc libressl.openssl.ossl_typ.EVP_PKEY* function(libressl.openssl.ossl_typ.ENGINE*, const (char)*, libressl.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
+alias ENGINE_SSL_CLIENT_CERT_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, libressl.openssl.ossl_typ.SSL* ssl, libressl.openssl.x509.stack_st_X509_NAME* ca_dn, libressl.openssl.ossl_typ.X509** pcert, libressl.openssl.ossl_typ.EVP_PKEY** pkey, libressl.openssl.x509.stack_st_X509** pother, libressl.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
 
 /*
  * These callback types are for an ENGINE's handler for cipher and digest logic.
  * These handlers have these prototypes;
- *   int foo(ENGINE* , const (libressl_d.openssl.ossl_typ.EVP_CIPHER)** cipher, const (int)** nids, int nid);
- *   int foo(ENGINE* , const (libressl_d.openssl.ossl_typ.EVP_MD)** digest, const (int)** nids, int nid);
+ *   int foo(ENGINE* , const (libressl.openssl.ossl_typ.EVP_CIPHER)** cipher, const (int)** nids, int nid);
+ *   int foo(ENGINE* , const (libressl.openssl.ossl_typ.EVP_MD)** digest, const (int)** nids, int nid);
  * Looking at how to implement these handlers in the case of cipher support, if
  * the framework wants the EVP_CIPHER for 'nid', it will call;
  *   foo(e, &p_evp_cipher, null, nid);    (return zero for failure)
@@ -404,10 +404,10 @@ alias ENGINE_SSL_CLIENT_CERT_PTR = extern (C) nothrow @nogc int function(libress
  * Returns to a pointer to the array of supported cipher 'nid's. If the second
  * parameter is non-null it is set to the size of the returned array.
  */
-alias ENGINE_CIPHERS_PTR = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE*, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)**, const (int)**, int);
-alias ENGINE_DIGESTS_PTR = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE*, const (libressl_d.openssl.ossl_typ.EVP_MD)**, const (int)**, int);
-alias ENGINE_PKEY_METHS_PTR = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE*, libressl_d.openssl.ossl_typ.EVP_PKEY_METHOD**, const (int)**, int);
-alias ENGINE_PKEY_ASN1_METHS_PTR = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE*, libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD**, const (int)**, int);
+alias ENGINE_CIPHERS_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, const (libressl.openssl.ossl_typ.EVP_CIPHER)**, const (int)**, int);
+alias ENGINE_DIGESTS_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, const (libressl.openssl.ossl_typ.EVP_MD)**, const (int)**, int);
+alias ENGINE_PKEY_METHS_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, libressl.openssl.ossl_typ.EVP_PKEY_METHOD**, const (int)**, int);
+alias ENGINE_PKEY_ASN1_METHS_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, libressl.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD**, const (int)**, int);
 
 /*
  * STRUCTURE functions ... all of these functions deal with pointers to ENGINE
@@ -422,27 +422,27 @@ alias ENGINE_PKEY_ASN1_METHS_PTR = extern (C) nothrow @nogc int function(libress
  */
 
 /* Get the first/last "ENGINE" type available. */
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_first();
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_last();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_first();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_last();
 
 /* Iterate to the next/previous "ENGINE" type (null = end of the list). */
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_next(libressl_d.openssl.ossl_typ.ENGINE* e);
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_prev(libressl_d.openssl.ossl_typ.ENGINE* e);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_next(libressl.openssl.ossl_typ.ENGINE* e);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_prev(libressl.openssl.ossl_typ.ENGINE* e);
 
 /**
  * Add another "ENGINE" type into the array.
  */
-int ENGINE_add(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_add(libressl.openssl.ossl_typ.ENGINE* e);
 
 /**
  * Remove an existing "ENGINE" type from the array.
  */
-int ENGINE_remove(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_remove(libressl.openssl.ossl_typ.ENGINE* e);
 
 /**
  * Retrieve an engine from the list by its unique "id" value.
  */
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_by_id(const (char)* id);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_by_id(const (char)* id);
 
 /* Add all the built-in engines. */
 void ENGINE_load_openssl();
@@ -472,52 +472,52 @@ void ENGINE_set_table_flags(uint flags);
  * ENGINE_cleanup() will reverse any "register" operations.
  */
 
-int ENGINE_register_RSA(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_RSA(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_RSA(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_RSA(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_RSA();
 
-int ENGINE_register_DSA(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_DSA(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_DSA(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_DSA(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_DSA();
 
-int ENGINE_register_ECDH(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_ECDH(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_ECDH(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_ECDH(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_ECDH();
 
-int ENGINE_register_ECDSA(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_ECDSA(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_ECDSA(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_ECDSA(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_ECDSA();
 
-int ENGINE_register_EC(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_EC(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_EC(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_EC(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_EC();
 
-int ENGINE_register_DH(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_DH(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_DH(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_DH(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_DH();
 
-int ENGINE_register_RAND(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_RAND(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_RAND(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_RAND(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_RAND();
 
-int ENGINE_register_STORE(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_STORE(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_STORE(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_STORE(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_STORE();
 
-int ENGINE_register_ciphers(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_ciphers(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_ciphers(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_ciphers(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_ciphers();
 
-int ENGINE_register_digests(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_digests(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_digests(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_digests(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_digests();
 
-int ENGINE_register_pkey_meths(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_pkey_meths(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_pkey_meths(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_pkey_meths(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_pkey_meths();
 
-int ENGINE_register_pkey_asn1_meths(libressl_d.openssl.ossl_typ.ENGINE* e);
-void ENGINE_unregister_pkey_asn1_meths(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_pkey_asn1_meths(libressl.openssl.ossl_typ.ENGINE* e);
+void ENGINE_unregister_pkey_asn1_meths(libressl.openssl.ossl_typ.ENGINE* e);
 void ENGINE_register_all_pkey_asn1_meths();
 
 /*
@@ -526,7 +526,7 @@ void ENGINE_register_all_pkey_asn1_meths();
  * need. If you only need a subset of functionality, consider using more
  * selective initialisation.
  */
-int ENGINE_register_complete(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_register_complete(libressl.openssl.ossl_typ.ENGINE* e);
 int ENGINE_register_all_complete();
 
 /**
@@ -538,7 +538,7 @@ int ENGINE_register_all_complete();
  * functional. The caller should be aware of trying commands that require an
  * operational ENGINE, and only use functional references in such situations.
  */
-int ENGINE_ctrl(libressl_d.openssl.ossl_typ.ENGINE* e, int cmd, core.stdc.config.c_long i, void* p, .ENGINE_ctrl_func f);
+int ENGINE_ctrl(libressl.openssl.ossl_typ.ENGINE* e, int cmd, core.stdc.config.c_long i, void* p, .ENGINE_ctrl_func f);
 private alias ENGINE_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 /**
@@ -547,7 +547,7 @@ private alias ENGINE_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc v
  * ENGINE_ctrl_cmd_string(). If this returns zero, it is not available to
  * ENGINE_ctrl_cmd_string(), only ENGINE_ctrl().
  */
-int ENGINE_cmd_is_executable(libressl_d.openssl.ossl_typ.ENGINE* e, int cmd);
+int ENGINE_cmd_is_executable(libressl.openssl.ossl_typ.ENGINE* e, int cmd);
 
 /**
  * This function works like ENGINE_ctrl() with the exception of taking a
@@ -555,7 +555,7 @@ int ENGINE_cmd_is_executable(libressl_d.openssl.ossl_typ.ENGINE* e, int cmd);
  * See the comment on ENGINE_ctrl_cmd_string() for an explanation on how to
  * use the cmd_name and cmd_optional.
  */
-int ENGINE_ctrl_cmd(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* cmd_name, core.stdc.config.c_long i, void* p, .ENGINE_ctrl_cmd_func f, int cmd_optional);
+int ENGINE_ctrl_cmd(libressl.openssl.ossl_typ.ENGINE* e, const (char)* cmd_name, core.stdc.config.c_long i, void* p, .ENGINE_ctrl_cmd_func f, int cmd_optional);
 private alias ENGINE_ctrl_cmd_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 /**
@@ -579,7 +579,7 @@ private alias ENGINE_ctrl_cmd_func = /* Temporary type */ extern (C) nothrow @no
  * compliant ENGINE-based applications can work consistently with the same
  * configuration for the same ENGINE-enabled devices, across applications.
  */
-int ENGINE_ctrl_cmd_string(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* cmd_name, const (char)* arg, int cmd_optional);
+int ENGINE_ctrl_cmd_string(libressl.openssl.ossl_typ.ENGINE* e, const (char)* cmd_name, const (char)* arg, int cmd_optional);
 
 /*
  * These functions are useful for manufacturing new ENGINE structures. They
@@ -589,37 +589,37 @@ int ENGINE_ctrl_cmd_string(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* 
  * here so that the ENGINE structure doesn't have to be exposed and break binary
  * compatibility!
  */
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_new();
-int ENGINE_free(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_up_ref(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_id(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* id);
-int ENGINE_set_name(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* name);
-int ENGINE_set_RSA(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.RSA_METHOD)* rsa_meth);
-int ENGINE_set_DSA(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.DSA_METHOD)* dsa_meth);
-int ENGINE_set_ECDH(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.ECDH_METHOD)* ecdh_meth);
-int ENGINE_set_ECDSA(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ecdsa_meth);
-int ENGINE_set_EC(libressl_d.openssl.ossl_typ.ENGINE* e, const (.EC_KEY_METHOD)* ec_meth);
-int ENGINE_set_DH(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.DH_METHOD)* dh_meth);
-int ENGINE_set_RAND(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.RAND_METHOD)* rand_meth);
-int ENGINE_set_STORE(libressl_d.openssl.ossl_typ.ENGINE* e, const (libressl_d.openssl.ossl_typ.STORE_METHOD)* store_meth);
-int ENGINE_set_destroy_function(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_GEN_INT_FUNC_PTR destroy_f);
-int ENGINE_set_init_function(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_GEN_INT_FUNC_PTR init_f);
-int ENGINE_set_finish_function(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_GEN_INT_FUNC_PTR finish_f);
-int ENGINE_set_ctrl_function(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_CTRL_FUNC_PTR ctrl_f);
-int ENGINE_set_load_privkey_function(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_LOAD_KEY_PTR loadpriv_f);
-int ENGINE_set_load_pubkey_function(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_LOAD_KEY_PTR loadpub_f);
-int ENGINE_set_load_ssl_client_cert_function(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_SSL_CLIENT_CERT_PTR loadssl_f);
-int ENGINE_set_ciphers(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_CIPHERS_PTR f);
-int ENGINE_set_digests(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_DIGESTS_PTR f);
-int ENGINE_set_pkey_meths(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_PKEY_METHS_PTR f);
-int ENGINE_set_pkey_asn1_meths(libressl_d.openssl.ossl_typ.ENGINE* e, .ENGINE_PKEY_ASN1_METHS_PTR f);
-int ENGINE_set_flags(libressl_d.openssl.ossl_typ.ENGINE* e, int flags);
-int ENGINE_set_cmd_defns(libressl_d.openssl.ossl_typ.ENGINE* e, const (.ENGINE_CMD_DEFN)* defns);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_new();
+int ENGINE_free(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_up_ref(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_id(libressl.openssl.ossl_typ.ENGINE* e, const (char)* id);
+int ENGINE_set_name(libressl.openssl.ossl_typ.ENGINE* e, const (char)* name);
+int ENGINE_set_RSA(libressl.openssl.ossl_typ.ENGINE* e, const (libressl.openssl.ossl_typ.RSA_METHOD)* rsa_meth);
+int ENGINE_set_DSA(libressl.openssl.ossl_typ.ENGINE* e, const (libressl.openssl.ossl_typ.DSA_METHOD)* dsa_meth);
+int ENGINE_set_ECDH(libressl.openssl.ossl_typ.ENGINE* e, const (libressl.openssl.ossl_typ.ECDH_METHOD)* ecdh_meth);
+int ENGINE_set_ECDSA(libressl.openssl.ossl_typ.ENGINE* e, const (libressl.openssl.ossl_typ.ECDSA_METHOD)* ecdsa_meth);
+int ENGINE_set_EC(libressl.openssl.ossl_typ.ENGINE* e, const (.EC_KEY_METHOD)* ec_meth);
+int ENGINE_set_DH(libressl.openssl.ossl_typ.ENGINE* e, const (libressl.openssl.ossl_typ.DH_METHOD)* dh_meth);
+int ENGINE_set_RAND(libressl.openssl.ossl_typ.ENGINE* e, const (libressl.openssl.ossl_typ.RAND_METHOD)* rand_meth);
+int ENGINE_set_STORE(libressl.openssl.ossl_typ.ENGINE* e, const (libressl.openssl.ossl_typ.STORE_METHOD)* store_meth);
+int ENGINE_set_destroy_function(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_GEN_INT_FUNC_PTR destroy_f);
+int ENGINE_set_init_function(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_GEN_INT_FUNC_PTR init_f);
+int ENGINE_set_finish_function(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_GEN_INT_FUNC_PTR finish_f);
+int ENGINE_set_ctrl_function(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_CTRL_FUNC_PTR ctrl_f);
+int ENGINE_set_load_privkey_function(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_LOAD_KEY_PTR loadpriv_f);
+int ENGINE_set_load_pubkey_function(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_LOAD_KEY_PTR loadpub_f);
+int ENGINE_set_load_ssl_client_cert_function(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_SSL_CLIENT_CERT_PTR loadssl_f);
+int ENGINE_set_ciphers(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_CIPHERS_PTR f);
+int ENGINE_set_digests(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_DIGESTS_PTR f);
+int ENGINE_set_pkey_meths(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_PKEY_METHS_PTR f);
+int ENGINE_set_pkey_asn1_meths(libressl.openssl.ossl_typ.ENGINE* e, .ENGINE_PKEY_ASN1_METHS_PTR f);
+int ENGINE_set_flags(libressl.openssl.ossl_typ.ENGINE* e, int flags);
+int ENGINE_set_cmd_defns(libressl.openssl.ossl_typ.ENGINE* e, const (.ENGINE_CMD_DEFN)* defns);
 
 /* These functions allow control over any per-structure ENGINE data. */
-int ENGINE_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
-int ENGINE_set_ex_data(libressl_d.openssl.ossl_typ.ENGINE* e, int idx, void* arg);
-void* ENGINE_get_ex_data(const (libressl_d.openssl.ossl_typ.ENGINE)* e, int idx);
+int ENGINE_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl.openssl.ossl_typ.CRYPTO_EX_free free_func);
+int ENGINE_set_ex_data(libressl.openssl.ossl_typ.ENGINE* e, int idx, void* arg);
+void* ENGINE_get_ex_data(const (libressl.openssl.ossl_typ.ENGINE)* e, int idx);
 
 /**
  * This function cleans up anything that needs it. Eg. the ENGINE_add() function
@@ -635,35 +635,35 @@ void ENGINE_cleanup();
  * which you obtained. Using the result for functional purposes if you only
  * obtained a structural reference may be problematic!
  */
-const (char)* ENGINE_get_id(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (char)* ENGINE_get_name(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.RSA_METHOD)* ENGINE_get_RSA(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.DSA_METHOD)* ENGINE_get_DSA(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.ECDH_METHOD)* ENGINE_get_ECDH(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ENGINE_get_ECDSA(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (.EC_KEY_METHOD)* ENGINE_get_EC(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.DH_METHOD)* ENGINE_get_DH(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.RAND_METHOD)* ENGINE_get_RAND(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.STORE_METHOD)* ENGINE_get_STORE(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_GEN_INT_FUNC_PTR ENGINE_get_destroy_function(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_GEN_INT_FUNC_PTR ENGINE_get_init_function(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_GEN_INT_FUNC_PTR ENGINE_get_finish_function(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_CTRL_FUNC_PTR ENGINE_get_ctrl_function(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_LOAD_KEY_PTR ENGINE_get_load_privkey_function(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_LOAD_KEY_PTR ENGINE_get_load_pubkey_function(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_SSL_CLIENT_CERT_PTR ENGINE_get_ssl_client_cert_function(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_CIPHERS_PTR ENGINE_get_ciphers(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_DIGESTS_PTR ENGINE_get_digests(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_PKEY_METHS_PTR ENGINE_get_pkey_meths(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-.ENGINE_PKEY_ASN1_METHS_PTR ENGINE_get_pkey_asn1_meths(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* ENGINE_get_cipher(libressl_d.openssl.ossl_typ.ENGINE* e, int nid);
-const (libressl_d.openssl.ossl_typ.EVP_MD)* ENGINE_get_digest(libressl_d.openssl.ossl_typ.ENGINE* e, int nid);
-const (libressl_d.openssl.ossl_typ.EVP_PKEY_METHOD)* ENGINE_get_pkey_meth(libressl_d.openssl.ossl_typ.ENGINE* e, int nid);
-const (libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* ENGINE_get_pkey_asn1_meth(libressl_d.openssl.ossl_typ.ENGINE* e, int nid);
-const (libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* ENGINE_get_pkey_asn1_meth_str(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* str, int len);
-const (libressl_d.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* ENGINE_pkey_asn1_find_str(libressl_d.openssl.ossl_typ.ENGINE** pe, const (char)* str, int len);
-const (.ENGINE_CMD_DEFN)* ENGINE_get_cmd_defns(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
-int ENGINE_get_flags(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
+const (char)* ENGINE_get_id(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (char)* ENGINE_get_name(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.RSA_METHOD)* ENGINE_get_RSA(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.DSA_METHOD)* ENGINE_get_DSA(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.ECDH_METHOD)* ENGINE_get_ECDH(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.ECDSA_METHOD)* ENGINE_get_ECDSA(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (.EC_KEY_METHOD)* ENGINE_get_EC(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.DH_METHOD)* ENGINE_get_DH(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.RAND_METHOD)* ENGINE_get_RAND(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.STORE_METHOD)* ENGINE_get_STORE(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_GEN_INT_FUNC_PTR ENGINE_get_destroy_function(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_GEN_INT_FUNC_PTR ENGINE_get_init_function(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_GEN_INT_FUNC_PTR ENGINE_get_finish_function(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_CTRL_FUNC_PTR ENGINE_get_ctrl_function(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_LOAD_KEY_PTR ENGINE_get_load_privkey_function(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_LOAD_KEY_PTR ENGINE_get_load_pubkey_function(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_SSL_CLIENT_CERT_PTR ENGINE_get_ssl_client_cert_function(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_CIPHERS_PTR ENGINE_get_ciphers(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_DIGESTS_PTR ENGINE_get_digests(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_PKEY_METHS_PTR ENGINE_get_pkey_meths(const (libressl.openssl.ossl_typ.ENGINE)* e);
+.ENGINE_PKEY_ASN1_METHS_PTR ENGINE_get_pkey_asn1_meths(const (libressl.openssl.ossl_typ.ENGINE)* e);
+const (libressl.openssl.ossl_typ.EVP_CIPHER)* ENGINE_get_cipher(libressl.openssl.ossl_typ.ENGINE* e, int nid);
+const (libressl.openssl.ossl_typ.EVP_MD)* ENGINE_get_digest(libressl.openssl.ossl_typ.ENGINE* e, int nid);
+const (libressl.openssl.ossl_typ.EVP_PKEY_METHOD)* ENGINE_get_pkey_meth(libressl.openssl.ossl_typ.ENGINE* e, int nid);
+const (libressl.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* ENGINE_get_pkey_asn1_meth(libressl.openssl.ossl_typ.ENGINE* e, int nid);
+const (libressl.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* ENGINE_get_pkey_asn1_meth_str(libressl.openssl.ossl_typ.ENGINE* e, const (char)* str, int len);
+const (libressl.openssl.ossl_typ.EVP_PKEY_ASN1_METHOD)* ENGINE_pkey_asn1_find_str(libressl.openssl.ossl_typ.ENGINE** pe, const (char)* str, int len);
+const (.ENGINE_CMD_DEFN)* ENGINE_get_cmd_defns(const (libressl.openssl.ossl_typ.ENGINE)* e);
+int ENGINE_get_flags(const (libressl.openssl.ossl_typ.ENGINE)* e);
 
 /*
  * FUNCTIONAL functions. These functions deal with ENGINE structures
@@ -684,23 +684,23 @@ int ENGINE_get_flags(const (libressl_d.openssl.ossl_typ.ENGINE)* e);
  * already in use). This will fail if the engine is not currently
  * operational and cannot initialise.
  */
-int ENGINE_init(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_init(libressl.openssl.ossl_typ.ENGINE* e);
 
 /**
  * Free a functional reference to a engine type. This does not require
  * a corresponding call to ENGINE_free as it also releases a structural
  * reference.
  */
-int ENGINE_finish(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_finish(libressl.openssl.ossl_typ.ENGINE* e);
 
 /*
  * The following functions handle keys that are stored in some secondary
  * location, handled by the engine.  The storage may be on a card or
  * whatever.
  */
-libressl_d.openssl.ossl_typ.EVP_PKEY* ENGINE_load_private_key(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* key_id, libressl_d.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
-libressl_d.openssl.ossl_typ.EVP_PKEY* ENGINE_load_public_key(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* key_id, libressl_d.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
-int ENGINE_load_ssl_client_cert(libressl_d.openssl.ossl_typ.ENGINE* e, libressl_d.openssl.ossl_typ.SSL* s, libressl_d.openssl.x509.stack_st_X509_NAME* ca_dn, libressl_d.openssl.ossl_typ.X509** pcert, libressl_d.openssl.ossl_typ.EVP_PKEY** ppkey, libressl_d.openssl.x509.stack_st_X509** pother, libressl_d.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
+libressl.openssl.ossl_typ.EVP_PKEY* ENGINE_load_private_key(libressl.openssl.ossl_typ.ENGINE* e, const (char)* key_id, libressl.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
+libressl.openssl.ossl_typ.EVP_PKEY* ENGINE_load_public_key(libressl.openssl.ossl_typ.ENGINE* e, const (char)* key_id, libressl.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
+int ENGINE_load_ssl_client_cert(libressl.openssl.ossl_typ.ENGINE* e, libressl.openssl.ossl_typ.SSL* s, libressl.openssl.x509.stack_st_X509_NAME* ca_dn, libressl.openssl.ossl_typ.X509** pcert, libressl.openssl.ossl_typ.EVP_PKEY** ppkey, libressl.openssl.x509.stack_st_X509** pother, libressl.openssl.ossl_typ.UI_METHOD* ui_method, void* callback_data);
 
 /*
  * This returns a pointer for the current ENGINE structure that
@@ -708,22 +708,22 @@ int ENGINE_load_ssl_client_cert(libressl_d.openssl.ossl_typ.ENGINE* e, libressl_
  * is an incremented reference, so it should be free'd (ENGINE_finish)
  * before it is discarded.
  */
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_default_RSA();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_default_RSA();
 /* Same for the other "methods" */
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_default_DSA();
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_default_ECDH();
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_default_ECDSA();
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_default_EC();
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_default_DH();
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_default_RAND();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_default_DSA();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_default_ECDH();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_default_ECDSA();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_default_EC();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_default_DH();
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_default_RAND();
 /*
  * These functions can be used to get a functional reference to perform
  * ciphering or digesting corresponding to "nid".
  */
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_cipher_engine(int nid);
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_digest_engine(int nid);
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_pkey_meth_engine(int nid);
-libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_pkey_asn1_meth_engine(int nid);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_cipher_engine(int nid);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_digest_engine(int nid);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_pkey_meth_engine(int nid);
+libressl.openssl.ossl_typ.ENGINE* ENGINE_get_pkey_asn1_meth_engine(int nid);
 
 /*
  * This sets a new default ENGINE structure for performing RSA
@@ -731,19 +731,19 @@ libressl_d.openssl.ossl_typ.ENGINE* ENGINE_get_pkey_asn1_meth_engine(int nid);
  * structure will have had its reference count up'd so the caller
  * should still free their own reference 'e'.
  */
-int ENGINE_set_default_RSA(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_string(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* def_list);
+int ENGINE_set_default_RSA(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_string(libressl.openssl.ossl_typ.ENGINE* e, const (char)* def_list);
 /* Same for the other "methods" */
-int ENGINE_set_default_DSA(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_ECDH(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_ECDSA(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_EC(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_DH(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_RAND(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_ciphers(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_digests(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_pkey_meths(libressl_d.openssl.ossl_typ.ENGINE* e);
-int ENGINE_set_default_pkey_asn1_meths(libressl_d.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_DSA(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_ECDH(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_ECDSA(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_EC(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_DH(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_RAND(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_ciphers(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_digests(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_pkey_meths(libressl.openssl.ossl_typ.ENGINE* e);
+int ENGINE_set_default_pkey_asn1_meths(libressl.openssl.ossl_typ.ENGINE* e);
 
 /**
  * The combination "set" - the flags are bitwise "OR"d from the
@@ -752,7 +752,7 @@ int ENGINE_set_default_pkey_asn1_meths(libressl_d.openssl.ossl_typ.ENGINE* e);
  * application requires only specific functionality, consider using more
  * selective functions.
  */
-int ENGINE_set_default(libressl_d.openssl.ossl_typ.ENGINE* e, uint flags);
+int ENGINE_set_default(libressl.openssl.ossl_typ.ENGINE* e, uint flags);
 
 void ENGINE_add_conf_module();
 
@@ -825,8 +825,8 @@ alias dynamic_LOCK_fns = .st_dynamic_LOCK_fns;
 struct st_dynamic_fns
 {
 	void* static_state;
-	const (libressl_d.openssl.ossl_typ.ERR_FNS)* err_fns;
-	const (libressl_d.openssl.crypto.CRYPTO_EX_DATA_IMPL)* ex_data_fns;
+	const (libressl.openssl.ossl_typ.ERR_FNS)* err_fns;
+	const (libressl.openssl.crypto.CRYPTO_EX_DATA_IMPL)* ex_data_fns;
 	.dynamic_MEM_fns mem_fns;
 	.dynamic_LOCK_fns lock_fns;
 }
@@ -862,10 +862,10 @@ alias dynamic_v_check_fn = extern (C) nothrow @nogc core.stdc.config.c_ulong fun
  * implementation can be instantiated with IMPLEMENT_DYNAMIC_BIND_FN(fn) where
  * the parameter 'fn' is a callback function that populates the ENGINE structure
  * and returns an int value (zero for failure). 'fn' should have prototype;
- *    [static] int fn(libressl_d.openssl.ossl_typ.ENGINE* , const (char)* id);
+ *    [static] int fn(libressl.openssl.ossl_typ.ENGINE* , const (char)* id);
  */
-alias dynamic_bind_engine = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* id, const (.dynamic_fns)* fns);
-//#define IMPLEMENT_DYNAMIC_BIND_FN(fn) extern int bind_engine(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* id, const (.dynamic_fns)* fns); extern int bind_engine(libressl_d.openssl.ossl_typ.ENGINE* e, const (char)* id, const (.dynamic_fns)* fns) { if (ENGINE_get_static_state() == fns.static_state) goto skip_cbs; if (!libressl_d.openssl.crypto.CRYPTO_set_mem_functions(fns.mem_fns.malloc_cb, fns.mem_fns.realloc_cb, fns.mem_fns.free_cb)) return 0; if (!libressl_d.openssl.crypto.CRYPTO_set_ex_data_implementation(fns.ex_data_fns)) return 0; if (!libressl_d.openssl.err.ERR_set_implementation(fns.err_fns)) return 0; skip_cbs: if (!fn(e, id)) return 0; return 1; }
+alias dynamic_bind_engine = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE* e, const (char)* id, const (.dynamic_fns)* fns);
+//#define IMPLEMENT_DYNAMIC_BIND_FN(fn) extern int bind_engine(libressl.openssl.ossl_typ.ENGINE* e, const (char)* id, const (.dynamic_fns)* fns); extern int bind_engine(libressl.openssl.ossl_typ.ENGINE* e, const (char)* id, const (.dynamic_fns)* fns) { if (ENGINE_get_static_state() == fns.static_state) goto skip_cbs; if (!libressl.openssl.crypto.CRYPTO_set_mem_functions(fns.mem_fns.malloc_cb, fns.mem_fns.realloc_cb, fns.mem_fns.free_cb)) return 0; if (!libressl.openssl.crypto.CRYPTO_set_ex_data_implementation(fns.ex_data_fns)) return 0; if (!libressl.openssl.err.ERR_set_implementation(fns.err_fns)) return 0; skip_cbs: if (!fn(e, id)) return 0; return 1; }
 
 /**
  * If the loading application (or library) and the loaded ENGINE library share

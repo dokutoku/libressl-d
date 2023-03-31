@@ -2,7 +2,7 @@
  * Public domain
  * netinet/ip.h compatibility shim
  */
-module libressl_d.compat.netinet.ip;
+module libressl.compat.netinet.ip;
 
 
 //#if defined(__hpux)
@@ -10,7 +10,7 @@ module libressl_d.compat.netinet.ip;
 //#endif
 
 //public import core.sys.posix.netinet.ip;
-public import libressl_d.compat.win32netcompat;
+public import libressl.compat.win32netcompat;
 
 /*
  * Definitions for DiffServ Codepoints as per RFC2474

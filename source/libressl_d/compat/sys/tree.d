@@ -23,7 +23,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-module libressl_d.compat.sys.tree;
+module libressl.compat.sys.tree;
 
 
 private static import core.stdc.config;
@@ -261,7 +261,7 @@ struct rb_entry
 
 template RBT_HEAD(string _name, string _type)
 {
-	enum RBT_HEAD = "struct " ~ _name ~ " { libressl_d.compat.sys.tree.rb_tree rbh_root; }";
+	enum RBT_HEAD = "struct " ~ _name ~ " { libressl.compat.sys.tree.rb_tree rbh_root; }";
 }
 
 //#define RBT_ENTRY(_type) struct rb_entry

@@ -2,7 +2,7 @@
  * Public domain
  * stdio.h compatibility shim
  */
-module libressl_d.compat.stdio;
+module libressl.compat.stdio;
 
 
 private static import core.stdc.config;
@@ -14,7 +14,7 @@ public import core.sys.posix.stdio;
 version (Windows) {
 	static if (core.stdcpp.xutility._MSC_VER >= 1900) {
 		//#include <../ucrt/corecrt_io.h>
-		public import libressl_d.compat.stdlib;
+		public import libressl.compat.stdlib;
 	}
 }
 

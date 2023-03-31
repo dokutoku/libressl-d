@@ -55,49 +55,49 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.ts;
+module libressl.openssl.ts;
 
 
 private static import core.stdc.config;
-private static import libressl_d.compat.stdio;
-private static import libressl_d.compat.time;
-private static import libressl_d.openssl.ossl_typ;
-private static import libressl_d.openssl.pkcs7;
-public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.safestack;
-public import libressl_d.openssl.stack;
-public import libressl_d.openssl.x509;
-public import libressl_d.openssl.x509v3;
+private static import libressl.compat.stdio;
+private static import libressl.compat.time;
+private static import libressl.openssl.ossl_typ;
+private static import libressl.openssl.pkcs7;
+public import libressl.openssl.asn1;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.safestack;
+public import libressl.openssl.stack;
+public import libressl.openssl.x509;
+public import libressl.openssl.x509v3;
 
 version (OPENSSL_NO_BUFFER) {
 } else {
-	public import libressl_d.openssl.buffer;
+	public import libressl.openssl.buffer;
 }
 
 version (OPENSSL_NO_EVP) {
 } else {
-	public import libressl_d.openssl.evp;
+	public import libressl.openssl.evp;
 }
 
 version (OPENSSL_NO_BIO) {
 } else {
-	public import libressl_d.openssl.bio;
+	public import libressl.openssl.bio;
 }
 
 version (OPENSSL_NO_RSA) {
 } else {
-	public import libressl_d.openssl.rsa;
+	public import libressl.openssl.rsa;
 }
 
 version (OPENSSL_NO_DSA) {
 } else {
-	public import libressl_d.openssl.dsa;
+	public import libressl.openssl.dsa;
 }
 
 version (OPENSSL_NO_DH) {
 } else {
-	public import libressl_d.openssl.dh;
+	public import libressl.openssl.dh;
 }
 
 extern (C):
@@ -139,7 +139,7 @@ alias TS_STATUS_INFO = .TS_status_info_st;
 //DECLARE_STACK_OF(ASN1_UTF8STRING)
 struct stack_st_ASN1_UTF8STRING
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct ESS_issuer_serial;
@@ -151,7 +151,7 @@ alias ESS_CERT_ID = .ESS_cert_id;
 //DECLARE_STACK_OF(ESS_CERT_ID)
 struct stack_st_ESS_CERT_ID
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct ESS_signing_cert;
@@ -163,7 +163,7 @@ alias ESS_CERT_ID_V2 = .ESS_cert_id_v2;
 //DECLARE_STACK_OF(ESS_CERT_ID_V2)
 struct stack_st_ESS_CERT_ID_V2
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct ESS_signing_cert_v2;
@@ -179,10 +179,10 @@ int i2d_TS_REQ(const (.TS_REQ)* a, ubyte** pp);
 
 .TS_REQ* TS_REQ_dup(.TS_REQ* a);
 
-.TS_REQ* d2i_TS_REQ_fp(libressl_d.compat.stdio.FILE* fp, .TS_REQ** a);
-int i2d_TS_REQ_fp(libressl_d.compat.stdio.FILE* fp, .TS_REQ* a);
-.TS_REQ* d2i_TS_REQ_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_REQ** a);
-int i2d_TS_REQ_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_REQ* a);
+.TS_REQ* d2i_TS_REQ_fp(libressl.compat.stdio.FILE* fp, .TS_REQ** a);
+int i2d_TS_REQ_fp(libressl.compat.stdio.FILE* fp, .TS_REQ* a);
+.TS_REQ* d2i_TS_REQ_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_REQ** a);
+int i2d_TS_REQ_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_REQ* a);
 
 .TS_MSG_IMPRINT* TS_MSG_IMPRINT_new();
 void TS_MSG_IMPRINT_free(.TS_MSG_IMPRINT* a);
@@ -191,22 +191,22 @@ int i2d_TS_MSG_IMPRINT(const (.TS_MSG_IMPRINT)* a, ubyte** pp);
 
 .TS_MSG_IMPRINT* TS_MSG_IMPRINT_dup(.TS_MSG_IMPRINT* a);
 
-.TS_MSG_IMPRINT* d2i_TS_MSG_IMPRINT_fp(libressl_d.compat.stdio.FILE* fp, .TS_MSG_IMPRINT** a);
-int i2d_TS_MSG_IMPRINT_fp(libressl_d.compat.stdio.FILE* fp, .TS_MSG_IMPRINT* a);
-.TS_MSG_IMPRINT* d2i_TS_MSG_IMPRINT_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_MSG_IMPRINT** a);
-int i2d_TS_MSG_IMPRINT_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_MSG_IMPRINT* a);
+.TS_MSG_IMPRINT* d2i_TS_MSG_IMPRINT_fp(libressl.compat.stdio.FILE* fp, .TS_MSG_IMPRINT** a);
+int i2d_TS_MSG_IMPRINT_fp(libressl.compat.stdio.FILE* fp, .TS_MSG_IMPRINT* a);
+.TS_MSG_IMPRINT* d2i_TS_MSG_IMPRINT_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_MSG_IMPRINT** a);
+int i2d_TS_MSG_IMPRINT_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_MSG_IMPRINT* a);
 
 .TS_RESP* TS_RESP_new();
 void TS_RESP_free(.TS_RESP* a);
 int i2d_TS_RESP(const (.TS_RESP)* a, ubyte** pp);
 .TS_RESP* d2i_TS_RESP(.TS_RESP** a, const (ubyte)** pp, core.stdc.config.c_long length_);
-.TS_TST_INFO* PKCS7_to_TS_TST_INFO(libressl_d.openssl.pkcs7.PKCS7* token);
+.TS_TST_INFO* PKCS7_to_TS_TST_INFO(libressl.openssl.pkcs7.PKCS7* token);
 .TS_RESP* TS_RESP_dup(.TS_RESP* a);
 
-.TS_RESP* d2i_TS_RESP_fp(libressl_d.compat.stdio.FILE* fp, .TS_RESP** a);
-int i2d_TS_RESP_fp(libressl_d.compat.stdio.FILE* fp, .TS_RESP* a);
-.TS_RESP* d2i_TS_RESP_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_RESP** a);
-int i2d_TS_RESP_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_RESP* a);
+.TS_RESP* d2i_TS_RESP_fp(libressl.compat.stdio.FILE* fp, .TS_RESP** a);
+int i2d_TS_RESP_fp(libressl.compat.stdio.FILE* fp, .TS_RESP* a);
+.TS_RESP* d2i_TS_RESP_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_RESP** a);
+int i2d_TS_RESP_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_RESP* a);
 
 .TS_STATUS_INFO* TS_STATUS_INFO_new();
 void TS_STATUS_INFO_free(.TS_STATUS_INFO* a);
@@ -220,10 +220,10 @@ int i2d_TS_TST_INFO(const (.TS_TST_INFO)* a, ubyte** pp);
 .TS_TST_INFO* d2i_TS_TST_INFO(.TS_TST_INFO** a, const (ubyte)** pp, core.stdc.config.c_long length_);
 .TS_TST_INFO* TS_TST_INFO_dup(.TS_TST_INFO* a);
 
-.TS_TST_INFO* d2i_TS_TST_INFO_fp(libressl_d.compat.stdio.FILE* fp, .TS_TST_INFO** a);
-int i2d_TS_TST_INFO_fp(libressl_d.compat.stdio.FILE* fp, .TS_TST_INFO* a);
-.TS_TST_INFO* d2i_TS_TST_INFO_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_TST_INFO** a);
-int i2d_TS_TST_INFO_bio(libressl_d.openssl.ossl_typ.BIO* fp, .TS_TST_INFO* a);
+.TS_TST_INFO* d2i_TS_TST_INFO_fp(libressl.compat.stdio.FILE* fp, .TS_TST_INFO** a);
+int i2d_TS_TST_INFO_fp(libressl.compat.stdio.FILE* fp, .TS_TST_INFO* a);
+.TS_TST_INFO* d2i_TS_TST_INFO_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_TST_INFO** a);
+int i2d_TS_TST_INFO_bio(libressl.openssl.ossl_typ.BIO* fp, .TS_TST_INFO* a);
 
 .TS_ACCURACY* TS_ACCURACY_new();
 void TS_ACCURACY_free(.TS_ACCURACY* a);
@@ -255,96 +255,96 @@ core.stdc.config.c_long TS_REQ_get_version(const (.TS_REQ)* a);
 int TS_REQ_set_msg_imprint(.TS_REQ* a, .TS_MSG_IMPRINT* msg_imprint);
 .TS_MSG_IMPRINT* TS_REQ_get_msg_imprint(.TS_REQ* a);
 
-int TS_MSG_IMPRINT_set_algo(.TS_MSG_IMPRINT* a, libressl_d.openssl.ossl_typ.X509_ALGOR* alg);
-libressl_d.openssl.ossl_typ.X509_ALGOR* TS_MSG_IMPRINT_get_algo(.TS_MSG_IMPRINT* a);
+int TS_MSG_IMPRINT_set_algo(.TS_MSG_IMPRINT* a, libressl.openssl.ossl_typ.X509_ALGOR* alg);
+libressl.openssl.ossl_typ.X509_ALGOR* TS_MSG_IMPRINT_get_algo(.TS_MSG_IMPRINT* a);
 
 int TS_MSG_IMPRINT_set_msg(.TS_MSG_IMPRINT* a, ubyte* d, int len);
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* TS_MSG_IMPRINT_get_msg(.TS_MSG_IMPRINT* a);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* TS_MSG_IMPRINT_get_msg(.TS_MSG_IMPRINT* a);
 
-int TS_REQ_set_policy_id(.TS_REQ* a, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* policy);
-libressl_d.openssl.ossl_typ.ASN1_OBJECT* TS_REQ_get_policy_id(.TS_REQ* a);
+int TS_REQ_set_policy_id(.TS_REQ* a, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* policy);
+libressl.openssl.ossl_typ.ASN1_OBJECT* TS_REQ_get_policy_id(.TS_REQ* a);
 
-int TS_REQ_set_nonce(.TS_REQ* a, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* nonce);
-const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* TS_REQ_get_nonce(const (.TS_REQ)* a);
+int TS_REQ_set_nonce(.TS_REQ* a, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* nonce);
+const (libressl.openssl.ossl_typ.ASN1_INTEGER)* TS_REQ_get_nonce(const (.TS_REQ)* a);
 
 int TS_REQ_set_cert_req(.TS_REQ* a, int cert_req);
 int TS_REQ_get_cert_req(const (.TS_REQ)* a);
 
-libressl_d.openssl.x509.stack_st_X509_EXTENSION* TS_REQ_get_exts(.TS_REQ* a);
+libressl.openssl.x509.stack_st_X509_EXTENSION* TS_REQ_get_exts(.TS_REQ* a);
 void TS_REQ_ext_free(.TS_REQ* a);
 int TS_REQ_get_ext_count(.TS_REQ* a);
 int TS_REQ_get_ext_by_NID(.TS_REQ* a, int nid, int lastpos);
-int TS_REQ_get_ext_by_OBJ(.TS_REQ* a, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
+int TS_REQ_get_ext_by_OBJ(.TS_REQ* a, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
 int TS_REQ_get_ext_by_critical(.TS_REQ* a, int crit, int lastpos);
-libressl_d.openssl.x509.X509_EXTENSION* TS_REQ_get_ext(.TS_REQ* a, int loc);
-libressl_d.openssl.x509.X509_EXTENSION* TS_REQ_delete_ext(.TS_REQ* a, int loc);
-int TS_REQ_add_ext(.TS_REQ* a, libressl_d.openssl.x509.X509_EXTENSION* ex, int loc);
+libressl.openssl.x509.X509_EXTENSION* TS_REQ_get_ext(.TS_REQ* a, int loc);
+libressl.openssl.x509.X509_EXTENSION* TS_REQ_delete_ext(.TS_REQ* a, int loc);
+int TS_REQ_add_ext(.TS_REQ* a, libressl.openssl.x509.X509_EXTENSION* ex, int loc);
 void* TS_REQ_get_ext_d2i(.TS_REQ* a, int nid, int* crit, int* idx);
 
 /* Function declarations for TS_REQ defined in ts/ts_req_print.c */
 
-int TS_REQ_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, .TS_REQ* a);
+int TS_REQ_print_bio(libressl.openssl.ossl_typ.BIO* bio, .TS_REQ* a);
 
 /* Function declarations for TS_RESP defined in ts/ts_rsp_utils.c */
 
 int TS_RESP_set_status_info(.TS_RESP* a, .TS_STATUS_INFO* info);
 .TS_STATUS_INFO* TS_RESP_get_status_info(.TS_RESP* a);
 
-const (libressl_d.openssl.ossl_typ.ASN1_UTF8STRING)* TS_STATUS_INFO_get0_failure_info(const (.TS_STATUS_INFO)* si);
+const (libressl.openssl.ossl_typ.ASN1_UTF8STRING)* TS_STATUS_INFO_get0_failure_info(const (.TS_STATUS_INFO)* si);
 const (.stack_st_ASN1_UTF8STRING)* TS_STATUS_INFO_get0_text(const (.TS_STATUS_INFO)* si);
-const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* TS_STATUS_INFO_get0_status(const (.TS_STATUS_INFO)* si);
+const (libressl.openssl.ossl_typ.ASN1_INTEGER)* TS_STATUS_INFO_get0_status(const (.TS_STATUS_INFO)* si);
 int TS_STATUS_INFO_set_status(.TS_STATUS_INFO* si, int i);
 
 /* Caller loses ownership of PKCS7 and TS_TST_INFO objects. */
-void TS_RESP_set_tst_info(.TS_RESP* a, libressl_d.openssl.pkcs7.PKCS7* p7, .TS_TST_INFO* tst_info);
-libressl_d.openssl.pkcs7.PKCS7* TS_RESP_get_token(.TS_RESP* a);
+void TS_RESP_set_tst_info(.TS_RESP* a, libressl.openssl.pkcs7.PKCS7* p7, .TS_TST_INFO* tst_info);
+libressl.openssl.pkcs7.PKCS7* TS_RESP_get_token(.TS_RESP* a);
 .TS_TST_INFO* TS_RESP_get_tst_info(.TS_RESP* a);
 
 int TS_TST_INFO_set_version(.TS_TST_INFO* a, core.stdc.config.c_long version_);
 core.stdc.config.c_long TS_TST_INFO_get_version(const (.TS_TST_INFO)* a);
 
-int TS_TST_INFO_set_policy_id(.TS_TST_INFO* a, libressl_d.openssl.ossl_typ.ASN1_OBJECT* policy_id);
-libressl_d.openssl.ossl_typ.ASN1_OBJECT* TS_TST_INFO_get_policy_id(.TS_TST_INFO* a);
+int TS_TST_INFO_set_policy_id(.TS_TST_INFO* a, libressl.openssl.ossl_typ.ASN1_OBJECT* policy_id);
+libressl.openssl.ossl_typ.ASN1_OBJECT* TS_TST_INFO_get_policy_id(.TS_TST_INFO* a);
 
 int TS_TST_INFO_set_msg_imprint(.TS_TST_INFO* a, .TS_MSG_IMPRINT* msg_imprint);
 .TS_MSG_IMPRINT* TS_TST_INFO_get_msg_imprint(.TS_TST_INFO* a);
 
-int TS_TST_INFO_set_serial(.TS_TST_INFO* a, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* serial);
-const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* TS_TST_INFO_get_serial(const (.TS_TST_INFO)* a);
+int TS_TST_INFO_set_serial(.TS_TST_INFO* a, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* serial);
+const (libressl.openssl.ossl_typ.ASN1_INTEGER)* TS_TST_INFO_get_serial(const (.TS_TST_INFO)* a);
 
-int TS_TST_INFO_set_time(.TS_TST_INFO* a, const (libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME)* gtime);
-const (libressl_d.openssl.ossl_typ.ASN1_GENERALIZEDTIME)* TS_TST_INFO_get_time(const (.TS_TST_INFO)* a);
+int TS_TST_INFO_set_time(.TS_TST_INFO* a, const (libressl.openssl.ossl_typ.ASN1_GENERALIZEDTIME)* gtime);
+const (libressl.openssl.ossl_typ.ASN1_GENERALIZEDTIME)* TS_TST_INFO_get_time(const (.TS_TST_INFO)* a);
 
 int TS_TST_INFO_set_accuracy(.TS_TST_INFO* a, .TS_ACCURACY* accuracy);
 .TS_ACCURACY* TS_TST_INFO_get_accuracy(.TS_TST_INFO* a);
 
-int TS_ACCURACY_set_seconds(.TS_ACCURACY* a, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* seconds);
-const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* TS_ACCURACY_get_seconds(const (.TS_ACCURACY)* a);
+int TS_ACCURACY_set_seconds(.TS_ACCURACY* a, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* seconds);
+const (libressl.openssl.ossl_typ.ASN1_INTEGER)* TS_ACCURACY_get_seconds(const (.TS_ACCURACY)* a);
 
-int TS_ACCURACY_set_millis(.TS_ACCURACY* a, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* millis);
-const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* TS_ACCURACY_get_millis(const (.TS_ACCURACY)* a);
+int TS_ACCURACY_set_millis(.TS_ACCURACY* a, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* millis);
+const (libressl.openssl.ossl_typ.ASN1_INTEGER)* TS_ACCURACY_get_millis(const (.TS_ACCURACY)* a);
 
-int TS_ACCURACY_set_micros(.TS_ACCURACY* a, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* micros);
-const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* TS_ACCURACY_get_micros(const (.TS_ACCURACY)* a);
+int TS_ACCURACY_set_micros(.TS_ACCURACY* a, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* micros);
+const (libressl.openssl.ossl_typ.ASN1_INTEGER)* TS_ACCURACY_get_micros(const (.TS_ACCURACY)* a);
 
 int TS_TST_INFO_set_ordering(.TS_TST_INFO* a, int ordering);
 int TS_TST_INFO_get_ordering(const (.TS_TST_INFO)* a);
 
-int TS_TST_INFO_set_nonce(.TS_TST_INFO* a, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* nonce);
-const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* TS_TST_INFO_get_nonce(const (.TS_TST_INFO)* a);
+int TS_TST_INFO_set_nonce(.TS_TST_INFO* a, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* nonce);
+const (libressl.openssl.ossl_typ.ASN1_INTEGER)* TS_TST_INFO_get_nonce(const (.TS_TST_INFO)* a);
 
-int TS_TST_INFO_set_tsa(.TS_TST_INFO* a, libressl_d.openssl.x509v3.GENERAL_NAME* tsa);
-libressl_d.openssl.x509v3.GENERAL_NAME* TS_TST_INFO_get_tsa(.TS_TST_INFO* a);
+int TS_TST_INFO_set_tsa(.TS_TST_INFO* a, libressl.openssl.x509v3.GENERAL_NAME* tsa);
+libressl.openssl.x509v3.GENERAL_NAME* TS_TST_INFO_get_tsa(.TS_TST_INFO* a);
 
-libressl_d.openssl.x509.stack_st_X509_EXTENSION* TS_TST_INFO_get_exts(.TS_TST_INFO* a);
+libressl.openssl.x509.stack_st_X509_EXTENSION* TS_TST_INFO_get_exts(.TS_TST_INFO* a);
 void TS_TST_INFO_ext_free(.TS_TST_INFO* a);
 int TS_TST_INFO_get_ext_count(.TS_TST_INFO* a);
 int TS_TST_INFO_get_ext_by_NID(.TS_TST_INFO* a, int nid, int lastpos);
-int TS_TST_INFO_get_ext_by_OBJ(.TS_TST_INFO* a, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
+int TS_TST_INFO_get_ext_by_OBJ(.TS_TST_INFO* a, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj, int lastpos);
 int TS_TST_INFO_get_ext_by_critical(.TS_TST_INFO* a, int crit, int lastpos);
-libressl_d.openssl.x509.X509_EXTENSION* TS_TST_INFO_get_ext(.TS_TST_INFO* a, int loc);
-libressl_d.openssl.x509.X509_EXTENSION* TS_TST_INFO_delete_ext(.TS_TST_INFO* a, int loc);
-int TS_TST_INFO_add_ext(.TS_TST_INFO* a, libressl_d.openssl.x509.X509_EXTENSION* ex, int loc);
+libressl.openssl.x509.X509_EXTENSION* TS_TST_INFO_get_ext(.TS_TST_INFO* a, int loc);
+libressl.openssl.x509.X509_EXTENSION* TS_TST_INFO_delete_ext(.TS_TST_INFO* a, int loc);
+int TS_TST_INFO_add_ext(.TS_TST_INFO* a, libressl.openssl.x509.X509_EXTENSION* ex, int loc);
 void* TS_TST_INFO_get_ext_d2i(.TS_TST_INFO* a, int nid, int* crit, int* idx);
 
 /* Declarations related to response generation, defined in ts/ts_rsp_sign.c. */
@@ -371,14 +371,14 @@ enum TS_ESS_CERT_ID_CHAIN = 0x04;
 /**
  * This must return a unique number less than 160 bits long.
  */
-alias TS_serial_cb = extern (C) nothrow @nogc libressl_d.openssl.ossl_typ.ASN1_INTEGER* function(.TS_resp_ctx*, void*);
+alias TS_serial_cb = extern (C) nothrow @nogc libressl.openssl.ossl_typ.ASN1_INTEGER* function(.TS_resp_ctx*, void*);
 
 /**
  * This must return the seconds and microseconds since Jan 1, 1970 in
  * the sec and usec variables allocated by the caller.
  * Return non-zero for success and zero for failure.
  */
-alias TS_time_cb = extern (C) nothrow @nogc int function(.TS_resp_ctx*, void*, libressl_d.compat.time.time_t* sec, core.stdc.config.c_long* usec);
+alias TS_time_cb = extern (C) nothrow @nogc int function(.TS_resp_ctx*, void*, libressl.compat.time.time_t* sec, core.stdc.config.c_long* usec);
 
 /**
  * This must process the given extension.
@@ -386,7 +386,7 @@ alias TS_time_cb = extern (C) nothrow @nogc int function(.TS_resp_ctx*, void*, l
  * Return values: !0 (processed), 0 (error, it must set the
  * status info/failure info of the response).
  */
-alias TS_extension_cb = extern (C) nothrow @nogc int function(.TS_resp_ctx*, libressl_d.openssl.x509.X509_EXTENSION*, void*);
+alias TS_extension_cb = extern (C) nothrow @nogc int function(.TS_resp_ctx*, libressl.openssl.x509.X509_EXTENSION*, void*);
 
 struct TS_resp_ctx;
 alias TS_RESP_CTX = .TS_resp_ctx;
@@ -394,7 +394,7 @@ alias TS_RESP_CTX = .TS_resp_ctx;
 //DECLARE_STACK_OF(EVP_MD)
 struct stack_st_EVP_MD
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /* Creates a response context that can be used for generating responses. */
@@ -404,30 +404,30 @@ void TS_RESP_CTX_free(.TS_RESP_CTX* ctx);
 /**
  * This parameter must be set.
  */
-int TS_RESP_CTX_set_signer_cert(.TS_RESP_CTX* ctx, libressl_d.openssl.ossl_typ.X509* signer);
+int TS_RESP_CTX_set_signer_cert(.TS_RESP_CTX* ctx, libressl.openssl.ossl_typ.X509* signer);
 
 ///Ditto
-int TS_RESP_CTX_set_signer_key(.TS_RESP_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY* key);
+int TS_RESP_CTX_set_signer_key(.TS_RESP_CTX* ctx, libressl.openssl.ossl_typ.EVP_PKEY* key);
 
 ///Ditto
-int TS_RESP_CTX_set_def_policy(.TS_RESP_CTX* ctx, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* def_policy);
+int TS_RESP_CTX_set_def_policy(.TS_RESP_CTX* ctx, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* def_policy);
 
 /**
  * No additional certs are included in the response by default.
  */
-int TS_RESP_CTX_set_certs(.TS_RESP_CTX* ctx, libressl_d.openssl.x509.stack_st_X509* certs);
+int TS_RESP_CTX_set_certs(.TS_RESP_CTX* ctx, libressl.openssl.x509.stack_st_X509* certs);
 
 /**
  * Adds a new acceptable policy, only the default policy
  * is accepted by default.
  */
-int TS_RESP_CTX_add_policy(.TS_RESP_CTX* ctx, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* policy);
+int TS_RESP_CTX_add_policy(.TS_RESP_CTX* ctx, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* policy);
 
 /**
  * Adds a new acceptable message digest. Note that no message digests
  * are accepted by default. The md argument is shared with the caller.
  */
-int TS_RESP_CTX_add_md(.TS_RESP_CTX* ctx, const (libressl_d.openssl.ossl_typ.EVP_MD)* md);
+int TS_RESP_CTX_add_md(.TS_RESP_CTX* ctx, const (libressl.openssl.ossl_typ.EVP_MD)* md);
 
 /**
  * Accuracy is not included by default.
@@ -491,14 +491,14 @@ int TS_RESP_CTX_add_failure_info(.TS_RESP_CTX* ctx, int failure);
  * In case of errors it sets the status info properly.
  * Returns null only in case of memory allocation/fatal error.
  */
-.TS_RESP* TS_RESP_create_response(.TS_RESP_CTX* ctx, libressl_d.openssl.ossl_typ.BIO* req_bio);
+.TS_RESP* TS_RESP_create_response(.TS_RESP_CTX* ctx, libressl.openssl.ossl_typ.BIO* req_bio);
 
 /*
  * Declarations related to response verification,
  * they are defined in ts/ts_rsp_verify.c.
  */
 
-int TS_RESP_verify_signature(libressl_d.openssl.pkcs7.PKCS7* token, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.X509_STORE* store, libressl_d.openssl.ossl_typ.X509** signer_out);
+int TS_RESP_verify_signature(libressl.openssl.pkcs7.PKCS7* token, libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.X509_STORE* store, libressl.openssl.ossl_typ.X509** signer_out);
 
 /* Context structure for the generic verify method. */
 
@@ -553,7 +553,7 @@ struct TS_verify_ctx;
 alias TS_VERIFY_CTX = .TS_verify_ctx;
 
 int TS_RESP_verify_response(.TS_VERIFY_CTX* ctx, .TS_RESP* response);
-int TS_RESP_verify_token(.TS_VERIFY_CTX* ctx, libressl_d.openssl.pkcs7.PKCS7* token);
+int TS_RESP_verify_token(.TS_VERIFY_CTX* ctx, libressl.openssl.pkcs7.PKCS7* token);
 
 /*
  * Declarations related to response verification context,
@@ -568,11 +568,11 @@ void TS_VERIFY_CTX_cleanup(.TS_VERIFY_CTX* ctx);
 
 int TS_VERIFY_CTX_add_flags(.TS_VERIFY_CTX* ctx, int flags);
 int TS_VERIFY_CTX_set_flags(.TS_VERIFY_CTX* ctx, int flags);
-libressl_d.openssl.ossl_typ.BIO* TS_VERIFY_CTX_set_data(.TS_VERIFY_CTX* ctx, libressl_d.openssl.ossl_typ.BIO* bio);
-libressl_d.openssl.ossl_typ.X509_STORE* TS_VERIFY_CTX_set_store(.TS_VERIFY_CTX* ctx, libressl_d.openssl.ossl_typ.X509_STORE* store);
+libressl.openssl.ossl_typ.BIO* TS_VERIFY_CTX_set_data(.TS_VERIFY_CTX* ctx, libressl.openssl.ossl_typ.BIO* bio);
+libressl.openssl.ossl_typ.X509_STORE* TS_VERIFY_CTX_set_store(.TS_VERIFY_CTX* ctx, libressl.openssl.ossl_typ.X509_STORE* store);
 /* R$ special */
 alias TS_VERIFY_CTS_set_certs = .TS_VERIFY_CTX_set_certs;
-libressl_d.openssl.x509.stack_st_X509* TS_VERIFY_CTX_set_certs(.TS_VERIFY_CTX* ctx, libressl_d.openssl.x509.stack_st_X509* certs);
+libressl.openssl.x509.stack_st_X509* TS_VERIFY_CTX_set_certs(.TS_VERIFY_CTX* ctx, libressl.openssl.x509.stack_st_X509* certs);
 ubyte* TS_VERIFY_CTX_set_imprint(.TS_VERIFY_CTX* ctx, ubyte* imprint, core.stdc.config.c_long imprint_len);
 
 /**
@@ -595,41 +595,41 @@ ubyte* TS_VERIFY_CTX_set_imprint(.TS_VERIFY_CTX* ctx, ubyte* imprint, core.stdc.
 
 /* Function declarations for TS_RESP defined in ts/ts_rsp_print.c */
 
-int TS_RESP_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, .TS_RESP* a);
-int TS_STATUS_INFO_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, .TS_STATUS_INFO* a);
-int TS_TST_INFO_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, .TS_TST_INFO* a);
+int TS_RESP_print_bio(libressl.openssl.ossl_typ.BIO* bio, .TS_RESP* a);
+int TS_STATUS_INFO_print_bio(libressl.openssl.ossl_typ.BIO* bio, .TS_STATUS_INFO* a);
+int TS_TST_INFO_print_bio(libressl.openssl.ossl_typ.BIO* bio, .TS_TST_INFO* a);
 
 /* Common utility functions defined in ts/ts_lib.c */
 
-int TS_ASN1_INTEGER_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, const (libressl_d.openssl.ossl_typ.ASN1_INTEGER)* num);
-int TS_OBJ_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj);
-int TS_ext_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, const (libressl_d.openssl.x509.stack_st_X509_EXTENSION)* extensions);
-int TS_X509_ALGOR_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, const (libressl_d.openssl.ossl_typ.X509_ALGOR)* alg);
-int TS_MSG_IMPRINT_print_bio(libressl_d.openssl.ossl_typ.BIO* bio, .TS_MSG_IMPRINT* msg);
+int TS_ASN1_INTEGER_print_bio(libressl.openssl.ossl_typ.BIO* bio, const (libressl.openssl.ossl_typ.ASN1_INTEGER)* num);
+int TS_OBJ_print_bio(libressl.openssl.ossl_typ.BIO* bio, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj);
+int TS_ext_print_bio(libressl.openssl.ossl_typ.BIO* bio, const (libressl.openssl.x509.stack_st_X509_EXTENSION)* extensions);
+int TS_X509_ALGOR_print_bio(libressl.openssl.ossl_typ.BIO* bio, const (libressl.openssl.ossl_typ.X509_ALGOR)* alg);
+int TS_MSG_IMPRINT_print_bio(libressl.openssl.ossl_typ.BIO* bio, .TS_MSG_IMPRINT* msg);
 
 /*
  * Function declarations for handling configuration options,
  * defined in ts/ts_conf.c
  */
 
-libressl_d.openssl.ossl_typ.X509* TS_CONF_load_cert(const (char)* file);
-libressl_d.openssl.x509.stack_st_X509* TS_CONF_load_certs(const (char)* file);
-libressl_d.openssl.ossl_typ.EVP_PKEY* TS_CONF_load_key(const (char)* file, const (char)* pass);
-const (char)* TS_CONF_get_tsa_section(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section);
-int TS_CONF_set_serial(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_serial_cb cb, .TS_RESP_CTX* ctx);
-int TS_CONF_set_crypto_device(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* device);
+libressl.openssl.ossl_typ.X509* TS_CONF_load_cert(const (char)* file);
+libressl.openssl.x509.stack_st_X509* TS_CONF_load_certs(const (char)* file);
+libressl.openssl.ossl_typ.EVP_PKEY* TS_CONF_load_key(const (char)* file, const (char)* pass);
+const (char)* TS_CONF_get_tsa_section(libressl.openssl.ossl_typ.CONF* conf, const (char)* section);
+int TS_CONF_set_serial(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_serial_cb cb, .TS_RESP_CTX* ctx);
+int TS_CONF_set_crypto_device(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* device);
 int TS_CONF_set_default_engine(const (char)* name);
-int TS_CONF_set_signer_cert(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* cert, .TS_RESP_CTX* ctx);
-int TS_CONF_set_certs(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* certs, .TS_RESP_CTX* ctx);
-int TS_CONF_set_signer_key(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* key, const (char)* pass, .TS_RESP_CTX* ctx);
-int TS_CONF_set_def_policy(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* policy, .TS_RESP_CTX* ctx);
-int TS_CONF_set_policies(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
-int TS_CONF_set_digests(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
-int TS_CONF_set_accuracy(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
-int TS_CONF_set_clock_precision_digits(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
-int TS_CONF_set_ordering(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
-int TS_CONF_set_tsa_name(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
-int TS_CONF_set_ess_cert_id_chain(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
+int TS_CONF_set_signer_cert(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* cert, .TS_RESP_CTX* ctx);
+int TS_CONF_set_certs(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* certs, .TS_RESP_CTX* ctx);
+int TS_CONF_set_signer_key(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* key, const (char)* pass, .TS_RESP_CTX* ctx);
+int TS_CONF_set_def_policy(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, const (char)* policy, .TS_RESP_CTX* ctx);
+int TS_CONF_set_policies(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
+int TS_CONF_set_digests(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
+int TS_CONF_set_accuracy(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
+int TS_CONF_set_clock_precision_digits(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
+int TS_CONF_set_ordering(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
+int TS_CONF_set_tsa_name(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
+int TS_CONF_set_ess_cert_id_chain(libressl.openssl.ossl_typ.CONF* conf, const (char)* section, .TS_RESP_CTX* ctx);
 
 void ERR_load_TS_strings();
 

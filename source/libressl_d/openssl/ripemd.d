@@ -55,12 +55,12 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.ripemd;
+module libressl.openssl.ripemd;
 
 
 private static import core.stdc.config;
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 extern (C):
 nothrow @nogc:

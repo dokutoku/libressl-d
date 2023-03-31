@@ -55,11 +55,11 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.idea;
+module libressl.openssl.idea;
 
 
 private static import core.stdc.config;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 enum HEADER_IDEA_H = true;
 
@@ -78,7 +78,7 @@ nothrow @nogc:
 
 struct idea_key_st
 {
-	libressl_d.openssl.opensslconf.IDEA_INT[6][9] data;
+	libressl.openssl.opensslconf.IDEA_INT[6][9] data;
 }
 
 alias IDEA_KEY_SCHEDULE = .idea_key_st;

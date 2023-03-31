@@ -2,7 +2,7 @@
  * Public domain
  * pthread.h compatibility shim
  */
-module libressl_d.compat.pthread;
+module libressl.compat.pthread;
 
 
 private static import core.sys.windows.winbase;
@@ -15,7 +15,7 @@ public import core.sys.windows.windows;
 version (Windows):
 
 private static import core.stdc.errno;
-public import libressl_d.compat.stdlib;
+public import libressl.compat.stdlib;
 //#include <malloc.h>
 
 extern (C):
@@ -145,10 +145,10 @@ int pthread_mutex_init(.pthread_mutex_t* mutex, scope const .pthread_mutexattr_t
 
 	do
 	{
-		mutex.lock = cast(core.sys.windows.winbase.LPCRITICAL_SECTION)(libressl_d.compat.stdlib.malloc(core.sys.windows.winbase.CRITICAL_SECTION.sizeof));
+		mutex.lock = cast(core.sys.windows.winbase.LPCRITICAL_SECTION)(libressl.compat.stdlib.malloc(core.sys.windows.winbase.CRITICAL_SECTION.sizeof));
 
 		if (mutex.lock == null) {
-			libressl_d.compat.stdlib.exit(core.stdc.errno.ENOMEM);
+			libressl.compat.stdlib.exit(core.stdc.errno.ENOMEM);
 		}
 
 		core.sys.windows.winbase.InitializeCriticalSection(mutex.lock);
@@ -169,17 +169,17 @@ int pthread_mutex_lock(.pthread_mutex_t* mutex)
 	do
 	{
 		if (mutex.lock == null) {
-			core.sys.windows.winbase.LPCRITICAL_SECTION lcs = cast(core.sys.windows.winbase.LPCRITICAL_SECTION)(libressl_d.compat.stdlib.malloc(core.sys.windows.winbase.CRITICAL_SECTION.sizeof));
+			core.sys.windows.winbase.LPCRITICAL_SECTION lcs = cast(core.sys.windows.winbase.LPCRITICAL_SECTION)(libressl.compat.stdlib.malloc(core.sys.windows.winbase.CRITICAL_SECTION.sizeof));
 
 			if (lcs == null) {
-				libressl_d.compat.stdlib.exit(core.stdc.errno.ENOMEM);
+				libressl.compat.stdlib.exit(core.stdc.errno.ENOMEM);
 			}
 
 			core.sys.windows.winbase.InitializeCriticalSection(lcs);
 
 			if (core.sys.windows.winbase.InterlockedCompareExchangePointer(cast(core.sys.windows.winnt.PVOID*)(&mutex.lock), cast(core.sys.windows.winnt.PVOID)(lcs), null) != null) {
 				core.sys.windows.winbase.DeleteCriticalSection(lcs);
-				libressl_d.compat.stdlib.free(lcs);
+				libressl.compat.stdlib.free(lcs);
 			}
 		}
 
@@ -214,7 +214,7 @@ int pthread_mutex_destroy(.pthread_mutex_t* mutex)
 	do
 	{
 		core.sys.windows.winbase.DeleteCriticalSection(mutex.lock);
-		libressl_d.compat.stdlib.free(mutex.lock);
+		libressl.compat.stdlib.free(mutex.lock);
 		mutex.lock = null;
 
 		return 0;

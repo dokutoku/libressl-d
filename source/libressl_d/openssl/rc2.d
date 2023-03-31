@@ -55,11 +55,11 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.rc2;
+module libressl.openssl.rc2;
 
 
 private static import core.stdc.config;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 enum HEADER_RC2_H = true;
 
@@ -78,7 +78,7 @@ nothrow @nogc:
 
 struct rc2_key_st
 {
-	libressl_d.openssl.opensslconf.RC2_INT[64] data;
+	libressl.openssl.opensslconf.RC2_INT[64] data;
 }
 
 alias RC2_KEY = .rc2_key_st;

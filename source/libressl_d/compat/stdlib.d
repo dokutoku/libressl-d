@@ -2,7 +2,7 @@
  * stdlib.h compatibility shim
  * Public domain
  */
-module libressl_d.compat.stdlib;
+module libressl.compat.stdlib;
 
 
 private static import core.stdc.config;
@@ -16,7 +16,7 @@ public import core.sys.netbsd.stdlib;
 public import core.sys.openbsd.stdlib;
 public import core.sys.posix.stdlib;
 public import core.sys.solaris.stdlib;
-public import libressl_d.compat.sys.types;
+public import libressl.compat.sys.types;
 
 extern (C):
 nothrow @nogc:

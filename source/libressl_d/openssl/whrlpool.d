@@ -1,9 +1,9 @@
 /* $OpenBSD: whrlpool.h,v 1.5 2014/07/10 22:45:58 jsing Exp $ */
-module libressl_d.openssl.whrlpool;
+module libressl.openssl.whrlpool;
 
 
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 extern (C):
 nothrow @nogc:

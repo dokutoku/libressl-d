@@ -14,12 +14,12 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-module libressl_d.openssl.chacha;
+module libressl.openssl.chacha;
 
 
 public import core.stdc.stddef;
 public import core.stdc.stdint;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_CHACHA) {
 	static assert(false, "ChaCha is disabled.");

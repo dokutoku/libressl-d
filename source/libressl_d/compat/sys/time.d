@@ -2,7 +2,7 @@
  * Public domain
  * sys/time.h compatibility shim
  */
-module libressl_d.compat.sys.time;
+module libressl.compat.sys.time;
 
 
 public import core.sys.posix.sys.time;

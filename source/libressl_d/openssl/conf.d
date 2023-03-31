@@ -55,17 +55,17 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.conf;
+module libressl.openssl.conf;
 
 
 private static import core.stdc.config;
-private static import libressl_d.compat.stdio;
-public import libressl_d.openssl.bio;
-public import libressl_d.openssl.lhash;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.safestack;
-public import libressl_d.openssl.stack;
+private static import libressl.compat.stdio;
+public import libressl.openssl.bio;
+public import libressl.openssl.lhash;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ossl_typ;
+public import libressl.openssl.safestack;
+public import libressl.openssl.stack;
 
 enum HEADER_CONF_H = true;
 
@@ -82,7 +82,7 @@ struct CONF_VALUE
 //DECLARE_STACK_OF(CONF_VALUE)
 struct stack_st_CONF_VALUE
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 //DECLARE_LHASH_OF(CONF_VALUE)
@@ -96,15 +96,15 @@ alias CONF_METHOD = .conf_method_st;
 struct conf_method_st
 {
 	const (char)* name;
-	libressl_d.openssl.ossl_typ.CONF* function(.CONF_METHOD* meth) create;
-	int function(libressl_d.openssl.ossl_typ.CONF* conf) init;
-	int function(libressl_d.openssl.ossl_typ.CONF* conf) destroy;
-	int function(libressl_d.openssl.ossl_typ.CONF* conf) destroy_data;
-	int function(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.BIO* bp, core.stdc.config.c_long* eline) load_bio;
-	int function(const (libressl_d.openssl.ossl_typ.CONF)* conf, libressl_d.openssl.ossl_typ.BIO* bp) dump;
-	int function(const (libressl_d.openssl.ossl_typ.CONF)* conf, char c) is_number;
-	int function(const (libressl_d.openssl.ossl_typ.CONF)* conf, char c) to_int;
-	int function(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* name, core.stdc.config.c_long* eline) load;
+	libressl.openssl.ossl_typ.CONF* function(.CONF_METHOD* meth) create;
+	int function(libressl.openssl.ossl_typ.CONF* conf) init;
+	int function(libressl.openssl.ossl_typ.CONF* conf) destroy;
+	int function(libressl.openssl.ossl_typ.CONF* conf) destroy_data;
+	int function(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.BIO* bp, core.stdc.config.c_long* eline) load_bio;
+	int function(const (libressl.openssl.ossl_typ.CONF)* conf, libressl.openssl.ossl_typ.BIO* bp) dump;
+	int function(const (libressl.openssl.ossl_typ.CONF)* conf, char c) is_number;
+	int function(const (libressl.openssl.ossl_typ.CONF)* conf, char c) to_int;
+	int function(libressl.openssl.ossl_typ.CONF* conf, const (char)* name, core.stdc.config.c_long* eline) load;
 }
 
 /* Module definitions */
@@ -117,17 +117,17 @@ alias CONF_MODULE = .conf_module_st;
 //DECLARE_STACK_OF(CONF_MODULE)
 struct stack_st_CONF_MODULE
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 //DECLARE_STACK_OF(CONF_IMODULE)
 struct stack_st_CONF_IMODULE
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /* DSO module function typedefs */
-private alias conf_init_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.CONF_IMODULE* md, const (libressl_d.openssl.ossl_typ.CONF)* cnf);
+private alias conf_init_func = /* Not a function pointer type */ extern (C) nothrow @nogc int function(.CONF_IMODULE* md, const (libressl.openssl.ossl_typ.CONF)* cnf);
 private alias conf_finish_func = /* Not a function pointer type */ extern (C) nothrow @nogc void function(.CONF_IMODULE* md);
 
 enum CONF_MFLAGS_IGNORE_ERRORS = 0x01;
@@ -138,16 +138,16 @@ enum CONF_MFLAGS_IGNORE_MISSING_FILE = 0x10;
 enum CONF_MFLAGS_DEFAULT_SECTION = 0x20;
 
 int CONF_set_default_method(.CONF_METHOD* meth);
-void CONF_set_nconf(libressl_d.openssl.ossl_typ.CONF* conf, .lhash_st_CONF_VALUE * hash);
+void CONF_set_nconf(libressl.openssl.ossl_typ.CONF* conf, .lhash_st_CONF_VALUE * hash);
 .lhash_st_CONF_VALUE* CONF_load(.lhash_st_CONF_VALUE * conf, const (char)* file, core.stdc.config.c_long* eline);
-.lhash_st_CONF_VALUE* CONF_load_fp(.lhash_st_CONF_VALUE * conf, libressl_d.compat.stdio.FILE* fp, core.stdc.config.c_long* eline);
-.lhash_st_CONF_VALUE* CONF_load_bio(.lhash_st_CONF_VALUE * conf, libressl_d.openssl.ossl_typ.BIO* bp, core.stdc.config.c_long* eline);
+.lhash_st_CONF_VALUE* CONF_load_fp(.lhash_st_CONF_VALUE * conf, libressl.compat.stdio.FILE* fp, core.stdc.config.c_long* eline);
+.lhash_st_CONF_VALUE* CONF_load_bio(.lhash_st_CONF_VALUE * conf, libressl.openssl.ossl_typ.BIO* bp, core.stdc.config.c_long* eline);
 .stack_st_CONF_VALUE* CONF_get_section(.lhash_st_CONF_VALUE * conf, const (char)* section);
 char* CONF_get_string(.lhash_st_CONF_VALUE * conf, const (char)* group, const (char)* name);
 core.stdc.config.c_long CONF_get_number(.lhash_st_CONF_VALUE * conf, const (char)* group, const (char)* name);
 void CONF_free(.lhash_st_CONF_VALUE * conf);
-int CONF_dump_fp(.lhash_st_CONF_VALUE * conf, libressl_d.compat.stdio.FILE* out_);
-int CONF_dump_bio(.lhash_st_CONF_VALUE * conf, libressl_d.openssl.ossl_typ.BIO* out_);
+int CONF_dump_fp(.lhash_st_CONF_VALUE * conf, libressl.compat.stdio.FILE* out_);
+int CONF_dump_bio(.lhash_st_CONF_VALUE * conf, libressl.openssl.ossl_typ.BIO* out_);
 
 void OPENSSL_config(const (char)* config_name);
 void OPENSSL_no_config();
@@ -163,26 +163,26 @@ struct conf_st
 	.lhash_st_CONF_VALUE* data;
 }
 
-libressl_d.openssl.ossl_typ.CONF* NCONF_new(.CONF_METHOD* meth);
+libressl.openssl.ossl_typ.CONF* NCONF_new(.CONF_METHOD* meth);
 .CONF_METHOD* NCONF_default();
 .CONF_METHOD* NCONF_WIN32();
-void NCONF_free(libressl_d.openssl.ossl_typ.CONF* conf);
-void NCONF_free_data(libressl_d.openssl.ossl_typ.CONF* conf);
+void NCONF_free(libressl.openssl.ossl_typ.CONF* conf);
+void NCONF_free_data(libressl.openssl.ossl_typ.CONF* conf);
 
-int NCONF_load(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* file, core.stdc.config.c_long* eline);
-int NCONF_load_fp(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.compat.stdio.FILE* fp, core.stdc.config.c_long* eline);
-int NCONF_load_bio(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.ossl_typ.BIO* bp, core.stdc.config.c_long* eline);
-.stack_st_CONF_VALUE* NCONF_get_section(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (char)* section);
-char* NCONF_get_string(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (char)* group, const (char)* name);
-int NCONF_get_number_e(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (char)* group, const (char)* name, core.stdc.config.c_long* result);
-int NCONF_dump_fp(const (libressl_d.openssl.ossl_typ.CONF)* conf, libressl_d.compat.stdio.FILE* out_);
-int NCONF_dump_bio(const (libressl_d.openssl.ossl_typ.CONF)* conf, libressl_d.openssl.ossl_typ.BIO* out_);
+int NCONF_load(libressl.openssl.ossl_typ.CONF* conf, const (char)* file, core.stdc.config.c_long* eline);
+int NCONF_load_fp(libressl.openssl.ossl_typ.CONF* conf, libressl.compat.stdio.FILE* fp, core.stdc.config.c_long* eline);
+int NCONF_load_bio(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.ossl_typ.BIO* bp, core.stdc.config.c_long* eline);
+.stack_st_CONF_VALUE* NCONF_get_section(const (libressl.openssl.ossl_typ.CONF)* conf, const (char)* section);
+char* NCONF_get_string(const (libressl.openssl.ossl_typ.CONF)* conf, const (char)* group, const (char)* name);
+int NCONF_get_number_e(const (libressl.openssl.ossl_typ.CONF)* conf, const (char)* group, const (char)* name, core.stdc.config.c_long* result);
+int NCONF_dump_fp(const (libressl.openssl.ossl_typ.CONF)* conf, libressl.compat.stdio.FILE* out_);
+int NCONF_dump_bio(const (libressl.openssl.ossl_typ.CONF)* conf, libressl.openssl.ossl_typ.BIO* out_);
 
 alias NCONF_get_number = .NCONF_get_number_e;
 
 /* Module functions */
 
-int CONF_modules_load(const (libressl_d.openssl.ossl_typ.CONF)* cnf, const (char)* appname, core.stdc.config.c_ulong flags);
+int CONF_modules_load(const (libressl.openssl.ossl_typ.CONF)* cnf, const (char)* appname, core.stdc.config.c_ulong flags);
 int CONF_modules_load_file(const (char)* filename, const (char)* appname, core.stdc.config.c_ulong flags);
 void CONF_modules_unload(int all);
 void CONF_modules_finish();

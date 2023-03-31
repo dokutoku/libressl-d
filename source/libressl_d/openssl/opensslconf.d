@@ -1,13 +1,13 @@
-module libressl_d.openssl.opensslconf;
+module libressl.openssl.opensslconf;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.bn;
-private static import libressl_d.openssl.des;
-private static import libressl_d.openssl.idea;
-private static import libressl_d.openssl.rc2;
-private static import libressl_d.openssl.rc4;
-public import libressl_d.openssl.opensslfeatures;
+private static import libressl.openssl.bn;
+private static import libressl.openssl.des;
+private static import libressl.openssl.idea;
+private static import libressl.openssl.rc2;
+private static import libressl.openssl.rc4;
+public import libressl.openssl.opensslfeatures;
 /* crypto/opensslconf.h.in */
 
 //#if defined(_MSC_VER) && !defined(__clang__) && !defined(__attribute__)
@@ -37,7 +37,7 @@ version (LIBRESSL_INTERNAL) {
 
 //#undef OPENSSL_EXPORT_VAR_AS_FUNCTION
 
-static assert(libressl_d.openssl.idea.HEADER_IDEA_H);
+static assert(libressl.openssl.idea.HEADER_IDEA_H);
 alias IDEA_INT = uint;
 
 //#if defined(HEADER_MD2_H) && !defined(MD2_INT)
@@ -45,11 +45,11 @@ version (none) {
 	alias MD2_INT = uint;
 }
 
-static assert(libressl_d.openssl.rc2.HEADER_RC2_H);
+static assert(libressl.openssl.rc2.HEADER_RC2_H);
 /* I need to put in a mod for the alpha - eay */
 alias RC2_INT = uint;
 
-static assert(libressl_d.openssl.rc4.HEADER_RC4_H);
+static assert(libressl.openssl.rc4.HEADER_RC4_H);
 /*
  * using int types make the structure larger but make the code faster
  * on most boxes I have tested - up to %20 faster.
@@ -67,14 +67,14 @@ alias RC4_INT = uint;
  */
 alias RC4_CHUNK = core.stdc.config.c_ulong;
 
-static assert(libressl_d.openssl.des.HEADER_NEW_DES_H);
+static assert(libressl.openssl.des.HEADER_NEW_DES_H);
 /*
  * If this is set to 'uint' on a DEC Alpha, this gives about a
  * %20 speed up (longs are 8 bytes, int's are 4).
  */
 alias DES_LONG = uint;
 
-static assert(libressl_d.openssl.bn.HEADER_BN_H);
+static assert(libressl.openssl.bn.HEADER_BN_H);
 //version = CONFIG_HEADER_BN_H;
 //#undef BN_LLONG
 

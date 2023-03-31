@@ -52,45 +52,45 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.ossl_typ;
+module libressl.openssl.ossl_typ;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.asn1;
-private static import libressl_d.openssl.asn1t;
-private static import libressl_d.openssl.buffer;
-private static import libressl_d.openssl.conf;
-private static import libressl_d.openssl.crypto;
-private static import libressl_d.openssl.ecdsa;
-private static import libressl_d.openssl.rand;
-private static import libressl_d.openssl.rsa;
-private static import libressl_d.openssl.x509;
-private static import libressl_d.openssl.x509v3;
-public import libressl_d.openssl.opensslconf;
+private static import libressl.openssl.asn1;
+private static import libressl.openssl.asn1t;
+private static import libressl.openssl.buffer;
+private static import libressl.openssl.conf;
+private static import libressl.openssl.crypto;
+private static import libressl.openssl.ecdsa;
+private static import libressl.openssl.rand;
+private static import libressl.openssl.rsa;
+private static import libressl.openssl.x509;
+private static import libressl.openssl.x509v3;
+public import libressl.openssl.opensslconf;
 
-alias ASN1_INTEGER = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_ENUMERATED = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_BIT_STRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_OCTET_STRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_PRINTABLESTRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_T61STRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_IA5STRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_GENERALSTRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_UNIVERSALSTRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_BMPSTRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_UTCTIME = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_TIME = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_GENERALIZEDTIME = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_VISIBLESTRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_UTF8STRING = libressl_d.openssl.asn1.asn1_string_st;
-alias ASN1_STRING = libressl_d.openssl.asn1.asn1_string_st;
+alias ASN1_INTEGER = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_ENUMERATED = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_BIT_STRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_OCTET_STRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_PRINTABLESTRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_T61STRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_IA5STRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_GENERALSTRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_UNIVERSALSTRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_BMPSTRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_UTCTIME = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_TIME = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_GENERALIZEDTIME = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_VISIBLESTRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_UTF8STRING = libressl.openssl.asn1.asn1_string_st;
+alias ASN1_STRING = libressl.openssl.asn1.asn1_string_st;
 alias ASN1_BOOLEAN = int;
 alias ASN1_NULL = int;
 
 struct asn1_object_st;
 alias ASN1_OBJECT = .asn1_object_st;
 
-alias ASN1_ITEM = libressl_d.openssl.asn1t.ASN1_ITEM_st;
+alias ASN1_ITEM = libressl.openssl.asn1t.ASN1_ITEM_st;
 struct asn1_pctx_st;
 alias ASN1_PCTX = .asn1_pctx_st;
 
@@ -101,7 +101,7 @@ alias ASN1_PCTX = .asn1_pctx_st;
 	}
 
 	//#undef X509_NAME
-	//#undef libressl_d.openssl.x509.X509_CERT_PAIR
+	//#undef libressl.openssl.x509.X509_CERT_PAIR
 	//#undef X509_EXTENSIONS
 	//#undef OCSP_REQUEST
 	//#undef OCSP_RESPONSE
@@ -129,7 +129,7 @@ alias BN_GENCB = .bn_gencb_st;
 struct bio_st;
 alias BIO = .bio_st;
 
-alias BUF_MEM = libressl_d.openssl.buffer.buf_mem_st;
+alias BUF_MEM = libressl.openssl.buffer.buf_mem_st;
 
 struct comp_ctx_st;
 alias COMP_CTX = .comp_ctx_st;
@@ -185,19 +185,19 @@ alias RSA = .rsa_st;
 struct rsa_meth_st;
 alias RSA_METHOD = .rsa_meth_st;
 
-alias RSA_PSS_PARAMS = libressl_d.openssl.rsa.rsa_pss_params_st;
+alias RSA_PSS_PARAMS = libressl.openssl.rsa.rsa_pss_params_st;
 
-alias RAND_METHOD = libressl_d.openssl.rand.rand_meth_st;
+alias RAND_METHOD = libressl.openssl.rand.rand_meth_st;
 
 struct ecdh_method;
 alias ECDH_METHOD = .ecdh_method;
 
-alias ECDSA_METHOD = libressl_d.openssl.ecdsa.ecdsa_method;
+alias ECDSA_METHOD = libressl.openssl.ecdsa.ecdsa_method;
 
 struct x509_st;
 alias X509 = .x509_st;
 
-alias X509_ALGOR = libressl_d.openssl.x509.X509_algor_st;
+alias X509_ALGOR = libressl.openssl.x509.X509_algor_st;
 
 struct X509_crl_st;
 alias X509_CRL = .X509_crl_st;
@@ -235,8 +235,8 @@ alias X509_VERIFY_PARAM = .X509_VERIFY_PARAM_st;
 struct pkcs8_priv_key_info_st;
 alias PKCS8_PRIV_KEY_INFO = .pkcs8_priv_key_info_st;
 
-alias X509V3_CTX = libressl_d.openssl.x509v3.v3_ext_ctx;
-alias CONF = libressl_d.openssl.conf.conf_st;
+alias X509V3_CTX = libressl.openssl.x509v3.v3_ext_ctx;
+alias CONF = libressl.openssl.conf.conf_st;
 
 struct store_st;
 alias STORE = .store_st;
@@ -269,16 +269,16 @@ alias X509_POLICY_TREE = .X509_POLICY_TREE_st;
 struct X509_POLICY_CACHE_st;
 alias X509_POLICY_CACHE = .X509_POLICY_CACHE_st;
 
-alias AUTHORITY_KEYID = libressl_d.openssl.x509v3.AUTHORITY_KEYID_st;
-alias DIST_POINT = libressl_d.openssl.x509v3.DIST_POINT_st;
-alias ISSUING_DIST_POINT = libressl_d.openssl.x509v3.ISSUING_DIST_POINT_st;
-alias NAME_CONSTRAINTS = libressl_d.openssl.x509v3.NAME_CONSTRAINTS_st;
+alias AUTHORITY_KEYID = libressl.openssl.x509v3.AUTHORITY_KEYID_st;
+alias DIST_POINT = libressl.openssl.x509v3.DIST_POINT_st;
+alias ISSUING_DIST_POINT = libressl.openssl.x509v3.ISSUING_DIST_POINT_st;
+alias NAME_CONSTRAINTS = libressl.openssl.x509v3.NAME_CONSTRAINTS_st;
 
 /* If placed in pkcs12.h, we end up with a circular dependency with pkcs7.h */
 //#define DECLARE_PKCS12_STACK_OF(type) /* Nothing */
 //#define IMPLEMENT_PKCS12_STACK_OF(type) /* Nothing */
 
-alias CRYPTO_EX_DATA = libressl_d.openssl.crypto.crypto_ex_data_st;
+alias CRYPTO_EX_DATA = libressl.openssl.crypto.crypto_ex_data_st;
 
 /* Callback types for crypto.h */
 package alias CRYPTO_EX_new = /* Not a function pointer type */ extern (C) nothrow @nogc int function(void* parent, void* ptr_, .CRYPTO_EX_DATA* ad, int idx, core.stdc.config.c_long argl, void* argp);

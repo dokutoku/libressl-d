@@ -55,24 +55,24 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.ssl23;
+module libressl.openssl.ssl23;
 
 
-private static import libressl_d.openssl.ssl;
+private static import libressl.openssl.ssl;
 
 extern (C):
 nothrow @nogc:
 
 /*client */
 /* write to server */
-enum SSL23_ST_CW_CLNT_HELLO_A = 0x0210 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL23_ST_CW_CLNT_HELLO_B = 0x0211 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
+enum SSL23_ST_CW_CLNT_HELLO_A = 0x0210 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL23_ST_CW_CLNT_HELLO_B = 0x0211 | libressl.openssl.ssl.SSL_ST_CONNECT;
 
 /* read from server */
-enum SSL23_ST_CR_SRVR_HELLO_A = 0x0220 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL23_ST_CR_SRVR_HELLO_B = 0x0221 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
+enum SSL23_ST_CR_SRVR_HELLO_A = 0x0220 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL23_ST_CR_SRVR_HELLO_B = 0x0221 | libressl.openssl.ssl.SSL_ST_CONNECT;
 
 /* server */
 /* read from client */
-enum SSL23_ST_SR_CLNT_HELLO_A = 0x0210 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL23_ST_SR_CLNT_HELLO_B = 0x0211 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL23_ST_SR_CLNT_HELLO_A = 0x0210 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL23_ST_SR_CLNT_HELLO_B = 0x0211 | libressl.openssl.ssl.SSL_ST_ACCEPT;

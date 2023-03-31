@@ -113,18 +113,18 @@
  * ECDH support in OpenSSL originally developed by
  * SUN MICROSYSTEMS, INC., and contributed to the OpenSSL project.
  */
-module libressl_d.openssl.crypto;
+module libressl.openssl.crypto;
 
 
 private static import core.stdc.config;
 public import core.stdc.stdint;
-public import libressl_d.compat.stdio;
-public import libressl_d.compat.stdlib;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.opensslv;
-public import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.safestack;
-public import libressl_d.openssl.stack;
+public import libressl.compat.stdio;
+public import libressl.compat.stdlib;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.opensslv;
+public import libressl.openssl.ossl_typ;
+public import libressl.openssl.safestack;
+public import libressl.openssl.stack;
 
 extern (C):
 nothrow @nogc:
@@ -134,7 +134,7 @@ nothrow @nogc:
  * This is more to be used to check the correct DLL is being used
  * in the MS world.
  */
-enum SSLEAY_VERSION_NUMBER = libressl_d.openssl.opensslv.OPENSSL_VERSION_NUMBER;
+enum SSLEAY_VERSION_NUMBER = libressl.openssl.opensslv.OPENSSL_VERSION_NUMBER;
 enum SSLEAY_VERSION = 0;
 
 /**
@@ -304,7 +304,7 @@ enum V_CRYPTO_MDEBUG_ALL = .V_CRYPTO_MDEBUG_TIME | .V_CRYPTO_MDEBUG_THREAD;
 /**
  * predec of the BIO type
  */
-alias BIO_dummy = libressl_d.openssl.ossl_typ.bio_st;
+alias BIO_dummy = libressl.openssl.ossl_typ.bio_st;
 
 struct crypto_ex_data_st
 {
@@ -314,7 +314,7 @@ struct crypto_ex_data_st
 //DECLARE_STACK_OF(void)
 struct stack_st_void
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /**
@@ -333,9 +333,9 @@ struct crypto_ex_data_func_st
 	 */
 	void* argp;
 
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func;
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func;
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func;
+	libressl.openssl.ossl_typ.CRYPTO_EX_new new_func;
+	libressl.openssl.ossl_typ.CRYPTO_EX_free free_func;
+	libressl.openssl.ossl_typ.CRYPTO_EX_dup dup_func;
 }
 
 alias CRYPTO_EX_DATA_FUNCS = .crypto_ex_data_func_st;
@@ -343,7 +343,7 @@ alias CRYPTO_EX_DATA_FUNCS = .crypto_ex_data_func_st;
 //DECLARE_STACK_OF(CRYPTO_EX_DATA_FUNCS)
 struct stack_st_CRYPTO_EX_DATA_FUNCS
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /*
@@ -511,22 +511,22 @@ int CRYPTO_ex_data_new_class();
 /**
  * Within a given class, get/register a new index
  */
-int CRYPTO_get_ex_new_index(int class_index, core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
+int CRYPTO_get_ex_new_index(int class_index, core.stdc.config.c_long argl, void* argp, libressl.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl.openssl.ossl_typ.CRYPTO_EX_free free_func);
 
 /*
  * Initialise/duplicate/free CRYPTO_EX_DATA variables corresponding to a given
  * class (invokes whatever per-class callbacks are applicable)
  */
-int CRYPTO_new_ex_data(int class_index, void* obj, libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA* ad);
-int CRYPTO_dup_ex_data(int class_index, libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA* to, libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA* from);
-void CRYPTO_free_ex_data(int class_index, void* obj, libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA* ad);
+int CRYPTO_new_ex_data(int class_index, void* obj, libressl.openssl.ossl_typ.CRYPTO_EX_DATA* ad);
+int CRYPTO_dup_ex_data(int class_index, libressl.openssl.ossl_typ.CRYPTO_EX_DATA* to, libressl.openssl.ossl_typ.CRYPTO_EX_DATA* from);
+void CRYPTO_free_ex_data(int class_index, void* obj, libressl.openssl.ossl_typ.CRYPTO_EX_DATA* ad);
 
 /*
  * Get/set data in a CRYPTO_EX_DATA variable corresponding to a particular index
  * (relative to the class type involved)
  */
-int CRYPTO_set_ex_data(libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA* ad, int idx, void* val);
-void* CRYPTO_get_ex_data(const (libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA)* ad, int idx);
+int CRYPTO_set_ex_data(libressl.openssl.ossl_typ.CRYPTO_EX_DATA* ad, int idx, void* val);
+void* CRYPTO_get_ex_data(const (libressl.openssl.ossl_typ.CRYPTO_EX_DATA)* ad, int idx);
 
 /**
  * This function cleans up all "ex_data" state. It mustn't be called under
@@ -705,8 +705,8 @@ void CRYPTO_dbg_set_options(core.stdc.config.c_long bits);
 deprecated
 core.stdc.config.c_long CRYPTO_dbg_get_options();
 
-int CRYPTO_mem_leaks_fp(libressl_d.compat.stdio.FILE*);
-int CRYPTO_mem_leaks(libressl_d.openssl.ossl_typ.bio_st* bio);
+int CRYPTO_mem_leaks_fp(libressl.compat.stdio.FILE*);
+int CRYPTO_mem_leaks(libressl.openssl.ossl_typ.bio_st* bio);
 /* core.stdc.config.c_ulong order, char* ile, int line, int num_bytes, char* ddr */
 private alias CRYPTO_MEM_LEAK_CB = /* Not a function pointer type */ extern (C) nothrow @nogc int* function(core.stdc.config.c_ulong, const (char)*, int, int, void*);
 int CRYPTO_mem_leaks_cb(.CRYPTO_MEM_LEAK_CB cb);

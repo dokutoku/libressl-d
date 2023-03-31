@@ -1,5 +1,5 @@
-module libressl_d.compat.arpa;
+module libressl.compat.arpa;
 
 
-public import libressl_d.compat.arpa.inet;
-public import libressl_d.compat.arpa.nameser;
+public import libressl.compat.arpa.inet;
+public import libressl.compat.arpa.nameser;

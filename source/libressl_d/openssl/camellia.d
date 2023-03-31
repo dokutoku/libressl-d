@@ -48,11 +48,11 @@
  * ====================================================================
  *
  */
-module libressl_d.openssl.camellia;
+module libressl.openssl.camellia;
 
 
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_CAMELLIA) {
 	static assert(false, "CAMELLIA is disabled.");

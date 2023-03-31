@@ -55,12 +55,12 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.buffer;
+module libressl.openssl.buffer;
 
 
 public import core.stdc.stddef;
-public import libressl_d.compat.sys.types;
-public import libressl_d.openssl.ossl_typ;
+public import libressl.compat.sys.types;
+public import libressl.openssl.ossl_typ;
 
 //#if !defined(HAVE_ATTRIBUTE__BOUNDED__) && !defined(__OpenBSD__)
 	//#define __bounded__(x, y, z)
@@ -87,10 +87,10 @@ struct buf_mem_st
 	size_t max;
 }
 
-libressl_d.openssl.ossl_typ.BUF_MEM* BUF_MEM_new();
-void BUF_MEM_free(libressl_d.openssl.ossl_typ.BUF_MEM* a);
-int BUF_MEM_grow(libressl_d.openssl.ossl_typ.BUF_MEM* str, size_t len);
-int BUF_MEM_grow_clean(libressl_d.openssl.ossl_typ.BUF_MEM* str, size_t len);
+libressl.openssl.ossl_typ.BUF_MEM* BUF_MEM_new();
+void BUF_MEM_free(libressl.openssl.ossl_typ.BUF_MEM* a);
+int BUF_MEM_grow(libressl.openssl.ossl_typ.BUF_MEM* str, size_t len);
+int BUF_MEM_grow_clean(libressl.openssl.ossl_typ.BUF_MEM* str, size_t len);
 
 version (LIBRESSL_INTERNAL) {
 } else {

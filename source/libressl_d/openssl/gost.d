@@ -48,16 +48,16 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
  */
-module libressl_d.openssl.gost;
+module libressl.openssl.gost;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.evp;
-private static import libressl_d.openssl.ossl_typ;
+private static import libressl.openssl.evp;
+private static import libressl.openssl.ossl_typ;
 private static import std.bitmanip;
-public import libressl_d.openssl.asn1t;
-public import libressl_d.openssl.ec;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.asn1t;
+public import libressl.openssl.ec;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_GOST) {
 	static assert(false, "GOST is disabled.");
@@ -87,15 +87,15 @@ void Gost2814789_cnt_encrypt(const (ubyte)* in_, ubyte* out_, size_t length_, .G
 
 struct GOST_CIPHER_PARAMS
 {
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* iv;
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* enc_param_set;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* iv;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* enc_param_set;
 }
 
 .GOST_CIPHER_PARAMS* GOST_CIPHER_PARAMS_new();
 void GOST_CIPHER_PARAMS_free(.GOST_CIPHER_PARAMS* a);
 .GOST_CIPHER_PARAMS* d2i_GOST_CIPHER_PARAMS(.GOST_CIPHER_PARAMS** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_GOST_CIPHER_PARAMS(.GOST_CIPHER_PARAMS* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM GOST_CIPHER_PARAMS_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM GOST_CIPHER_PARAMS_it;
 
 enum GOST2814789IMIT_LENGTH = 4;
 enum GOST2814789IMIT_CBLOCK = 8;
@@ -184,23 +184,23 @@ alias GOST_KEY = .gost_key_st;
 .GOST_KEY* GOST_KEY_new();
 void GOST_KEY_free(.GOST_KEY* r);
 int GOST_KEY_check_key(const (.GOST_KEY)* eckey);
-int GOST_KEY_set_public_key_affine_coordinates(.GOST_KEY* key, libressl_d.openssl.ossl_typ.BIGNUM* x, libressl_d.openssl.ossl_typ.BIGNUM* y);
-const (libressl_d.openssl.ec.EC_GROUP)* GOST_KEY_get0_group(const (.GOST_KEY)* key);
-int GOST_KEY_set_group(.GOST_KEY* key, const (libressl_d.openssl.ec.EC_GROUP)* group);
+int GOST_KEY_set_public_key_affine_coordinates(.GOST_KEY* key, libressl.openssl.ossl_typ.BIGNUM* x, libressl.openssl.ossl_typ.BIGNUM* y);
+const (libressl.openssl.ec.EC_GROUP)* GOST_KEY_get0_group(const (.GOST_KEY)* key);
+int GOST_KEY_set_group(.GOST_KEY* key, const (libressl.openssl.ec.EC_GROUP)* group);
 int GOST_KEY_get_digest(const (.GOST_KEY)* key);
 int GOST_KEY_set_digest(.GOST_KEY* key, int digest_nid);
-const (libressl_d.openssl.ossl_typ.BIGNUM)* GOST_KEY_get0_private_key(const (.GOST_KEY)* key);
-int GOST_KEY_set_private_key(.GOST_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* priv_key);
-const (libressl_d.openssl.ec.EC_POINT)* GOST_KEY_get0_public_key(const (.GOST_KEY)* key);
-int GOST_KEY_set_public_key(.GOST_KEY* key, const (libressl_d.openssl.ec.EC_POINT)* pub_key);
+const (libressl.openssl.ossl_typ.BIGNUM)* GOST_KEY_get0_private_key(const (.GOST_KEY)* key);
+int GOST_KEY_set_private_key(.GOST_KEY* key, const (libressl.openssl.ossl_typ.BIGNUM)* priv_key);
+const (libressl.openssl.ec.EC_POINT)* GOST_KEY_get0_public_key(const (.GOST_KEY)* key);
+int GOST_KEY_set_public_key(.GOST_KEY* key, const (libressl.openssl.ec.EC_POINT)* pub_key);
 size_t GOST_KEY_get_size(const (.GOST_KEY)* r);
 
 /* Gost-specific pmeth control-function parameters */
 /* For GOST R34.10 parameters */
-enum EVP_PKEY_CTRL_GOST_PARAMSET = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
-enum EVP_PKEY_CTRL_GOST_SIG_FORMAT = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
-enum EVP_PKEY_CTRL_GOST_SET_DIGEST = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
-enum EVP_PKEY_CTRL_GOST_GET_DIGEST = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 4;
+enum EVP_PKEY_CTRL_GOST_PARAMSET = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
+enum EVP_PKEY_CTRL_GOST_SIG_FORMAT = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
+enum EVP_PKEY_CTRL_GOST_SET_DIGEST = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
+enum EVP_PKEY_CTRL_GOST_GET_DIGEST = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 4;
 
 enum GOST_SIG_FORMAT_SR_BE = 0;
 enum GOST_SIG_FORMAT_RS_LE = 1;

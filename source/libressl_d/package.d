@@ -1,7 +1,7 @@
-module libressl_d;
+module libressl;
 
 
-public import libressl_d.compat;
-public import libressl_d.openssl;
-public import libressl_d.pqueue;
-public import libressl_d.tls;
+public import libressl.compat;
+public import libressl.openssl;
+public import libressl.pqueue;
+public import libressl.tls;

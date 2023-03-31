@@ -2,8 +2,8 @@
  * Public domain
  * netinet/tcp.h compatibility shim
  */
-module libressl_d.compat.netinet.tcp;
+module libressl.compat.netinet.tcp;
 
 
 public import core.sys.posix.netinet.tcp;
-public import libressl_d.compat.win32netcompat;
+public import libressl.compat.win32netcompat;

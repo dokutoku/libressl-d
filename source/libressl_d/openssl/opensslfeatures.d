@@ -3,7 +3,7 @@
  * are enabled, rather than not being able to tell when things are
  * enabled (or possibly not yet not implemented, or removed!).
  */
-module libressl_d.openssl.opensslfeatures;
+module libressl.openssl.opensslfeatures;
 
 
 version (LIBRESSL_INTERNAL) {

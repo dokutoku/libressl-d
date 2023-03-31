@@ -55,18 +55,18 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.objects;
+module libressl.openssl.objects;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.bio;
-public import libressl_d.openssl.obj_mac;
+private static import libressl.openssl.ossl_typ;
+public import libressl.openssl.asn1;
+public import libressl.openssl.bio;
+public import libressl.openssl.obj_mac;
 
-enum SN_ED25519 = libressl_d.openssl.obj_mac.SN_Ed25519;
-enum NID_ED25519 = libressl_d.openssl.obj_mac.NID_Ed25519;
-//enum OBJ_ED25519 = libressl_d.openssl.obj_mac.OBJ_Ed25519;
+enum SN_ED25519 = libressl.openssl.obj_mac.SN_Ed25519;
+enum NID_ED25519 = libressl.openssl.obj_mac.NID_Ed25519;
+//enum OBJ_ED25519 = libressl.openssl.obj_mac.OBJ_Ed25519;
 
 enum OBJ_NAME_TYPE_UNDEF = 0x00;
 enum OBJ_NAME_TYPE_MD_METH = 0x01;
@@ -117,17 +117,17 @@ void OBJ_NAME_do_all(int type, .OBJ_NAME_do_all_func fn, void* arg);
 private alias OBJ_NAME_do_all_sorted_func = /* Temporary type */ extern (C) nothrow @nogc void function(const (.OBJ_NAME)*, void* arg);
 void OBJ_NAME_do_all_sorted(int type, .OBJ_NAME_do_all_sorted_func fn, void* arg);
 
-libressl_d.openssl.ossl_typ.ASN1_OBJECT* OBJ_dup(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* o);
-libressl_d.openssl.ossl_typ.ASN1_OBJECT* OBJ_nid2obj(int n);
+libressl.openssl.ossl_typ.ASN1_OBJECT* OBJ_dup(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* o);
+libressl.openssl.ossl_typ.ASN1_OBJECT* OBJ_nid2obj(int n);
 const (char)* OBJ_nid2ln(int n);
 const (char)* OBJ_nid2sn(int n);
-int OBJ_obj2nid(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* o);
-libressl_d.openssl.ossl_typ.ASN1_OBJECT* OBJ_txt2obj(const (char)* s, int no_name);
-int OBJ_obj2txt(char* buf, int buf_len, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* a, int no_name);
+int OBJ_obj2nid(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* o);
+libressl.openssl.ossl_typ.ASN1_OBJECT* OBJ_txt2obj(const (char)* s, int no_name);
+int OBJ_obj2txt(char* buf, int buf_len, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* a, int no_name);
 int OBJ_txt2nid(const (char)* s);
 int OBJ_ln2nid(const (char)* s);
 int OBJ_sn2nid(const (char)* s);
-int OBJ_cmp(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* a, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* b);
+int OBJ_cmp(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* a, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* b);
 
 version (LIBRESSL_INTERNAL) {
 	private alias OBJ_bsearch__cmp_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (void)*, const (void)*);
@@ -138,13 +138,13 @@ version (LIBRESSL_INTERNAL) {
 }
 
 int OBJ_new_nid(int num);
-int OBJ_add_object(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj);
+int OBJ_add_object(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj);
 int OBJ_create(const (char)* oid, const (char)* sn, const (char)* ln);
 void OBJ_cleanup();
-int OBJ_create_objects(libressl_d.openssl.ossl_typ.BIO* in_);
+int OBJ_create_objects(libressl.openssl.ossl_typ.BIO* in_);
 
-size_t OBJ_length(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj);
-const (ubyte)* OBJ_get0_data(const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj);
+size_t OBJ_length(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj);
+const (ubyte)* OBJ_get0_data(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj);
 
 int OBJ_find_sigid_algs(int signid, int* pdig_nid, int* ppkey_nid);
 int OBJ_find_sigid_by_algs(int* psignid, int dig_nid, int pkey_nid);

@@ -55,11 +55,11 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.cast_;
+module libressl.openssl.cast_;
 
 
 private static import core.stdc.config;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 extern (C):
 nothrow @nogc:

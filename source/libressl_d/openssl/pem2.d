@@ -57,15 +57,15 @@
  * This header only exists to break a circular dependency between pem and err
  * Ben 30 Jan 1999.
  */
-module libressl_d.openssl.pem2;
+module libressl.openssl.pem2;
 
 
-private static import libressl_d.openssl.pem;
+private static import libressl.openssl.pem;
 
 extern (C):
 nothrow @nogc:
 
 version (none) {
-	static assert(!libressl_d.openssl.pem.HEADER_PEM_H);
+	static assert(!libressl.openssl.pem.HEADER_PEM_H);
 	void ERR_load_PEM_strings();
 }

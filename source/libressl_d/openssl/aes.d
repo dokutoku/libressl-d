@@ -48,11 +48,11 @@
  * ====================================================================
  *
  */
-module libressl_d.openssl.aes;
+module libressl.openssl.aes;
 
 
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_AES) {
 	static assert(false, "AES is disabled.");

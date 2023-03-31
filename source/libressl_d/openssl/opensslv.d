@@ -2,7 +2,7 @@
 /**
  * These will change with each release of LibreSSL-portable
  */
-module libressl_d.openssl.opensslv;
+module libressl.openssl.opensslv;
 
 
 enum LIBRESSL_VERSION_NUMBER = 0x3070100FL;

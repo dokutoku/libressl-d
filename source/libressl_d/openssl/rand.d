@@ -55,13 +55,13 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.rand;
+module libressl.openssl.rand;
 
 
 private static import core.stdc.config;
-public import libressl_d.compat.stdlib;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ossl_typ;
+public import libressl.compat.stdlib;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ossl_typ;
 
 extern (C):
 nothrow @nogc:
@@ -79,15 +79,15 @@ struct rand_meth_st
 	int function() status;
 }
 
-int RAND_set_rand_method(const (libressl_d.openssl.ossl_typ.RAND_METHOD)* meth);
-const (libressl_d.openssl.ossl_typ.RAND_METHOD)* RAND_get_rand_method();
+int RAND_set_rand_method(const (libressl.openssl.ossl_typ.RAND_METHOD)* meth);
+const (libressl.openssl.ossl_typ.RAND_METHOD)* RAND_get_rand_method();
 
 version (OPENSSL_NO_ENGINE) {
 } else {
-	int RAND_set_rand_engine(libressl_d.openssl.ossl_typ.ENGINE* engine);
+	int RAND_set_rand_engine(libressl.openssl.ossl_typ.ENGINE* engine);
 }
 
-libressl_d.openssl.ossl_typ.RAND_METHOD* RAND_SSLeay();
+libressl.openssl.ossl_typ.RAND_METHOD* RAND_SSLeay();
 
 version (LIBRESSL_INTERNAL) {
 } else {

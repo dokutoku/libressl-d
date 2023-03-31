@@ -62,15 +62,15 @@
  * work and I have just tweaked them a little to fit into my
  * stylistic vision for SSLeay :-)
  */
-module libressl_d.openssl.dsa;
+module libressl.openssl.dsa;
 
 
 private static import core.stdc.config;
-private static import libressl_d.compat.stdio;
-private static import libressl_d.openssl.evp;
-public import libressl_d.openssl.crypto;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ossl_typ;
+private static import libressl.compat.stdio;
+private static import libressl.openssl.evp;
+public import libressl.openssl.crypto;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ossl_typ;
 
 version (OPENSSL_NO_DSA) {
 	static assert(false, "DSA is disabled.");
@@ -78,16 +78,16 @@ version (OPENSSL_NO_DSA) {
 
 version (OPENSSL_NO_BIO) {
 } else {
-	public import libressl_d.openssl.bio;
+	public import libressl.openssl.bio;
 }
 
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	public import libressl_d.openssl.bn;
+	public import libressl.openssl.bn;
 
 	version (OPENSSL_NO_DH) {
 	} else {
-		public import libressl_d.openssl.dh;
+		public import libressl.openssl.dh;
 	}
 }
 
@@ -119,76 +119,76 @@ nothrow @nogc:
 struct DSA_SIG_st;
 alias DSA_SIG = .DSA_SIG_st;
 
-libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.DSA** a);
-int i2d_DSAparams_bio(libressl_d.openssl.ossl_typ.BIO* bp, libressl_d.openssl.ossl_typ.DSA* a);
-libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DSA** a);
-int i2d_DSAparams_fp(libressl_d.compat.stdio.FILE* fp, libressl_d.openssl.ossl_typ.DSA* a);
+libressl.openssl.ossl_typ.DSA* d2i_DSAparams_bio(libressl.openssl.ossl_typ.BIO* bp, libressl.openssl.ossl_typ.DSA** a);
+int i2d_DSAparams_bio(libressl.openssl.ossl_typ.BIO* bp, libressl.openssl.ossl_typ.DSA* a);
+libressl.openssl.ossl_typ.DSA* d2i_DSAparams_fp(libressl.compat.stdio.FILE* fp, libressl.openssl.ossl_typ.DSA** a);
+int i2d_DSAparams_fp(libressl.compat.stdio.FILE* fp, libressl.openssl.ossl_typ.DSA* a);
 
-libressl_d.openssl.ossl_typ.DSA* DSAparams_dup(libressl_d.openssl.ossl_typ.DSA* x);
+libressl.openssl.ossl_typ.DSA* DSAparams_dup(libressl.openssl.ossl_typ.DSA* x);
 .DSA_SIG* DSA_SIG_new();
 void DSA_SIG_free(.DSA_SIG* a);
 int i2d_DSA_SIG(const (.DSA_SIG)* a, ubyte** pp);
 .DSA_SIG* d2i_DSA_SIG(.DSA_SIG** v, const (ubyte)** pp, core.stdc.config.c_long length_);
-void DSA_SIG_get0(const (.DSA_SIG)* sig, const (libressl_d.openssl.ossl_typ.BIGNUM)** pr, const (libressl_d.openssl.ossl_typ.BIGNUM)** ps);
-int DSA_SIG_set0(.DSA_SIG* sig, libressl_d.openssl.ossl_typ.BIGNUM* r, libressl_d.openssl.ossl_typ.BIGNUM* s);
+void DSA_SIG_get0(const (.DSA_SIG)* sig, const (libressl.openssl.ossl_typ.BIGNUM)** pr, const (libressl.openssl.ossl_typ.BIGNUM)** ps);
+int DSA_SIG_set0(.DSA_SIG* sig, libressl.openssl.ossl_typ.BIGNUM* r, libressl.openssl.ossl_typ.BIGNUM* s);
 
-.DSA_SIG* DSA_do_sign(const (ubyte)* dgst, int dlen, libressl_d.openssl.ossl_typ.DSA* dsa);
-int DSA_do_verify(const (ubyte)* dgst, int dgst_len, .DSA_SIG* sig, libressl_d.openssl.ossl_typ.DSA* dsa);
+.DSA_SIG* DSA_do_sign(const (ubyte)* dgst, int dlen, libressl.openssl.ossl_typ.DSA* dsa);
+int DSA_do_verify(const (ubyte)* dgst, int dgst_len, .DSA_SIG* sig, libressl.openssl.ossl_typ.DSA* dsa);
 
-const (libressl_d.openssl.ossl_typ.DSA_METHOD)* DSA_OpenSSL();
+const (libressl.openssl.ossl_typ.DSA_METHOD)* DSA_OpenSSL();
 
-void DSA_set_default_method(const (libressl_d.openssl.ossl_typ.DSA_METHOD)*);
-const (libressl_d.openssl.ossl_typ.DSA_METHOD)* DSA_get_default_method();
-int DSA_set_method(libressl_d.openssl.ossl_typ.DSA* dsa, const (libressl_d.openssl.ossl_typ.DSA_METHOD)*);
+void DSA_set_default_method(const (libressl.openssl.ossl_typ.DSA_METHOD)*);
+const (libressl.openssl.ossl_typ.DSA_METHOD)* DSA_get_default_method();
+int DSA_set_method(libressl.openssl.ossl_typ.DSA* dsa, const (libressl.openssl.ossl_typ.DSA_METHOD)*);
 
-libressl_d.openssl.ossl_typ.DSA* DSA_new();
-libressl_d.openssl.ossl_typ.DSA* DSA_new_method(libressl_d.openssl.ossl_typ.ENGINE* engine);
-void DSA_free(libressl_d.openssl.ossl_typ.DSA* r);
+libressl.openssl.ossl_typ.DSA* DSA_new();
+libressl.openssl.ossl_typ.DSA* DSA_new_method(libressl.openssl.ossl_typ.ENGINE* engine);
+void DSA_free(libressl.openssl.ossl_typ.DSA* r);
 /* "up" the DSA object's reference count */
-int DSA_up_ref(libressl_d.openssl.ossl_typ.DSA* r);
-int DSA_size(const (libressl_d.openssl.ossl_typ.DSA)*);
-int DSA_bits(const (libressl_d.openssl.ossl_typ.DSA)* d);
+int DSA_up_ref(libressl.openssl.ossl_typ.DSA* r);
+int DSA_size(const (libressl.openssl.ossl_typ.DSA)*);
+int DSA_bits(const (libressl.openssl.ossl_typ.DSA)* d);
 /* next 4 return -1 on error */
-int DSA_sign_setup(libressl_d.openssl.ossl_typ.DSA* dsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx_in, libressl_d.openssl.ossl_typ.BIGNUM** kinvp, libressl_d.openssl.ossl_typ.BIGNUM** rp);
-int DSA_sign(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, libressl_d.openssl.ossl_typ.DSA* dsa);
-int DSA_verify(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbuf, int siglen, libressl_d.openssl.ossl_typ.DSA* dsa);
-int DSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
-int DSA_set_ex_data(libressl_d.openssl.ossl_typ.DSA* d, int idx, void* arg);
-void* DSA_get_ex_data(libressl_d.openssl.ossl_typ.DSA* d, int idx);
-int DSA_security_bits(const (libressl_d.openssl.ossl_typ.DSA)* d);
+int DSA_sign_setup(libressl.openssl.ossl_typ.DSA* dsa, libressl.openssl.ossl_typ.BN_CTX* ctx_in, libressl.openssl.ossl_typ.BIGNUM** kinvp, libressl.openssl.ossl_typ.BIGNUM** rp);
+int DSA_sign(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, libressl.openssl.ossl_typ.DSA* dsa);
+int DSA_verify(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbuf, int siglen, libressl.openssl.ossl_typ.DSA* dsa);
+int DSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl.openssl.ossl_typ.CRYPTO_EX_free free_func);
+int DSA_set_ex_data(libressl.openssl.ossl_typ.DSA* d, int idx, void* arg);
+void* DSA_get_ex_data(libressl.openssl.ossl_typ.DSA* d, int idx);
+int DSA_security_bits(const (libressl.openssl.ossl_typ.DSA)* d);
 
-libressl_d.openssl.ossl_typ.DSA* d2i_DSAPublicKey(libressl_d.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
-int i2d_DSAPublicKey(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAPublicKey_it;
+libressl.openssl.ossl_typ.DSA* d2i_DSAPublicKey(libressl.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
+int i2d_DSAPublicKey(const (libressl.openssl.ossl_typ.DSA)* a, ubyte** pp);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM DSAPublicKey_it;
 
-libressl_d.openssl.ossl_typ.DSA* d2i_DSAPrivateKey(libressl_d.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
-int i2d_DSAPrivateKey(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAPrivateKey_it;
+libressl.openssl.ossl_typ.DSA* d2i_DSAPrivateKey(libressl.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
+int i2d_DSAPrivateKey(const (libressl.openssl.ossl_typ.DSA)* a, ubyte** pp);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM DSAPrivateKey_it;
 
-libressl_d.openssl.ossl_typ.DSA* d2i_DSAparams(libressl_d.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
-int i2d_DSAparams(const (libressl_d.openssl.ossl_typ.DSA)* a, ubyte** pp);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM DSAparams_it;
+libressl.openssl.ossl_typ.DSA* d2i_DSAparams(libressl.openssl.ossl_typ.DSA** a, const (ubyte)** pp, core.stdc.config.c_long length_);
+int i2d_DSAparams(const (libressl.openssl.ossl_typ.DSA)* a, ubyte** pp);
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM DSAparams_it;
 
 /* Deprecated version */
 version (OPENSSL_NO_DEPRECATED) {
 } else {
 	private alias DSA_generate_parameters_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
-	libressl_d.openssl.ossl_typ.DSA* DSA_generate_parameters(int bits, ubyte* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, .DSA_generate_parameters_callback callback, void* cb_arg);
+	libressl.openssl.ossl_typ.DSA* DSA_generate_parameters(int bits, ubyte* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, .DSA_generate_parameters_callback callback, void* cb_arg);
 }
 
 /* New version */
-int DSA_generate_parameters_ex(libressl_d.openssl.ossl_typ.DSA* dsa, int bits, const (ubyte)* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, libressl_d.openssl.ossl_typ.BN_GENCB* cb);
+int DSA_generate_parameters_ex(libressl.openssl.ossl_typ.DSA* dsa, int bits, const (ubyte)* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, libressl.openssl.ossl_typ.BN_GENCB* cb);
 
-int DSA_generate_key(libressl_d.openssl.ossl_typ.DSA* a);
+int DSA_generate_key(libressl.openssl.ossl_typ.DSA* a);
 
 version (OPENSSL_NO_BIO) {
 } else {
-	int DSAparams_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x);
-	int DSA_print(libressl_d.openssl.ossl_typ.BIO* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
+	int DSAparams_print(libressl.openssl.ossl_typ.BIO* bp, const (libressl.openssl.ossl_typ.DSA)* x);
+	int DSA_print(libressl.openssl.ossl_typ.BIO* bp, const (libressl.openssl.ossl_typ.DSA)* x, int off);
 }
 
-int DSAparams_print_fp(libressl_d.compat.stdio.FILE* fp, const (libressl_d.openssl.ossl_typ.DSA)* x);
-int DSA_print_fp(libressl_d.compat.stdio.FILE* bp, const (libressl_d.openssl.ossl_typ.DSA)* x, int off);
+int DSAparams_print_fp(libressl.compat.stdio.FILE* fp, const (libressl.openssl.ossl_typ.DSA)* x);
+int DSA_print_fp(libressl.compat.stdio.FILE* bp, const (libressl.openssl.ossl_typ.DSA)* x, int off);
 
 /**
  * Primality test according to FIPS PUB 186-4, Appendix C.3. Set the number
@@ -202,11 +202,11 @@ version (OPENSSL_NO_DEPRECATED) {
 	private alias DSA_is_prime_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
 
 	pragma(inline, true)
-	int DSA_is_prime(const (libressl_d.openssl.ossl_typ.BIGNUM)* n, .DSA_is_prime_callback callback, void* cb_arg)
+	int DSA_is_prime(const (libressl.openssl.ossl_typ.BIGNUM)* n, .DSA_is_prime_callback callback, void* cb_arg)
 
 		do
 		{
-			return libressl_d.openssl.bn.BN_is_prime(n, .DSS_prime_checks, callback, null, cb_arg);
+			return libressl.openssl.bn.BN_is_prime(n, .DSS_prime_checks, callback, null, cb_arg);
 		}
 }
 
@@ -216,46 +216,46 @@ version (OPENSSL_NO_DH) {
 	 * Convert DSA structure (key or just parameters) into DH structure
 	 * (be careful to avoid small subgroup attacks when using this!)
 	 */
-	libressl_d.openssl.ossl_typ.DH* DSA_dup_DH(const (libressl_d.openssl.ossl_typ.DSA)* r);
+	libressl.openssl.ossl_typ.DH* DSA_dup_DH(const (libressl.openssl.ossl_typ.DSA)* r);
 }
 
-void DSA_get0_pqg(const (libressl_d.openssl.ossl_typ.DSA)* d, const (libressl_d.openssl.ossl_typ.BIGNUM)** p, const (libressl_d.openssl.ossl_typ.BIGNUM)** q, const (libressl_d.openssl.ossl_typ.BIGNUM)** g);
-int DSA_set0_pqg(libressl_d.openssl.ossl_typ.DSA* d, libressl_d.openssl.ossl_typ.BIGNUM* p, libressl_d.openssl.ossl_typ.BIGNUM* q, libressl_d.openssl.ossl_typ.BIGNUM* g);
-void DSA_get0_key(const (libressl_d.openssl.ossl_typ.DSA)* d, const (libressl_d.openssl.ossl_typ.BIGNUM)** pub_key, const (libressl_d.openssl.ossl_typ.BIGNUM)** priv_key);
-int DSA_set0_key(libressl_d.openssl.ossl_typ.DSA* d, libressl_d.openssl.ossl_typ.BIGNUM* pub_key, libressl_d.openssl.ossl_typ.BIGNUM* priv_key);
-const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_p(const (libressl_d.openssl.ossl_typ.DSA)* d);
-const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_q(const (libressl_d.openssl.ossl_typ.DSA)* d);
-const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_g(const (libressl_d.openssl.ossl_typ.DSA)* d);
-const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_pub_key(const (libressl_d.openssl.ossl_typ.DSA)* d);
-const (libressl_d.openssl.ossl_typ.BIGNUM)* DSA_get0_priv_key(const (libressl_d.openssl.ossl_typ.DSA)* d);
-void DSA_clear_flags(libressl_d.openssl.ossl_typ.DSA* d, int flags);
-int DSA_test_flags(const (libressl_d.openssl.ossl_typ.DSA)* d, int flags);
-void DSA_set_flags(libressl_d.openssl.ossl_typ.DSA* d, int flags);
-libressl_d.openssl.ossl_typ.ENGINE* DSA_get0_engine(libressl_d.openssl.ossl_typ.DSA* d);
+void DSA_get0_pqg(const (libressl.openssl.ossl_typ.DSA)* d, const (libressl.openssl.ossl_typ.BIGNUM)** p, const (libressl.openssl.ossl_typ.BIGNUM)** q, const (libressl.openssl.ossl_typ.BIGNUM)** g);
+int DSA_set0_pqg(libressl.openssl.ossl_typ.DSA* d, libressl.openssl.ossl_typ.BIGNUM* p, libressl.openssl.ossl_typ.BIGNUM* q, libressl.openssl.ossl_typ.BIGNUM* g);
+void DSA_get0_key(const (libressl.openssl.ossl_typ.DSA)* d, const (libressl.openssl.ossl_typ.BIGNUM)** pub_key, const (libressl.openssl.ossl_typ.BIGNUM)** priv_key);
+int DSA_set0_key(libressl.openssl.ossl_typ.DSA* d, libressl.openssl.ossl_typ.BIGNUM* pub_key, libressl.openssl.ossl_typ.BIGNUM* priv_key);
+const (libressl.openssl.ossl_typ.BIGNUM)* DSA_get0_p(const (libressl.openssl.ossl_typ.DSA)* d);
+const (libressl.openssl.ossl_typ.BIGNUM)* DSA_get0_q(const (libressl.openssl.ossl_typ.DSA)* d);
+const (libressl.openssl.ossl_typ.BIGNUM)* DSA_get0_g(const (libressl.openssl.ossl_typ.DSA)* d);
+const (libressl.openssl.ossl_typ.BIGNUM)* DSA_get0_pub_key(const (libressl.openssl.ossl_typ.DSA)* d);
+const (libressl.openssl.ossl_typ.BIGNUM)* DSA_get0_priv_key(const (libressl.openssl.ossl_typ.DSA)* d);
+void DSA_clear_flags(libressl.openssl.ossl_typ.DSA* d, int flags);
+int DSA_test_flags(const (libressl.openssl.ossl_typ.DSA)* d, int flags);
+void DSA_set_flags(libressl.openssl.ossl_typ.DSA* d, int flags);
+libressl.openssl.ossl_typ.ENGINE* DSA_get0_engine(libressl.openssl.ossl_typ.DSA* d);
 
-libressl_d.openssl.ossl_typ.DSA_METHOD* DSA_meth_new(const (char)* name, int flags);
-void DSA_meth_free(libressl_d.openssl.ossl_typ.DSA_METHOD* meth);
-libressl_d.openssl.ossl_typ.DSA_METHOD* DSA_meth_dup(const (libressl_d.openssl.ossl_typ.DSA_METHOD)* meth);
-const (char)* DSA_meth_get0_name(const (libressl_d.openssl.ossl_typ.DSA_METHOD)* meth);
-int DSA_meth_set1_name(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, const (char)* name);
+libressl.openssl.ossl_typ.DSA_METHOD* DSA_meth_new(const (char)* name, int flags);
+void DSA_meth_free(libressl.openssl.ossl_typ.DSA_METHOD* meth);
+libressl.openssl.ossl_typ.DSA_METHOD* DSA_meth_dup(const (libressl.openssl.ossl_typ.DSA_METHOD)* meth);
+const (char)* DSA_meth_get0_name(const (libressl.openssl.ossl_typ.DSA_METHOD)* meth);
+int DSA_meth_set1_name(libressl.openssl.ossl_typ.DSA_METHOD* meth, const (char)* name);
 
-private alias DSA_meth_set_sign_func = /* Temporary type */ extern (C) nothrow @nogc DSA_SIG* function(const (ubyte)*, int, libressl_d.openssl.ossl_typ.DSA*);
-int DSA_meth_set_sign(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, .DSA_meth_set_sign_func sign);
+private alias DSA_meth_set_sign_func = /* Temporary type */ extern (C) nothrow @nogc DSA_SIG* function(const (ubyte)*, int, libressl.openssl.ossl_typ.DSA*);
+int DSA_meth_set_sign(libressl.openssl.ossl_typ.DSA_METHOD* meth, .DSA_meth_set_sign_func sign);
 
-private alias DSA_meth_set_finish_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.DSA*);
-int DSA_meth_set_finish(libressl_d.openssl.ossl_typ.DSA_METHOD* meth, .DSA_meth_set_finish_func finish);
+private alias DSA_meth_set_finish_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.DSA*);
+int DSA_meth_set_finish(libressl.openssl.ossl_typ.DSA_METHOD* meth, .DSA_meth_set_finish_func finish);
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_dsa_paramgen_bits(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int nbits)
+int EVP_PKEY_CTX_set_dsa_paramgen_bits(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int nbits)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl_d.openssl.evp.EVP_PKEY_DSA, libressl_d.openssl.evp.EVP_PKEY_OP_PARAMGEN, .EVP_PKEY_CTRL_DSA_PARAMGEN_BITS, nbits, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(ctx, libressl.openssl.evp.EVP_PKEY_DSA, libressl.openssl.evp.EVP_PKEY_OP_PARAMGEN, .EVP_PKEY_CTRL_DSA_PARAMGEN_BITS, nbits, null);
 	}
 
-enum EVP_PKEY_CTRL_DSA_PARAMGEN_BITS = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
-enum EVP_PKEY_CTRL_DSA_PARAMGEN_Q_BITS = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
-enum EVP_PKEY_CTRL_DSA_PARAMGEN_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
+enum EVP_PKEY_CTRL_DSA_PARAMGEN_BITS = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 1;
+enum EVP_PKEY_CTRL_DSA_PARAMGEN_Q_BITS = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 2;
+enum EVP_PKEY_CTRL_DSA_PARAMGEN_MD = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
 
 void ERR_load_DSA_strings();
 

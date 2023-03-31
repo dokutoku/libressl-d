@@ -114,11 +114,11 @@
  * Copyright (C) 2006, Network Resonance, Inc.
  * Copyright (C) 2011, RTFM, Inc.
  */
-module libressl_d.openssl.srtp;
+module libressl.openssl.srtp;
 
 
-private static import libressl_d.openssl.ossl_typ;
-private static import libressl_d.openssl.ssl;
+private static import libressl.openssl.ossl_typ;
+private static import libressl.openssl.ssl;
 
 extern (C):
 nothrow @nogc:
@@ -138,8 +138,8 @@ enum SRTP_AEAD_AES_128_GCM = 0x0007;
 ///Ditto
 enum SRTP_AEAD_AES_256_GCM = 0x0008;
 
-int SSL_CTX_set_tlsext_use_srtp(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (char)* profiles);
-int SSL_set_tlsext_use_srtp(libressl_d.openssl.ossl_typ.SSL* ctx, const (char)* profiles);
+int SSL_CTX_set_tlsext_use_srtp(libressl.openssl.ossl_typ.SSL_CTX* ctx, const (char)* profiles);
+int SSL_set_tlsext_use_srtp(libressl.openssl.ossl_typ.SSL* ctx, const (char)* profiles);
 
-libressl_d.openssl.ssl.stack_st_SRTP_PROTECTION_PROFILE* SSL_get_srtp_profiles(libressl_d.openssl.ossl_typ.SSL* ssl);
-libressl_d.openssl.ssl.SRTP_PROTECTION_PROFILE* SSL_get_selected_srtp_profile(libressl_d.openssl.ossl_typ.SSL* s);
+libressl.openssl.ssl.stack_st_SRTP_PROTECTION_PROFILE* SSL_get_srtp_profiles(libressl.openssl.ossl_typ.SSL* ssl);
+libressl.openssl.ssl.SRTP_PROTECTION_PROFILE* SSL_get_selected_srtp_profile(libressl.openssl.ossl_typ.SSL* s);

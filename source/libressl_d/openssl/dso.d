@@ -55,12 +55,12 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.dso;
+module libressl.openssl.dso;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.crypto;
+private static import libressl.openssl.ossl_typ;
+public import libressl.openssl.crypto;
 
 extern (C):
 nothrow @nogc:
@@ -222,7 +222,7 @@ struct dso_st
 	 * method control its own destiny. "Handles" and such go in
 	 * a STACK.
 	 */
-	libressl_d.openssl.crypto.stack_st_void* meth_data;
+	libressl.openssl.crypto.stack_st_void* meth_data;
 	int references;
 	int flags;
 
@@ -230,7 +230,7 @@ struct dso_st
 	 * For use by applications etc ... use this for your bits'n'pieces,
 	 * don't touch meth_data!
 	 */
-	libressl_d.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
+	libressl.openssl.ossl_typ.CRYPTO_EX_DATA ex_data;
 
 	/**
 	 * If this callback function pointer is set to non-null, then it will

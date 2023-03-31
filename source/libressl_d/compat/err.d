@@ -2,7 +2,7 @@
  * Public domain
  * err.h compatibility shim
  */
-module libressl_d.compat.err;
+module libressl.compat.err;
 
 
 
@@ -16,9 +16,9 @@ public import core.sys.linux.err;
 public import core.sys.netbsd.err;
 public import core.sys.openbsd.err;
 public import core.sys.solaris.err;
-public import libressl_d.compat.stdio;
-public import libressl_d.compat.stdlib;
-public import libressl_d.compat.string;
+public import libressl.compat.stdio;
+public import libressl.compat.stdlib;
+public import libressl.compat.string;
 
 extern (C):
 
@@ -38,13 +38,13 @@ version (Posix) {
 				core.stdc.stdarg.va_start(ap, fmt);
 
 				if (fmt != null) {
-					libressl_d.compat.stdio.vfprintf(libressl_d.compat.stdio.stderr, fmt, ap);
-					libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, ": ");
+					libressl.compat.stdio.vfprintf(libressl.compat.stdio.stderr, fmt, ap);
+					libressl.compat.stdio.fprintf(libressl.compat.stdio.stderr, ": ");
 				}
 
 				core.stdc.stdarg.va_end(ap);
-				libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, "%s\n", libressl_d.compat.string.strerror(sverrno));
-				libressl_d.compat.stdlib.exit(eval);
+				libressl.compat.stdio.fprintf(libressl.compat.stdio.stderr, "%s\n", libressl.compat.string.strerror(sverrno));
+				libressl.compat.stdlib.exit(eval);
 			}
 
 		pragma(inline, true)
@@ -58,12 +58,12 @@ version (Posix) {
 				core.stdc.stdarg.va_start(ap, fmt);
 
 				if (fmt != null) {
-					libressl_d.compat.stdio.vfprintf(libressl_d.compat.stdio.stderr, fmt, ap);
+					libressl.compat.stdio.vfprintf(libressl.compat.stdio.stderr, fmt, ap);
 				}
 
 				core.stdc.stdarg.va_end(ap);
-				libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, "\n");
-				libressl_d.compat.stdlib.exit(eval);
+				libressl.compat.stdio.fprintf(libressl.compat.stdio.stderr, "\n");
+				libressl.compat.stdlib.exit(eval);
 			}
 
 		pragma(inline, true)
@@ -78,12 +78,12 @@ version (Posix) {
 				core.stdc.stdarg.va_start(ap, fmt);
 
 				if (fmt != null) {
-					libressl_d.compat.stdio.vfprintf(libressl_d.compat.stdio.stderr, fmt, ap);
-					libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, ": ");
+					libressl.compat.stdio.vfprintf(libressl.compat.stdio.stderr, fmt, ap);
+					libressl.compat.stdio.fprintf(libressl.compat.stdio.stderr, ": ");
 				}
 
 				core.stdc.stdarg.va_end(ap);
-				libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, "%s\n", libressl_d.compat.string.strerror(sverrno));
+				libressl.compat.stdio.fprintf(libressl.compat.stdio.stderr, "%s\n", libressl.compat.string.strerror(sverrno));
 			}
 
 		pragma(inline, true)
@@ -93,10 +93,10 @@ version (Posix) {
 			do
 			{
 				if (fmt != null) {
-					libressl_d.compat.stdio.vfprintf(libressl_d.compat.stdio.stderr, fmt, args);
+					libressl.compat.stdio.vfprintf(libressl.compat.stdio.stderr, fmt, args);
 				}
 
-				libressl_d.compat.stdio.fprintf(libressl_d.compat.stdio.stderr, "\n");
+				libressl.compat.stdio.fprintf(libressl.compat.stdio.stderr, "\n");
 			}
 
 		pragma(inline, true)

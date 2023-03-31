@@ -5,7 +5,7 @@
  * Rights for redistribution and usage in source and binary
  * forms are granted according to the OpenSSL license.
  */
-module libressl_d.openssl.modes;
+module libressl.openssl.modes;
 
 
 public import core.stdc.stddef;

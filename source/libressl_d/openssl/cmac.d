@@ -50,11 +50,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
  */
-module libressl_d.openssl.cmac;
+module libressl.openssl.cmac;
 
 
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.evp;
+private static import libressl.openssl.ossl_typ;
+public import libressl.openssl.evp;
 
 extern (C):
 nothrow @nogc:
@@ -66,10 +66,10 @@ alias CMAC_CTX = .CMAC_CTX_st;
 .CMAC_CTX* CMAC_CTX_new();
 void CMAC_CTX_cleanup(.CMAC_CTX* ctx);
 void CMAC_CTX_free(.CMAC_CTX* ctx);
-libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* CMAC_CTX_get0_cipher_ctx(.CMAC_CTX* ctx);
+libressl.openssl.ossl_typ.EVP_CIPHER_CTX* CMAC_CTX_get0_cipher_ctx(.CMAC_CTX* ctx);
 int CMAC_CTX_copy(.CMAC_CTX* out_, const (.CMAC_CTX)* in_);
 
-int CMAC_Init(.CMAC_CTX* ctx, const (void)* key, size_t keylen, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, libressl_d.openssl.ossl_typ.ENGINE* impl);
+int CMAC_Init(.CMAC_CTX* ctx, const (void)* key, size_t keylen, const (libressl.openssl.ossl_typ.EVP_CIPHER)* cipher, libressl.openssl.ossl_typ.ENGINE* impl);
 int CMAC_Update(.CMAC_CTX* ctx, const (void)* data, size_t dlen);
 int CMAC_Final(.CMAC_CTX* ctx, ubyte* out_, size_t* poutlen);
 int CMAC_resume(.CMAC_CTX* ctx);

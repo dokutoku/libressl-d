@@ -55,18 +55,18 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.ui;
+module libressl.openssl.ui;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.stack;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.safestack;
+private static import libressl.openssl.stack;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ossl_typ;
+public import libressl.openssl.safestack;
 
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	public import libressl_d.openssl.crypto;
+	public import libressl.openssl.crypto;
 }
 
 extern (C):
@@ -84,9 +84,9 @@ nothrow @nogc:
  */
 
 /* Creators and destructor.   */
-libressl_d.openssl.ossl_typ.UI* UI_new();
-libressl_d.openssl.ossl_typ.UI* UI_new_method(const (libressl_d.openssl.ossl_typ.UI_METHOD)* method);
-void UI_free(libressl_d.openssl.ossl_typ.UI* ui);
+libressl.openssl.ossl_typ.UI* UI_new();
+libressl.openssl.ossl_typ.UI* UI_new_method(const (libressl.openssl.ossl_typ.UI_METHOD)* method);
+void UI_free(libressl.openssl.ossl_typ.UI* ui);
 
 /*
  * The following functions are used to add strings to be printed and prompt
@@ -132,16 +132,16 @@ void UI_free(libressl_d.openssl.ossl_typ.UI* ui);
  * On success, the functions all return an index of the added information.
  * That index is useful when retrieving results with UI_get0_result().
  */
-int UI_add_input_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize);
-int UI_dup_input_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize);
-int UI_add_verify_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize, const (char)* test_buf);
-int UI_dup_verify_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize, const (char)* test_buf);
-int UI_add_input_boolean(libressl_d.openssl.ossl_typ.UI* ui, const (char)* prompt, const (char)* action_desc, const (char)* ok_chars, const (char)* cancel_chars, int flags, char* result_buf);
-int UI_dup_input_boolean(libressl_d.openssl.ossl_typ.UI* ui, const (char)* prompt, const (char)* action_desc, const (char)* ok_chars, const (char)* cancel_chars, int flags, char* result_buf);
-int UI_add_info_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* text);
-int UI_dup_info_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* text);
-int UI_add_error_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* text);
-int UI_dup_error_string(libressl_d.openssl.ossl_typ.UI* ui, const (char)* text);
+int UI_add_input_string(libressl.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize);
+int UI_dup_input_string(libressl.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize);
+int UI_add_verify_string(libressl.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize, const (char)* test_buf);
+int UI_dup_verify_string(libressl.openssl.ossl_typ.UI* ui, const (char)* prompt, int flags, char* result_buf, int minsize, int maxsize, const (char)* test_buf);
+int UI_add_input_boolean(libressl.openssl.ossl_typ.UI* ui, const (char)* prompt, const (char)* action_desc, const (char)* ok_chars, const (char)* cancel_chars, int flags, char* result_buf);
+int UI_dup_input_boolean(libressl.openssl.ossl_typ.UI* ui, const (char)* prompt, const (char)* action_desc, const (char)* ok_chars, const (char)* cancel_chars, int flags, char* result_buf);
+int UI_add_info_string(libressl.openssl.ossl_typ.UI* ui, const (char)* text);
+int UI_dup_info_string(libressl.openssl.ossl_typ.UI* ui, const (char)* text);
+int UI_add_error_string(libressl.openssl.ossl_typ.UI* ui, const (char)* text);
+int UI_dup_error_string(libressl.openssl.ossl_typ.UI* ui, const (char)* text);
 
 /* These are the possible flags.  They can be or'ed together. */
 /**
@@ -187,7 +187,7 @@ enum UI_INPUT_FLAG_USER_BASE = 16;
  *
  *	"Enter pass phrase for foo.key:"
  */
-char* UI_construct_prompt(libressl_d.openssl.ossl_typ.UI* ui_method, const (char)* object_desc, const (char)* object_name);
+char* UI_construct_prompt(libressl.openssl.ossl_typ.UI* ui_method, const (char)* object_desc, const (char)* object_name);
 
 /**
  * The following function is used to store a pointer to user-specific data.
@@ -200,29 +200,29 @@ char* UI_construct_prompt(libressl_d.openssl.ossl_typ.UI* ui_method, const (char
  * Note that the UI_OpenSSL() method completely ignores the user data.
  * Other methods may not, however.
  */
-void* UI_add_user_data(libressl_d.openssl.ossl_typ.UI* ui, void* user_data);
+void* UI_add_user_data(libressl.openssl.ossl_typ.UI* ui, void* user_data);
 
 /**
  * We need a user data retrieving function as well.
  */
-void* UI_get0_user_data(libressl_d.openssl.ossl_typ.UI* ui);
+void* UI_get0_user_data(libressl.openssl.ossl_typ.UI* ui);
 
 /**
  * Return the result associated with a prompt given with the index i.
  */
-const (char)* UI_get0_result(libressl_d.openssl.ossl_typ.UI* ui, int i);
+const (char)* UI_get0_result(libressl.openssl.ossl_typ.UI* ui, int i);
 
 /**
  * When all strings have been added, process the whole thing.
  */
-int UI_process(libressl_d.openssl.ossl_typ.UI* ui);
+int UI_process(libressl.openssl.ossl_typ.UI* ui);
 
 /**
  * Give a user interface parametrised control commands.  This can be used to
  * send down an integer, a data pointer or a function pointer, as well as
  * be used to get information from a UI.
  */
-int UI_ctrl(libressl_d.openssl.ossl_typ.UI* ui, int cmd, core.stdc.config.c_long i, void* p, .UI_ctrl_func f);
+int UI_ctrl(libressl.openssl.ossl_typ.UI* ui, int cmd, core.stdc.config.c_long i, void* p, .UI_ctrl_func f);
 private alias UI_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc void function();
 
 /* The commands */
@@ -242,7 +242,7 @@ enum UI_CTRL_IS_REDOABLE = 2;
 
 /* Some methods may use extra data */
 pragma(inline, true)
-int UI_set_app_data(libressl_d.openssl.ossl_typ.UI* s, void* arg)
+int UI_set_app_data(libressl.openssl.ossl_typ.UI* s, void* arg)
 
 	do
 	{
@@ -250,29 +250,29 @@ int UI_set_app_data(libressl_d.openssl.ossl_typ.UI* s, void* arg)
 	}
 
 pragma(inline, true)
-void* UI_get_app_data(libressl_d.openssl.ossl_typ.UI* s)
+void* UI_get_app_data(libressl.openssl.ossl_typ.UI* s)
 
 	do
 	{
 		return .UI_get_ex_data(s, 0);
 	}
 
-int UI_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
-int UI_set_ex_data(libressl_d.openssl.ossl_typ.UI* r, int idx, void* arg);
-void* UI_get_ex_data(libressl_d.openssl.ossl_typ.UI* r, int idx);
+int UI_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl.openssl.ossl_typ.CRYPTO_EX_free free_func);
+int UI_set_ex_data(libressl.openssl.ossl_typ.UI* r, int idx, void* arg);
+void* UI_get_ex_data(libressl.openssl.ossl_typ.UI* r, int idx);
 
 /* Use specific methods instead of the built-in one */
-void UI_set_default_method(const (libressl_d.openssl.ossl_typ.UI_METHOD)* meth);
-const (libressl_d.openssl.ossl_typ.UI_METHOD)* UI_get_default_method();
-const (libressl_d.openssl.ossl_typ.UI_METHOD)* UI_get_method(libressl_d.openssl.ossl_typ.UI* ui);
-const (libressl_d.openssl.ossl_typ.UI_METHOD)* UI_set_method(libressl_d.openssl.ossl_typ.UI* ui, const (libressl_d.openssl.ossl_typ.UI_METHOD)* meth);
+void UI_set_default_method(const (libressl.openssl.ossl_typ.UI_METHOD)* meth);
+const (libressl.openssl.ossl_typ.UI_METHOD)* UI_get_default_method();
+const (libressl.openssl.ossl_typ.UI_METHOD)* UI_get_method(libressl.openssl.ossl_typ.UI* ui);
+const (libressl.openssl.ossl_typ.UI_METHOD)* UI_set_method(libressl.openssl.ossl_typ.UI* ui, const (libressl.openssl.ossl_typ.UI_METHOD)* meth);
 
 /**
  * The method with all the built-in thingies
  */
-libressl_d.openssl.ossl_typ.UI_METHOD* UI_OpenSSL();
+libressl.openssl.ossl_typ.UI_METHOD* UI_OpenSSL();
 
-const (libressl_d.openssl.ossl_typ.UI_METHOD)* UI_null();
+const (libressl.openssl.ossl_typ.UI_METHOD)* UI_null();
 
 /*
  * ---------- For method writers ----------
@@ -327,7 +327,7 @@ alias UI_STRING = .ui_string_st;
 //DECLARE_STACK_OF(UI_STRING)
 struct stack_st_UI_STRING
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /**
@@ -376,33 +376,33 @@ enum
 }
 
 /* Create and manipulate methods */
-libressl_d.openssl.ossl_typ.UI_METHOD* UI_create_method(const (char)* name);
-void UI_destroy_method(libressl_d.openssl.ossl_typ.UI_METHOD* ui_method);
+libressl.openssl.ossl_typ.UI_METHOD* UI_create_method(const (char)* name);
+void UI_destroy_method(libressl.openssl.ossl_typ.UI_METHOD* ui_method);
 
-private alias UI_method_set_opener_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.UI* ui);
-int UI_method_set_opener(libressl_d.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_opener_func opener);
+private alias UI_method_set_opener_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.UI* ui);
+int UI_method_set_opener(libressl.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_opener_func opener);
 
-private alias UI_method_set_writer_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.UI* ui, .UI_STRING* uis);
-int UI_method_set_writer(libressl_d.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_writer_func writer);
+private alias UI_method_set_writer_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.UI* ui, .UI_STRING* uis);
+int UI_method_set_writer(libressl.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_writer_func writer);
 
-private alias UI_method_set_flusher_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.UI* ui);
-int UI_method_set_flusher(libressl_d.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_flusher_func flusher);
+private alias UI_method_set_flusher_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.UI* ui);
+int UI_method_set_flusher(libressl.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_flusher_func flusher);
 
-private alias UI_method_set_reader_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.UI* ui, .UI_STRING* uis);
-int UI_method_set_reader(libressl_d.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_reader_func reader);
+private alias UI_method_set_reader_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.UI* ui, .UI_STRING* uis);
+int UI_method_set_reader(libressl.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_reader_func reader);
 
-private alias UI_method_set_closer_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.UI* ui);
-int UI_method_set_closer(libressl_d.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_closer_func closer);
+private alias UI_method_set_closer_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.UI* ui);
+int UI_method_set_closer(libressl.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_closer_func closer);
 
-private alias UI_method_set_prompt_constructor_func = /* Temporary type */ extern (C) nothrow @nogc char* function(libressl_d.openssl.ossl_typ.UI* ui, const (char)* object_desc, const (char)* object_name);
-int UI_method_set_prompt_constructor(libressl_d.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_prompt_constructor_func prompt_constructor);
+private alias UI_method_set_prompt_constructor_func = /* Temporary type */ extern (C) nothrow @nogc char* function(libressl.openssl.ossl_typ.UI* ui, const (char)* object_desc, const (char)* object_name);
+int UI_method_set_prompt_constructor(libressl.openssl.ossl_typ.UI_METHOD* method, .UI_method_set_prompt_constructor_func prompt_constructor);
 
-//int (*UI_method_get_opener(const (libressl_d.openssl.ossl_typ.UI_METHOD)* method))(libressl_d.openssl.ossl_typ.UI*);
-//int (*UI_method_get_writer(const (libressl_d.openssl.ossl_typ.UI_METHOD)* method))(libressl_d.openssl.ossl_typ.UI*, .UI_STRING*);
-//int (*UI_method_get_flusher(const (libressl_d.openssl.ossl_typ.UI_METHOD)* method))(libressl_d.openssl.ossl_typ.UI*);
-//int (*UI_method_get_reader(const (libressl_d.openssl.ossl_typ.UI_METHOD)* method))(libressl_d.openssl.ossl_typ.UI*, .UI_STRING*);
-//int (*UI_method_get_closer(const (libressl_d.openssl.ossl_typ.UI_METHOD)* method))(libressl_d.openssl.ossl_typ.UI*);
-//char* (*UI_method_get_prompt_constructor(const (libressl_d.openssl.ossl_typ.UI_METHOD)* method))(libressl_d.openssl.ossl_typ.UI*, const (char)*, const (char)*);
+//int (*UI_method_get_opener(const (libressl.openssl.ossl_typ.UI_METHOD)* method))(libressl.openssl.ossl_typ.UI*);
+//int (*UI_method_get_writer(const (libressl.openssl.ossl_typ.UI_METHOD)* method))(libressl.openssl.ossl_typ.UI*, .UI_STRING*);
+//int (*UI_method_get_flusher(const (libressl.openssl.ossl_typ.UI_METHOD)* method))(libressl.openssl.ossl_typ.UI*);
+//int (*UI_method_get_reader(const (libressl.openssl.ossl_typ.UI_METHOD)* method))(libressl.openssl.ossl_typ.UI*, .UI_STRING*);
+//int (*UI_method_get_closer(const (libressl.openssl.ossl_typ.UI_METHOD)* method))(libressl.openssl.ossl_typ.UI*);
+//char* (*UI_method_get_prompt_constructor(const (libressl.openssl.ossl_typ.UI_METHOD)* method))(libressl.openssl.ossl_typ.UI*, const (char)*, const (char)*);
 
 /*
  * The following functions are helpers for method writers to access relevant
@@ -452,7 +452,7 @@ int UI_get_result_maxsize(.UI_STRING* uis);
 /**
  * Set the result of a UI_STRING.
  */
-int UI_set_result(libressl_d.openssl.ossl_typ.UI* ui, .UI_STRING* uis, const (char)* result);
+int UI_set_result(libressl.openssl.ossl_typ.UI* ui, .UI_STRING* uis, const (char)* result);
 
 /* A couple of popular utility functions */
 int UI_UTIL_read_pw_string(char* buf, int length_, const (char)* prompt, int verify);

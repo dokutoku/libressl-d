@@ -57,13 +57,13 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.ecdsa;
+module libressl.openssl.ecdsa;
 
 
 private static import core.stdc.config;
-public import libressl_d.openssl.ec;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ossl_typ;
+public import libressl.openssl.ec;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ossl_typ;
 
 version (OPENSSL_NO_ECDSA) {
 	static assert(false, "ECDSA is disabled.");
@@ -71,7 +71,7 @@ version (OPENSSL_NO_ECDSA) {
 
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	public import libressl_d.openssl.bn;
+	public import libressl.openssl.bn;
 }
 
 extern (C):
@@ -83,9 +83,9 @@ alias ECDSA_SIG = .ECDSA_SIG_st;
 struct ecdsa_method
 {
 	const (char)* name;
-	.ECDSA_SIG* function(const (ubyte)* dgst, int dgst_len, const (libressl_d.openssl.ossl_typ.BIGNUM)* inv, const (libressl_d.openssl.ossl_typ.BIGNUM)* rp, libressl_d.openssl.ec.EC_KEY* eckey) ecdsa_do_sign;
-	int function(libressl_d.openssl.ec.EC_KEY* eckey, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BIGNUM** kinv, libressl_d.openssl.ossl_typ.BIGNUM** r) ecdsa_sign_setup;
-	int function(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl_d.openssl.ec.EC_KEY* eckey) ecdsa_do_verify;
+	.ECDSA_SIG* function(const (ubyte)* dgst, int dgst_len, const (libressl.openssl.ossl_typ.BIGNUM)* inv, const (libressl.openssl.ossl_typ.BIGNUM)* rp, libressl.openssl.ec.EC_KEY* eckey) ecdsa_do_sign;
+	int function(libressl.openssl.ec.EC_KEY* eckey, libressl.openssl.ossl_typ.BN_CTX* ctx, libressl.openssl.ossl_typ.BIGNUM** kinv, libressl.openssl.ossl_typ.BIGNUM** r) ecdsa_sign_setup;
+	int function(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl.openssl.ec.EC_KEY* eckey) ecdsa_do_verify;
 	int flags;
 	char* app_data;
 }
@@ -147,10 +147,10 @@ int i2d_ECDSA_SIG(const (.ECDSA_SIG)* sig, ubyte** pp);
  *      pr = pointer to BIGNUM pointer for r (may be null)
  *      ps = pointer to BIGNUM pointer for s (may be null)
  */
-void ECDSA_SIG_get0(const (.ECDSA_SIG)* sig, const (libressl_d.openssl.ossl_typ.BIGNUM)** pr, const (libressl_d.openssl.ossl_typ.BIGNUM)** ps);
+void ECDSA_SIG_get0(const (.ECDSA_SIG)* sig, const (libressl.openssl.ossl_typ.BIGNUM)** pr, const (libressl.openssl.ossl_typ.BIGNUM)** ps);
 
-const (libressl_d.openssl.ossl_typ.BIGNUM)* ECDSA_SIG_get0_r(const (.ECDSA_SIG)* sig);
-const (libressl_d.openssl.ossl_typ.BIGNUM)* ECDSA_SIG_get0_s(const (.ECDSA_SIG)* sig);
+const (libressl.openssl.ossl_typ.BIGNUM)* ECDSA_SIG_get0_r(const (.ECDSA_SIG)* sig);
+const (libressl.openssl.ossl_typ.BIGNUM)* ECDSA_SIG_get0_s(const (.ECDSA_SIG)* sig);
 
 /**
  * Setter for r and s fields of ECDSA_SIG
@@ -160,7 +160,7 @@ const (libressl_d.openssl.ossl_typ.BIGNUM)* ECDSA_SIG_get0_s(const (.ECDSA_SIG)*
  *      r = pointer to BIGNUM for r (may be null)
  *      s = pointer to BIGNUM for s (may be null)
  */
-int ECDSA_SIG_set0(.ECDSA_SIG* sig, libressl_d.openssl.ossl_typ.BIGNUM* r, libressl_d.openssl.ossl_typ.BIGNUM* s);
+int ECDSA_SIG_set0(.ECDSA_SIG* sig, libressl.openssl.ossl_typ.BIGNUM* r, libressl.openssl.ossl_typ.BIGNUM* s);
 
 /**
  * Computes the ECDSA signature of the given hash value using the supplied private key and returns the created signature.
@@ -172,7 +172,7 @@ int ECDSA_SIG_set0(.ECDSA_SIG* sig, libressl_d.openssl.ossl_typ.BIGNUM* r, libre
  *
  * Returns: pointer to a ECDSA_SIG structure or null if an error occurred
  */
-.ECDSA_SIG* ECDSA_do_sign(const (ubyte)* dgst, int dgst_len, libressl_d.openssl.ec.EC_KEY* eckey);
+.ECDSA_SIG* ECDSA_do_sign(const (ubyte)* dgst, int dgst_len, libressl.openssl.ec.EC_KEY* eckey);
 
 /**
  * Computes ECDSA signature of a given hash value using the supplied private key (note: sig must point to ECDSA_size(eckey) bytes of memory).
@@ -186,7 +186,7 @@ int ECDSA_SIG_set0(.ECDSA_SIG* sig, libressl_d.openssl.ossl_typ.BIGNUM* r, libre
  *
  * Returns: pointer to a ECDSA_SIG structure or null if an error occurred
  */
-.ECDSA_SIG* ECDSA_do_sign_ex(const (ubyte)* dgst, int dgstlen, const (libressl_d.openssl.ossl_typ.BIGNUM)* kinv, const (libressl_d.openssl.ossl_typ.BIGNUM)* rp, libressl_d.openssl.ec.EC_KEY* eckey);
+.ECDSA_SIG* ECDSA_do_sign_ex(const (ubyte)* dgst, int dgstlen, const (libressl.openssl.ossl_typ.BIGNUM)* kinv, const (libressl.openssl.ossl_typ.BIGNUM)* rp, libressl.openssl.ec.EC_KEY* eckey);
 
 /**
  * Verifies that the supplied signature is a valid ECDSA signature of the supplied hash value using the supplied public key.
@@ -199,9 +199,9 @@ int ECDSA_SIG_set0(.ECDSA_SIG* sig, libressl_d.openssl.ossl_typ.BIGNUM* r, libre
  *
  * Returns: 1 if the signature is valid, 0 if the signature is invalid and -1 on error
  */
-int ECDSA_do_verify(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl_d.openssl.ec.EC_KEY* eckey);
+int ECDSA_do_verify(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl.openssl.ec.EC_KEY* eckey);
 
-const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ECDSA_OpenSSL();
+const (libressl.openssl.ossl_typ.ECDSA_METHOD)* ECDSA_OpenSSL();
 
 /**
  * Sets the default ECDSA method
@@ -209,14 +209,14 @@ const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ECDSA_OpenSSL();
  * Params:
  *      meth = new default ECDSA_METHOD
  */
-void ECDSA_set_default_method(const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* meth);
+void ECDSA_set_default_method(const (libressl.openssl.ossl_typ.ECDSA_METHOD)* meth);
 
 /**
  * Returns the default ECDSA method
  *
  * Returns: pointer to ECDSA_METHOD structure containing the default method
  */
-const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ECDSA_get_default_method();
+const (libressl.openssl.ossl_typ.ECDSA_METHOD)* ECDSA_get_default_method();
 
 /**
  * Sets method to be used for the ECDSA operations
@@ -227,7 +227,7 @@ const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* ECDSA_get_default_method();
  *
  * Returns: 1 on success and 0 otherwise
  */
-int ECDSA_set_method(libressl_d.openssl.ec.EC_KEY* eckey, const (libressl_d.openssl.ossl_typ.ECDSA_METHOD)* meth);
+int ECDSA_set_method(libressl.openssl.ec.EC_KEY* eckey, const (libressl.openssl.ossl_typ.ECDSA_METHOD)* meth);
 
 /**
  * Returns the maximum length of the DER encoded signature
@@ -237,7 +237,7 @@ int ECDSA_set_method(libressl_d.openssl.ec.EC_KEY* eckey, const (libressl_d.open
  *
  * Returns: numbers of bytes required for the DER encoded signature
  */
-int ECDSA_size(const (libressl_d.openssl.ec.EC_KEY)* eckey);
+int ECDSA_size(const (libressl.openssl.ec.EC_KEY)* eckey);
 
 /**
  * Precompute parts of the signing operation
@@ -250,7 +250,7 @@ int ECDSA_size(const (libressl_d.openssl.ec.EC_KEY)* eckey);
  *
  * Returns: 1 on success and 0 otherwise
  */
-int ECDSA_sign_setup(libressl_d.openssl.ec.EC_KEY* eckey, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BIGNUM** kinv, libressl_d.openssl.ossl_typ.BIGNUM** rp);
+int ECDSA_sign_setup(libressl.openssl.ec.EC_KEY* eckey, libressl.openssl.ossl_typ.BN_CTX* ctx, libressl.openssl.ossl_typ.BIGNUM** kinv, libressl.openssl.ossl_typ.BIGNUM** rp);
 
 /**
  * Computes ECDSA signature of a given hash value using the supplied private key (note: sig must point to ECDSA_size(eckey) bytes of memory).
@@ -265,7 +265,7 @@ int ECDSA_sign_setup(libressl_d.openssl.ec.EC_KEY* eckey, libressl_d.openssl.oss
  *
  * Returns: 1 on success and 0 otherwise
  */
-int ECDSA_sign(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* siglen, libressl_d.openssl.ec.EC_KEY* eckey);
+int ECDSA_sign(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* siglen, libressl.openssl.ec.EC_KEY* eckey);
 
 /**
  * Computes ECDSA signature of a given hash value using the supplied private key (note: sig must point to ECDSA_size(eckey) bytes of memory).
@@ -282,7 +282,7 @@ int ECDSA_sign(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* sig
  *
  * Returns: 1 on success and 0 otherwise
  */
-int ECDSA_sign_ex(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* siglen, const (libressl_d.openssl.ossl_typ.BIGNUM)* kinv, const (libressl_d.openssl.ossl_typ.BIGNUM)* rp, libressl_d.openssl.ec.EC_KEY* eckey);
+int ECDSA_sign_ex(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* siglen, const (libressl.openssl.ossl_typ.BIGNUM)* kinv, const (libressl.openssl.ossl_typ.BIGNUM)* rp, libressl.openssl.ec.EC_KEY* eckey);
 
 /**
  * Verifies that the given signature is valid ECDSA signature of the supplied hash value using the specified public key.
@@ -297,32 +297,32 @@ int ECDSA_sign_ex(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* 
  *
  * Returns: 1 if the signature is valid, 0 if the signature is invalid and -1 on error
  */
-int ECDSA_verify(int type, const (ubyte)* dgst, int dgstlen, const (ubyte)* sig, int siglen, libressl_d.openssl.ec.EC_KEY* eckey);
+int ECDSA_verify(int type, const (ubyte)* dgst, int dgstlen, const (ubyte)* sig, int siglen, libressl.openssl.ec.EC_KEY* eckey);
 
 /* the standard ex_data functions */
-int ECDSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
-int ECDSA_set_ex_data(libressl_d.openssl.ec.EC_KEY* d, int idx, void* arg);
-void* ECDSA_get_ex_data(libressl_d.openssl.ec.EC_KEY* d, int idx);
+int ECDSA_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl.openssl.ossl_typ.CRYPTO_EX_free free_func);
+int ECDSA_set_ex_data(libressl.openssl.ec.EC_KEY* d, int idx, void* arg);
+void* ECDSA_get_ex_data(libressl.openssl.ec.EC_KEY* d, int idx);
 
 /* XXX should be in ec.h, but needs ECDSA_SIG */
 
-private alias EC_KEY_METHOD_set_sign_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, const (libressl_d.openssl.ossl_typ.BIGNUM)* kinv, const (libressl_d.openssl.ossl_typ.BIGNUM)* r, libressl_d.openssl.ec.EC_KEY* eckey);
-private alias EC_KEY_METHOD_set_sign_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ec.EC_KEY* eckey, libressl_d.openssl.ossl_typ.BN_CTX* ctx_in, libressl_d.openssl.ossl_typ.BIGNUM** kinvp, libressl_d.openssl.ossl_typ.BIGNUM** rp);
-private alias EC_KEY_METHOD_set_sign_func3 = /* Temporary type */ extern (C) nothrow @nogc .ECDSA_SIG* function(const (ubyte)* dgst, int dgst_len, const (libressl_d.openssl.ossl_typ.BIGNUM)* in_kinv, const (libressl_d.openssl.ossl_typ.BIGNUM)* in_r, libressl_d.openssl.ec.EC_KEY* eckey);
-void EC_KEY_METHOD_set_sign(libressl_d.openssl.ec.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_sign_func1 sign, .EC_KEY_METHOD_set_sign_func2 sign_setup, .EC_KEY_METHOD_set_sign_func3 sign_sig);
+private alias EC_KEY_METHOD_set_sign_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, const (libressl.openssl.ossl_typ.BIGNUM)* kinv, const (libressl.openssl.ossl_typ.BIGNUM)* r, libressl.openssl.ec.EC_KEY* eckey);
+private alias EC_KEY_METHOD_set_sign_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ec.EC_KEY* eckey, libressl.openssl.ossl_typ.BN_CTX* ctx_in, libressl.openssl.ossl_typ.BIGNUM** kinvp, libressl.openssl.ossl_typ.BIGNUM** rp);
+private alias EC_KEY_METHOD_set_sign_func3 = /* Temporary type */ extern (C) nothrow @nogc .ECDSA_SIG* function(const (ubyte)* dgst, int dgst_len, const (libressl.openssl.ossl_typ.BIGNUM)* in_kinv, const (libressl.openssl.ossl_typ.BIGNUM)* in_r, libressl.openssl.ec.EC_KEY* eckey);
+void EC_KEY_METHOD_set_sign(libressl.openssl.ec.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_sign_func1 sign, .EC_KEY_METHOD_set_sign_func2 sign_setup, .EC_KEY_METHOD_set_sign_func3 sign_sig);
 
-private alias EC_KEY_METHOD_set_verify_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbuf, int sig_len, libressl_d.openssl.ec.EC_KEY* eckey);
-private alias EC_KEY_METHOD_set_verify_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl_d.openssl.ec.EC_KEY* eckey);
-void EC_KEY_METHOD_set_verify(libressl_d.openssl.ec.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_verify_func1 verify, .EC_KEY_METHOD_set_verify_func2 verify_sig);
+private alias EC_KEY_METHOD_set_verify_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbuf, int sig_len, libressl.openssl.ec.EC_KEY* eckey);
+private alias EC_KEY_METHOD_set_verify_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl.openssl.ec.EC_KEY* eckey);
+void EC_KEY_METHOD_set_verify(libressl.openssl.ec.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_verify_func1 verify, .EC_KEY_METHOD_set_verify_func2 verify_sig);
 
-private alias EC_KEY_METHOD_get_sign_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, const (libressl_d.openssl.ossl_typ.BIGNUM)* kinv, const (libressl_d.openssl.ossl_typ.BIGNUM)* r, libressl_d.openssl.ec.EC_KEY* eckey);
-private alias EC_KEY_METHOD_get_sign_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ec.EC_KEY* eckey, libressl_d.openssl.ossl_typ.BN_CTX* ctx_in, libressl_d.openssl.ossl_typ.BIGNUM** kinvp, libressl_d.openssl.ossl_typ.BIGNUM** rp);
-private alias EC_KEY_METHOD_get_sign_func3 = /* Temporary type */ extern (C) nothrow @nogc .ECDSA_SIG* function(const (ubyte)* dgst, int dgst_len, const (libressl_d.openssl.ossl_typ.BIGNUM)* in_kinv, const (libressl_d.openssl.ossl_typ.BIGNUM)* in_r, libressl_d.openssl.ec.EC_KEY* eckey);
-void EC_KEY_METHOD_get_sign(const (libressl_d.openssl.ec.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_sign_func1* psign, .EC_KEY_METHOD_get_sign_func2* psign_setup, .EC_KEY_METHOD_get_sign_func3* psign_sig);
+private alias EC_KEY_METHOD_get_sign_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dlen, ubyte* sig, uint* siglen, const (libressl.openssl.ossl_typ.BIGNUM)* kinv, const (libressl.openssl.ossl_typ.BIGNUM)* r, libressl.openssl.ec.EC_KEY* eckey);
+private alias EC_KEY_METHOD_get_sign_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ec.EC_KEY* eckey, libressl.openssl.ossl_typ.BN_CTX* ctx_in, libressl.openssl.ossl_typ.BIGNUM** kinvp, libressl.openssl.ossl_typ.BIGNUM** rp);
+private alias EC_KEY_METHOD_get_sign_func3 = /* Temporary type */ extern (C) nothrow @nogc .ECDSA_SIG* function(const (ubyte)* dgst, int dgst_len, const (libressl.openssl.ossl_typ.BIGNUM)* in_kinv, const (libressl.openssl.ossl_typ.BIGNUM)* in_r, libressl.openssl.ec.EC_KEY* eckey);
+void EC_KEY_METHOD_get_sign(const (libressl.openssl.ec.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_sign_func1* psign, .EC_KEY_METHOD_get_sign_func2* psign_setup, .EC_KEY_METHOD_get_sign_func3* psign_sig);
 
-private alias EC_KEY_METHOD_get_verify_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbuf, int sig_len, libressl_d.openssl.ec.EC_KEY* eckey);
-private alias EC_KEY_METHOD_get_verify_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl_d.openssl.ec.EC_KEY* eckey);
-void EC_KEY_METHOD_get_verify(const (libressl_d.openssl.ec.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_verify_func1* pverify, .EC_KEY_METHOD_get_verify_func2* pverify_sig);
+private alias EC_KEY_METHOD_get_verify_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* dgst, int dgst_len, const (ubyte)* sigbuf, int sig_len, libressl.openssl.ec.EC_KEY* eckey);
+private alias EC_KEY_METHOD_get_verify_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(const (ubyte)* dgst, int dgst_len, const (.ECDSA_SIG)* sig, libressl.openssl.ec.EC_KEY* eckey);
+void EC_KEY_METHOD_get_verify(const (libressl.openssl.ec.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_verify_func1* pverify, .EC_KEY_METHOD_get_verify_func2* pverify_sig);
 
 void ERR_load_ECDSA_strings();
 

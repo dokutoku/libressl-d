@@ -2,7 +2,7 @@
  * Public domain
  * resolv.h compatibility shim
  */
-module libressl_d.compat.resolv;
+module libressl.compat.resolv;
 
 
 private static import core.stdcpp.xutility;

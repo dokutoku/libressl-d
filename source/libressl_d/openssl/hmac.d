@@ -55,13 +55,13 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.hmac;
+module libressl.openssl.hmac;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.evp;
-public import libressl_d.openssl.opensslconf;
+private static import libressl.openssl.ossl_typ;
+public import libressl.openssl.evp;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_HMAC) {
 	static assert(false, "HMAC is disabled.");
@@ -78,25 +78,25 @@ nothrow @nogc:
 alias HMAC_CTX = .hmac_ctx_st;
 
 pragma(inline, true)
-int HMAC_size(const (libressl_d.openssl.ossl_typ.HMAC_CTX)* e)
+int HMAC_size(const (libressl.openssl.ossl_typ.HMAC_CTX)* e)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_MD_size(.HMAC_CTX_get_md(e));
+		return libressl.openssl.evp.EVP_MD_size(.HMAC_CTX_get_md(e));
 	}
 
-libressl_d.openssl.ossl_typ.HMAC_CTX* HMAC_CTX_new();
-void HMAC_CTX_free(libressl_d.openssl.ossl_typ.HMAC_CTX* ctx);
-int HMAC_CTX_reset(libressl_d.openssl.ossl_typ.HMAC_CTX* ctx);
+libressl.openssl.ossl_typ.HMAC_CTX* HMAC_CTX_new();
+void HMAC_CTX_free(libressl.openssl.ossl_typ.HMAC_CTX* ctx);
+int HMAC_CTX_reset(libressl.openssl.ossl_typ.HMAC_CTX* ctx);
 
 deprecated
-int HMAC_Init(libressl_d.openssl.ossl_typ.HMAC_CTX* ctx, const (void)* key, int len, const (libressl_d.openssl.ossl_typ.EVP_MD)* md);
+int HMAC_Init(libressl.openssl.ossl_typ.HMAC_CTX* ctx, const (void)* key, int len, const (libressl.openssl.ossl_typ.EVP_MD)* md);
 
-int HMAC_Init_ex(libressl_d.openssl.ossl_typ.HMAC_CTX* ctx, const (void)* key, int len, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, libressl_d.openssl.ossl_typ.ENGINE* impl);
-int HMAC_Update(libressl_d.openssl.ossl_typ.HMAC_CTX* ctx, const (ubyte)* data, size_t len);
-int HMAC_Final(libressl_d.openssl.ossl_typ.HMAC_CTX* ctx, ubyte* md, uint* len);
-ubyte* HMAC(const (libressl_d.openssl.ossl_typ.EVP_MD)* evp_md, const (void)* key, int key_len, const (ubyte)* d, size_t n, ubyte* md, uint* md_len);
-int HMAC_CTX_copy(libressl_d.openssl.ossl_typ.HMAC_CTX* dctx, libressl_d.openssl.ossl_typ.HMAC_CTX* sctx);
+int HMAC_Init_ex(libressl.openssl.ossl_typ.HMAC_CTX* ctx, const (void)* key, int len, const (libressl.openssl.ossl_typ.EVP_MD)* md, libressl.openssl.ossl_typ.ENGINE* impl);
+int HMAC_Update(libressl.openssl.ossl_typ.HMAC_CTX* ctx, const (ubyte)* data, size_t len);
+int HMAC_Final(libressl.openssl.ossl_typ.HMAC_CTX* ctx, ubyte* md, uint* len);
+ubyte* HMAC(const (libressl.openssl.ossl_typ.EVP_MD)* evp_md, const (void)* key, int key_len, const (ubyte)* d, size_t n, ubyte* md, uint* md_len);
+int HMAC_CTX_copy(libressl.openssl.ossl_typ.HMAC_CTX* dctx, libressl.openssl.ossl_typ.HMAC_CTX* sctx);
 
-void HMAC_CTX_set_flags(libressl_d.openssl.ossl_typ.HMAC_CTX* ctx, core.stdc.config.c_ulong flags);
-const (libressl_d.openssl.ossl_typ.EVP_MD)* HMAC_CTX_get_md(const (libressl_d.openssl.ossl_typ.HMAC_CTX)* ctx);
+void HMAC_CTX_set_flags(libressl.openssl.ossl_typ.HMAC_CTX* ctx, core.stdc.config.c_ulong flags);
+const (libressl.openssl.ossl_typ.EVP_MD)* HMAC_CTX_get_md(const (libressl.openssl.ossl_typ.HMAC_CTX)* ctx);

@@ -2,11 +2,11 @@
  * Public domain
  * sys/types.h compatibility shim
  */
-module libressl_d.compat.sys.types;
+module libressl.compat.sys.types;
 
 
 private static import core.stdcpp.xutility;
-private static import libressl_d.compat.stdio;
+private static import libressl.compat.stdio;
 public import core.stdc.stdint;
 public import core.sys.posix.sys.types;
 public import core.sys.windows.basetsd;
@@ -29,7 +29,7 @@ version (MinGW) {
 }
 
 version (Windows) {
-	alias off_t = libressl_d.compat.stdio.off_t;
+	alias off_t = libressl.compat.stdio.off_t;
 	alias u_char = ubyte;
 	alias u_short = ushort;
 	alias u_int = uint;

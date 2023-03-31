@@ -2,7 +2,7 @@
  * Public domain
  * endian.h compatibility shim
  */
-module libressl_d.compat.endian;
+module libressl.compat.endian;
 
 
 version (Windows) {
@@ -24,7 +24,7 @@ version (Windows) {
 //	#include_next <machine/endian.h>
 //#elif defined(__sun) || defined(_AIX) || defined(__hpux)
 //	public import core.sys.posix.arpa.nameser_compat;
-//	public import libressl_d.compat.sys.types;
+//	public import libressl.compat.sys.types;
 //#elif defined(__sgi)
 //	#include <standards.h>
 //	public import core.sys.posix.sys.endian;

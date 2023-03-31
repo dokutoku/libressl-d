@@ -51,29 +51,29 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
  */
-module libressl_d.openssl.kdf;
+module libressl.openssl.kdf;
 
 
-private static import libressl_d.openssl.evp;
-private static import libressl_d.openssl.ossl_typ;
+private static import libressl.openssl.evp;
+private static import libressl.openssl.ossl_typ;
 
 extern (C):
 nothrow @nogc:
 
 ///
-enum EVP_PKEY_CTRL_HKDF_MD = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
+enum EVP_PKEY_CTRL_HKDF_MD = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 3;
 
 ///Ditto
-enum EVP_PKEY_CTRL_HKDF_SALT = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 4;
+enum EVP_PKEY_CTRL_HKDF_SALT = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 4;
 
 ///Ditto
-enum EVP_PKEY_CTRL_HKDF_KEY = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 5;
+enum EVP_PKEY_CTRL_HKDF_KEY = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 5;
 
 ///Ditto
-enum EVP_PKEY_CTRL_HKDF_INFO = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 6;
+enum EVP_PKEY_CTRL_HKDF_INFO = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 6;
 
 ///Ditto
-enum EVP_PKEY_CTRL_HKDF_MODE = libressl_d.openssl.evp.EVP_PKEY_ALG_CTRL + 7;
+enum EVP_PKEY_CTRL_HKDF_MODE = libressl.openssl.evp.EVP_PKEY_ALG_CTRL + 7;
 
 ///
 enum EVP_PKEY_HKDEF_MODE_EXTRACT_AND_EXPAND = 0;
@@ -85,43 +85,43 @@ enum EVP_PKEY_HKDEF_MODE_EXTRACT_ONLY = 1;
 enum EVP_PKEY_HKDEF_MODE_EXPAND_ONLY = 2;
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set_hkdf_md(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* md)
+int EVP_PKEY_CTX_set_hkdf_md(libressl.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* md)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_MD, 0, cast(void*)(md));
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_MD, 0, cast(void*)(md));
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set1_hkdf_salt(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* salt, int saltlen)
+int EVP_PKEY_CTX_set1_hkdf_salt(libressl.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* salt, int saltlen)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_SALT, saltlen, cast(void*)(salt));
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_SALT, saltlen, cast(void*)(salt));
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_set1_hkdf_key(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* key, int keylen)
+int EVP_PKEY_CTX_set1_hkdf_key(libressl.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* key, int keylen)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_KEY, keylen, cast(void*)(key));
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_KEY, keylen, cast(void*)(key));
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_add1_hkdf_info(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* info, int infolen)
+int EVP_PKEY_CTX_add1_hkdf_info(libressl.openssl.ossl_typ.EVP_PKEY_CTX* pctx, void* info, int infolen)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_INFO, infolen, cast(void*)(info));
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_INFO, infolen, cast(void*)(info));
 	}
 
 pragma(inline, true)
-int EVP_PKEY_CTX_hkdf_mode(libressl_d.openssl.ossl_typ.EVP_PKEY_CTX* pctx, int mode)
+int EVP_PKEY_CTX_hkdf_mode(libressl.openssl.ossl_typ.EVP_PKEY_CTX* pctx, int mode)
 
 	do
 	{
-		return libressl_d.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl_d.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_MODE, mode, null);
+		return libressl.openssl.evp.EVP_PKEY_CTX_ctrl(pctx, -1, libressl.openssl.evp.EVP_PKEY_OP_DERIVE, .EVP_PKEY_CTRL_HKDF_MODE, mode, null);
 	}
 
 int ERR_load_KDF_strings();

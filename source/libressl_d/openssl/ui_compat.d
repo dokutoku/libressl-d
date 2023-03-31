@@ -55,12 +55,11 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.ui_compat;
+module libressl.openssl.ui_compat;
 
 
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ui;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ui;
 
 extern (C):
 nothrow @nogc:
-

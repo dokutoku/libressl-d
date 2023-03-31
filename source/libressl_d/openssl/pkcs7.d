@@ -55,18 +55,18 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.pkcs7;
+module libressl.openssl.pkcs7;
 
 
 private static import core.stdc.config;
-private static import libressl_d.compat.stdio;
-private static import libressl_d.openssl.objects;
-private static import libressl_d.openssl.stack;
-private static import libressl_d.openssl.x509;
-public import libressl_d.openssl.asn1;
-public import libressl_d.openssl.bio;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ossl_typ;
+private static import libressl.compat.stdio;
+private static import libressl.openssl.objects;
+private static import libressl.openssl.stack;
+private static import libressl.openssl.x509;
+public import libressl.openssl.asn1;
+public import libressl.openssl.bio;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ossl_typ;
 
 extern (C):
 nothrow @nogc:
@@ -90,8 +90,8 @@ Key_Encryption_ID	rsaEncryption
 
 struct pkcs7_issuer_and_serial_st
 {
-	libressl_d.openssl.ossl_typ.X509_NAME* issuer;
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* serial;
+	libressl.openssl.ossl_typ.X509_NAME* issuer;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* serial;
 }
 
 alias PKCS7_ISSUER_AND_SERIAL = .pkcs7_issuer_and_serial_st;
@@ -101,26 +101,26 @@ struct pkcs7_signer_info_st
 	/**
 	 * version 1
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 
 	.PKCS7_ISSUER_AND_SERIAL* issuer_and_serial;
-	libressl_d.openssl.ossl_typ.X509_ALGOR* digest_alg;
+	libressl.openssl.ossl_typ.X509_ALGOR* digest_alg;
 
 	/**
 	 * [ 0 ]
 	 */
-	libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* auth_attr;
+	libressl.openssl.x509.stack_st_X509_ATTRIBUTE* auth_attr;
 
-	libressl_d.openssl.ossl_typ.X509_ALGOR* digest_enc_alg;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* enc_digest;
+	libressl.openssl.ossl_typ.X509_ALGOR* digest_enc_alg;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* enc_digest;
 
 	/**
 	 * [ 1 ]
 	 */
-	libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* unauth_attr;
+	libressl.openssl.x509.stack_st_X509_ATTRIBUTE* unauth_attr;
 
 	/* The private key to sign with */
-	libressl_d.openssl.ossl_typ.EVP_PKEY* pkey;
+	libressl.openssl.ossl_typ.EVP_PKEY* pkey;
 }
 
 alias PKCS7_SIGNER_INFO = .pkcs7_signer_info_st;
@@ -128,7 +128,7 @@ alias PKCS7_SIGNER_INFO = .pkcs7_signer_info_st;
 //DECLARE_STACK_OF(PKCS7_SIGNER_INFO)
 struct stack_st_PKCS7_SIGNER_INFO
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct pkcs7_recip_info_st
@@ -136,16 +136,16 @@ struct pkcs7_recip_info_st
 	/**
 	 * version 0
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 
 	.PKCS7_ISSUER_AND_SERIAL* issuer_and_serial;
-	libressl_d.openssl.ossl_typ.X509_ALGOR* key_enc_algor;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* enc_key;
+	libressl.openssl.ossl_typ.X509_ALGOR* key_enc_algor;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* enc_key;
 
 	/**
 	 * get the pub-key from this
 	 */
-	libressl_d.openssl.ossl_typ.X509* cert;
+	libressl.openssl.ossl_typ.X509* cert;
 }
 
 alias PKCS7_RECIP_INFO = .pkcs7_recip_info_st;
@@ -153,7 +153,7 @@ alias PKCS7_RECIP_INFO = .pkcs7_recip_info_st;
 //DECLARE_STACK_OF(PKCS7_RECIP_INFO)
 struct stack_st_PKCS7_RECIP_INFO
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 struct pkcs7_signed_st
@@ -161,22 +161,22 @@ struct pkcs7_signed_st
 	/**
 	 * version 1
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 
 	/**
 	 * md used
 	 */
-	libressl_d.openssl.asn1.stack_st_X509_ALGOR* md_algs;
+	libressl.openssl.asn1.stack_st_X509_ALGOR* md_algs;
 
 	/**
 	 * [ 0 ]
 	 */
-	libressl_d.openssl.x509.stack_st_X509* cert;
+	libressl.openssl.x509.stack_st_X509* cert;
 
 	/**
 	 * [ 1 ]
 	 */
-	libressl_d.openssl.x509.stack_st_X509_CRL* crl;
+	libressl.openssl.x509.stack_st_X509_CRL* crl;
 
 	.stack_st_PKCS7_SIGNER_INFO* signer_info;
 
@@ -191,15 +191,15 @@ alias PKCS7_SIGNED = .pkcs7_signed_st;
 
 struct pkcs7_enc_content_st
 {
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* content_type;
-	libressl_d.openssl.ossl_typ.X509_ALGOR* algorithm;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* content_type;
+	libressl.openssl.ossl_typ.X509_ALGOR* algorithm;
 
 	/**
 	 * [ 0 ]
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* enc_data;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* enc_data;
 
-	const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher;
+	const (libressl.openssl.ossl_typ.EVP_CIPHER)* cipher;
 }
 
 alias PKCS7_ENC_CONTENT = .pkcs7_enc_content_st;
@@ -209,7 +209,7 @@ struct pkcs7_enveloped_st
 	/**
 	 * version 0
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 
 	.stack_st_PKCS7_RECIP_INFO* recipientinfo;
 	.PKCS7_ENC_CONTENT* enc_data;
@@ -222,22 +222,22 @@ struct pkcs7_signedandenveloped_st
 	/**
 	 * version 1
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 
 	/**
 	 * md used
 	 */
-	libressl_d.openssl.asn1.stack_st_X509_ALGOR* md_algs;
+	libressl.openssl.asn1.stack_st_X509_ALGOR* md_algs;
 
 	/**
 	 * [ 0 ]
 	 */
-	libressl_d.openssl.x509.stack_st_X509* cert;
+	libressl.openssl.x509.stack_st_X509* cert;
 
 	/**
 	 * [ 1 ]
 	 */
-	libressl_d.openssl.x509.stack_st_X509_CRL* crl;
+	libressl.openssl.x509.stack_st_X509_CRL* crl;
 
 	.stack_st_PKCS7_SIGNER_INFO* signer_info;
 
@@ -252,15 +252,15 @@ struct pkcs7_digest_st
 	/**
 	 * version 0
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 
 	/**
 	 * md used
 	 */
-	libressl_d.openssl.ossl_typ.X509_ALGOR* md;
+	libressl.openssl.ossl_typ.X509_ALGOR* md;
 
 	.pkcs7_st* contents;
-	libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* digest;
+	libressl.openssl.ossl_typ.ASN1_OCTET_STRING* digest;
 }
 
 alias PKCS7_DIGEST = .pkcs7_digest_st;
@@ -270,7 +270,7 @@ struct pkcs7_encrypted_st
 	/**
 	 * version 0
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_INTEGER* version_;
+	libressl.openssl.ossl_typ.ASN1_INTEGER* version_;
 
 	.PKCS7_ENC_CONTENT* enc_data;
 }
@@ -300,7 +300,7 @@ struct pkcs7_st
 	/**
 	 * content as defined by the type
 	 */
-	libressl_d.openssl.ossl_typ.ASN1_OBJECT* type;
+	libressl.openssl.ossl_typ.ASN1_OBJECT* type;
 
 	/**
 	 * all encryption/message digests are applied to the 'contents',
@@ -313,7 +313,7 @@ struct pkcs7_st
 		/**
 		 * NID_pkcs7_data
 		 */
-		libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* data;
+		libressl.openssl.ossl_typ.ASN1_OCTET_STRING* data;
 
 		/**
 		 * NID_pkcs7_signed
@@ -343,7 +343,7 @@ struct pkcs7_st
 		/**
 		 * Anything else
 		 */
-		libressl_d.openssl.asn1.ASN1_TYPE* other;
+		libressl.openssl.asn1.ASN1_TYPE* other;
 	}
 
 	d_ d;
@@ -354,17 +354,17 @@ alias PKCS7 = .pkcs7_st;
 //DECLARE_STACK_OF(PKCS7)
 struct stack_st_PKCS7
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
-//libressl_d.openssl.ossl_typ.DECLARE_PKCS12_STACK_OF(PKCS7)
+//libressl.openssl.ossl_typ.DECLARE_PKCS12_STACK_OF(PKCS7)
 
 enum PKCS7_OP_SET_DETACHED_SIGNATURE = 1;
 enum PKCS7_OP_GET_DETACHED_SIGNATURE = 2;
 
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_signed_attributes(return scope .PKCS7_SIGNER_INFO* si)
+libressl.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_signed_attributes(return scope .PKCS7_SIGNER_INFO* si)
 
 	in
 	{
@@ -378,7 +378,7 @@ libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_signed_attributes(ret
 
 pragma(inline, true)
 pure nothrow @trusted @nogc @live
-libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_attributes(return scope .PKCS7_SIGNER_INFO* si)
+libressl.openssl.x509.stack_st_X509_ATTRIBUTE* PKCS7_get_attributes(return scope .PKCS7_SIGNER_INFO* si)
 
 	in
 	{
@@ -400,7 +400,7 @@ bool PKCS7_type_is_signed(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_signed;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_signed;
 	}
 
 pragma(inline, true)
@@ -413,7 +413,7 @@ bool PKCS7_type_is_encrypted(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_encrypted;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_encrypted;
 	}
 
 pragma(inline, true)
@@ -426,7 +426,7 @@ bool PKCS7_type_is_enveloped(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_enveloped;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_enveloped;
 	}
 
 pragma(inline, true)
@@ -439,7 +439,7 @@ bool PKCS7_type_is_signedAndEnveloped(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_signedAndEnveloped;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_signedAndEnveloped;
 	}
 
 pragma(inline, true)
@@ -452,7 +452,7 @@ bool PKCS7_type_is_data(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_data;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_data;
 	}
 
 pragma(inline, true)
@@ -465,7 +465,7 @@ bool PKCS7_type_is_digest(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_digest;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_digest;
 	}
 
 pragma(inline, true)
@@ -478,7 +478,7 @@ bool PKCS7_type_is_encrypted(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_encrypted;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_encrypted;
 	}
 
 pragma(inline, true)
@@ -491,7 +491,7 @@ bool PKCS7_type_is_digest(A)(const (A)* a)
 
 	do
 	{
-		return libressl_d.openssl.objects.OBJ_obj2nid(a.type) == libressl_d.openssl.objects.NID_pkcs7_digest;
+		return libressl.openssl.objects.OBJ_obj2nid(a.type) == libressl.openssl.objects.NID_pkcs7_digest;
 	}
 
 pragma(inline, true)
@@ -553,131 +553,131 @@ enum SMIME_NOATTR = .PKCS7_NOATTR;
 void PKCS7_ISSUER_AND_SERIAL_free(.PKCS7_ISSUER_AND_SERIAL* a);
 .PKCS7_ISSUER_AND_SERIAL* d2i_PKCS7_ISSUER_AND_SERIAL(.PKCS7_ISSUER_AND_SERIAL** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_ISSUER_AND_SERIAL(.PKCS7_ISSUER_AND_SERIAL* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ISSUER_AND_SERIAL_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_ISSUER_AND_SERIAL_it;
 
-int PKCS7_ISSUER_AND_SERIAL_digest(.PKCS7_ISSUER_AND_SERIAL* data, const (libressl_d.openssl.ossl_typ.EVP_MD)* type, ubyte* md, uint* len);
-.PKCS7* d2i_PKCS7_fp(libressl_d.compat.stdio.FILE* fp, .PKCS7** p7);
-int i2d_PKCS7_fp(libressl_d.compat.stdio.FILE* fp, .PKCS7* p7);
+int PKCS7_ISSUER_AND_SERIAL_digest(.PKCS7_ISSUER_AND_SERIAL* data, const (libressl.openssl.ossl_typ.EVP_MD)* type, ubyte* md, uint* len);
+.PKCS7* d2i_PKCS7_fp(libressl.compat.stdio.FILE* fp, .PKCS7** p7);
+int i2d_PKCS7_fp(libressl.compat.stdio.FILE* fp, .PKCS7* p7);
 .PKCS7* PKCS7_dup(.PKCS7* p7);
-.PKCS7* d2i_PKCS7_bio(libressl_d.openssl.ossl_typ.BIO* bp, .PKCS7** p7);
-int i2d_PKCS7_bio(libressl_d.openssl.ossl_typ.BIO* bp, .PKCS7* p7);
-int i2d_PKCS7_bio_stream(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* in_, int flags);
-int PEM_write_bio_PKCS7_stream(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* in_, int flags);
+.PKCS7* d2i_PKCS7_bio(libressl.openssl.ossl_typ.BIO* bp, .PKCS7** p7);
+int i2d_PKCS7_bio(libressl.openssl.ossl_typ.BIO* bp, .PKCS7* p7);
+int i2d_PKCS7_bio_stream(libressl.openssl.ossl_typ.BIO* out_, .PKCS7* p7, libressl.openssl.ossl_typ.BIO* in_, int flags);
+int PEM_write_bio_PKCS7_stream(libressl.openssl.ossl_typ.BIO* out_, .PKCS7* p7, libressl.openssl.ossl_typ.BIO* in_, int flags);
 
 .PKCS7_SIGNER_INFO* PKCS7_SIGNER_INFO_new();
 void PKCS7_SIGNER_INFO_free(.PKCS7_SIGNER_INFO* a);
 .PKCS7_SIGNER_INFO* d2i_PKCS7_SIGNER_INFO(.PKCS7_SIGNER_INFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_SIGNER_INFO(.PKCS7_SIGNER_INFO* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_SIGNER_INFO_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_SIGNER_INFO_it;
 .PKCS7_RECIP_INFO* PKCS7_RECIP_INFO_new();
 void PKCS7_RECIP_INFO_free(.PKCS7_RECIP_INFO* a);
 .PKCS7_RECIP_INFO* d2i_PKCS7_RECIP_INFO(.PKCS7_RECIP_INFO** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_RECIP_INFO(.PKCS7_RECIP_INFO* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_RECIP_INFO_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_RECIP_INFO_it;
 .PKCS7_SIGNED* PKCS7_SIGNED_new();
 void PKCS7_SIGNED_free(.PKCS7_SIGNED* a);
 .PKCS7_SIGNED* d2i_PKCS7_SIGNED(.PKCS7_SIGNED** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_SIGNED(.PKCS7_SIGNED* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_SIGNED_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_SIGNED_it;
 .PKCS7_ENC_CONTENT* PKCS7_ENC_CONTENT_new();
 void PKCS7_ENC_CONTENT_free(.PKCS7_ENC_CONTENT* a);
 .PKCS7_ENC_CONTENT* d2i_PKCS7_ENC_CONTENT(.PKCS7_ENC_CONTENT** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_ENC_CONTENT(.PKCS7_ENC_CONTENT* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ENC_CONTENT_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_ENC_CONTENT_it;
 .PKCS7_ENVELOPE* PKCS7_ENVELOPE_new();
 void PKCS7_ENVELOPE_free(.PKCS7_ENVELOPE* a);
 .PKCS7_ENVELOPE* d2i_PKCS7_ENVELOPE(.PKCS7_ENVELOPE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_ENVELOPE(.PKCS7_ENVELOPE* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ENVELOPE_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_ENVELOPE_it;
 .PKCS7_SIGN_ENVELOPE* PKCS7_SIGN_ENVELOPE_new();
 void PKCS7_SIGN_ENVELOPE_free(.PKCS7_SIGN_ENVELOPE* a);
 .PKCS7_SIGN_ENVELOPE* d2i_PKCS7_SIGN_ENVELOPE(.PKCS7_SIGN_ENVELOPE** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_SIGN_ENVELOPE(.PKCS7_SIGN_ENVELOPE* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_SIGN_ENVELOPE_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_SIGN_ENVELOPE_it;
 .PKCS7_DIGEST* PKCS7_DIGEST_new();
 void PKCS7_DIGEST_free(.PKCS7_DIGEST* a);
 .PKCS7_DIGEST* d2i_PKCS7_DIGEST(.PKCS7_DIGEST** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_DIGEST(.PKCS7_DIGEST* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_DIGEST_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_DIGEST_it;
 .PKCS7_ENCRYPT* PKCS7_ENCRYPT_new();
 void PKCS7_ENCRYPT_free(.PKCS7_ENCRYPT* a);
 .PKCS7_ENCRYPT* d2i_PKCS7_ENCRYPT(.PKCS7_ENCRYPT** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7_ENCRYPT(.PKCS7_ENCRYPT* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ENCRYPT_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_ENCRYPT_it;
 .PKCS7* PKCS7_new();
 void PKCS7_free(.PKCS7* a);
 .PKCS7* d2i_PKCS7(.PKCS7** a, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_PKCS7(.PKCS7* a, ubyte** out_);
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_it;
 
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ATTR_SIGN_it;
-extern __gshared const libressl_d.openssl.ossl_typ.ASN1_ITEM PKCS7_ATTR_VERIFY_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_ATTR_SIGN_it;
+extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM PKCS7_ATTR_VERIFY_it;
 
 int i2d_PKCS7_NDEF(.PKCS7* a, ubyte** out_);
-int PKCS7_print_ctx(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* x, int indent, const (libressl_d.openssl.ossl_typ.ASN1_PCTX)* pctx);
+int PKCS7_print_ctx(libressl.openssl.ossl_typ.BIO* out_, .PKCS7* x, int indent, const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx);
 
 core.stdc.config.c_long PKCS7_ctrl(.PKCS7* p7, int cmd, core.stdc.config.c_long larg, char* parg);
 
 int PKCS7_set_type(.PKCS7* p7, int type);
-int PKCS7_set0_type_other(.PKCS7* p7, int type, libressl_d.openssl.asn1.ASN1_TYPE* other);
+int PKCS7_set0_type_other(.PKCS7* p7, int type, libressl.openssl.asn1.ASN1_TYPE* other);
 int PKCS7_set_content(.PKCS7* p7, .PKCS7* p7_data);
-int PKCS7_SIGNER_INFO_set(.PKCS7_SIGNER_INFO* p7i, libressl_d.openssl.ossl_typ.X509* x509, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl_d.openssl.ossl_typ.EVP_MD)* dgst);
+int PKCS7_SIGNER_INFO_set(.PKCS7_SIGNER_INFO* p7i, libressl.openssl.ossl_typ.X509* x509, libressl.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl.openssl.ossl_typ.EVP_MD)* dgst);
 int PKCS7_SIGNER_INFO_sign(.PKCS7_SIGNER_INFO* si);
 int PKCS7_add_signer(.PKCS7* p7, .PKCS7_SIGNER_INFO* p7i);
-int PKCS7_add_certificate(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509* x509);
-int PKCS7_add_crl(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509_CRL* x509);
+int PKCS7_add_certificate(.PKCS7* p7, libressl.openssl.ossl_typ.X509* x509);
+int PKCS7_add_crl(.PKCS7* p7, libressl.openssl.ossl_typ.X509_CRL* x509);
 int PKCS7_content_new(.PKCS7* p7, int nid);
-int PKCS7_dataVerify(libressl_d.openssl.ossl_typ.X509_STORE* cert_store, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si);
-int PKCS7_signatureVerify(libressl_d.openssl.ossl_typ.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.X509* x509);
+int PKCS7_dataVerify(libressl.openssl.ossl_typ.X509_STORE* cert_store, libressl.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl.openssl.ossl_typ.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si);
+int PKCS7_signatureVerify(libressl.openssl.ossl_typ.BIO* bio, .PKCS7* p7, .PKCS7_SIGNER_INFO* si, libressl.openssl.ossl_typ.X509* x509);
 
-libressl_d.openssl.ossl_typ.BIO* PKCS7_dataInit(.PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* bio);
-int PKCS7_dataFinal(.PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* bio);
-libressl_d.openssl.ossl_typ.BIO* PKCS7_dataDecode(.PKCS7* p7, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ossl_typ.BIO* in_bio, libressl_d.openssl.ossl_typ.X509* pcert);
+libressl.openssl.ossl_typ.BIO* PKCS7_dataInit(.PKCS7* p7, libressl.openssl.ossl_typ.BIO* bio);
+int PKCS7_dataFinal(.PKCS7* p7, libressl.openssl.ossl_typ.BIO* bio);
+libressl.openssl.ossl_typ.BIO* PKCS7_dataDecode(.PKCS7* p7, libressl.openssl.ossl_typ.EVP_PKEY* pkey, libressl.openssl.ossl_typ.BIO* in_bio, libressl.openssl.ossl_typ.X509* pcert);
 
-.PKCS7_SIGNER_INFO* PKCS7_add_signature(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509* x509, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl_d.openssl.ossl_typ.EVP_MD)* dgst);
-libressl_d.openssl.ossl_typ.X509* PKCS7_cert_from_signer_info(.PKCS7* p7, .PKCS7_SIGNER_INFO* si);
-int PKCS7_set_digest(.PKCS7* p7, const (libressl_d.openssl.ossl_typ.EVP_MD)* md);
+.PKCS7_SIGNER_INFO* PKCS7_add_signature(.PKCS7* p7, libressl.openssl.ossl_typ.X509* x509, libressl.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl.openssl.ossl_typ.EVP_MD)* dgst);
+libressl.openssl.ossl_typ.X509* PKCS7_cert_from_signer_info(.PKCS7* p7, .PKCS7_SIGNER_INFO* si);
+int PKCS7_set_digest(.PKCS7* p7, const (libressl.openssl.ossl_typ.EVP_MD)* md);
 .stack_st_PKCS7_SIGNER_INFO* PKCS7_get_signer_info(.PKCS7* p7);
 
-.PKCS7_RECIP_INFO* PKCS7_add_recipient(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509* x509);
-void PKCS7_SIGNER_INFO_get0_algs(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.EVP_PKEY** pk, libressl_d.openssl.ossl_typ.X509_ALGOR** pdig, libressl_d.openssl.ossl_typ.X509_ALGOR** psig);
-void PKCS7_RECIP_INFO_get0_alg(.PKCS7_RECIP_INFO* ri, libressl_d.openssl.ossl_typ.X509_ALGOR** penc);
+.PKCS7_RECIP_INFO* PKCS7_add_recipient(.PKCS7* p7, libressl.openssl.ossl_typ.X509* x509);
+void PKCS7_SIGNER_INFO_get0_algs(.PKCS7_SIGNER_INFO* si, libressl.openssl.ossl_typ.EVP_PKEY** pk, libressl.openssl.ossl_typ.X509_ALGOR** pdig, libressl.openssl.ossl_typ.X509_ALGOR** psig);
+void PKCS7_RECIP_INFO_get0_alg(.PKCS7_RECIP_INFO* ri, libressl.openssl.ossl_typ.X509_ALGOR** penc);
 int PKCS7_add_recipient_info(.PKCS7* p7, .PKCS7_RECIP_INFO* ri);
-int PKCS7_RECIP_INFO_set(.PKCS7_RECIP_INFO* p7i, libressl_d.openssl.ossl_typ.X509* x509);
-int PKCS7_set_cipher(.PKCS7* p7, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher);
+int PKCS7_RECIP_INFO_set(.PKCS7_RECIP_INFO* p7i, libressl.openssl.ossl_typ.X509* x509);
+int PKCS7_set_cipher(.PKCS7* p7, const (libressl.openssl.ossl_typ.EVP_CIPHER)* cipher);
 int PKCS7_stream(ubyte*** boundary, .PKCS7* p7);
 
 .PKCS7_ISSUER_AND_SERIAL* PKCS7_get_issuer_and_serial(.PKCS7* p7, int idx);
-libressl_d.openssl.ossl_typ.ASN1_OCTET_STRING* PKCS7_digest_from_attributes(libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
+libressl.openssl.ossl_typ.ASN1_OCTET_STRING* PKCS7_digest_from_attributes(libressl.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
 int PKCS7_add_signed_attribute(.PKCS7_SIGNER_INFO* p7si, int nid, int type, void* data);
 int PKCS7_add_attribute(.PKCS7_SIGNER_INFO* p7si, int nid, int atrtype, void* value);
-libressl_d.openssl.asn1.ASN1_TYPE* PKCS7_get_attribute(.PKCS7_SIGNER_INFO* si, int nid);
-libressl_d.openssl.asn1.ASN1_TYPE* PKCS7_get_signed_attribute(.PKCS7_SIGNER_INFO* si, int nid);
-int PKCS7_set_signed_attributes(.PKCS7_SIGNER_INFO* p7si, libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
-int PKCS7_set_attributes(.PKCS7_SIGNER_INFO* p7si, libressl_d.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
+libressl.openssl.asn1.ASN1_TYPE* PKCS7_get_attribute(.PKCS7_SIGNER_INFO* si, int nid);
+libressl.openssl.asn1.ASN1_TYPE* PKCS7_get_signed_attribute(.PKCS7_SIGNER_INFO* si, int nid);
+int PKCS7_set_signed_attributes(.PKCS7_SIGNER_INFO* p7si, libressl.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
+int PKCS7_set_attributes(.PKCS7_SIGNER_INFO* p7si, libressl.openssl.x509.stack_st_X509_ATTRIBUTE* sk);
 
-.PKCS7* PKCS7_sign(libressl_d.openssl.ossl_typ.X509* signcert, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.BIO* data, int flags);
+.PKCS7* PKCS7_sign(libressl.openssl.ossl_typ.X509* signcert, libressl.openssl.ossl_typ.EVP_PKEY* pkey, libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.BIO* data, int flags);
 
-.PKCS7_SIGNER_INFO* PKCS7_sign_add_signer(.PKCS7* p7, libressl_d.openssl.ossl_typ.X509* signcert, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl_d.openssl.ossl_typ.EVP_MD)* md, int flags);
+.PKCS7_SIGNER_INFO* PKCS7_sign_add_signer(.PKCS7* p7, libressl.openssl.ossl_typ.X509* signcert, libressl.openssl.ossl_typ.EVP_PKEY* pkey, const (libressl.openssl.ossl_typ.EVP_MD)* md, int flags);
 
-int PKCS7_final(.PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* data, int flags);
-int PKCS7_verify(.PKCS7* p7, libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.X509_STORE* store, libressl_d.openssl.ossl_typ.BIO* indata, libressl_d.openssl.ossl_typ.BIO* out_, int flags);
-libressl_d.openssl.x509.stack_st_X509* PKCS7_get0_signers(.PKCS7* p7, libressl_d.openssl.x509.stack_st_X509* certs, int flags);
-.PKCS7* PKCS7_encrypt(libressl_d.openssl.x509.stack_st_X509* certs, libressl_d.openssl.ossl_typ.BIO* in_, const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher, int flags);
-int PKCS7_decrypt(.PKCS7* p7, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey, libressl_d.openssl.ossl_typ.X509* cert, libressl_d.openssl.ossl_typ.BIO* data, int flags);
+int PKCS7_final(.PKCS7* p7, libressl.openssl.ossl_typ.BIO* data, int flags);
+int PKCS7_verify(.PKCS7* p7, libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.X509_STORE* store, libressl.openssl.ossl_typ.BIO* indata, libressl.openssl.ossl_typ.BIO* out_, int flags);
+libressl.openssl.x509.stack_st_X509* PKCS7_get0_signers(.PKCS7* p7, libressl.openssl.x509.stack_st_X509* certs, int flags);
+.PKCS7* PKCS7_encrypt(libressl.openssl.x509.stack_st_X509* certs, libressl.openssl.ossl_typ.BIO* in_, const (libressl.openssl.ossl_typ.EVP_CIPHER)* cipher, int flags);
+int PKCS7_decrypt(.PKCS7* p7, libressl.openssl.ossl_typ.EVP_PKEY* pkey, libressl.openssl.ossl_typ.X509* cert, libressl.openssl.ossl_typ.BIO* data, int flags);
 
-int PKCS7_add_attrib_smimecap(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.asn1.stack_st_X509_ALGOR* cap);
-libressl_d.openssl.asn1.stack_st_X509_ALGOR* PKCS7_get_smimecap(.PKCS7_SIGNER_INFO* si);
-int PKCS7_simple_smimecap(libressl_d.openssl.asn1.stack_st_X509_ALGOR* sk, int nid, int arg);
+int PKCS7_add_attrib_smimecap(.PKCS7_SIGNER_INFO* si, libressl.openssl.asn1.stack_st_X509_ALGOR* cap);
+libressl.openssl.asn1.stack_st_X509_ALGOR* PKCS7_get_smimecap(.PKCS7_SIGNER_INFO* si);
+int PKCS7_simple_smimecap(libressl.openssl.asn1.stack_st_X509_ALGOR* sk, int nid, int arg);
 
-int PKCS7_add_attrib_content_type(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.ASN1_OBJECT* coid);
-int PKCS7_add0_attrib_signing_time(.PKCS7_SIGNER_INFO* si, libressl_d.openssl.ossl_typ.ASN1_TIME* t);
+int PKCS7_add_attrib_content_type(.PKCS7_SIGNER_INFO* si, libressl.openssl.ossl_typ.ASN1_OBJECT* coid);
+int PKCS7_add0_attrib_signing_time(.PKCS7_SIGNER_INFO* si, libressl.openssl.ossl_typ.ASN1_TIME* t);
 int PKCS7_add1_attrib_digest(.PKCS7_SIGNER_INFO* si, const (ubyte)* md, int mdlen);
 
-int SMIME_write_PKCS7(libressl_d.openssl.ossl_typ.BIO* bio, .PKCS7* p7, libressl_d.openssl.ossl_typ.BIO* data, int flags);
-.PKCS7* SMIME_read_PKCS7(libressl_d.openssl.ossl_typ.BIO* bio, libressl_d.openssl.ossl_typ.BIO** bcont);
+int SMIME_write_PKCS7(libressl.openssl.ossl_typ.BIO* bio, .PKCS7* p7, libressl.openssl.ossl_typ.BIO* data, int flags);
+.PKCS7* SMIME_read_PKCS7(libressl.openssl.ossl_typ.BIO* bio, libressl.openssl.ossl_typ.BIO** bcont);
 
-libressl_d.openssl.ossl_typ.BIO* BIO_new_PKCS7(libressl_d.openssl.ossl_typ.BIO* out_, .PKCS7* p7);
+libressl.openssl.ossl_typ.BIO* BIO_new_PKCS7(libressl.openssl.ossl_typ.BIO* out_, .PKCS7* p7);
 
 void ERR_load_PKCS7_strings();
 

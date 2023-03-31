@@ -4,7 +4,7 @@
  * Written by Todd C. Miller, September 9, 2016
  * Public domain.
  */
-module libressl_d.compat.sys._null;
+module libressl.compat.sys._null;
 
 
 enum NULL = cast(void*)(0);

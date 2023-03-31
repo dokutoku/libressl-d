@@ -55,11 +55,11 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.rc4;
+module libressl.openssl.rc4;
 
 
 public import core.stdc.stddef;
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 enum HEADER_RC4_H = true;
 
@@ -72,9 +72,9 @@ nothrow @nogc:
 
 struct rc4_key_st
 {
-	libressl_d.openssl.opensslconf.RC4_INT x;
-	libressl_d.openssl.opensslconf.RC4_INT y;
-	libressl_d.openssl.opensslconf.RC4_INT[256] data;
+	libressl.openssl.opensslconf.RC4_INT x;
+	libressl.openssl.opensslconf.RC4_INT y;
+	libressl.openssl.opensslconf.RC4_INT[256] data;
 }
 
 alias RC4_KEY = .rc4_key_st;

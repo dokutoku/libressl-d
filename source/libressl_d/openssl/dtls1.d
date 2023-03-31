@@ -56,15 +56,15 @@
  * Hudson (tjh@cryptsoft.com).
  *
  */
-module libressl_d.openssl.dtls1;
+module libressl.openssl.dtls1;
 
 
-public import libressl_d.compat.stdio;
-public import libressl_d.compat.stdlib;
-public import libressl_d.compat.string;
-public import libressl_d.compat.sys.time;
-public import libressl_d.openssl.buffer;
-public import libressl_d.openssl.opensslconf;
+public import libressl.compat.stdio;
+public import libressl.compat.stdlib;
+public import libressl.compat.string;
+public import libressl.compat.sys.time;
+public import libressl.openssl.buffer;
+public import libressl.openssl.opensslconf;
 
 extern (C):
 nothrow @nogc:

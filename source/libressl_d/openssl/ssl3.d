@@ -113,13 +113,13 @@
  * ECC cipher suite support in OpenSSL originally developed by
  * SUN MICROSYSTEMS, INC., and contributed to the OpenSSL project.
  */
-module libressl_d.openssl.ssl3;
+module libressl.openssl.ssl3;
 
 
-public import libressl_d.openssl.buffer;
-public import libressl_d.openssl.evp;
-public import libressl_d.openssl.opensslconf;
-public import libressl_d.openssl.ssl;
+public import libressl.openssl.buffer;
+public import libressl.openssl.evp;
+public import libressl.openssl.opensslconf;
+public import libressl.openssl.ssl;
 
 extern (C):
 nothrow @nogc:
@@ -360,90 +360,90 @@ enum SSL3_FLAGS_CCS_OK = 0x0080;
 /* SSLv3 */
 /*client */
 /* extra state */
-enum SSL3_ST_CW_FLUSH = 0x0100 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_FLUSH = 0x0100 | libressl.openssl.ssl.SSL_ST_CONNECT;
 /* write to server */
-enum SSL3_ST_CW_CLNT_HELLO_A = 0x0110 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CLNT_HELLO_B = 0x0111 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CLNT_HELLO_A = 0x0110 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CLNT_HELLO_B = 0x0111 | libressl.openssl.ssl.SSL_ST_CONNECT;
 /* read from server */
-enum SSL3_ST_CR_SRVR_HELLO_A = 0x0120 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_SRVR_HELLO_B = 0x0121 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum DTLS1_ST_CR_HELLO_VERIFY_REQUEST_A = 0x0126 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum DTLS1_ST_CR_HELLO_VERIFY_REQUEST_B = 0x0127 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_CERT_A = 0x0130 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_CERT_B = 0x0131 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_KEY_EXCH_A = 0x0140 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_KEY_EXCH_B = 0x0141 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_CERT_REQ_A = 0x0150 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_CERT_REQ_B = 0x0151 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_SRVR_DONE_A = 0x0160 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_SRVR_DONE_B = 0x0161 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_SRVR_HELLO_A = 0x0120 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_SRVR_HELLO_B = 0x0121 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum DTLS1_ST_CR_HELLO_VERIFY_REQUEST_A = 0x0126 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum DTLS1_ST_CR_HELLO_VERIFY_REQUEST_B = 0x0127 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CERT_A = 0x0130 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CERT_B = 0x0131 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_KEY_EXCH_A = 0x0140 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_KEY_EXCH_B = 0x0141 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CERT_REQ_A = 0x0150 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CERT_REQ_B = 0x0151 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_SRVR_DONE_A = 0x0160 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_SRVR_DONE_B = 0x0161 | libressl.openssl.ssl.SSL_ST_CONNECT;
 /* write to server */
-enum SSL3_ST_CW_CERT_A = 0x0170 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CERT_B = 0x0171 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CERT_C = 0x0172 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CERT_D = 0x0173 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_KEY_EXCH_A = 0x0180 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_KEY_EXCH_B = 0x0181 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CERT_VRFY_A = 0x0190 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CERT_VRFY_B = 0x0191 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CHANGE_A = 0x01A0 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_CHANGE_B = 0x01A1 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_FINISHED_A = 0x01B0 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CW_FINISHED_B = 0x01B1 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CERT_A = 0x0170 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CERT_B = 0x0171 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CERT_C = 0x0172 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CERT_D = 0x0173 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_KEY_EXCH_A = 0x0180 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_KEY_EXCH_B = 0x0181 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CERT_VRFY_A = 0x0190 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CERT_VRFY_B = 0x0191 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CHANGE_A = 0x01A0 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_CHANGE_B = 0x01A1 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_FINISHED_A = 0x01B0 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CW_FINISHED_B = 0x01B1 | libressl.openssl.ssl.SSL_ST_CONNECT;
 /* read from server */
-enum SSL3_ST_CR_CHANGE_A = 0x01C0 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_CHANGE_B = 0x01C1 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_FINISHED_A = 0x01D0 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_FINISHED_B = 0x01D1 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_SESSION_TICKET_A = 0x01E0 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_SESSION_TICKET_B = 0x01E1 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_CERT_STATUS_A = 0x01F0 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
-enum SSL3_ST_CR_CERT_STATUS_B = 0x01F1 | libressl_d.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CHANGE_A = 0x01C0 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CHANGE_B = 0x01C1 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_FINISHED_A = 0x01D0 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_FINISHED_B = 0x01D1 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_SESSION_TICKET_A = 0x01E0 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_SESSION_TICKET_B = 0x01E1 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CERT_STATUS_A = 0x01F0 | libressl.openssl.ssl.SSL_ST_CONNECT;
+enum SSL3_ST_CR_CERT_STATUS_B = 0x01F1 | libressl.openssl.ssl.SSL_ST_CONNECT;
 
 /* server */
 /* extra state */
-enum SSL3_ST_SW_FLUSH = 0x0100 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_FLUSH = 0x0100 | libressl.openssl.ssl.SSL_ST_ACCEPT;
 /* read from client */
 /* Do not change the number values, they do matter */
-enum SSL3_ST_SR_CLNT_HELLO_A = 0x0110 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_CLNT_HELLO_B = 0x0111 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_CLNT_HELLO_C = 0x0112 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CLNT_HELLO_A = 0x0110 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CLNT_HELLO_B = 0x0111 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CLNT_HELLO_C = 0x0112 | libressl.openssl.ssl.SSL_ST_ACCEPT;
 /* write to client */
-enum DTLS1_ST_SW_HELLO_VERIFY_REQUEST_A = 0x0113 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum DTLS1_ST_SW_HELLO_VERIFY_REQUEST_B = 0x0114 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_HELLO_REQ_A = 0x0120 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_HELLO_REQ_B = 0x0121 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_HELLO_REQ_C = 0x0122 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_SRVR_HELLO_A = 0x0130 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_SRVR_HELLO_B = 0x0131 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_CERT_A = 0x0140 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_CERT_B = 0x0141 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_KEY_EXCH_A = 0x0150 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_KEY_EXCH_B = 0x0151 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_CERT_REQ_A = 0x0160 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_CERT_REQ_B = 0x0161 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_SRVR_DONE_A = 0x0170 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_SRVR_DONE_B = 0x0171 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
+enum DTLS1_ST_SW_HELLO_VERIFY_REQUEST_A = 0x0113 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum DTLS1_ST_SW_HELLO_VERIFY_REQUEST_B = 0x0114 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_HELLO_REQ_A = 0x0120 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_HELLO_REQ_B = 0x0121 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_HELLO_REQ_C = 0x0122 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_SRVR_HELLO_A = 0x0130 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_SRVR_HELLO_B = 0x0131 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CERT_A = 0x0140 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CERT_B = 0x0141 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_KEY_EXCH_A = 0x0150 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_KEY_EXCH_B = 0x0151 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CERT_REQ_A = 0x0160 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CERT_REQ_B = 0x0161 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_SRVR_DONE_A = 0x0170 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_SRVR_DONE_B = 0x0171 | libressl.openssl.ssl.SSL_ST_ACCEPT;
 /* read from client */
-enum SSL3_ST_SR_CERT_A = 0x0180 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_CERT_B = 0x0181 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_KEY_EXCH_A = 0x0190 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_KEY_EXCH_B = 0x0191 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_CERT_VRFY_A = 0x01A0 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_CERT_VRFY_B = 0x01A1 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_CHANGE_A = 0x01B0 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_CHANGE_B = 0x01B1 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_FINISHED_A = 0x01C0 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SR_FINISHED_B = 0x01C1 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CERT_A = 0x0180 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CERT_B = 0x0181 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_KEY_EXCH_A = 0x0190 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_KEY_EXCH_B = 0x0191 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CERT_VRFY_A = 0x01A0 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CERT_VRFY_B = 0x01A1 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CHANGE_A = 0x01B0 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_CHANGE_B = 0x01B1 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_FINISHED_A = 0x01C0 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SR_FINISHED_B = 0x01C1 | libressl.openssl.ssl.SSL_ST_ACCEPT;
 /* write to client */
-enum SSL3_ST_SW_CHANGE_A = 0x01D0 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_CHANGE_B = 0x01D1 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_FINISHED_A = 0x01E0 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_FINISHED_B = 0x01E1 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_SESSION_TICKET_A = 0x01F0 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_SESSION_TICKET_B = 0x01F1 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_CERT_STATUS_A = 0x0200 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
-enum SSL3_ST_SW_CERT_STATUS_B = 0x0201 | libressl_d.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CHANGE_A = 0x01D0 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CHANGE_B = 0x01D1 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_FINISHED_A = 0x01E0 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_FINISHED_B = 0x01E1 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_SESSION_TICKET_A = 0x01F0 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_SESSION_TICKET_B = 0x01F1 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CERT_STATUS_A = 0x0200 | libressl.openssl.ssl.SSL_ST_ACCEPT;
+enum SSL3_ST_SW_CERT_STATUS_B = 0x0201 | libressl.openssl.ssl.SSL_ST_ACCEPT;
 
 enum SSL3_MT_HELLO_REQUEST = 0;
 enum SSL3_MT_CLIENT_HELLO = 1;

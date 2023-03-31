@@ -51,10 +51,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * ====================================================================
  */
-module libressl_d.openssl.ct;
+module libressl.openssl.ct;
 
 
-public import libressl_d.openssl.opensslconf;
+public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_CT) {
 } else {
@@ -63,14 +63,14 @@ version (OPENSSL_NO_CT) {
 
 version (OPENSSL_CT_INTERNAL):
 
-public import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.safestack;
-public import libressl_d.openssl.x509;
+public import libressl.openssl.ossl_typ;
+public import libressl.openssl.safestack;
+public import libressl.openssl.x509;
 
 private static import core.stdc.config;
 private static import core.stdc.stdint;
-private static import libressl_d.openssl.sha;
-private static import libressl_d.openssl.stack;
+private static import libressl.openssl.sha;
+private static import libressl.openssl.stack;
 
 extern (C):
 nothrow @nogc:
@@ -83,7 +83,7 @@ enum SCT_MIN_RSA_BITS = 2048;
 /**
  * All hashes are SHA256 in v1 of Certificate Transparency
  */
-enum CT_V1_HASHLEN = libressl_d.openssl.sha.SHA256_DIGEST_LENGTH;
+enum CT_V1_HASHLEN = libressl.openssl.sha.SHA256_DIGEST_LENGTH;
 
 enum ct_log_entry_type_t
 {
@@ -154,13 +154,13 @@ enum
 //DECLARE_STACK_OF(SCT)
 struct stack_st_SCT
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 //DECLARE_STACK_OF(CTLOG)
 struct stack_st_CTLOG
 {
-	libressl_d.openssl.stack._STACK stack;
+	libressl.openssl.stack._STACK stack;
 }
 
 /* *****************************************
@@ -172,17 +172,17 @@ struct stack_st_CTLOG
  * The caller is responsible for calling CT_POLICY_EVAL_CTX_free when finished
  * with the CT_POLICY_EVAL_CTX.
  */
-libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX* CT_POLICY_EVAL_CTX_new();
+libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX* CT_POLICY_EVAL_CTX_new();
 
 /**
  * Deletes a policy evaluation context and anything it owns.
  */
-void CT_POLICY_EVAL_CTX_free(libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx);
+void CT_POLICY_EVAL_CTX_free(libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx);
 
 /**
  * Gets the peer certificate that the SCTs are for
  */
-libressl_d.openssl.ossl_typ.X509* CT_POLICY_EVAL_CTX_get0_cert(const (libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
+libressl.openssl.ossl_typ.X509* CT_POLICY_EVAL_CTX_get0_cert(const (libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
 
 /**
  * Sets the certificate associated with the received SCTs.
@@ -190,12 +190,12 @@ libressl_d.openssl.ossl_typ.X509* CT_POLICY_EVAL_CTX_get0_cert(const (libressl_d
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int CT_POLICY_EVAL_CTX_set1_cert(libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, libressl_d.openssl.ossl_typ.X509* cert);
+int CT_POLICY_EVAL_CTX_set1_cert(libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, libressl.openssl.ossl_typ.X509* cert);
 
 /**
  * Gets the issuer of the aforementioned certificate
  */
-libressl_d.openssl.ossl_typ.X509* CT_POLICY_EVAL_CTX_get0_issuer(const (libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
+libressl.openssl.ossl_typ.X509* CT_POLICY_EVAL_CTX_get0_issuer(const (libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
 
 /**
  * Sets the issuer of the certificate associated with the received SCTs.
@@ -203,24 +203,24 @@ libressl_d.openssl.ossl_typ.X509* CT_POLICY_EVAL_CTX_get0_issuer(const (libressl
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int CT_POLICY_EVAL_CTX_set1_issuer(libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, libressl_d.openssl.ossl_typ.X509* issuer);
+int CT_POLICY_EVAL_CTX_set1_issuer(libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, libressl.openssl.ossl_typ.X509* issuer);
 
 /**
  * Gets the CT logs that are trusted sources of SCTs
  */
-const (libressl_d.openssl.ossl_typ.CTLOG_STORE)* CT_POLICY_EVAL_CTX_get0_log_store(const (libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
+const (libressl.openssl.ossl_typ.CTLOG_STORE)* CT_POLICY_EVAL_CTX_get0_log_store(const (libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
 
 /**
  * Sets the log store that is in use. It must outlive the CT_POLICY_EVAL_CTX.
  */
-void CT_POLICY_EVAL_CTX_set_shared_CTLOG_STORE(libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, libressl_d.openssl.ossl_typ.CTLOG_STORE* log_store);
+void CT_POLICY_EVAL_CTX_set_shared_CTLOG_STORE(libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, libressl.openssl.ossl_typ.CTLOG_STORE* log_store);
 
 /**
  * Gets the time, in milliseconds since the Unix epoch, that will be used as the
  * current time when checking whether an SCT was issued in the future.
  * Such SCTs will fail validation, as required by RFC6962.
  */
-core.stdc.stdint.uint64_t CT_POLICY_EVAL_CTX_get_time(const (libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
+core.stdc.stdint.uint64_t CT_POLICY_EVAL_CTX_get_time(const (libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
 
 /**
  * Sets the time to evaluate SCTs against, in milliseconds since the Unix epoch.
@@ -228,7 +228,7 @@ core.stdc.stdint.uint64_t CT_POLICY_EVAL_CTX_get_time(const (libressl_d.openssl.
  * been issued in the future. RFC6962 states that "TLS clients MUST reject SCTs
  * whose timestamp is in the future", so an SCT will not validate in this case.
  */
-void CT_POLICY_EVAL_CTX_set_time(libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, core.stdc.stdint.uint64_t time_in_ms);
+void CT_POLICY_EVAL_CTX_set_time(libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx, core.stdc.stdint.uint64_t time_in_ms);
 
 /* ****************
  * SCT functions *
@@ -238,18 +238,18 @@ void CT_POLICY_EVAL_CTX_set_time(libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX*
  * Creates a new, blank SCT.
  * The caller is responsible for calling SCT_free when finished with the SCT.
  */
-libressl_d.openssl.ossl_typ.SCT* SCT_new();
+libressl.openssl.ossl_typ.SCT* SCT_new();
 
 /**
  * Creates a new SCT from some base64-encoded strings.
  * The caller is responsible for calling SCT_free when finished with the SCT.
  */
-libressl_d.openssl.ossl_typ.SCT* SCT_new_from_base64(ubyte version_, const (char)* logid_base64, .ct_log_entry_type_t entry_type, core.stdc.stdint.uint64_t timestamp, const (char)* extensions_base64, const (char)* signature_base64);
+libressl.openssl.ossl_typ.SCT* SCT_new_from_base64(ubyte version_, const (char)* logid_base64, .ct_log_entry_type_t entry_type, core.stdc.stdint.uint64_t timestamp, const (char)* extensions_base64, const (char)* signature_base64);
 
 /**
  * Frees the SCT and the underlying data structures.
  */
-void SCT_free(libressl_d.openssl.ossl_typ.SCT* sct);
+void SCT_free(libressl.openssl.ossl_typ.SCT* sct);
 
 /**
  * Free a stack of SCTs, and the underlying SCTs themselves.
@@ -260,26 +260,26 @@ void SCT_LIST_free(.stack_st_SCT* a);
 /**
  * Returns: the version of the SCT.
  */
-.sct_version_t SCT_get_version(const (libressl_d.openssl.ossl_typ.SCT)* sct);
+.sct_version_t SCT_get_version(const (libressl.openssl.ossl_typ.SCT)* sct);
 
 /**
  * Set the version of an SCT.
  *
  * Returns: 1 on success, 0 if the version is unrecognized.
  */
-int SCT_set_version(libressl_d.openssl.ossl_typ.SCT* sct, .sct_version_t version_);
+int SCT_set_version(libressl.openssl.ossl_typ.SCT* sct, .sct_version_t version_);
 
 /**
  * Returns: the log entry type of the SCT.
  */
-.ct_log_entry_type_t SCT_get_log_entry_type(const (libressl_d.openssl.ossl_typ.SCT)* sct);
+.ct_log_entry_type_t SCT_get_log_entry_type(const (libressl.openssl.ossl_typ.SCT)* sct);
 
 /**
  * Set the log entry type of an SCT.
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int SCT_set_log_entry_type(libressl_d.openssl.ossl_typ.SCT* sct, .ct_log_entry_type_t entry_type);
+int SCT_set_log_entry_type(libressl.openssl.ossl_typ.SCT* sct, .ct_log_entry_type_t entry_type);
 
 /**
  * Gets the ID of the log that an SCT came from.
@@ -287,7 +287,7 @@ int SCT_set_log_entry_type(libressl_d.openssl.ossl_typ.SCT* sct, .ct_log_entry_t
  *
  * Returns: the length of the log ID.
  */
-size_t SCT_get0_log_id(const (libressl_d.openssl.ossl_typ.SCT)* sct, ubyte** log_id);
+size_t SCT_get0_log_id(const (libressl.openssl.ossl_typ.SCT)* sct, ubyte** log_id);
 
 /**
  * Set the log ID of an SCT to point directly to the *log_id specified.
@@ -295,7 +295,7 @@ size_t SCT_get0_log_id(const (libressl_d.openssl.ossl_typ.SCT)* sct, ubyte** log
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int SCT_set0_log_id(libressl_d.openssl.ossl_typ.SCT* sct, ubyte* log_id, size_t log_id_len);
+int SCT_set0_log_id(libressl.openssl.ossl_typ.SCT* sct, ubyte* log_id, size_t log_id_len);
 
 /**
  * Set the log ID of an SCT.
@@ -303,24 +303,24 @@ int SCT_set0_log_id(libressl_d.openssl.ossl_typ.SCT* sct, ubyte* log_id, size_t 
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int SCT_set1_log_id(libressl_d.openssl.ossl_typ.SCT* sct, const (ubyte)* log_id, size_t log_id_len);
+int SCT_set1_log_id(libressl.openssl.ossl_typ.SCT* sct, const (ubyte)* log_id, size_t log_id_len);
 
 /**
  * Returns: the timestamp for the SCT (epoch time in milliseconds).
  */
-core.stdc.stdint.uint64_t SCT_get_timestamp(const (libressl_d.openssl.ossl_typ.SCT)* sct);
+core.stdc.stdint.uint64_t SCT_get_timestamp(const (libressl.openssl.ossl_typ.SCT)* sct);
 
 /**
  * Set the timestamp of an SCT (epoch time in milliseconds).
  */
-void SCT_set_timestamp(libressl_d.openssl.ossl_typ.SCT* sct, core.stdc.stdint.uint64_t timestamp);
+void SCT_set_timestamp(libressl.openssl.ossl_typ.SCT* sct, core.stdc.stdint.uint64_t timestamp);
 
 /**
  * Return the NID for the signature used by the SCT.
  * For CT v1, this will be either NID_sha256WithRSAEncryption or
  * NID_ecdsa_with_SHA256 (or NID_undef if incorrect/unset).
  */
-int SCT_get_signature_nid(const (libressl_d.openssl.ossl_typ.SCT)* sct);
+int SCT_get_signature_nid(const (libressl.openssl.ossl_typ.SCT)* sct);
 
 /**
  * Set the signature type of an SCT
@@ -329,7 +329,7 @@ int SCT_get_signature_nid(const (libressl_d.openssl.ossl_typ.SCT)* sct);
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int SCT_set_signature_nid(libressl_d.openssl.ossl_typ.SCT* sct, int nid);
+int SCT_set_signature_nid(libressl.openssl.ossl_typ.SCT* sct, int nid);
 
 /**
  * Set *ext to point to the extension data for the SCT. ext must not be null.
@@ -337,13 +337,13 @@ int SCT_set_signature_nid(libressl_d.openssl.ossl_typ.SCT* sct, int nid);
  *
  * Returns: length of the data pointed to.
  */
-size_t SCT_get0_extensions(const (libressl_d.openssl.ossl_typ.SCT)* sct, ubyte** ext);
+size_t SCT_get0_extensions(const (libressl.openssl.ossl_typ.SCT)* sct, ubyte** ext);
 
 /**
  * Set the extensions of an SCT to point directly to the *ext specified.
  * The SCT takes ownership of the specified pointer.
  */
-void SCT_set0_extensions(libressl_d.openssl.ossl_typ.SCT* sct, ubyte* ext, size_t ext_len);
+void SCT_set0_extensions(libressl.openssl.ossl_typ.SCT* sct, ubyte* ext, size_t ext_len);
 
 /**
  * Set the extensions of an SCT.
@@ -351,7 +351,7 @@ void SCT_set0_extensions(libressl_d.openssl.ossl_typ.SCT* sct, ubyte* ext, size_
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int SCT_set1_extensions(libressl_d.openssl.ossl_typ.SCT* sct, const (ubyte)* ext, size_t ext_len);
+int SCT_set1_extensions(libressl.openssl.ossl_typ.SCT* sct, const (ubyte)* ext, size_t ext_len);
 
 /**
  * Set *sig to point to the signature for the SCT. sig must not be null.
@@ -359,37 +359,37 @@ int SCT_set1_extensions(libressl_d.openssl.ossl_typ.SCT* sct, const (ubyte)* ext
  *
  * Returns: length of the data pointed to.
  */
-size_t SCT_get0_signature(const (libressl_d.openssl.ossl_typ.SCT)* sct, ubyte** sig);
+size_t SCT_get0_signature(const (libressl.openssl.ossl_typ.SCT)* sct, ubyte** sig);
 
 /**
  * Set the signature of an SCT to point directly to the *sig specified.
  * The SCT takes ownership of the specified pointer.
  */
-void SCT_set0_signature(libressl_d.openssl.ossl_typ.SCT* sct, ubyte* sig, size_t sig_len);
+void SCT_set0_signature(libressl.openssl.ossl_typ.SCT* sct, ubyte* sig, size_t sig_len);
 
 /**
  * Set the signature of an SCT to be a copy of the *sig specified.
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int SCT_set1_signature(libressl_d.openssl.ossl_typ.SCT* sct, const (ubyte)* sig, size_t sig_len);
+int SCT_set1_signature(libressl.openssl.ossl_typ.SCT* sct, const (ubyte)* sig, size_t sig_len);
 
 /**
  * The origin of this SCT, e.g. TLS extension, OCSP response, etc.
  */
-.sct_source_t SCT_get_source(const (libressl_d.openssl.ossl_typ.SCT)* sct);
+.sct_source_t SCT_get_source(const (libressl.openssl.ossl_typ.SCT)* sct);
 
 /**
  * Set the origin of this SCT, e.g. TLS extension, OCSP response, etc.
  *
  * Returns: 1 on success, 0 otherwise.
  */
-int SCT_set_source(libressl_d.openssl.ossl_typ.SCT* sct, .sct_source_t source);
+int SCT_set_source(libressl.openssl.ossl_typ.SCT* sct, .sct_source_t source);
 
 /**
  * Returns: a text string describing the validation status of |sct|.
  */
-const (char)* SCT_validation_status_string(const (libressl_d.openssl.ossl_typ.SCT)* sct);
+const (char)* SCT_validation_status_string(const (libressl.openssl.ossl_typ.SCT)* sct);
 
 /**
  * Pretty-prints an |sct| to |out|.
@@ -397,7 +397,7 @@ const (char)* SCT_validation_status_string(const (libressl_d.openssl.ossl_typ.SC
  * If |logs| is not null, it will be used to lookup the CT log that the SCT came
  * from, so that the log name can be printed.
  */
-void SCT_print(const (libressl_d.openssl.ossl_typ.SCT)* sct, libressl_d.openssl.ossl_typ.BIO* out_, int indent, const (libressl_d.openssl.ossl_typ.CTLOG_STORE)* logs);
+void SCT_print(const (libressl.openssl.ossl_typ.SCT)* sct, libressl.openssl.ossl_typ.BIO* out_, int indent, const (libressl.openssl.ossl_typ.CTLOG_STORE)* logs);
 
 /**
  * Pretty-prints an |sct_list| to |out|.
@@ -406,13 +406,13 @@ void SCT_print(const (libressl_d.openssl.ossl_typ.SCT)* sct, libressl_d.openssl.
  * If |logs| is not null, it will be used to lookup the CT log that each SCT
  * came from, so that the log names can be printed.
  */
-void SCT_LIST_print(const (.stack_st_SCT)* sct_list, libressl_d.openssl.ossl_typ.BIO* out_, int indent, const (char)* separator, const (libressl_d.openssl.ossl_typ.CTLOG_STORE)* logs);
+void SCT_LIST_print(const (.stack_st_SCT)* sct_list, libressl.openssl.ossl_typ.BIO* out_, int indent, const (char)* separator, const (libressl.openssl.ossl_typ.CTLOG_STORE)* logs);
 
 /**
  * Gets the last result of validating this SCT.
  * If it has not been validated yet, returns SCT_VALIDATION_STATUS_NOT_SET.
  */
-.sct_validation_status_t SCT_get_validation_status(const (libressl_d.openssl.ossl_typ.SCT)* sct);
+.sct_validation_status_t SCT_get_validation_status(const (libressl.openssl.ossl_typ.SCT)* sct);
 
 /**
  * Validates the given SCT with the provided context.
@@ -420,7 +420,7 @@ void SCT_LIST_print(const (.stack_st_SCT)* sct_list, libressl_d.openssl.ossl_typ
  *
  * Returns: 1 if the SCT is valid and the signature verifies. 0 if the SCT is invalid or could not be verified. -1 if an error occurs.
  */
-int SCT_validate(libressl_d.openssl.ossl_typ.SCT* sct, const (libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
+int SCT_validate(libressl.openssl.ossl_typ.SCT* sct, const (libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX)* ctx);
 
 /**
  * Validates the given list of SCTs with the provided context.
@@ -428,7 +428,7 @@ int SCT_validate(libressl_d.openssl.ossl_typ.SCT* sct, const (libressl_d.openssl
  *
  * Returns: 1 if there are no invalid SCTs and all signatures verify. 0 if at least one SCT is invalid or could not be verified. a negative integer if an error occurs.
  */
-int SCT_LIST_validate(const (.stack_st_SCT)* scts, libressl_d.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx);
+int SCT_LIST_validate(const (.stack_st_SCT)* scts, libressl.openssl.ossl_typ.CT_POLICY_EVAL_CTX* ctx);
 
 /* ********************************
  * SCT parsing and serialisation *
@@ -495,7 +495,7 @@ int i2d_SCT_LIST(const (.stack_st_SCT)* a, ubyte** pp);
  * to it.
  * The length of the SCT in TLS format will be returned.
  */
-int i2o_SCT(const (libressl_d.openssl.ossl_typ.SCT)* sct, ubyte** out_);
+int i2o_SCT(const (libressl.openssl.ossl_typ.SCT)* sct, ubyte** out_);
 
 /**
  * Parses an SCT in TLS format and returns it.
@@ -508,7 +508,7 @@ int i2o_SCT(const (libressl_d.openssl.ossl_typ.SCT)* sct, ubyte** out_);
  * If the SCT is an unsupported version, only the SCT's 'sct' and 'sct_len'
  * fields will be populated (with |in| and |len| respectively).
  */
-libressl_d.openssl.ossl_typ.SCT* o2i_SCT(libressl_d.openssl.ossl_typ.SCT** psct, const (ubyte)** in_, size_t len);
+libressl.openssl.ossl_typ.SCT* o2i_SCT(libressl.openssl.ossl_typ.SCT** psct, const (ubyte)** in_, size_t len);
 
 /* *******************
  * CT log functions *
@@ -520,7 +520,7 @@ libressl_d.openssl.ossl_typ.SCT* o2i_SCT(libressl_d.openssl.ossl_typ.SCT** psct,
  * Returns null if malloc fails or if |public_key| cannot be converted to DER.
  * Should be deleted by the caller using CTLOG_free when no longer needed.
  */
-libressl_d.openssl.ossl_typ.CTLOG* CTLOG_new(libressl_d.openssl.ossl_typ.EVP_PKEY* public_key, const (char)* name);
+libressl.openssl.ossl_typ.CTLOG* CTLOG_new(libressl.openssl.ossl_typ.EVP_PKEY* public_key, const (char)* name);
 
 /**
  * Creates a new CTLOG instance with the base64-encoded SubjectPublicKeyInfo DER
@@ -528,27 +528,27 @@ libressl_d.openssl.ossl_typ.CTLOG* CTLOG_new(libressl_d.openssl.ossl_typ.EVP_PKE
  * Returns 1 on success, 0 on failure.
  * Should be deleted by the caller using CTLOG_free when no longer needed.
  */
-int CTLOG_new_from_base64(libressl_d.openssl.ossl_typ.CTLOG** ct_log, const (char)* pkey_base64, const (char)* name);
+int CTLOG_new_from_base64(libressl.openssl.ossl_typ.CTLOG** ct_log, const (char)* pkey_base64, const (char)* name);
 
 /**
  * Deletes a CT log instance and its fields.
  */
-void CTLOG_free(libressl_d.openssl.ossl_typ.CTLOG* log);
+void CTLOG_free(libressl.openssl.ossl_typ.CTLOG* log);
 
 /**
  * Gets the name of the CT log
  */
-const (char)* CTLOG_get0_name(const (libressl_d.openssl.ossl_typ.CTLOG)* log);
+const (char)* CTLOG_get0_name(const (libressl.openssl.ossl_typ.CTLOG)* log);
 
 /**
  * Gets the ID of the CT log
  */
-void CTLOG_get0_log_id(const (libressl_d.openssl.ossl_typ.CTLOG)* log, const (core.stdc.stdint.uint8_t)** log_id, size_t* log_id_len);
+void CTLOG_get0_log_id(const (libressl.openssl.ossl_typ.CTLOG)* log, const (core.stdc.stdint.uint8_t)** log_id, size_t* log_id_len);
 
 /**
  * Gets the public key of the CT log
  */
-libressl_d.openssl.ossl_typ.EVP_PKEY* CTLOG_get0_public_key(const (libressl_d.openssl.ossl_typ.CTLOG)* log);
+libressl.openssl.ossl_typ.EVP_PKEY* CTLOG_get0_public_key(const (libressl.openssl.ossl_typ.CTLOG)* log);
 
 /* *************************
  * CT log store functions *
@@ -558,33 +558,33 @@ libressl_d.openssl.ossl_typ.EVP_PKEY* CTLOG_get0_public_key(const (libressl_d.op
  * Creates a new CT log store.
  * Should be deleted by the caller using CTLOG_STORE_free when no longer needed.
  */
-libressl_d.openssl.ossl_typ.CTLOG_STORE* CTLOG_STORE_new();
+libressl.openssl.ossl_typ.CTLOG_STORE* CTLOG_STORE_new();
 
 /**
  * Deletes a CT log store and all of the CT log instances held within.
  */
-void CTLOG_STORE_free(libressl_d.openssl.ossl_typ.CTLOG_STORE* store);
+void CTLOG_STORE_free(libressl.openssl.ossl_typ.CTLOG_STORE* store);
 
 /**
  * Finds a CT log in the store based on its log ID.
  *
  * Returns: the CT log, or null if no match is found.
  */
-const (libressl_d.openssl.ossl_typ.CTLOG)* CTLOG_STORE_get0_log_by_id(const (libressl_d.openssl.ossl_typ.CTLOG_STORE)* store, const (core.stdc.stdint.uint8_t)* log_id, size_t log_id_len);
+const (libressl.openssl.ossl_typ.CTLOG)* CTLOG_STORE_get0_log_by_id(const (libressl.openssl.ossl_typ.CTLOG_STORE)* store, const (core.stdc.stdint.uint8_t)* log_id, size_t log_id_len);
 
 /**
  * Loads a CT log list into a |store| from a |file|.
  *
  * Returns: 1 if loading is successful, or 0 otherwise.
  */
-int CTLOG_STORE_load_file(libressl_d.openssl.ossl_typ.CTLOG_STORE* store, const (char)* file);
+int CTLOG_STORE_load_file(libressl.openssl.ossl_typ.CTLOG_STORE* store, const (char)* file);
 
 /**
  * Loads the default CT log list into a |store|.
  *
  * Returns: 1 if loading is successful, or 0 otherwise.
  */
-int CTLOG_STORE_load_default_file(libressl_d.openssl.ossl_typ.CTLOG_STORE* store);
+int CTLOG_STORE_load_default_file(libressl.openssl.ossl_typ.CTLOG_STORE* store);
 
 int ERR_load_CT_strings();
 

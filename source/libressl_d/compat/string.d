@@ -2,14 +2,14 @@
  * Public domain
  * string.h compatibility shim
  */
-module libressl_d.compat.string;
+module libressl.compat.string;
 
 
 private static import core.sys.windows.winsock2;
 public import core.stdc.string;
 public import core.sys.posix.string;
 public import core.sys.posix.strings;
-public import libressl_d.compat.sys.types;
+public import libressl.compat.sys.types;
 
 version (Windows) {
 	public import core.stdc.errno;

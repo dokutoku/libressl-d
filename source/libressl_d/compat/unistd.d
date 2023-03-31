@@ -2,12 +2,12 @@
  * Public domain
  * unistd.h compatibility shim
  */
-module libressl_d.compat.unistd;
+module libressl.compat.unistd;
 
 
 private static import core.sys.windows.winbase;
-private static import libressl_d.compat.stdio;
-private static import libressl_d.compat.sys.types;
+private static import libressl.compat.stdio;
+private static import libressl.compat.sys.types;
 public import core.sys.posix.unistd;
 
 extern (C):
@@ -15,13 +15,13 @@ nothrow @nogc:
 
 version (Posix) {
 	//#if defined(__MINGW32__)
-		//int ftruncate(int fd, libressl_d.compat.stdio.off_t length_);
-		//libressl_d.compat.sys.types.uid_t getuid();
-		//libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
-		//libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
+		//int ftruncate(int fd, libressl.compat.stdio.off_t length_);
+		//libressl.compat.sys.types.uid_t getuid();
+		//libressl.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl.compat.stdio.off_t offset);
+		//libressl.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl.compat.stdio.off_t offset);
 	//#endif
 } else {
-	public import libressl_d.compat.stdlib;
+	public import libressl.compat.stdlib;
 	//#include <io.h>
 	//#include <process.h>
 
@@ -58,10 +58,10 @@ version (Posix) {
 		//alias access = ._access;
 	}
 
-	int ftruncate(int fd, libressl_d.compat.stdio.off_t length_);
-	libressl_d.compat.sys.types.uid_t getuid();
-	libressl_d.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
-	libressl_d.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl_d.compat.stdio.off_t offset);
+	int ftruncate(int fd, libressl.compat.stdio.off_t length_);
+	libressl.compat.sys.types.uid_t getuid();
+	libressl.compat.sys.types.ssize_t pread(int d, void* buf, size_t nbytes, libressl.compat.stdio.off_t offset);
+	libressl.compat.sys.types.ssize_t pwrite(int d, const (void)* buf, size_t nbytes, libressl.compat.stdio.off_t offset);
 }
 
 static if (!__traits(compiles, getentropy)) {

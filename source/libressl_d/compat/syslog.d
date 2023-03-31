@@ -2,7 +2,7 @@
  * Public domain
  * syslog.h compatibility shim
  */
-module libressl_d.compat.syslog;
+module libressl.compat.syslog;
 
 
 private static import core.stdc.stdarg;

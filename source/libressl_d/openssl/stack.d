@@ -55,7 +55,7 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.stack;
+module libressl.openssl.stack;
 
 
 extern (C):

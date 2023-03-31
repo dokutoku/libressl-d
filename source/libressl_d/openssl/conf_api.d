@@ -55,13 +55,13 @@
  * copied and put under another distribution licence
  * [including the GNU Public Licence.]
  */
-module libressl_d.openssl.conf_api;
+module libressl.openssl.conf_api;
 
 
 private static import core.stdc.config;
-private static import libressl_d.openssl.ossl_typ;
-public import libressl_d.openssl.conf;
-public import libressl_d.openssl.lhash;
+private static import libressl.openssl.ossl_typ;
+public import libressl.openssl.conf;
+public import libressl.openssl.lhash;
 
 extern (C):
 nothrow @nogc:
@@ -69,21 +69,21 @@ nothrow @nogc:
 /**
  * Up until OpenSSL 0.9.5a, this was new_section
  */
-libressl_d.openssl.conf.CONF_VALUE* _CONF_new_section(libressl_d.openssl.ossl_typ.CONF* conf, const (char)* section);
+libressl.openssl.conf.CONF_VALUE* _CONF_new_section(libressl.openssl.ossl_typ.CONF* conf, const (char)* section);
 
 /**
  * Up until OpenSSL 0.9.5a, this was get_section
  */
-libressl_d.openssl.conf.CONF_VALUE* _CONF_get_section(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (char)* section);
+libressl.openssl.conf.CONF_VALUE* _CONF_get_section(const (libressl.openssl.ossl_typ.CONF)* conf, const (char)* section);
 
 /**
  * Up until OpenSSL 0.9.5a, this was CONF_get_section
  */
-libressl_d.openssl.conf.stack_st_CONF_VALUE* _CONF_get_section_values(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (char)* section);
+libressl.openssl.conf.stack_st_CONF_VALUE* _CONF_get_section_values(const (libressl.openssl.ossl_typ.CONF)* conf, const (char)* section);
 
-int _CONF_add_string(libressl_d.openssl.ossl_typ.CONF* conf, libressl_d.openssl.conf.CONF_VALUE* section, libressl_d.openssl.conf.CONF_VALUE* value);
-char* _CONF_get_string(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (char)* section, const (char)* name);
-core.stdc.config.c_long _CONF_get_number(const (libressl_d.openssl.ossl_typ.CONF)* conf, const (char)* section, const (char)* name);
+int _CONF_add_string(libressl.openssl.ossl_typ.CONF* conf, libressl.openssl.conf.CONF_VALUE* section, libressl.openssl.conf.CONF_VALUE* value);
+char* _CONF_get_string(const (libressl.openssl.ossl_typ.CONF)* conf, const (char)* section, const (char)* name);
+core.stdc.config.c_long _CONF_get_number(const (libressl.openssl.ossl_typ.CONF)* conf, const (char)* section, const (char)* name);
 
-int _CONF_new_data(libressl_d.openssl.ossl_typ.CONF* conf);
-void _CONF_free_data(libressl_d.openssl.ossl_typ.CONF* conf);
+int _CONF_new_data(libressl.openssl.ossl_typ.CONF* conf);
+void _CONF_free_data(libressl.openssl.ossl_typ.CONF* conf);
