@@ -1,4 +1,4 @@
-/* $OpenBSD: crypto.h,v 1.57 2022/09/11 17:26:51 tb Exp $ */
+/* $OpenBSD: crypto.h,v 1.58 2022/12/26 07:18:50 jmc Exp $ */
 /* ====================================================================
  * Copyright (c) 1998-2006 The OpenSSL Project.  All rights reserved.
  *
@@ -324,12 +324,12 @@ struct stack_st_void
 struct crypto_ex_data_func_st
 {
 	/**
-	 * Arbitary core.stdc.config.c_long
+	 * Arbitrary core.stdc.config.c_long
 	 */
 	core.stdc.config.c_long argl;
 
 	/**
-	 * Arbitary void *
+	 * Arbitrary void *
 	 */
 	void* argp;
 
@@ -769,7 +769,7 @@ enum OPENSSL_INIT_LOAD_CONFIG = 0x00000002L;
 enum _OPENSSL_INIT_FLAG_NOOP = 0x80000000L;
 
 /*
- * These are provided for compatibiliy, but have no effect
+ * These are provided for compatibility, but have no effect
  * on how LibreSSL is initialized.
  */
 enum OPENSSL_INIT_NO_LOAD_CRYPTO_STRINGS = ._OPENSSL_INIT_FLAG_NOOP;

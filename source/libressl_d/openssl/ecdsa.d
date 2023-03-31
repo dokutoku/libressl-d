@@ -1,4 +1,4 @@
-/* $OpenBSD: ecdsa.h,v 1.12 2022/07/12 14:42:49 kn Exp $ */
+/* $OpenBSD: ecdsa.h,v 1.13 2022/12/26 07:18:51 jmc Exp $ */
 /**
  * Include file for the OpenSSL ECDSA functions
  *
@@ -181,7 +181,7 @@ int ECDSA_SIG_set0(.ECDSA_SIG* sig, libressl_d.openssl.ossl_typ.BIGNUM* r, libre
  *      dgst = pointer to the hash value to sign
  *      dgstlen = length of the hash value
  *      kinv = BIGNUM with a pre-computed inverse k (optional)
- *      rp = BIGNUM with a pre-computed rp value (optioanl), see ECDSA_sign_setup
+ *      rp = BIGNUM with a pre-computed rp value (optional), see ECDSA_sign_setup
  *      eckey = EC_KEY object containing a private EC key
  *
  * Returns: pointer to a ECDSA_SIG structure or null if an error occurred
@@ -277,7 +277,7 @@ int ECDSA_sign(int type, const (ubyte)* dgst, int dgstlen, ubyte* sig, uint* sig
  *      sig = buffer to hold the DER encoded signature
  *      siglen = pointer to the length of the returned signature
  *      kinv = BIGNUM with a pre-computed inverse k (optional)
- *      rp = BIGNUM with a pre-computed rp value (optioanl), see ECDSA_sign_setup
+ *      rp = BIGNUM with a pre-computed rp value (optional), see ECDSA_sign_setup
  *      eckey = EC_KEY object containing a private EC key
  *
  * Returns: 1 on success and 0 otherwise

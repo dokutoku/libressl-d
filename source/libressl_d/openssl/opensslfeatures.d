@@ -20,6 +20,13 @@ version (LIBRESSL_HAS_TLS1_3) {
 
 version (none):
 
+/*
+ * Used for compatibility with compilers lacking __attribute__
+ */
+//#if defined(_MSC_VER) && !defined(__clang__) && !defined(__attribute__)
+	//#define __attribute__(a)
+//#endif
+
 version = LIBRESSL_HAS_QUIC;
 version = LIBRESSL_HAS_TLS1_3;
 version = LIBRESSL_HAS_DTLS1_2;

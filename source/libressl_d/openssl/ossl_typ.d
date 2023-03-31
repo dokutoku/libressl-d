@@ -1,4 +1,4 @@
-/* $OpenBSD: ossl_typ.h,v 1.21 2022/01/14 08:59:30 tb Exp $ */
+/* $OpenBSD: ossl_typ.h,v 1.22 2022/12/26 07:18:50 jmc Exp $ */
 /* ====================================================================
  * Copyright (c) 1998-2001 The OpenSSL Project.  All rights reserved.
  *
@@ -274,7 +274,7 @@ alias DIST_POINT = libressl_d.openssl.x509v3.DIST_POINT_st;
 alias ISSUING_DIST_POINT = libressl_d.openssl.x509v3.ISSUING_DIST_POINT_st;
 alias NAME_CONSTRAINTS = libressl_d.openssl.x509v3.NAME_CONSTRAINTS_st;
 
-/* If placed in pkcs12.h, we end up with a circular depency with pkcs7.h */
+/* If placed in pkcs12.h, we end up with a circular dependency with pkcs7.h */
 //#define DECLARE_PKCS12_STACK_OF(type) /* Nothing */
 //#define IMPLEMENT_PKCS12_STACK_OF(type) /* Nothing */
 

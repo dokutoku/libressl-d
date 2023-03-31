@@ -1,4 +1,4 @@
-/* $OpenBSD: evp.h,v 1.112 2022/11/13 14:04:13 tb Exp $ */
+/* $OpenBSD: evp.h,v 1.114 2023/03/10 16:41:07 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -673,6 +673,32 @@ core.stdc.config.c_ulong EVP_CIPHER_CTX_mode(const (libressl_d.openssl.ossl_typ.
 	{
 		return .EVP_CIPHER_CTX_flags(e) & .EVP_CIPH_MODE;
 	}
+
+libressl_d.openssl.ossl_typ.EVP_CIPHER* EVP_CIPHER_meth_new(int cipher_type, int block_size, int key_len);
+libressl_d.openssl.ossl_typ.EVP_CIPHER* EVP_CIPHER_meth_dup(const (libressl_d.openssl.ossl_typ.EVP_CIPHER)* cipher);
+void EVP_CIPHER_meth_free(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher);
+
+int EVP_CIPHER_meth_set_iv_length(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, int iv_len);
+int EVP_CIPHER_meth_set_flags(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, core.stdc.config.c_ulong flags);
+int EVP_CIPHER_meth_set_impl_ctx_size(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, int ctx_size);
+
+private alias EVP_CIPHER_meth_set_init_func =  /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX* ctx, const (ubyte)* key, const (ubyte)* iv, int enc);
+int EVP_CIPHER_meth_set_init(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, .EVP_CIPHER_meth_set_init_func init);
+
+private alias EVP_CIPHER_meth_set_do_cipher_func =  /* Temporary type */ extern (C) nothrow @nogc int function(EVP_CIPHER_CTX* ctx, ubyte* out_, const (ubyte)* in_, size_t inl);
+int EVP_CIPHER_meth_set_do_cipher(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, .EVP_CIPHER_meth_set_do_cipher_func do_cipher);
+
+private alias EVP_CIPHER_meth_set_cleanup_func =  /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX*);
+int EVP_CIPHER_meth_set_cleanup(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, .EVP_CIPHER_meth_set_cleanup_func cleanup);
+
+private alias EVP_CIPHER_meth_set_set_asn1_params_func =  /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX*, ASN1_TYPE*);
+int EVP_CIPHER_meth_set_set_asn1_params(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, .EVP_CIPHER_meth_set_set_asn1_params_func set_asn1_parameters);
+
+private alias EVP_CIPHER_meth_set_get_asn1_params_func =  /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX*, ASN1_TYPE*);
+int EVP_CIPHER_meth_set_get_asn1_params(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, .EVP_CIPHER_meth_set_get_asn1_params_func get_asn1_parameters);
+
+private alias EVP_CIPHER_meth_set_ctrl_func =  /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.EVP_CIPHER_CTX*, int type, int arg, void* ptr_);
+int EVP_CIPHER_meth_set_ctrl(libressl_d.openssl.ossl_typ.EVP_CIPHER* cipher, .EVP_CIPHER_meth_set_ctrl_func ctrl);
 
 libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new_raw_private_key(int type, libressl_d.openssl.ossl_typ.ENGINE* engine, const (ubyte)* private_key, size_t len);
 libressl_d.openssl.ossl_typ.EVP_PKEY* EVP_PKEY_new_raw_public_key(int type, libressl_d.openssl.ossl_typ.ENGINE* engine, const (ubyte)* public_key, size_t len);

@@ -1,4 +1,4 @@
-/* $OpenBSD: x509.h,v 1.90 2022/07/12 14:42:50 kn Exp $ */
+/* $OpenBSD: x509.h,v 1.94 2023/03/10 16:43:02 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -558,6 +558,8 @@ libressl_d.openssl.ossl_typ.X509_NAME* X509_CRL_get_issuer(const (libressl_d.ope
 .stack_st_X509_REVOKED* X509_CRL_get_REVOKED(libressl_d.openssl.ossl_typ.X509_CRL* crl);
 void X509_CRL_get0_signature(const (libressl_d.openssl.ossl_typ.X509_CRL)* crl, const (libressl_d.openssl.ossl_typ.ASN1_BIT_STRING)** psig, const (libressl_d.openssl.ossl_typ.X509_ALGOR)** palg);
 
+const (libressl_d.openssl.ossl_typ.X509_ALGOR)* X509_CRL_get0_tbs_sigalg(const (libressl_d.openssl.ossl_typ.X509_CRL)* crl);
+
 int X509_REQ_get_signature_nid(const (.X509_REQ)* req);
 
 void X509_REQ_get0_signature(const (.X509_REQ)* req, const (libressl_d.openssl.ossl_typ.ASN1_BIT_STRING)** psig, const (libressl_d.openssl.ossl_typ.X509_ALGOR)** palg);
@@ -921,6 +923,7 @@ version (OPENSSL_NO_EVP) {
 }
 
 const (.stack_st_X509_EXTENSION)* X509_get0_extensions(const (libressl_d.openssl.ossl_typ.X509)* x);
+void X509_get0_uids(const (libressl_d.openssl.ossl_typ.X509)* x, const (libressl_d.openssl.ossl_typ.ASN1_BIT_STRING)** piuid, const (libressl_d.openssl.ossl_typ.ASN1_BIT_STRING)** psuid);
 const (libressl_d.openssl.ossl_typ.X509_ALGOR)* X509_get0_tbs_sigalg(const (libressl_d.openssl.ossl_typ.X509)* x);
 int X509_set_version(libressl_d.openssl.ossl_typ.X509* x, core.stdc.config.c_long version_);
 core.stdc.config.c_long X509_get_version(const (libressl_d.openssl.ossl_typ.X509)* x);
@@ -1037,7 +1040,7 @@ int X509_NAME_get_text_by_NID(libressl_d.openssl.ossl_typ.X509_NAME* name, int n
 int X509_NAME_get_text_by_OBJ(libressl_d.openssl.ossl_typ.X509_NAME* name, const (libressl_d.openssl.ossl_typ.ASN1_OBJECT)* obj, char* buf, int len);
 
 /*
- * NOTE: you should be passsing -1, not 0 as lastpos.  The functions that use
+ * NOTE: you should be passing -1, not 0 as lastpos.  The functions that use
  * lastpos, search after that position on.
  */
 int X509_NAME_get_index_by_NID(const (libressl_d.openssl.ossl_typ.X509_NAME)* name, int nid, int lastpos);

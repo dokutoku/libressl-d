@@ -1,4 +1,4 @@
-/* $OpenBSD: ui.h,v 1.14 2022/07/12 18:43:56 jsing Exp $ */
+/* $OpenBSD: ui.h,v 1.17 2023/03/10 16:41:32 tb Exp $ */
 /* Written by Richard Levitte (richard@levitte.org) for the OpenSSL
  * project 2001.
  */
@@ -272,6 +272,8 @@ const (libressl_d.openssl.ossl_typ.UI_METHOD)* UI_set_method(libressl_d.openssl.
  */
 libressl_d.openssl.ossl_typ.UI_METHOD* UI_OpenSSL();
 
+const (libressl_d.openssl.ossl_typ.UI_METHOD)* UI_null();
+
 /*
  * ---------- For method writers ----------
  * A method contains a number of functions that implement the low level
@@ -287,7 +289,7 @@ libressl_d.openssl.ossl_typ.UI_METHOD* UI_OpenSSL();
  *			display a dialog box after it has been built.
  *	a reader	This function is called to read a given prompt,
  *			maybe from the tty, maybe from a field in a
- *			window.  Note that it's called wth all string
+ *			window.  Note that it's called with all string
  *			structures, not only the prompt ones, so it must
  *			check such things itself.
  *	a closer	This function closes the session, maybe by closing

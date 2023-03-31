@@ -1,4 +1,4 @@
-/* $OpenBSD: ui_compat.h,v 1.4 2014/06/12 15:49:31 deraadt Exp $ */
+/* $OpenBSD: ui_compat.h,v 1.5 2022/12/23 02:20:28 jsing Exp $ */
 /* Written by Richard Levitte (richard@levitte.org) for the OpenSSL
  * project 2001.
  */
@@ -64,13 +64,3 @@ public import libressl_d.openssl.ui;
 extern (C):
 nothrow @nogc:
 
-/*
- * The following functions were previously part of the DES section,
- * and are provided here for backward compatibility reasons.
- */
-
-alias des_read_pw_string = ._ossl_old_des_read_pw_string;
-alias des_read_pw = ._ossl_old_des_read_pw;
-
-int _ossl_old_des_read_pw_string(char* buf, int length_, const (char)* prompt, int verify);
-int _ossl_old_des_read_pw(char* buf, char* buff, int size, const (char)* prompt, int verify);

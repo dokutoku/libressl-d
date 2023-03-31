@@ -1,4 +1,4 @@
-/* $OpenBSD: dso.h,v 1.13 2022/07/12 14:42:49 kn Exp $ */
+/* $OpenBSD: dso.h,v 1.14 2022/12/26 07:18:51 jmc Exp $ */
 /* Written by Geoff Thorpe (geoff@geoffthorpe.net) for the OpenSSL
  * project 2000.
  */
@@ -116,7 +116,7 @@ alias DSO = .dso_st;
 /**
  * The function prototype used for method functions (or caller-provided
  * callbacks) that transform filenames. They are passed a DSO structure pointer
- * (or null if they are to be used independantly of a DSO object) and a
+ * (or null if they are to be used independently of a DSO object) and a
  * filename to transform. They should either return null (if there is an error
  * condition) or a newly allocated string containing the transformed form that
  * the caller will need to free with free() when done.
@@ -126,7 +126,7 @@ alias DSO_NAME_CONVERTER_FUNC = extern (C) nothrow @nogc char* function(.DSO*, c
 /**
  * The function prototype used for method functions (or caller-provided
  * callbacks) that merge two file specifications. They are passed a
- * DSO structure pointer (or null if they are to be used independantly of
+ * DSO structure pointer (or null if they are to be used independently of
  * a DSO object) and two file specifications to merge. They should
  * either return null (if there is an error condition) or a newly allocated
  * string containing the result of merging that the caller will need
@@ -368,7 +368,7 @@ void* DSO_bind_var(.DSO* dso, const (char)* symname);
  * containing 'addr' into 'sz' large caller-provided 'path' and
  * returns the number of characters [including trailing zero]
  * written to it. If 'sz' is 0 or negative, 'path' is ignored and
- * required amount of charachers [including trailing zero] to
+ * required amount of characters [including trailing zero] to
  * accommodate pathname is returned. If 'addr' is null, then
  * pathname of cryptolib itself is returned. Negative or zero
  * return value denotes error.

@@ -1,4 +1,4 @@
-/* $OpenBSD: bn.h,v 1.56 2022/11/30 01:47:19 jsing Exp $ */
+/* $OpenBSD: bn.h,v 1.57 2022/12/17 15:56:25 jsing Exp $ */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -136,6 +136,12 @@ enum HEADER_BN_H = true;
 
 extern (C):
 nothrow @nogc:
+
+version (LIBRESSL_INTERNAL) {
+	version = LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API;
+} else version (LIBRESSL_NEXT_API) {
+	version = LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API;
+}
 
 version (OPENSSL_SMALL_FOOTPRINT) {
 } else {
@@ -381,32 +387,37 @@ int BN_is_one(const (libressl_d.openssl.ossl_typ.BIGNUM)* a);
 int BN_is_word(const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const .BN_ULONG w);
 int BN_is_odd(const (libressl_d.openssl.ossl_typ.BIGNUM)* a);
 
-pragma(inline, true)
-int BN_one(libressl_d.openssl.ossl_typ.BIGNUM* a)
-
-	do
-	{
-		return .BN_set_word(a, 1);
-	}
-
-void BN_zero_ex(libressl_d.openssl.ossl_typ.BIGNUM* a);
-
-version (OPENSSL_NO_DEPRECATED) {
-	pragma(inline, true)
-	pure nothrow @trusted @nogc @live
-	void BN_zero(scope libressl_d.openssl.ossl_typ.BIGNUM* a)
-		do
-		{
-			.BN_zero_ex(a);
-		}
+version (LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API) {
+	void BN_zero(libressl_d.openssl.ossl_typ.BIGNUM* a);
+	int BN_one(libressl_d.openssl.ossl_typ.BIGNUM* a);
 } else {
 	pragma(inline, true)
-	int BN_zero(libressl_d.openssl.ossl_typ.BIGNUM* a)
+	int BN_one(libressl_d.openssl.ossl_typ.BIGNUM* a)
 
 		do
 		{
-			return .BN_set_word(a, 0);
+			return .BN_set_word(a, 1);
 		}
+
+	void BN_zero_ex(libressl_d.openssl.ossl_typ.BIGNUM* a);
+
+	version (OPENSSL_NO_DEPRECATED) {
+		pragma(inline, true)
+		pure nothrow @trusted @nogc @live
+		void BN_zero(scope libressl_d.openssl.ossl_typ.BIGNUM* a)
+			do
+			{
+				.BN_zero_ex(a);
+			}
+	} else {
+		pragma(inline, true)
+		int BN_zero(libressl_d.openssl.ossl_typ.BIGNUM* a)
+
+			do
+			{
+				return .BN_set_word(a, 0);
+			}
+	}
 }
 
 const (libressl_d.openssl.ossl_typ.BIGNUM)* BN_value_one();

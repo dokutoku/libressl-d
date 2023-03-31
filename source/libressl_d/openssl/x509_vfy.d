@@ -1,4 +1,4 @@
-/* $OpenBSD: x509_vfy.h,v 1.56 2022/12/01 05:27:04 tb Exp $ */
+/* $OpenBSD: x509_vfy.h,v 1.58 2023/03/10 16:44:07 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -383,7 +383,7 @@ enum X509_V_FLAG_NO_ALT_CHAINS = 0x100000;
 enum X509_V_FLAG_NO_CHECK_TIME = 0x200000;
 
 /**
- * Force the use of the legacy certificate verifcation
+ * Force the use of the legacy certificate verification
  */
 enum X509_V_FLAG_LEGACY_VERIFY = 0x400000;
 
@@ -440,13 +440,11 @@ void X509_STORE_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE* ctx, .X509
 
 alias X509_STORE_set_verify_cb_func = X509_STORE_set_verify_cb;
 
-version (LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API) {
-	alias X509_STORE_CTX_check_issued_fn = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* subject, libressl_d.openssl.ossl_typ.X509* issuer);
+alias X509_STORE_CTX_check_issued_fn = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl_d.openssl.ossl_typ.X509* subject, libressl_d.openssl.ossl_typ.X509* issuer);
 
-	.X509_STORE_CTX_check_issued_fn X509_STORE_get_check_issued(libressl_d.openssl.ossl_typ.X509_STORE* store);
-	void X509_STORE_set_check_issued(libressl_d.openssl.ossl_typ.X509_STORE* store, .X509_STORE_CTX_check_issued_fn check_issued);
-	.X509_STORE_CTX_check_issued_fn X509_STORE_CTX_get_check_issued(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
-}
+.X509_STORE_CTX_check_issued_fn X509_STORE_get_check_issued(libressl_d.openssl.ossl_typ.X509_STORE* store);
+void X509_STORE_set_check_issued(libressl_d.openssl.ossl_typ.X509_STORE* store, .X509_STORE_CTX_check_issued_fn check_issued);
+.X509_STORE_CTX_check_issued_fn X509_STORE_CTX_get_check_issued(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
 
 libressl_d.openssl.ossl_typ.X509_STORE_CTX* X509_STORE_CTX_new();
 

@@ -1,4 +1,4 @@
-/* $OpenBSD: engine.h,v 1.34 2022/07/12 14:42:49 kn Exp $ */
+/* $OpenBSD: engine.h,v 1.35 2022/12/26 07:18:52 jmc Exp $ */
 /* Written by Geoff Thorpe (geoff@geoffthorpe.net) for the OpenSSL
  * project 2000.
  */
@@ -799,7 +799,7 @@ struct st_dynamic_MEM_fns
 alias dynamic_MEM_fns = .st_dynamic_MEM_fns;
 /*
  * FIXME: Perhaps the memory and locking code (crypto.h) should declare and use
- * these types so we (and any other dependant code) can simplify a bit??
+ * these types so we (and any other dependent code) can simplify a bit??
  */
 alias dyn_lock_locking_cb = extern (C) nothrow @nogc void function(int, int, const (char)*, int);
 alias dyn_lock_add_lock_cb = extern (C) nothrow @nogc int function(int*, int, int, const (char)*, int);
