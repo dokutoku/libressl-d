@@ -341,7 +341,8 @@ int RSA_size(const (libressl_d.openssl.ossl_typ.RSA)* rsa);
 /* Deprecated version */
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	libressl_d.openssl.ossl_typ.RSA* RSA_generate_key(int bits, core.stdc.config.c_ulong e, void function(int, int, void*) callback, void* cb_arg);
+	private alias RSA_generate_key_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
+	libressl_d.openssl.ossl_typ.RSA* RSA_generate_key(int bits, core.stdc.config.c_ulong e, .RSA_generate_key_callback callback, void* cb_arg);
 }
 
 /**
@@ -495,16 +496,34 @@ libressl_d.openssl.ossl_typ.RSA_METHOD* RSA_meth_new(const (char)* name, int fla
 void RSA_meth_free(libressl_d.openssl.ossl_typ.RSA_METHOD* meth);
 libressl_d.openssl.ossl_typ.RSA_METHOD* RSA_meth_dup(const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth);
 int RSA_meth_set1_name(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, const (char)* name);
-int RSA_meth_set_priv_enc(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) priv_enc);
-int RSA_meth_set_priv_dec(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) priv_dec);
+
+private alias RSA_meth_set_priv_enc_func = /* Temporary type */ extern (C) nothrow @nogc int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding);
+int RSA_meth_set_priv_enc(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_priv_enc_func priv_enc);
+
+private alias RSA_meth_set_priv_dec_func = /* Temporary type */ extern (C) nothrow @nogc int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding);
+int RSA_meth_set_priv_dec(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_priv_dec_func priv_dec);
 //int (*RSA_meth_get_finish(const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth))(libressl_d.openssl.ossl_typ.RSA* rsa);
-int RSA_meth_set_finish(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(libressl_d.openssl.ossl_typ.RSA* rsa) finish);
-int RSA_meth_set_pub_enc(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) pub_enc);
-int RSA_meth_set_pub_dec(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding) pub_dec);
-int RSA_meth_set_mod_exp(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(libressl_d.openssl.ossl_typ.BIGNUM* r0, const (libressl_d.openssl.ossl_typ.BIGNUM)* i, libressl_d.openssl.ossl_typ.RSA* rsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx) mod_exp);
-int RSA_meth_set_bn_mod_exp(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BN_MONT_CTX* m_ctx) bn_mod_exp);
-int RSA_meth_set_init(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(libressl_d.openssl.ossl_typ.RSA* rsa) init);
-int RSA_meth_set_keygen(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int function(libressl_d.openssl.ossl_typ.RSA* rsa, int bits, libressl_d.openssl.ossl_typ.BIGNUM* e, libressl_d.openssl.ossl_typ.BN_GENCB* cb) keygen);
+
+private alias RSA_meth_set_finish_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.RSA* rsa);
+int RSA_meth_set_finish(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_finish_func finish);
+
+private alias RSA_meth_set_pub_enc_func = /* Temporary type */ extern (C) nothrow @nogc int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding);
+int RSA_meth_set_pub_enc(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_pub_enc_func pub_enc);
+
+private alias RSA_meth_set_pub_dec_func = /* Temporary type */ extern (C) nothrow @nogc int function(int flen, const (ubyte)* from, ubyte* to, libressl_d.openssl.ossl_typ.RSA* rsa, int padding);
+int RSA_meth_set_pub_dec(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_pub_dec_func pub_dec);
+
+private alias RSA_meth_set_mod_exp_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIGNUM* r0, const (libressl_d.openssl.ossl_typ.BIGNUM)* i, libressl_d.openssl.ossl_typ.RSA* rsa, libressl_d.openssl.ossl_typ.BN_CTX* ctx);
+int RSA_meth_set_mod_exp(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_mod_exp_func mod_exp);
+
+private alias RSA_meth_set_bn_mod_exp_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.BIGNUM* r, const (libressl_d.openssl.ossl_typ.BIGNUM)* a, const (libressl_d.openssl.ossl_typ.BIGNUM)* p, const (libressl_d.openssl.ossl_typ.BIGNUM)* m, libressl_d.openssl.ossl_typ.BN_CTX* ctx, libressl_d.openssl.ossl_typ.BN_MONT_CTX* m_ctx);
+int RSA_meth_set_bn_mod_exp(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_bn_mod_exp_func bn_mod_exp);
+
+private alias RSA_meth_set_init_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.RSA* rsa);
+int RSA_meth_set_init(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_init_func init);
+
+private alias RSA_meth_set_keygen_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.RSA* rsa, int bits, libressl_d.openssl.ossl_typ.BIGNUM* e, libressl_d.openssl.ossl_typ.BN_GENCB* cb);
+int RSA_meth_set_keygen(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, .RSA_meth_set_keygen_func keygen);
 int RSA_meth_set_flags(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, int flags);
 int RSA_meth_set0_app_data(libressl_d.openssl.ossl_typ.RSA_METHOD* meth, void* app_data);
 const (char)* RSA_meth_get0_name(const (libressl_d.openssl.ossl_typ.RSA_METHOD)*);
@@ -519,9 +538,13 @@ const (char)* RSA_meth_get0_name(const (libressl_d.openssl.ossl_typ.RSA_METHOD)*
 int RSA_meth_get_flags(const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth);
 void* RSA_meth_get0_app_data(const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth);
 //int (*RSA_meth_get_sign(const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth))(int type, const (ubyte)* m, uint m_length, ubyte* sigret, uint* siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa);
-int RSA_meth_set_sign(libressl_d.openssl.ossl_typ.RSA_METHOD* rsa, int function(int type, const (ubyte)* m, uint m_length, ubyte* sigret, uint* siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa) sign);
+
+private alias RSA_meth_set_sign_func = /* Temporary type */ extern (C) nothrow @nogc int function(int type, const (ubyte)* m, uint m_length, ubyte* sigret, uint* siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa);
+int RSA_meth_set_sign(libressl_d.openssl.ossl_typ.RSA_METHOD* rsa, .RSA_meth_set_sign_func sign);
 //int (*RSA_meth_get_verify(const (libressl_d.openssl.ossl_typ.RSA_METHOD)* meth))(int dtype, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa);
-int RSA_meth_set_verify(libressl_d.openssl.ossl_typ.RSA_METHOD* rsa, int function(int dtype, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa) verify);
+
+private alias RSA_meth_set_verify_func = /* Temporary type */ extern (C) nothrow @nogc int function(int dtype, const (ubyte)* m, uint m_length, const (ubyte)* sigbuf, uint siglen, const (libressl_d.openssl.ossl_typ.RSA)* rsa);
+int RSA_meth_set_verify(libressl_d.openssl.ossl_typ.RSA_METHOD* rsa, .RSA_meth_set_verify_func verify);
 
 void ERR_load_RSA_strings();
 

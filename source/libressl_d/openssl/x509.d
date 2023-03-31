@@ -563,7 +563,12 @@ int X509_REQ_get_signature_nid(const (.X509_REQ)* req);
 void X509_REQ_get0_signature(const (.X509_REQ)* req, const (libressl_d.openssl.ossl_typ.ASN1_BIT_STRING)** psig, const (libressl_d.openssl.ossl_typ.X509_ALGOR)** palg);
 
 void X509_CRL_set_default_method(const (libressl_d.openssl.ossl_typ.X509_CRL_METHOD)* meth);
-libressl_d.openssl.ossl_typ.X509_CRL_METHOD* X509_CRL_METHOD_new(int function(libressl_d.openssl.ossl_typ.X509_CRL* crl) crl_init, int function(libressl_d.openssl.ossl_typ.X509_CRL* crl) crl_free, int function(libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.X509_REVOKED** ret, libressl_d.openssl.ossl_typ.ASN1_INTEGER* ser, libressl_d.openssl.ossl_typ.X509_NAME* issuer) crl_lookup, int function(libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.EVP_PKEY* pk) crl_verify);
+
+private alias X509_CRL_METHOD_new_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_CRL* crl);
+private alias X509_CRL_METHOD_new_func2 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_CRL* crl);
+private alias X509_CRL_METHOD_new_func3 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.X509_REVOKED** ret, libressl_d.openssl.ossl_typ.ASN1_INTEGER* ser, libressl_d.openssl.ossl_typ.X509_NAME* issuer);
+private alias X509_CRL_METHOD_new_func4 = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_CRL* crl, libressl_d.openssl.ossl_typ.EVP_PKEY* pk);
+libressl_d.openssl.ossl_typ.X509_CRL_METHOD* X509_CRL_METHOD_new(.X509_CRL_METHOD_new_func1 crl_init, .X509_CRL_METHOD_new_func2 crl_free, .X509_CRL_METHOD_new_func3 crl_lookup, .X509_CRL_METHOD_new_func4 crl_verify);
 void X509_CRL_METHOD_free(libressl_d.openssl.ossl_typ.X509_CRL_METHOD* m);
 
 void X509_CRL_set_meth_data(libressl_d.openssl.ossl_typ.X509_CRL* crl, void* dat);
@@ -1183,7 +1188,10 @@ int X509_check_trust(libressl_d.openssl.ossl_typ.X509* x, int id, int flags);
 int X509_TRUST_get_count();
 .X509_TRUST* X509_TRUST_get0(int idx);
 int X509_TRUST_get_by_id(int id);
-int X509_TRUST_add(int id, int flags, int function(.X509_TRUST*, libressl_d.openssl.ossl_typ.X509*, int) ck, const (char)* name, int arg1, void* arg2);
+
+private alias X509_TRUST_add_func = /* Temporary type */ extern (C) nothrow @nogc int function(.X509_TRUST*, libressl_d.openssl.ossl_typ.X509*, int);
+int X509_TRUST_add(int id, int flags, .X509_TRUST_add_func ck, const (char)* name, int arg1, void* arg2);
+
 void X509_TRUST_cleanup();
 int X509_TRUST_get_flags(const (.X509_TRUST)* xp);
 char* X509_TRUST_get0_name(const (.X509_TRUST)* xp);

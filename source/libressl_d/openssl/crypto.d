@@ -588,16 +588,55 @@ version (LIBRESSL_INTERNAL) {
  * CRYPTO_set_mem_functions includes CRYPTO_set_locked_mem_functions --
  * call the latter last if you need different functions
  */
-int CRYPTO_set_mem_functions(void* function(size_t) m, void* function(void*, size_t) r, void function(void*) f);
-int CRYPTO_set_locked_mem_functions(void* function(size_t) m, void function(void*) free_func);
-int CRYPTO_set_mem_ex_functions(void* function(size_t, const (char)*, int) m, void* function(void*, size_t, const (char)*, int) r, void function(void*) f);
-int CRYPTO_set_locked_mem_ex_functions(void* function(size_t, const (char)*, int) m, void function(void*) free_func);
-int CRYPTO_set_mem_debug_functions(void function(void*, int, const (char)*, int, int) m, void function(void*, void*, int, const (char)*, int, int) r, void function(void*, int) f, void function(core.stdc.config.c_long) so, core.stdc.config.c_long function() go);
-void CRYPTO_get_mem_functions(void* function(size_t)* m, void* function(void*, size_t)* r, void function(void*)* f);
-void CRYPTO_get_locked_mem_functions(void* function(size_t)* m, void function(void*)* f);
-void CRYPTO_get_mem_ex_functions(void* function(size_t, const (char)*, int)* m, void* function(void*, size_t, const (char)*, int)* r, void function(void*)* f);
-void CRYPTO_get_locked_mem_ex_functions(void* function(size_t, const (char)*, int)* m, void function(void*)* f);
-void CRYPTO_get_mem_debug_functions(void function(void*, int, const (char)*, int, int)* m, void function(void*, void*, int, const (char)*, int, int)* r, void function(void*, int)* f, void function(core.stdc.config.c_long)* so, core.stdc.config.c_long function()* go);
+private alias CRYPTO_set_mem_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t);
+private alias CRYPTO_set_mem_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void* function(void*, size_t);
+private alias CRYPTO_set_mem_functions_func3 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+int CRYPTO_set_mem_functions(.CRYPTO_set_mem_functions_func1 m, .CRYPTO_set_mem_functions_func2 r, .CRYPTO_set_mem_functions_func3 f);
+
+private alias CRYPTO_set_locked_mem_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t);
+private alias CRYPTO_set_locked_mem_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+int CRYPTO_set_locked_mem_functions(.CRYPTO_set_locked_mem_functions_func1 m, .CRYPTO_set_locked_mem_functions_func2 free_func);
+
+private alias CRYPTO_set_mem_ex_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t, const (char)*, int);
+private alias CRYPTO_set_mem_ex_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void* function(void*, size_t, const (char)*, int);
+private alias CRYPTO_set_mem_ex_functions_func3 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+int CRYPTO_set_mem_ex_functions(.CRYPTO_set_mem_ex_functions_func1 m, .CRYPTO_set_mem_ex_functions_func2 r, .CRYPTO_set_mem_ex_functions_func3 f);
+
+private alias CRYPTO_set_locked_mem_ex_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t, const (char)*, int);
+private alias CRYPTO_set_locked_mem_ex_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+int CRYPTO_set_locked_mem_ex_functions(.CRYPTO_set_locked_mem_ex_functions_func1 m, .CRYPTO_set_locked_mem_ex_functions_func2 free_func);
+
+private alias CRYPTO_set_mem_debug_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void function(void*, int, const (char)*, int, int);
+private alias CRYPTO_set_mem_debug_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(void*, void*, int, const (char)*, int, int);
+private alias CRYPTO_set_mem_debug_functions_func3 = /* Temporary type */ extern (C) nothrow @nogc void function(void*, int);
+private alias CRYPTO_set_mem_debug_functions_func4 = /* Temporary type */ extern (C) nothrow @nogc void function(core.stdc.config.c_long);
+private alias CRYPTO_set_mem_debug_functions_func5 = /* Temporary type */ extern (C) nothrow @nogc core.stdc.config.c_long function();
+int CRYPTO_set_mem_debug_functions(.CRYPTO_set_mem_debug_functions_func1 m, .CRYPTO_set_mem_debug_functions_func2 r, .CRYPTO_set_mem_debug_functions_func3 f, .CRYPTO_set_mem_debug_functions_func4 so, .CRYPTO_set_mem_debug_functions_func5 go);
+
+private alias CRYPTO_get_mem_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t);
+private alias CRYPTO_get_mem_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void* function(void*, size_t);
+private alias CRYPTO_get_mem_functions_func3 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+void CRYPTO_get_mem_functions(.CRYPTO_get_mem_functions_func1* m, .CRYPTO_get_mem_functions_func2* r, .CRYPTO_get_mem_functions_func3* f);
+
+private alias CRYPTO_get_locked_mem_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t);
+private alias CRYPTO_get_locked_mem_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+void CRYPTO_get_locked_mem_functions(.CRYPTO_get_locked_mem_functions_func1* m, .CRYPTO_get_locked_mem_functions_func2* f);
+
+private alias CRYPTO_get_mem_ex_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t, const (char)*, int);
+private alias CRYPTO_get_mem_ex_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void* function(void*, size_t, const (char)*, int);
+private alias CRYPTO_get_mem_ex_functions_func3 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+void CRYPTO_get_mem_ex_functions(.CRYPTO_get_mem_ex_functions_func1* m, .CRYPTO_get_mem_ex_functions_func2* r, .CRYPTO_get_mem_ex_functions_func3* f);
+
+private alias CRYPTO_get_locked_mem_ex_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void* function(size_t, const (char)*, int);
+private alias CRYPTO_get_locked_mem_ex_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+void CRYPTO_get_locked_mem_ex_functions(.CRYPTO_get_locked_mem_ex_functions_func1* m, .CRYPTO_get_locked_mem_ex_functions_func2* f);
+
+private alias CRYPTO_get_mem_debug_functions_func1 = /* Temporary type */ extern (C) nothrow @nogc void function(void*, int, const (char)*, int, int);
+private alias CRYPTO_get_mem_debug_functions_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(void*, void*, int, const (char)*, int, int);
+private alias CRYPTO_get_mem_debug_functions_func3 = /* Temporary type */ extern (C) nothrow @nogc void function(void*, int);
+private alias CRYPTO_get_mem_debug_functions_func4 = /* Temporary type */ extern (C) nothrow @nogc void function(core.stdc.config.c_long);
+private alias CRYPTO_get_mem_debug_functions_func5 = /* Temporary type */ extern (C) nothrow @nogc core.stdc.config.c_long function();
+void CRYPTO_get_mem_debug_functions(.CRYPTO_get_mem_debug_functions_func1* m, .CRYPTO_get_mem_debug_functions_func2* r, .CRYPTO_get_mem_debug_functions_func3* f, .CRYPTO_get_mem_debug_functions_func4* so, .CRYPTO_get_mem_debug_functions_func5* go);
 
 version (LIBRESSL_INTERNAL) {
 } else {

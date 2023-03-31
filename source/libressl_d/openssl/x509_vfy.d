@@ -435,7 +435,8 @@ alias X509_STORE_CTX_verify_cb = extern (C) nothrow @nogc int function(int, libr
 
 .X509_STORE_CTX_verify_cb X509_STORE_get_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE*);
 
-void X509_STORE_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE* ctx, int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*) verify_cb);
+private alias X509_STORE_set_verify_cb_func_internal = /* Temporary type */ extern (C) nothrow @nogc int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+void X509_STORE_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE* ctx, .X509_STORE_set_verify_cb_func_internal verify_cb);
 
 alias X509_STORE_set_verify_cb_func = X509_STORE_set_verify_cb;
 
@@ -528,7 +529,8 @@ void X509_STORE_CTX_set_verify(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, 
 //ToDo:
 //int (*X509_STORE_CTX_get_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx))(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
 
-void X509_STORE_CTX_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*) verify_cb);
+private alias X509_STORE_CTX_set_verify_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+void X509_STORE_CTX_set_verify_cb(libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx, .X509_STORE_CTX_set_verify_cb_func verify_cb);
 
 alias X509_STORE_CTX_verify_fn = extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
 

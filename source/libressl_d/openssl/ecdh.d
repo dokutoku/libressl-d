@@ -93,7 +93,9 @@ const (libressl_d.openssl.ossl_typ.ECDH_METHOD)* ECDH_get_default_method();
 int ECDH_set_method(libressl_d.openssl.ec.EC_KEY*, const (libressl_d.openssl.ossl_typ.ECDH_METHOD)*);
 
 int ECDH_size(const (libressl_d.openssl.ec.EC_KEY)* ecdh);
-int ECDH_compute_key(void* out_, size_t outlen, const (libressl_d.openssl.ec.EC_POINT)* pub_key, libressl_d.openssl.ec.EC_KEY* ecdh, void* function(const (void)* in_, size_t inlen, void* out_, size_t* outlen) KDF);
+
+private alias ECDH_compute_key_func = /* Temporary type */ extern (C) nothrow @nogc void* function(const (void)* in_, size_t inlen, void* out_, size_t* outlen);
+int ECDH_compute_key(void* out_, size_t outlen, const (libressl_d.openssl.ec.EC_POINT)* pub_key, libressl_d.openssl.ec.EC_KEY* ecdh, .ECDH_compute_key_func KDF);
 
 int ECDH_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl_d.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl_d.openssl.ossl_typ.CRYPTO_EX_free free_func);
 int ECDH_set_ex_data(libressl_d.openssl.ec.EC_KEY* d, int idx, void* arg);

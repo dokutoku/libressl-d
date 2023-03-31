@@ -1093,7 +1093,11 @@ void EC_KEY_set_enc_flags(.EC_KEY* eckey, uint flags);
 .point_conversion_form_t EC_KEY_get_conv_form(const (.EC_KEY)* key);
 void EC_KEY_set_conv_form(.EC_KEY* eckey, .point_conversion_form_t cform);
 /* functions to set/get method specific data  */
-void* EC_KEY_get_key_method_data(.EC_KEY* key, void* function(void*) dup_func, void function(void*) free_func, void function(void*) clear_free_func);
+
+private alias EC_KEY_get_key_method_data_dup_func = /* Temporary type */ extern (C) nothrow @nogc void* function(void*);
+private alias EC_KEY_get_key_method_data_free_func = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+private alias EC_KEY_get_key_method_data_clear_func = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+void* EC_KEY_get_key_method_data(.EC_KEY* key, .EC_KEY_get_key_method_data_dup_func dup_func, .EC_KEY_get_key_method_data_free_func free_func, .EC_KEY_get_key_method_data_clear_func clear_free_func);
 
 /**
  * Sets the key method data of an EC_KEY object, if none has yet been set.
@@ -1107,7 +1111,10 @@ void* EC_KEY_get_key_method_data(.EC_KEY* key, void* function(void*) dup_func, v
  *
  * Returns: the previously set data pointer, or null if |data| was inserted.
  */
-void* EC_KEY_insert_key_method_data(.EC_KEY* key, void* data, void* function(void*) dup_func, void function(void*) free_func, void function(void*) clear_free_func);
+void* EC_KEY_insert_key_method_data(.EC_KEY* key, void* data, .EC_KEY_insert_key_method_data_dup_func dup_func, .EC_KEY_insert_key_method_data_free_func free_func, .EC_KEY_insert_key_method_data_clear_free_func clear_free_func);
+private alias EC_KEY_insert_key_method_data_dup_func = /* Temporary type */ extern (C) nothrow @nogc void* function(void*);
+private alias EC_KEY_insert_key_method_data_free_func = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+private alias EC_KEY_insert_key_method_data_clear_free_func = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
 
 /* wrapper functions for the underlying EC_GROUP object */
 void EC_KEY_set_asn1_flag(.EC_KEY* eckey, int asn1_flag);
@@ -1305,12 +1312,36 @@ int EC_KEY_set_method(.EC_KEY* key, const (.EC_KEY_METHOD)* meth);
 .EC_KEY* EC_KEY_new_method(libressl_d.openssl.ossl_typ.ENGINE* engine);
 .EC_KEY_METHOD* EC_KEY_METHOD_new(const (.EC_KEY_METHOD)* meth);
 void EC_KEY_METHOD_free(.EC_KEY_METHOD* meth);
-void EC_KEY_METHOD_set_init(.EC_KEY_METHOD* meth, int function(.EC_KEY* key) init, void function(.EC_KEY* key) finish, int function(.EC_KEY* dest, const (.EC_KEY)* src) copy, int function(.EC_KEY* key, const (.EC_GROUP)* grp) set_group, int function(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* priv_key) set_private, int function(.EC_KEY* key, const (.EC_POINT)* pub_key) set_public);
-void EC_KEY_METHOD_set_keygen(.EC_KEY_METHOD* meth, int function(.EC_KEY* key) keygen);
-void EC_KEY_METHOD_set_compute_key(.EC_KEY_METHOD* meth, int function(void* out_, size_t outlen, const (.EC_POINT)* pub_key, .EC_KEY* ecdh, void* function(const (void)* in_, size_t inlen, void* out_, size_t* outlen) KDF) ckey);
-void EC_KEY_METHOD_get_init(const (.EC_KEY_METHOD)* meth, int function(.EC_KEY* key)* pinit, void function(.EC_KEY* key)* pfinish, int function(.EC_KEY* dest, const (.EC_KEY)* src)* pcopy, int function(.EC_KEY* key, const (.EC_GROUP)* grp)* pset_group, int function(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* priv_key)* pset_private, int function(.EC_KEY* key, const (.EC_POINT)* pub_key)* pset_public);
-void EC_KEY_METHOD_get_keygen(const (.EC_KEY_METHOD)* meth, int function(.EC_KEY* key)* pkeygen);
-void EC_KEY_METHOD_get_compute_key(const (.EC_KEY_METHOD)* meth, int function(void* out_, size_t outlen, const (.EC_POINT)* pub_key, .EC_KEY* ecdh, void* function(const (void)* in_, size_t inlen, void* out_, size_t* outlen) KDF)* pck);
+
+private alias EC_KEY_METHOD_set_init_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key);
+private alias EC_KEY_METHOD_set_init_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(.EC_KEY* key);
+private alias EC_KEY_METHOD_set_init_func3 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* dest, const (.EC_KEY)* src);
+private alias EC_KEY_METHOD_set_init_func4 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_GROUP)* grp);
+private alias EC_KEY_METHOD_set_init_func5 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* priv_key);
+private alias EC_KEY_METHOD_set_init_func6 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_POINT)* pub_key);
+void EC_KEY_METHOD_set_init(.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_init_func1 init, .EC_KEY_METHOD_set_init_func2 finish, .EC_KEY_METHOD_set_init_func3 copy, .EC_KEY_METHOD_set_init_func4 set_group, .EC_KEY_METHOD_set_init_func5 set_private, .EC_KEY_METHOD_set_init_func6 set_public);
+
+private alias EC_KEY_METHOD_set_keygen_func = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key);
+void EC_KEY_METHOD_set_keygen(.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_keygen_func keygen);
+
+private alias EC_KEY_METHOD_set_compute_key_func1_internal = /* Temporary type */ extern (C) nothrow @nogc void* function(const (void)* in_, size_t inlen, void* out_, size_t* outlen);
+private alias EC_KEY_METHOD_set_compute_key_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(void* out_, size_t outlen, const (.EC_POINT)* pub_key, .EC_KEY* ecdh, .EC_KEY_METHOD_set_compute_key_func1_internal KDF) ;
+void EC_KEY_METHOD_set_compute_key(.EC_KEY_METHOD* meth, .EC_KEY_METHOD_set_compute_key_func1 ckey);
+
+private alias EC_KEY_METHOD_get_init_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key);
+private alias EC_KEY_METHOD_get_init_func2 = /* Temporary type */ extern (C) nothrow @nogc void function(.EC_KEY* key);
+private alias EC_KEY_METHOD_get_init_func3 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* dest, const (.EC_KEY)* src);
+private alias EC_KEY_METHOD_get_init_func4 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_GROUP)* grp);
+private alias EC_KEY_METHOD_get_init_func5 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (libressl_d.openssl.ossl_typ.BIGNUM)* priv_key);
+private alias EC_KEY_METHOD_get_init_func6 = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key, const (.EC_POINT)* pub_key);
+void EC_KEY_METHOD_get_init(const (.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_init_func1* pinit, .EC_KEY_METHOD_get_init_func2* pfinish, .EC_KEY_METHOD_get_init_func3* pcopy, .EC_KEY_METHOD_get_init_func4* pset_group, .EC_KEY_METHOD_get_init_func5* pset_private, .EC_KEY_METHOD_get_init_func6* pset_public);
+
+private alias EC_KEY_METHOD_get_keygen_func = /* Temporary type */ extern (C) nothrow @nogc int function(.EC_KEY* key);
+void EC_KEY_METHOD_get_keygen(const (.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_keygen_func* pkeygen);
+
+private alias EC_KEY_METHOD_get_compute_key_func1_internal = /* Temporary type */ extern (C) nothrow @nogc void* function(const (void)* in_, size_t inlen, void* out_, size_t* outlen);
+private alias EC_KEY_METHOD_get_compute_key_func1 = /* Temporary type */ extern (C) nothrow @nogc int function(void* out_, size_t outlen, const (.EC_POINT)* pub_key, .EC_KEY* ecdh, .EC_KEY_METHOD_get_compute_key_func1_internal KDF);
+void EC_KEY_METHOD_get_compute_key(const (.EC_KEY_METHOD)* meth, .EC_KEY_METHOD_get_compute_key_func1* pck);
 
 .EC_KEY* ECParameters_dup(.EC_KEY* key);
 

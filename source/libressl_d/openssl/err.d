@@ -833,7 +833,10 @@ void ERR_error_string_n(core.stdc.config.c_ulong e, char* buf, size_t len);
 const (char)* ERR_lib_error_string(core.stdc.config.c_ulong e);
 const (char)* ERR_func_error_string(core.stdc.config.c_ulong e);
 const (char)* ERR_reason_error_string(core.stdc.config.c_ulong e);
-void ERR_print_errors_cb(int function(const (char)* str, size_t len, void* u) cb, void* u);
+
+private alias ERR_print_errors_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (char)* str, size_t len, void* u);
+void ERR_print_errors_cb(.ERR_print_errors_cb_func cb, void* u);
+
 void ERR_print_errors_fp(libressl_d.compat.stdio.FILE* fp);
 
 version (OPENSSL_NO_BIO) {

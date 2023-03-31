@@ -903,7 +903,8 @@ version (LIBRESSL_INTERNAL) {
 	void* ASN1_dup(i2d_of_void* i2d, d2i_of_void* d2i, void* x);
 }
 
-void* ASN1_d2i_fp(void* function() xnew, d2i_of_void* d2i, libressl_d.compat.stdio.FILE* in_, void** x);
+private alias ASN1_d2i_fp_func = /* Temporary type */ extern (C) nothrow @nogc void* function();
+void* ASN1_d2i_fp(.ASN1_d2i_fp_func xnew, d2i_of_void* d2i, libressl_d.compat.stdio.FILE* in_, void** x);
 
 //#define ASN1_d2i_fp_of(type, xnew, d2i, in_, x) ((type*) .ASN1_d2i_fp(.CHECKED_NEW_OF(type, xnew), .CHECKED_D2I_OF(type, d2i), in_, .CHECKED_PPTR_OF(type, x)))
 
@@ -921,7 +922,8 @@ int ASN1_STRING_to_UTF8(ubyte** out_, const (libressl_d.openssl.ossl_typ.ASN1_ST
 
 version (OPENSSL_NO_BIO) {
 } else {
-	void* ASN1_d2i_bio(void* function() xnew, d2i_of_void* d2i, libressl_d.openssl.ossl_typ.BIO* in_, void** x);
+	private alias ASN1_d2i_bio_func = /* Temporary type */ extern (C) nothrow @nogc void* function();
+	void* ASN1_d2i_bio(.ASN1_d2i_bio_func xnew, d2i_of_void* d2i, libressl_d.openssl.ossl_typ.BIO* in_, void** x);
 
 	//#define ASN1_d2i_bio_of(type, xnew, d2i, in_, x) ((type*) .ASN1_d2i_bio(.CHECKED_NEW_OF(type, xnew), .CHECKED_D2I_OF(type, d2i), in_, .CHECKED_PPTR_OF(type, x)))
 

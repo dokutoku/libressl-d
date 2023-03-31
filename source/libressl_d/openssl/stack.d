@@ -97,10 +97,15 @@ void* sk_value(const (._STACK)*, int);
 
 void* sk_set(._STACK*, int, void*);
 
-._STACK* sk_new(int function(const (void)*, const (void)*) cmp);
+private alias sk_new_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (void)*, const (void)*);
+._STACK* sk_new(.sk_new_func cmp);
+
 ._STACK* sk_new_null();
 void sk_free(._STACK*);
-void sk_pop_free(._STACK* st, void function(void*) func);
+
+private alias sk_pop_free_func = /* Temporary type */ extern (C) nothrow @nogc void function(void*);
+void sk_pop_free(._STACK* st, .sk_pop_free_func func);
+
 int sk_insert(._STACK* sk, void* data, int where);
 void* sk_delete(._STACK* st, int loc);
 void* sk_delete_ptr(._STACK* st, void* p);

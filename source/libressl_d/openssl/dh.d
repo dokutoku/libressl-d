@@ -169,7 +169,8 @@ int DH_set_length(libressl_d.openssl.ossl_typ.DH* dh, core.stdc.config.c_long le
 /* Deprecated version */
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	libressl_d.openssl.ossl_typ.DH* DH_generate_parameters(int prime_len, int generator, void function(int, int, void*) callback, void* cb_arg);
+	private alias DH_generate_parameters_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
+	libressl_d.openssl.ossl_typ.DH* DH_generate_parameters(int prime_len, int generator, .DH_generate_parameters_callback callback, void* cb_arg);
 }
 
 /* New version */

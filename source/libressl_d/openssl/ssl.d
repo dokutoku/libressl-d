@@ -716,8 +716,11 @@ core.stdc.config.c_long SSL_get_secure_renegotiation_support(libressl_d.openssl.
 		return .SSL_ctrl(ssl, .SSL_CTRL_GET_RI_SUPPORT, 0, null);
 	}
 
-void SSL_CTX_set_msg_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void function(int write_p, int version_, int content_type, const (void)* buf, size_t len, libressl_d.openssl.ossl_typ.SSL* ssl, void* arg) cb);
-void SSL_set_msg_callback(libressl_d.openssl.ossl_typ.SSL* ssl, void function(int write_p, int version_, int content_type, const (void)* buf, size_t len, libressl_d.openssl.ossl_typ.SSL* ssl, void* arg) cb);
+private alias SSL_CTX_set_msg_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function(int write_p, int version_, int content_type, const (void)* buf, size_t len, libressl_d.openssl.ossl_typ.SSL* ssl, void* arg);
+void SSL_CTX_set_msg_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_msg_callback_func cb);
+
+private alias SSL_set_msg_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function(int write_p, int version_, int content_type, const (void)* buf, size_t len, libressl_d.openssl.ossl_typ.SSL* ssl, void* arg);
+void SSL_set_msg_callback(libressl_d.openssl.ossl_typ.SSL* ssl, .SSL_set_msg_callback_func cb);
 
 pragma(inline, true)
 core.stdc.config.c_long SSL_CTX_set_msg_callback_arg(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void* arg)
@@ -901,15 +904,24 @@ core.stdc.config.c_long SSL_CTX_sess_cache_full(libressl_d.openssl.ossl_typ.SSL_
 		return .SSL_CTX_ctrl(ctx, .SSL_CTRL_SESS_CACHE_FULL, 0, null);
 	}
 
-void SSL_CTX_sess_set_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.ssl_st* ssl, .SSL_SESSION* sess) new_session_cb);
+private alias SSL_CTX_sess_set_new_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.ssl_st* ssl, .SSL_SESSION* sess);
+void SSL_CTX_sess_set_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_sess_set_new_cb_func new_session_cb);
 //int (*SSL_CTX_sess_get_new_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(libressl_d.openssl.ossl_typ.ssl_st* ssl, .SSL_SESSION* sess);
-void SSL_CTX_sess_set_remove_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void function(libressl_d.openssl.ossl_typ.ssl_ctx_st* ctx, .SSL_SESSION* sess) remove_session_cb);
+
+private alias SSL_CTX_sess_set_remove_cb_func = /* Temporary type */ extern (C) nothrow @nogc void function(libressl_d.openssl.ossl_typ.ssl_ctx_st* ctx, .SSL_SESSION* sess);
+void SSL_CTX_sess_set_remove_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_sess_set_remove_cb_func remove_session_cb);
 //void (*SSL_CTX_sess_get_remove_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(libressl_d.openssl.ossl_typ.ssl_ctx_st* ctx, .SSL_SESSION* sess);
-void SSL_CTX_sess_set_get_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_SESSION* function(libressl_d.openssl.ossl_typ.ssl_st* ssl, const (ubyte)* data, int len, int* copy) get_session_cb);
+
+private alias SSL_CTX_sess_set_get_cb_func = /* Temporary type */ extern (C) nothrow @nogc .SSL_SESSION* function(libressl_d.openssl.ossl_typ.ssl_st* ssl, const (ubyte)* data, int len, int* copy);
+void SSL_CTX_sess_set_get_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_sess_set_get_cb_func get_session_cb);
 //.SSL_SESSION* (*SSL_CTX_sess_get_get_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(libressl_d.openssl.ossl_typ.ssl_st* ssl, const (ubyte)* data, int len, int* copy);
-void SSL_CTX_set_info_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, void function(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val) cb);
+
+private alias SSL_CTX_set_info_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val);
+void SSL_CTX_set_info_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_info_callback_func cb);
 //void (*SSL_CTX_get_info_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val);
-void SSL_CTX_set_client_cert_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.X509** x509, libressl_d.openssl.ossl_typ.EVP_PKEY** pkey) client_cert_cb);
+
+private alias SSL_CTX_set_client_cert_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.X509** x509, libressl_d.openssl.ossl_typ.EVP_PKEY** pkey);
+void SSL_CTX_set_client_cert_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_client_cert_cb_func client_cert_cb);
 //int (*SSL_CTX_get_client_cert_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx))(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.X509** x509, libressl_d.openssl.ossl_typ.EVP_PKEY** pkey);
 
 version (OPENSSL_NO_ENGINE) {
@@ -917,10 +929,18 @@ version (OPENSSL_NO_ENGINE) {
 	int SSL_CTX_set_client_cert_engine(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.ENGINE* e);
 }
 
-void SSL_CTX_set_cookie_generate_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.SSL* ssl, ubyte* cookie, uint* cookie_len) app_gen_cookie_cb);
-void SSL_CTX_set_cookie_verify_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)* cookie, uint cookie_len) app_verify_cookie_cb);
-void SSL_CTX_set_next_protos_advertised_cb(libressl_d.openssl.ossl_typ.SSL_CTX* s, int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)** out_, uint* outlen, void* arg) cb, void* arg);
-void SSL_CTX_set_next_proto_select_cb(libressl_d.openssl.ossl_typ.SSL_CTX* s, int function(libressl_d.openssl.ossl_typ.SSL* ssl, ubyte** out_, ubyte* outlen, const (ubyte)* in_, uint inlen, void* arg) cb, void* arg);
+
+private alias SSL_CTX_set_cookie_generate_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* ssl, ubyte* cookie, uint* cookie_len);
+void SSL_CTX_set_cookie_generate_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_cookie_generate_cb_func app_gen_cookie_cb);
+
+private alias SSL_CTX_set_cookie_verify_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)* cookie, uint cookie_len);
+void SSL_CTX_set_cookie_verify_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_cookie_verify_cb_func app_verify_cookie_cb);
+
+private alias SSL_CTX_set_next_protos_advertised_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)** out_, uint* outlen, void* arg);
+void SSL_CTX_set_next_protos_advertised_cb(libressl_d.openssl.ossl_typ.SSL_CTX* s, .SSL_CTX_set_next_protos_advertised_cb_func cb, void* arg);
+
+private alias SSL_CTX_set_next_proto_select_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* ssl, ubyte** out_, ubyte* outlen, const (ubyte)* in_, uint inlen, void* arg);
+void SSL_CTX_set_next_proto_select_cb(libressl_d.openssl.ossl_typ.SSL_CTX* s, .SSL_CTX_set_next_proto_select_cb_func cb, void* arg);
 
 int SSL_select_next_proto(ubyte** out_, ubyte* outlen, const (ubyte)* in_, uint inlen, const (ubyte)* client, uint client_len);
 void SSL_get0_next_proto_negotiated(const (libressl_d.openssl.ossl_typ.SSL)* s, const (ubyte)** data, uint* len);
@@ -931,7 +951,9 @@ enum OPENSSL_NPN_NO_OVERLAP = 2;
 
 int SSL_CTX_set_alpn_protos(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (ubyte)* protos, uint protos_len);
 int SSL_set_alpn_protos(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)* protos, uint protos_len);
-void SSL_CTX_set_alpn_select_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)** out_, ubyte* outlen, const (ubyte)* in_, uint inlen, void* arg) cb, void* arg);
+
+private alias SSL_CTX_set_alpn_select_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)** out_, ubyte* outlen, const (ubyte)* in_, uint inlen, void* arg);
+void SSL_CTX_set_alpn_select_cb(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_alpn_select_cb_func cb, void* arg);
 void SSL_get0_alpn_selected(const (libressl_d.openssl.ossl_typ.SSL)* ssl, const (ubyte)** data, uint* len);
 
 static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl_d.openssl.opensslfeatures.LIBRESSL_INTERNAL)) {
@@ -1771,7 +1793,9 @@ void SSL_set_read_ahead(libressl_d.openssl.ossl_typ.SSL* s, int yes);
 int SSL_get_verify_mode(const (libressl_d.openssl.ossl_typ.SSL)* s);
 int SSL_get_verify_depth(const (libressl_d.openssl.ossl_typ.SSL)* s);
 //int (*SSL_get_verify_callback(const (libressl_d.openssl.ossl_typ.SSL)* s))(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
-void SSL_set_verify(libressl_d.openssl.ossl_typ.SSL* s, int mode, int function(int ok, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx) callback);
+
+private alias SSL_set_verify_callback = /* Temporary type */ extern (C) nothrow @nogc int function(int ok, libressl_d.openssl.ossl_typ.X509_STORE_CTX* ctx);
+void SSL_set_verify(libressl_d.openssl.ossl_typ.SSL* s, int mode, .SSL_set_verify_callback callback);
 void SSL_set_verify_depth(libressl_d.openssl.ossl_typ.SSL* s, int depth);
 int SSL_use_RSAPrivateKey(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.RSA* rsa);
 int SSL_use_RSAPrivateKey_ASN1(libressl_d.openssl.ossl_typ.SSL* ssl, const (ubyte)* d, core.stdc.config.c_long len);
@@ -1859,9 +1883,15 @@ libressl_d.openssl.ossl_typ.X509* SSL_get_peer_certificate(const (libressl_d.ope
 int SSL_CTX_get_verify_mode(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
 int SSL_CTX_get_verify_depth(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx);
 //int (*SSL_CTX_get_verify_callback(const (libressl_d.openssl.ossl_typ.SSL_CTX)* ctx))(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
-void SSL_CTX_set_verify(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int mode, int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*) callback);
+
+private alias SSL_CTX_set_verify_callback = /* Temporary type */ extern (C) nothrow @nogc int function(int, libressl_d.openssl.ossl_typ.X509_STORE_CTX*);
+void SSL_CTX_set_verify(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int mode, .SSL_CTX_set_verify_callback callback);
+
 void SSL_CTX_set_verify_depth(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int depth);
-void SSL_CTX_set_cert_verify_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX*, void*) cb, void* arg);
+
+private alias SSL_CTX_set_cert_verify_callback_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl_d.openssl.ossl_typ.X509_STORE_CTX*, void*);
+void SSL_CTX_set_cert_verify_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_cert_verify_callback_func cb, void* arg);
+
 int SSL_CTX_use_RSAPrivateKey(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.RSA* rsa);
 int SSL_CTX_use_RSAPrivateKey_ASN1(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, const (ubyte)* d, core.stdc.config.c_long len);
 int SSL_CTX_use_PrivateKey(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.EVP_PKEY* pkey);
@@ -1928,9 +1958,14 @@ static if ((libressl_d.openssl.opensslfeatures.LIBRESSL_HAS_TLS1_3) || (libressl
 }
 
 core.stdc.config.c_long SSL_ctrl(libressl_d.openssl.ossl_typ.SSL* ssl, int cmd, core.stdc.config.c_long larg, void* parg);
-core.stdc.config.c_long SSL_callback_ctrl(libressl_d.openssl.ossl_typ.SSL*, int, void function());
+
+private alias SSL_callback_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc void function();
+core.stdc.config.c_long SSL_callback_ctrl(libressl_d.openssl.ossl_typ.SSL*, int, .SSL_callback_ctrl_func);
+
 core.stdc.config.c_long SSL_CTX_ctrl(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, int cmd, core.stdc.config.c_long larg, void* parg);
-core.stdc.config.c_long SSL_CTX_callback_ctrl(libressl_d.openssl.ossl_typ.SSL_CTX*, int, void function());
+
+private alias SSL_CTX_callback_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc void function();
+core.stdc.config.c_long SSL_CTX_callback_ctrl(libressl_d.openssl.ossl_typ.SSL_CTX*, int, .SSL_CTX_callback_ctrl_func);
 
 int SSL_get_error(const (libressl_d.openssl.ossl_typ.SSL)* s, int ret_code);
 const (char)* SSL_get_version(const (libressl_d.openssl.ossl_typ.SSL)* s);
@@ -2093,7 +2128,10 @@ alias SSL_get0_session = .SSL_get_session;
 
 libressl_d.openssl.ossl_typ.SSL_CTX* SSL_get_SSL_CTX(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
 libressl_d.openssl.ossl_typ.SSL_CTX* SSL_set_SSL_CTX(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.SSL_CTX* ctx);
-void SSL_set_info_callback(libressl_d.openssl.ossl_typ.SSL* ssl, void function(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val) cb);
+
+private alias SSL_set_info_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val);
+void SSL_set_info_callback(libressl_d.openssl.ossl_typ.SSL* ssl, .SSL_set_info_callback_func cb);
+
 //void (*SSL_get_info_callback(const (libressl_d.openssl.ossl_typ.SSL)* ssl))(const (libressl_d.openssl.ossl_typ.SSL)* ssl, int type, int val);
 int SSL_state(const (libressl_d.openssl.ossl_typ.SSL)* ssl);
 void SSL_set_state(libressl_d.openssl.ossl_typ.SSL* ssl, int state);
@@ -2215,13 +2253,23 @@ core.stdc.config.c_long SSL_set_max_send_fragment(libressl_d.openssl.ossl_typ.SS
 	}
 
 /* NB: the keylength is only applicable when is_export is true */
-void SSL_CTX_set_tmp_rsa_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.RSA* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength) cb);
+private alias SSL_CTX_set_tmp_rsa_callback_func = /* Temporary type */ extern (C) nothrow @nogc libressl_d.openssl.ossl_typ.RSA* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength);
+void SSL_CTX_set_tmp_rsa_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_tmp_rsa_callback_func cb);
 
-void SSL_set_tmp_rsa_callback(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.RSA* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength) cb);
-void SSL_CTX_set_tmp_dh_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ossl_typ.DH* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength) dh);
-void SSL_set_tmp_dh_callback(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ossl_typ.DH* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength) dh);
-void SSL_CTX_set_tmp_ecdh_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, libressl_d.openssl.ec.EC_KEY* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength) ecdh);
-void SSL_set_tmp_ecdh_callback(libressl_d.openssl.ossl_typ.SSL* ssl, libressl_d.openssl.ec.EC_KEY* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength) ecdh);
+private alias SSL_set_tmp_rsa_callback_func = /* Temporary type */ extern (C) nothrow @nogc libressl_d.openssl.ossl_typ.RSA* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength);
+void SSL_set_tmp_rsa_callback(libressl_d.openssl.ossl_typ.SSL* ssl, .SSL_set_tmp_rsa_callback_func cb);
+
+private alias SSL_CTX_set_tmp_dh_callback_func = /* Temporary type */ extern (C) nothrow @nogc libressl_d.openssl.ossl_typ.DH* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength);
+void SSL_CTX_set_tmp_dh_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_tmp_dh_callback_func dh);
+
+private alias SSL_set_tmp_dh_callback_func = /* Temporary type */ extern (C) nothrow @nogc libressl_d.openssl.ossl_typ.DH* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength);
+void SSL_set_tmp_dh_callback(libressl_d.openssl.ossl_typ.SSL* ssl, .SSL_set_tmp_dh_callback_func dh);
+
+private alias SSL_CTX_set_tmp_ecdh_callback_func = /* Temporary type */ extern (C) nothrow @nogc libressl_d.openssl.ec.EC_KEY* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength);
+void SSL_CTX_set_tmp_ecdh_callback(libressl_d.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_tmp_ecdh_callback_func ecdh);
+
+private alias SSL_set_tmp_ecdh_callback_func = /* Temporary type */ extern (C) nothrow @nogc libressl_d.openssl.ec.EC_KEY* function(libressl_d.openssl.ossl_typ.SSL* ssl, int is_export, int keylength);
+void SSL_set_tmp_ecdh_callback(libressl_d.openssl.ossl_typ.SSL* ssl, .SSL_set_tmp_ecdh_callback_func ecdh);
 
 size_t SSL_get_client_random(const (libressl_d.openssl.ossl_typ.SSL)* s, ubyte* out_, size_t max_out);
 size_t SSL_get_server_random(const (libressl_d.openssl.ossl_typ.SSL)* s, ubyte* out_, size_t max_out);

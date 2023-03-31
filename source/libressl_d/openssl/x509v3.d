@@ -960,7 +960,10 @@ int X509_PURPOSE_get_count();
 .X509_PURPOSE* X509_PURPOSE_get0(int idx);
 int X509_PURPOSE_get_by_sname(const (char)* sname);
 int X509_PURPOSE_get_by_id(int id);
-int X509_PURPOSE_add(int id, int trust, int flags, int function(const (.X509_PURPOSE)*, const (libressl_d.openssl.ossl_typ.X509)*, int) ck, const (char)* name, const (char)* sname, void* arg);
+
+private alias X509_PURPOSE_add_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (.X509_PURPOSE)*, const (libressl_d.openssl.ossl_typ.X509)*, int);
+int X509_PURPOSE_add(int id, int trust, int flags, .X509_PURPOSE_add_func ck, const (char)* name, const (char)* sname, void* arg);
+
 char* X509_PURPOSE_get0_name(const (.X509_PURPOSE)* xp);
 char* X509_PURPOSE_get0_sname(const (.X509_PURPOSE)* xp);
 int X509_PURPOSE_get_trust(const (.X509_PURPOSE)* xp);
