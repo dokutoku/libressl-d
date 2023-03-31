@@ -7,7 +7,13 @@ module libressl.compat.string;
 
 private static import core.sys.windows.winsock2;
 public import core.stdc.string;
-public import core.sys.posix.string;
+public import core.sys.bionic.string;
+public import core.sys.darwin.string;
+public import core.sys.dragonflybsd.string;
+public import core.sys.freebsd.string;
+public import core.sys.linux.string;
+public import core.sys.netbsd.string;
+public import core.sys.openbsd.string;
 public import core.sys.posix.strings;
 public import libressl.compat.sys.types;
 

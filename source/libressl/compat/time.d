@@ -6,8 +6,16 @@ module libressl.compat.time;
 
 
 public import core.stdc.time;
+public import core.sys.freebsd.time;
 public import core.sys.posix.time;
+public import core.sys.solaris.time;
 public import libressl.compat.sys.time;
+
+version (none) {
+	public import core.sys.dragonflybsd.time;
+	public import core.sys.netbsd.time;
+	public import core.sys.openbsd.time;
+}
 
 extern (C):
 nothrow @nogc:

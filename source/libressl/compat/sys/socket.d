@@ -5,6 +5,8 @@
 module libressl.compat.sys.socket;
 
 
+public import core.sys.dragonflybsd.sys.socket;
+public import core.sys.linux.sys.socket;
 public import core.sys.posix.sys.socket;
 public import libressl.compat.win32netcompat;
 

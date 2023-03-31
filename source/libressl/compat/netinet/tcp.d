@@ -7,3 +7,7 @@ module libressl.compat.netinet.tcp;
 
 public import core.sys.posix.netinet.tcp;
 public import libressl.compat.win32netcompat;
+
+version (none) {
+	public import core.sys.linux.netinet.tcp;
+}

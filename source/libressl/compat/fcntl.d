@@ -6,6 +6,9 @@ module libressl.compat.fcntl;
 
 
 private static import core.stdcpp.xutility;
+public import core.sys.darwin.fcntl;
+public import core.sys.bionic.fcntl;
+public import core.sys.linux.fcntl;
 public import core.sys.posix.fcntl;
 
 version (Posix) {

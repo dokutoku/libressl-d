@@ -5,6 +5,7 @@
 module libressl.compat.sys.time;
 
 
+public import core.sys.linux.sys.time;
 public import core.sys.posix.sys.time;
 public import core.sys.windows.winsock2;
 

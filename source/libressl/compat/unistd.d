@@ -8,6 +8,10 @@ module libressl.compat.unistd;
 private static import core.sys.windows.winbase;
 private static import libressl.compat.stdio;
 private static import libressl.compat.sys.types;
+public import core.sys.bionic.unistd;
+public import core.sys.freebsd.unistd;
+public import core.sys.linux.unistd;
+public import core.sys.openbsd.unistd;
 public import core.sys.posix.unistd;
 
 extern (C):

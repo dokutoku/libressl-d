@@ -9,6 +9,7 @@ private static import core.stdc.config;
 private static import core.stdcpp.xutility;
 public import core.stdc.stdarg;
 public import core.stdc.stdio;
+public import core.sys.linux.stdio;
 public import core.sys.posix.stdio;
 
 version (Windows) {
