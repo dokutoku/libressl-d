@@ -1513,12 +1513,14 @@ version (__MINGW_PRINTF_FORMAT) {
 	int BIO_vsnprintf(char* buf, size_t n, const (char)* format, core.stdc.stdarg.va_list args);
 } else {
 	//__attribute__((__format__(__printf__, 2, 3), __nonnull__(2)));
+	pragma(printf)
 	int BIO_printf(libressl_d.openssl.ossl_typ.BIO* bio, const (char)* format, ...);
 
 	//__attribute__((__format__(__printf__, 2, 0), __nonnull__(2)));
 	int BIO_vprintf(libressl_d.openssl.ossl_typ.BIO* bio, const (char)* format, core.stdc.stdarg.va_list args);
 
 	//__attribute__((__deprecated__, __format__(__printf__, 3, 4), __nonnull__(3)));
+	pragma(printf)
 	int BIO_snprintf(char* buf, size_t n, const (char)* format, ...);
 
 	//__attribute__((__deprecated__, __format__(__printf__, 3, 0), __nonnull__(3)));
