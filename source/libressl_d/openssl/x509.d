@@ -348,7 +348,7 @@ enum XN_FLAG_FN_MASK = 0x03 << 21;
 enum XN_FLAG_FN_SN = 0;
 
 /**
- * Object core.stdc.config.c_long name
+ * Object long name
  */
 enum XN_FLAG_FN_LN = 1 << 21;
 

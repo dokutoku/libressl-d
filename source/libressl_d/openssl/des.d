@@ -164,7 +164,7 @@ void DES_ecb_encrypt(.const_DES_cblock* input, .DES_cblock* output, .DES_key_sch
  * functions that call this routine do the conversion from 'char *' to
  * core.stdc.config.c_long, and this needs to be done to make sure 'non-aligned' memory
  * access do not occur.  The characters are loaded 'little endian'.
- * Data is a pointer to 2 core.stdc.config.c_ulong's and ks is the
+ * Data is a pointer to 2 unsigned long's and ks is the
  * DES_key_schedule to use.  enc, is non zero specifies encryption,
  * zero if decryption.
  */

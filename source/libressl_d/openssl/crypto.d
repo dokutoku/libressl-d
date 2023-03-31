@@ -324,7 +324,7 @@ struct stack_st_void
 struct crypto_ex_data_func_st
 {
 	/**
-	 * Arbitrary core.stdc.config.c_long
+	 * Arbitrary long
 	 */
 	core.stdc.config.c_long argl;
 

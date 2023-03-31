@@ -369,7 +369,7 @@ enum TS_ORDERING = 0x02;
 enum TS_ESS_CERT_ID_CHAIN = 0x04;
 
 /**
- * This must return a unique number less than 160 bits core.stdc.config.c_long.
+ * This must return a unique number less than 160 bits long.
  */
 alias TS_serial_cb = extern (C) nothrow @nogc libressl_d.openssl.ossl_typ.ASN1_INTEGER* function(.TS_resp_ctx*, void*);
 

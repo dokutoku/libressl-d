@@ -189,7 +189,7 @@ enum int ENGINE_FLAGS_NO_REGISTER_ALL = 0x0008;
  */
 
 /**
- * accepts a 'core.stdc.config.c_long' input value (3rd parameter to ENGINE_ctrl)
+ * accepts a 'long' input value (3rd parameter to ENGINE_ctrl)
  */
 enum uint ENGINE_CMD_FLAG_NUMERIC = 0x0001;
 
@@ -295,7 +295,7 @@ enum ENGINE_CTRL_HAS_CTRL_FUNCTION = 10;
 enum ENGINE_CTRL_GET_FIRST_CMD_TYPE = 11;
 
 /**
- * The 'core.stdc.config.c_long' argument specifies a command implemented by the engine, and the
+ * The 'long' argument specifies a command implemented by the engine, and the
  * return value is the next command supported, or zero if there are no more.
  */
 enum ENGINE_CTRL_GET_NEXT_CMD_TYPE = 12;
@@ -308,7 +308,7 @@ enum ENGINE_CTRL_GET_CMD_FROM_NAME = 13;
 
 /*
  * The next two allow a command to be converted into its corresponding string
- * form. In each case, the 'core.stdc.config.c_long' argument supplies the command. In the NAME_LEN
+ * form. In each case, the 'long' argument supplies the command. In the NAME_LEN
  * case, the return value is the length of the command name (not counting a
  * trailing EOL). In the NAME case, the 'void*' argument must be a string buffer
  * large enough, and it will be populated with the name of the command (WITH a

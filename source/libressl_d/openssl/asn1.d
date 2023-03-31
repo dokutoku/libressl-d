@@ -318,7 +318,7 @@ struct ASN1_ENCODING_st
 alias ASN1_ENCODING = .ASN1_ENCODING_st;
 
 /**
- * Used with ASN1 LONG type: if a core.stdc.config.c_long is set to this it is omitted
+ * Used with ASN1 LONG type: if a long is set to this it is omitted
  */
 enum ASN1_LONG_UNDEF = 0x7FFFFFFFL;
 

@@ -2330,7 +2330,7 @@ enum SSL_SECOP_CURVE_CHECK = 6 | .SSL_SECOP_OTHER_CURVE;
 /*
  * XXX: changed in OpenSSL e2b420fdd70 to (7 | SSL_SECOP_OTHER_PKEY)
  * Needs switching internal use of DH to EVP_PKEY. The code is not reachable
- * from outside the library as core.stdc.config.c_long as we do not expose the callback in the API.
+ * from outside the library as long as we do not expose the callback in the API.
  */
 enum SSL_SECOP_TMP_DH = 7 | .SSL_SECOP_OTHER_DH;
 
