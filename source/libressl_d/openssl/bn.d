@@ -403,8 +403,7 @@ version (LIBRESSL_INTERNAL_OR_LIBRESSL_NEXT_API) {
 
 	version (OPENSSL_NO_DEPRECATED) {
 		pragma(inline, true)
-		pure nothrow @trusted @nogc @live
-		void BN_zero(scope libressl_d.openssl.ossl_typ.BIGNUM* a)
+		void BN_zero(libressl_d.openssl.ossl_typ.BIGNUM* a)
 			do
 			{
 				.BN_zero_ex(a);
