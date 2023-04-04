@@ -362,7 +362,11 @@ version (OPENSSL_NO_BIO) {
 	void* PEM_ASN1_read_bio(d2i_of_void* d2i, const (char)* name, libressl.openssl.ossl_typ.BIO* bp, void** x, .pem_password_cb cb, void* u);
 	int PEM_ASN1_write_bio(i2d_of_void* i2d, const (char)* name, libressl.openssl.ossl_typ.BIO* bp, void* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
 
-	libressl.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read_bio(libressl.openssl.ossl_typ.BIO* bp, libressl.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb cb, void* u);
+	version (OPENSSL_NO_EVP) {
+	} else {
+		libressl.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read_bio(libressl.openssl.ossl_typ.BIO* bp, libressl.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb cb, void* u);
+	}
+
 	int PEM_X509_INFO_write_bio(libressl.openssl.ossl_typ.BIO* bp, libressl.openssl.x509.X509_INFO* xi, libressl.openssl.ossl_typ.EVP_CIPHER* enc, ubyte* kstr, int klen, .pem_password_cb cd, void* u);
 }
 
@@ -370,7 +374,11 @@ int PEM_read(libressl.compat.stdio.FILE* fp, char** name, char** header, ubyte**
 int PEM_write(libressl.compat.stdio.FILE* fp, const (char)* name, const (char)* hdr, const (ubyte)* data, core.stdc.config.c_long len);
 void* PEM_ASN1_read(d2i_of_void* d2i, const (char)* name, libressl.compat.stdio.FILE* fp, void** x, .pem_password_cb cb, void* u);
 int PEM_ASN1_write(i2d_of_void* i2d, const (char)* name, libressl.compat.stdio.FILE* fp, void* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb callback, void* u);
-libressl.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read(libressl.compat.stdio.FILE* fp, libressl.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb cb, void* u);
+
+version (OPENSSL_NO_EVP) {
+} else {
+	libressl.openssl.x509.stack_st_X509_INFO* PEM_X509_INFO_read(libressl.compat.stdio.FILE* fp, libressl.openssl.x509.stack_st_X509_INFO* sk, .pem_password_cb cb, void* u);
+}
 
 int PEM_SignInit(libressl.openssl.ossl_typ.EVP_MD_CTX* ctx, libressl.openssl.ossl_typ.EVP_MD* type);
 int PEM_SignUpdate(libressl.openssl.ossl_typ.EVP_MD_CTX* ctx, ubyte* d, uint cnt);
