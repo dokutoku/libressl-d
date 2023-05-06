@@ -381,7 +381,7 @@ alias ENGINE_GEN_INT_FUNC_PTR = extern (C) nothrow @nogc int function(libressl.o
 /**
  * Specific control function pointer
  */
-alias ENGINE_CTRL_FUNC_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, int, core.stdc.config.c_long, void*, void function() f);
+alias ENGINE_CTRL_FUNC_PTR = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.ENGINE*, int, core.stdc.config.c_long, void*, void function() nothrow @nogc f);
 
 /**
  * Generic load_key function pointer

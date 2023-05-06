@@ -868,7 +868,7 @@ core.stdc.config.c_long BIO_set_filter_bio(libressl.openssl.ossl_typ.BIO* b, cha
 	}
 
 /* libressl.openssl.ossl_typ.BIO* IO_get_filter_bio(libressl.openssl.ossl_typ.BIO* io); */
-//#define BIO_set_proxy_cb(b, cb) .BIO_callback_ctrl(b, .BIO_C_SET_PROXY_PARAM, 3, (void* function() cb))
+//#define BIO_set_proxy_cb(b, cb) .BIO_callback_ctrl(b, .BIO_C_SET_PROXY_PARAM, 3, (void* function() nothrow @nogc cb))
 
 pragma(inline, true)
 core.stdc.config.c_long BIO_set_proxy_header(libressl.openssl.ossl_typ.BIO* b, char* sk)
@@ -1347,7 +1347,7 @@ int BIO_dgram_set_peer(libressl.openssl.ossl_typ.BIO* b, char* peer)
 
 /* These two aren't currently implemented */
 /* int BIO_get_ex_num(libressl.openssl.ossl_typ.BIO* io); */
-/* void BIO_set_ex_free_func(libressl.openssl.ossl_typ.BIO* io,int idx,void function() cb); */
+/* void BIO_set_ex_free_func(libressl.openssl.ossl_typ.BIO* io, int idx, void function() nothrow @nogc cb); */
 int BIO_set_ex_data(libressl.openssl.ossl_typ.BIO* bio, int idx, void* data);
 void* BIO_get_ex_data(libressl.openssl.ossl_typ.BIO* bio, int idx);
 int BIO_get_ex_new_index(core.stdc.config.c_long argl, void* argp, libressl.openssl.ossl_typ.CRYPTO_EX_new new_func, libressl.openssl.ossl_typ.CRYPTO_EX_dup dup_func, libressl.openssl.ossl_typ.CRYPTO_EX_free free_func);

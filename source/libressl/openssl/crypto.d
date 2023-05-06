@@ -555,7 +555,7 @@ core.stdc.config.c_ulong CRYPTO_THREADID_hash(const (.CRYPTO_THREADID)* id);
 version (LIBRESSL_INTERNAL) {
 } else {
 	/* These functions are deprecated no-op stubs */
-	void CRYPTO_set_id_callback(core.stdc.config.c_ulong function() func);
+	void CRYPTO_set_id_callback(core.stdc.config.c_ulong function() nothrow @nogc func);
 	//core.stdc.config.c_ulong (*CRYPTO_get_id_callback(void))();
 	core.stdc.config.c_ulong CRYPTO_thread_id();
 
@@ -563,22 +563,22 @@ version (LIBRESSL_INTERNAL) {
 	const (char)* CRYPTO_get_lock_name(int type);
 
 	int CRYPTO_num_locks();
-	void CRYPTO_set_locking_callback(void function(int mode, int type, const (char)* file, int line) func);
+	void CRYPTO_set_locking_callback(void function(int mode, int type, const (char)* file, int line) nothrow @nogc func);
 	//void (*CRYPTO_get_locking_callback(void))(int mode, int type, const (char)* file, int line);
-	void CRYPTO_set_add_lock_callback(int function(int* num, int mount, int type, const (char)* file, int line) func);
+	void CRYPTO_set_add_lock_callback(int function(int* num, int mount, int type, const (char)* file, int line) nothrow @nogc func);
 	//int (*CRYPTO_get_add_lock_callback(void))(int* num, int mount, int type, const (char)* file, int line);
 
 	void CRYPTO_THREADID_set_numeric(.CRYPTO_THREADID* id, core.stdc.config.c_ulong val);
 	void CRYPTO_THREADID_set_pointer(.CRYPTO_THREADID* id, void* ptr_);
-	int CRYPTO_THREADID_set_callback(void function(.CRYPTO_THREADID*) threadid_func);
+	int CRYPTO_THREADID_set_callback(void function(.CRYPTO_THREADID*) nothrow @nogc threadid_func);
 	//void (*CRYPTO_THREADID_get_callback(void))(.CRYPTO_THREADID*);
 
 	int CRYPTO_get_new_dynlockid();
 	void CRYPTO_destroy_dynlockid(int i);
 	.CRYPTO_dynlock_value* CRYPTO_get_dynlock_value(int i);
-	void CRYPTO_set_dynlock_create_callback(.CRYPTO_dynlock_value* function(const (char)* file, int line) dyn_create_function);
-	void CRYPTO_set_dynlock_lock_callback(void function(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_lock_function);
-	void CRYPTO_set_dynlock_destroy_callback(void function(.CRYPTO_dynlock_value* l, const (char)* file, int line) dyn_destroy_function);
+	void CRYPTO_set_dynlock_create_callback(.CRYPTO_dynlock_value* function(const (char)* file, int line) nothrow @nogc dyn_create_function);
+	void CRYPTO_set_dynlock_lock_callback(void function(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line) nothrow @nogc dyn_lock_function);
+	void CRYPTO_set_dynlock_destroy_callback(void function(.CRYPTO_dynlock_value* l, const (char)* file, int line) nothrow @nogc dyn_destroy_function);
 	//.CRYPTO_dynlock_value* (*CRYPTO_get_dynlock_create_callback(void))(const (char)* file, int line);
 	//void (*CRYPTO_get_dynlock_lock_callback(void))(int mode, .CRYPTO_dynlock_value* l, const (char)* file, int line);
 	//void (*CRYPTO_get_dynlock_destroy_callback(void))(.CRYPTO_dynlock_value* l, const (char)* file, int line);

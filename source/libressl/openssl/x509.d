@@ -855,7 +855,7 @@ int X509_alias_set1(libressl.openssl.ossl_typ.X509* x, const (ubyte)* name, int 
 int X509_keyid_set1(libressl.openssl.ossl_typ.X509* x, const (ubyte)* id, int len);
 ubyte* X509_alias_get0(libressl.openssl.ossl_typ.X509* x, int* len);
 ubyte* X509_keyid_get0(libressl.openssl.ossl_typ.X509* x, int* len);
-//int (*X509_TRUST_set_default(int function(int, libressl.openssl.ossl_typ.X509*, int) trust))(int, libressl.openssl.ossl_typ.X509*, int);
+//int (*X509_TRUST_set_default(int function(int, libressl.openssl.ossl_typ.X509*, int) nothrow @nogc trust))(int, libressl.openssl.ossl_typ.X509*, int);
 int X509_TRUST_set(int* t, int trust);
 int X509_add1_trust_object(libressl.openssl.ossl_typ.X509* x, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj);
 int X509_add1_reject_object(libressl.openssl.ossl_typ.X509* x, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* obj);
