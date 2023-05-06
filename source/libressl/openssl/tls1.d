@@ -391,10 +391,8 @@ core.stdc.config.c_long SSL_set_tlsext_host_name(libressl.openssl.ossl_typ.SSL* 
 		return libressl.openssl.ssl.SSL_ctrl(s, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_HOSTNAME, .TLSEXT_NAMETYPE_host_name, name);
 	}
 
-private alias SSL_set_tlsext_debug_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function();
-
 pragma(inline, true)
-core.stdc.config.c_long SSL_set_tlsext_debug_callback(libressl.openssl.ossl_typ.SSL* ssl, .SSL_set_tlsext_debug_callback_func cb)
+core.stdc.config.c_long SSL_set_tlsext_debug_callback(libressl.openssl.ossl_typ.SSL* ssl, void function() nothrow @nogc cb)
 
 	do
 	{
@@ -473,10 +471,8 @@ core.stdc.config.c_long SSL_set_tlsext_status_ocsp_resp(libressl.openssl.ossl_ty
 		return libressl.openssl.ssl.SSL_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_OCSP_RESP, arglen, arg);
 	}
 
-private alias SSL_CTX_set_tlsext_servername_callback_func = /* Temporary type */ extern (C) nothrow @nogc void function();
-
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_servername_callback(libressl.openssl.ossl_typ.SSL_CTX* ctx, .SSL_CTX_set_tlsext_servername_callback_func cb)
+core.stdc.config.c_long SSL_CTX_set_tlsext_servername_callback(libressl.openssl.ossl_typ.SSL_CTX* ctx, void function() nothrow @nogc cb)
 
 	do
 	{
@@ -512,20 +508,16 @@ core.stdc.config.c_long SSL_CTX_set_tlsext_ticket_keys(libressl.openssl.ossl_typ
 		return libressl.openssl.ssl.SSL_CTX_ctrl(ctx, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_TICKET_KEYS, keylen, keys);
 	}
 
-private alias SSL_CTX_get_tlsext_status_cb_func = /* Temporary type */ extern (C) nothrow @nogc void function();
-
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_get_tlsext_status_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_get_tlsext_status_cb_func cb)
+core.stdc.config.c_long SSL_CTX_get_tlsext_status_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, void function() nothrow @nogc cb)
 
 	do
 	{
 		return libressl.openssl.ssl.SSL_CTX_callback_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_GET_TLSEXT_STATUS_REQ_CB, cb);
 	}
 
-private alias SSL_CTX_set_tlsext_status_cb_func = /* Temporary type */ extern (C) nothrow @nogc void function();
-
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_status_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_set_tlsext_status_cb_func cb)
+core.stdc.config.c_long SSL_CTX_set_tlsext_status_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, void function() nothrow @nogc cb)
 
 	do
 	{
@@ -548,10 +540,8 @@ core.stdc.config.c_long SSL_CTX_set_tlsext_status_arg(libressl.openssl.ossl_typ.
 		return libressl.openssl.ssl.SSL_CTX_ctrl(ssl, libressl.openssl.ssl.SSL_CTRL_SET_TLSEXT_STATUS_REQ_CB_ARG, 0, arg);
 	}
 
-private alias SSL_CTX_set_tlsext_ticket_key_cb_func = /* Temporary type */ extern (C) nothrow @nogc void function();
-
 pragma(inline, true)
-core.stdc.config.c_long SSL_CTX_set_tlsext_ticket_key_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, .SSL_CTX_set_tlsext_ticket_key_cb_func cb)
+core.stdc.config.c_long SSL_CTX_set_tlsext_ticket_key_cb(libressl.openssl.ossl_typ.SSL_CTX* ssl, void function() nothrow @nogc cb)
 
 	do
 	{

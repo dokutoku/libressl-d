@@ -282,14 +282,12 @@ int BN_GENCB_call(libressl.openssl.ossl_typ.BN_GENCB* cb, int a, int b);
 /**
  * Populate a BN_GENCB structure with an "old"-style callback
  */
-void BN_GENCB_set_old(libressl.openssl.ossl_typ.BN_GENCB* gencb, .BN_GENCB_set_old_callback callback, void* cb_arg);
-private alias BN_GENCB_set_old_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
+void BN_GENCB_set_old(libressl.openssl.ossl_typ.BN_GENCB* gencb, void function(int, int, void*) nothrow @nogc callback, void* cb_arg);
 
 /**
  * Populate a BN_GENCB structure with a "new"-style callback
  */
-void BN_GENCB_set(libressl.openssl.ossl_typ.BN_GENCB* gencb, .BN_GENCB_set_callback callback, void* cb_arg);
-private alias BN_GENCB_set_callback = /* Temporary type */ extern (C) nothrow @nogc int function(int, int, libressl.openssl.ossl_typ.BN_GENCB*);
+void BN_GENCB_set(libressl.openssl.ossl_typ.BN_GENCB* gencb, int function(int, int, libressl.openssl.ossl_typ.BN_GENCB*) nothrow @nogc callback, void* cb_arg);
 
 void* BN_GENCB_get_arg(libressl.openssl.ossl_typ.BN_GENCB* cb);
 
@@ -560,14 +558,9 @@ int BN_security_bits(int L, int N);
 /* Deprecated versions */
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	private alias BN_generate_prime_func = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
-	libressl.openssl.ossl_typ.BIGNUM* BN_generate_prime(libressl.openssl.ossl_typ.BIGNUM* ret, int bits, int safe, const (libressl.openssl.ossl_typ.BIGNUM)* add, const (libressl.openssl.ossl_typ.BIGNUM)* rem, .BN_generate_prime_func callback, void* cb_arg);
-
-	private alias BN_is_prime_func = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
-	int BN_is_prime(const (libressl.openssl.ossl_typ.BIGNUM)* p, int nchecks, .BN_is_prime_func callback, libressl.openssl.ossl_typ.BN_CTX* ctx, void* cb_arg);
-
-	private alias BN_is_prime_fasttest_func = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
-	int BN_is_prime_fasttest(const (libressl.openssl.ossl_typ.BIGNUM)* p, int nchecks, .BN_is_prime_fasttest_func callback, libressl.openssl.ossl_typ.BN_CTX* ctx, void* cb_arg, int do_trial_division);
+	libressl.openssl.ossl_typ.BIGNUM* BN_generate_prime(libressl.openssl.ossl_typ.BIGNUM* ret, int bits, int safe, const (libressl.openssl.ossl_typ.BIGNUM)* add, const (libressl.openssl.ossl_typ.BIGNUM)* rem, void function(int, int, void*) nothrow @nogc callback, void* cb_arg);
+	int BN_is_prime(const (libressl.openssl.ossl_typ.BIGNUM)* p, int nchecks, void function(int, int, void*) nothrow @nogc callback, libressl.openssl.ossl_typ.BN_CTX* ctx, void* cb_arg);
+	int BN_is_prime_fasttest(const (libressl.openssl.ossl_typ.BIGNUM)* p, int nchecks, void function(int, int, void*) nothrow @nogc callback, libressl.openssl.ossl_typ.BN_CTX* ctx, void* cb_arg, int do_trial_division);
 }
 
 /* Newer versions */
@@ -611,9 +604,7 @@ version (OPENSSL_NO_DEPRECATED) {
 libressl.openssl.crypto.CRYPTO_THREADID* BN_BLINDING_thread_id(libressl.openssl.ossl_typ.BN_BLINDING*);
 core.stdc.config.c_ulong BN_BLINDING_get_flags(const (libressl.openssl.ossl_typ.BN_BLINDING)*);
 void BN_BLINDING_set_flags(libressl.openssl.ossl_typ.BN_BLINDING*, core.stdc.config.c_ulong);
-
-private alias BN_BLINDING_create_param_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIGNUM* r, const (libressl.openssl.ossl_typ.BIGNUM)* a, const (libressl.openssl.ossl_typ.BIGNUM)* p, const (libressl.openssl.ossl_typ.BIGNUM)* m, libressl.openssl.ossl_typ.BN_CTX* ctx, libressl.openssl.ossl_typ.BN_MONT_CTX* m_ctx);
-libressl.openssl.ossl_typ.BN_BLINDING* BN_BLINDING_create_param(libressl.openssl.ossl_typ.BN_BLINDING* b, const (libressl.openssl.ossl_typ.BIGNUM)* e, libressl.openssl.ossl_typ.BIGNUM* m, libressl.openssl.ossl_typ.BN_CTX* ctx, .BN_BLINDING_create_param_func bn_mod_exp, libressl.openssl.ossl_typ.BN_MONT_CTX* m_ctx);
+libressl.openssl.ossl_typ.BN_BLINDING* BN_BLINDING_create_param(libressl.openssl.ossl_typ.BN_BLINDING* b, const (libressl.openssl.ossl_typ.BIGNUM)* e, libressl.openssl.ossl_typ.BIGNUM* m, libressl.openssl.ossl_typ.BN_CTX* ctx, int function(libressl.openssl.ossl_typ.BIGNUM* r, const (libressl.openssl.ossl_typ.BIGNUM)* a, const (libressl.openssl.ossl_typ.BIGNUM)* p, const (libressl.openssl.ossl_typ.BIGNUM)* m, libressl.openssl.ossl_typ.BN_CTX* ctx, libressl.openssl.ossl_typ.BN_MONT_CTX* m_ctx) nothrow @nogc bn_mod_exp, libressl.openssl.ossl_typ.BN_MONT_CTX* m_ctx);
 
 version (OPENSSL_NO_DEPRECATED) {
 } else {

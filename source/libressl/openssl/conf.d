@@ -201,8 +201,7 @@ void CONF_module_set_usr_data(.CONF_MODULE* pmod, void* usr_data);
 
 char* CONF_get1_default_config_file();
 
-private alias CONF_parse_list_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (char)* elem, int len, void* usr);
-int CONF_parse_list(const (char)* list, int sep, int nospc, .CONF_parse_list_func list_cb, void* arg);
+int CONF_parse_list(const (char)* list, int sep, int nospc, int function(const (char)* elem, int len, void* usr) nothrow @nogc list_cb, void* arg);
 
 void OPENSSL_load_builtin_modules();
 

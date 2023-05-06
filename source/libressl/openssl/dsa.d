@@ -172,8 +172,7 @@ extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM DSAparams_it;
 /* Deprecated version */
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	private alias DSA_generate_parameters_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
-	libressl.openssl.ossl_typ.DSA* DSA_generate_parameters(int bits, ubyte* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, .DSA_generate_parameters_callback callback, void* cb_arg);
+	libressl.openssl.ossl_typ.DSA* DSA_generate_parameters(int bits, ubyte* seed, int seed_len, int* counter_ret, core.stdc.config.c_ulong* h_ret, void function(int, int, void*) nothrow @nogc callback, void* cb_arg);
 }
 
 /* New version */
@@ -199,10 +198,8 @@ enum DSS_prime_checks = 64;
 
 version (OPENSSL_NO_DEPRECATED) {
 } else {
-	private alias DSA_is_prime_callback = /* Temporary type */ extern (C) nothrow @nogc void function(int, int, void*);
-
 	pragma(inline, true)
-	int DSA_is_prime(const (libressl.openssl.ossl_typ.BIGNUM)* n, .DSA_is_prime_callback callback, void* cb_arg)
+	int DSA_is_prime(const (libressl.openssl.ossl_typ.BIGNUM)* n, void function(int, int, void*) nothrow @nogc callback, void* cb_arg)
 
 		do
 		{
@@ -238,12 +235,8 @@ void DSA_meth_free(libressl.openssl.ossl_typ.DSA_METHOD* meth);
 libressl.openssl.ossl_typ.DSA_METHOD* DSA_meth_dup(const (libressl.openssl.ossl_typ.DSA_METHOD)* meth);
 const (char)* DSA_meth_get0_name(const (libressl.openssl.ossl_typ.DSA_METHOD)* meth);
 int DSA_meth_set1_name(libressl.openssl.ossl_typ.DSA_METHOD* meth, const (char)* name);
-
-private alias DSA_meth_set_sign_func = /* Temporary type */ extern (C) nothrow @nogc DSA_SIG* function(const (ubyte)*, int, libressl.openssl.ossl_typ.DSA*);
-int DSA_meth_set_sign(libressl.openssl.ossl_typ.DSA_METHOD* meth, .DSA_meth_set_sign_func sign);
-
-private alias DSA_meth_set_finish_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.DSA*);
-int DSA_meth_set_finish(libressl.openssl.ossl_typ.DSA_METHOD* meth, .DSA_meth_set_finish_func finish);
+int DSA_meth_set_sign(libressl.openssl.ossl_typ.DSA_METHOD* meth, DSA_SIG* function(const (ubyte)*, int, libressl.openssl.ossl_typ.DSA*) nothrow @nogc sign);
+int DSA_meth_set_finish(libressl.openssl.ossl_typ.DSA_METHOD* meth, int function(libressl.openssl.ossl_typ.DSA*) nothrow @nogc finish);
 
 pragma(inline, true)
 int EVP_PKEY_CTX_set_dsa_paramgen_bits(libressl.openssl.ossl_typ.EVP_PKEY_CTX* ctx, int nbits)

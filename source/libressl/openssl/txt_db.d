@@ -110,9 +110,7 @@ version (OPENSSL_NO_BIO) {
 	core.stdc.config.c_long TXT_DB_write(libressl.openssl.ossl_typ.BIO* out_, .TXT_DB* db);
 }
 
-private alias TXT_DB_create_index_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.safestack.OPENSSL_STRING*);
-int TXT_DB_create_index(.TXT_DB* db, int field, .TXT_DB_create_index_func qual, libressl.openssl.lhash.LHASH_HASH_FN_TYPE hash, libressl.openssl.lhash.LHASH_COMP_FN_TYPE cmp);
-
+int TXT_DB_create_index(.TXT_DB* db, int field, int function(libressl.openssl.safestack.OPENSSL_STRING*) nothrow @nogc qual, libressl.openssl.lhash.LHASH_HASH_FN_TYPE hash, libressl.openssl.lhash.LHASH_COMP_FN_TYPE cmp);
 void TXT_DB_free(.TXT_DB* db);
 libressl.openssl.safestack.OPENSSL_STRING* TXT_DB_get_by_index(.TXT_DB* db, int idx, libressl.openssl.safestack.OPENSSL_STRING* value);
 int TXT_DB_insert(.TXT_DB* db, libressl.openssl.safestack.OPENSSL_STRING* value);

@@ -97,11 +97,7 @@ alias OBJ_create_and_add_object = .OBJ_create;
 
 int OBJ_NAME_init();
 
-private alias OBJ_NAME_new_index_hash_func = /* Temporary type */ extern (C) nothrow @nogc core.stdc.config.c_ulong function(const (char)*);
-private alias OBJ_NAME_new_index_cmp_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (char)*, const (char)*);
-private alias OBJ_NAME_new_index_free_func = /* Temporary type */ extern (C) nothrow @nogc void function(const (char)*, int, const (char)*);
-int OBJ_NAME_new_index(.OBJ_NAME_new_index_hash_func hash_func, .OBJ_NAME_new_index_cmp_func cmp_func, .OBJ_NAME_new_index_free_func free_func);
-
+int OBJ_NAME_new_index(core.stdc.config.c_ulong function(const (char)*) nothrow @nogc hash_func, int function(const (char)*, const (char)*) nothrow @nogc cmp_func, void function(const (char)*, int, const (char)*) nothrow @nogc free_func);
 const (char)* OBJ_NAME_get(const (char)* name, int type);
 int OBJ_NAME_add(const (char)* name, int type, const (char)* data);
 int OBJ_NAME_remove(const (char)* name, int type);
@@ -111,12 +107,8 @@ int OBJ_NAME_remove(const (char)* name, int type);
  */
 void OBJ_NAME_cleanup(int type);
 
-private alias OBJ_NAME_do_all_func = /* Temporary type */ extern (C) nothrow @nogc void function(const (.OBJ_NAME)*, void* arg);
-void OBJ_NAME_do_all(int type, .OBJ_NAME_do_all_func fn, void* arg);
-
-private alias OBJ_NAME_do_all_sorted_func = /* Temporary type */ extern (C) nothrow @nogc void function(const (.OBJ_NAME)*, void* arg);
-void OBJ_NAME_do_all_sorted(int type, .OBJ_NAME_do_all_sorted_func fn, void* arg);
-
+void OBJ_NAME_do_all(int type, void function(const (.OBJ_NAME)*, void* arg) nothrow @nogc fn, void* arg);
+void OBJ_NAME_do_all_sorted(int type, void function(const (.OBJ_NAME)*, void* arg) nothrow @nogc fn, void* arg);
 libressl.openssl.ossl_typ.ASN1_OBJECT* OBJ_dup(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* o);
 libressl.openssl.ossl_typ.ASN1_OBJECT* OBJ_nid2obj(int n);
 const (char)* OBJ_nid2ln(int n);
@@ -130,11 +122,8 @@ int OBJ_sn2nid(const (char)* s);
 int OBJ_cmp(const (libressl.openssl.ossl_typ.ASN1_OBJECT)* a, const (libressl.openssl.ossl_typ.ASN1_OBJECT)* b);
 
 version (LIBRESSL_INTERNAL) {
-	private alias OBJ_bsearch__cmp_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (void)*, const (void)*);
-	const (void)* OBJ_bsearch_(const (void)* key, const (void)* base, int num, int size, .OBJ_bsearch__cmp_func cmp);
-
-	private alias OBJ_bsearch_ex__func = /* Temporary type */ extern (C) nothrow @nogc int function(const (void)*, const (void)*);
-	const (void)* OBJ_bsearch_ex_(const (void)* key, const (void)* base, int num, int size, .OBJ_bsearch_ex__func cmp, int flags);
+	const (void)* OBJ_bsearch_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) nothrow @nogc cmp);
+	const (void)* OBJ_bsearch_ex_(const (void)* key, const (void)* base, int num, int size, int function(const (void)*, const (void)*) nothrow @nogc cmp, int flags);
 }
 
 int OBJ_new_nid(int num);

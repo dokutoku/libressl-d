@@ -435,9 +435,7 @@ alias X509_STORE_CTX_verify_cb = extern (C) nothrow @nogc int function(int, libr
 
 .X509_STORE_CTX_verify_cb X509_STORE_get_verify_cb(libressl.openssl.ossl_typ.X509_STORE*);
 
-private alias X509_STORE_set_verify_cb_func_internal = /* Temporary type */ extern (C) nothrow @nogc int function(int, libressl.openssl.ossl_typ.X509_STORE_CTX*);
-void X509_STORE_set_verify_cb(libressl.openssl.ossl_typ.X509_STORE* ctx, .X509_STORE_set_verify_cb_func_internal verify_cb);
-
+void X509_STORE_set_verify_cb(libressl.openssl.ossl_typ.X509_STORE* ctx, int function(int, libressl.openssl.ossl_typ.X509_STORE_CTX*) nothrow @nogc verify_cb);
 alias X509_STORE_set_verify_cb_func = X509_STORE_set_verify_cb;
 
 alias X509_STORE_CTX_check_issued_fn = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.X509_STORE_CTX* ctx, libressl.openssl.ossl_typ.X509* subject, libressl.openssl.ossl_typ.X509* issuer);
@@ -521,14 +519,12 @@ void X509_STORE_CTX_set0_verified_chain(libressl.openssl.ossl_typ.X509_STORE_CTX
 //ToDo:
 //int (*X509_STORE_CTX_get_verify(libressl.openssl.ossl_typ.X509_STORE_CTX* ctx))(libressl.openssl.ossl_typ.X509_STORE_CTX*);
 
-private alias X509_STORE_CTX_set_verify_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.X509_STORE_CTX*);
-void X509_STORE_CTX_set_verify(libressl.openssl.ossl_typ.X509_STORE_CTX* ctx, .X509_STORE_CTX_set_verify_func verify);
+void X509_STORE_CTX_set_verify(libressl.openssl.ossl_typ.X509_STORE_CTX* ctx, int function(libressl.openssl.ossl_typ.X509_STORE_CTX*) nothrow @nogc verify);
 
 //ToDo:
 //int (*X509_STORE_CTX_get_verify_cb(libressl.openssl.ossl_typ.X509_STORE_CTX* ctx))(int, libressl.openssl.ossl_typ.X509_STORE_CTX*);
 
-private alias X509_STORE_CTX_set_verify_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(int, libressl.openssl.ossl_typ.X509_STORE_CTX*);
-void X509_STORE_CTX_set_verify_cb(libressl.openssl.ossl_typ.X509_STORE_CTX* ctx, .X509_STORE_CTX_set_verify_cb_func verify_cb);
+void X509_STORE_CTX_set_verify_cb(libressl.openssl.ossl_typ.X509_STORE_CTX* ctx, int function(int, libressl.openssl.ossl_typ.X509_STORE_CTX*) nothrow @nogc verify_cb);
 
 alias X509_STORE_CTX_verify_fn = extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.X509_STORE_CTX*);
 

@@ -538,8 +538,7 @@ int ENGINE_register_all_complete();
  * functional. The caller should be aware of trying commands that require an
  * operational ENGINE, and only use functional references in such situations.
  */
-int ENGINE_ctrl(libressl.openssl.ossl_typ.ENGINE* e, int cmd, core.stdc.config.c_long i, void* p, .ENGINE_ctrl_func f);
-private alias ENGINE_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc void function();
+int ENGINE_ctrl(libressl.openssl.ossl_typ.ENGINE* e, int cmd, core.stdc.config.c_long i, void* p, void function() nothrow @nogc f);
 
 /**
  * This function tests if an ENGINE-specific command is usable as a "setting".
@@ -555,8 +554,7 @@ int ENGINE_cmd_is_executable(libressl.openssl.ossl_typ.ENGINE* e, int cmd);
  * See the comment on ENGINE_ctrl_cmd_string() for an explanation on how to
  * use the cmd_name and cmd_optional.
  */
-int ENGINE_ctrl_cmd(libressl.openssl.ossl_typ.ENGINE* e, const (char)* cmd_name, core.stdc.config.c_long i, void* p, .ENGINE_ctrl_cmd_func f, int cmd_optional);
-private alias ENGINE_ctrl_cmd_func = /* Temporary type */ extern (C) nothrow @nogc void function();
+int ENGINE_ctrl_cmd(libressl.openssl.ossl_typ.ENGINE* e, const (char)* cmd_name, core.stdc.config.c_long i, void* p, void function() nothrow @nogc f, int cmd_optional);
 
 /**
  * This function passes a command-name and argument to an ENGINE. The cmd_name

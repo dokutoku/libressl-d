@@ -578,37 +578,21 @@ private alias asn1_ps_func = /* Not a function pointer type */ extern (C) nothro
 .BIO_METHOD* BIO_meth_new(int type, const (char)* name);
 void BIO_meth_free(.BIO_METHOD* biom);
 //int (*BIO_meth_get_write(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*, const (char)*, int);
-
-private alias BIO_meth_set_write_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO*, const (char)*, int);
-int BIO_meth_set_write(.BIO_METHOD* biom, .BIO_meth_set_write_func write);
+int BIO_meth_set_write(.BIO_METHOD* biom, int function(libressl.openssl.ossl_typ.BIO*, const (char)*, int) nothrow @nogc write);
 //int (*BIO_meth_get_read(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*, char*, int);
-
-private alias BIO_meth_set_read_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO*, char*, int);
-int BIO_meth_set_read(.BIO_METHOD* biom, .BIO_meth_set_read_func read);
+int BIO_meth_set_read(.BIO_METHOD* biom, int function(libressl.openssl.ossl_typ.BIO*, char*, int) nothrow @nogc read);
 //int (*BIO_meth_get_puts(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*, const (char)*);
-
-private alias BIO_meth_set_puts_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO*, const (char)*);
-int BIO_meth_set_puts(.BIO_METHOD* biom, .BIO_meth_set_puts_func puts);
+int BIO_meth_set_puts(.BIO_METHOD* biom, int function(libressl.openssl.ossl_typ.BIO*, const (char)*) nothrow @nogc puts);
 //int (*BIO_meth_get_gets(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*, char*, int);
-
-private alias BIO_meth_set_gets_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO*, char*, int);
-int BIO_meth_set_gets(.BIO_METHOD* biom, .BIO_meth_set_gets_func gets);
+int BIO_meth_set_gets(.BIO_METHOD* biom, int function(libressl.openssl.ossl_typ.BIO*, char*, int) nothrow @nogc gets);
 //core.stdc.config.c_long (*BIO_meth_get_ctrl(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*, int, core.stdc.config.c_long, void*);
-
-private alias BIO_meth_set_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc core.stdc.config.c_long function(libressl.openssl.ossl_typ.BIO*, int, core.stdc.config.c_long, void*);
-int BIO_meth_set_ctrl(.BIO_METHOD* biom, .BIO_meth_set_ctrl_func ctrl);
+int BIO_meth_set_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(libressl.openssl.ossl_typ.BIO*, int, core.stdc.config.c_long, void*) nothrow @nogc ctrl);
 //int (*BIO_meth_get_create(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*);
-
-private alias BIO_meth_set_create_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO*);
-int BIO_meth_set_create(.BIO_METHOD* biom, .BIO_meth_set_create_func create);
+int BIO_meth_set_create(.BIO_METHOD* biom, int function(libressl.openssl.ossl_typ.BIO*) nothrow @nogc create);
 //int (*BIO_meth_get_destroy(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*);
-
-private alias BIO_meth_set_destroy_func = /* Temporary type */ extern (C) nothrow @nogc int function(libressl.openssl.ossl_typ.BIO*);
-int BIO_meth_set_destroy(.BIO_METHOD* biom, .BIO_meth_set_destroy_func destroy);
+int BIO_meth_set_destroy(.BIO_METHOD* biom, int function(libressl.openssl.ossl_typ.BIO*) nothrow @nogc destroy);
 //core.stdc.config.c_long (*BIO_meth_get_callback_ctrl(const (.BIO_METHOD)* biom))(libressl.openssl.ossl_typ.BIO*, int, .BIO_info_cb);
-
-private alias BIO_meth_set_callback_ctrl_func = /* Temporary type */ extern (C) nothrow @nogc core.stdc.config.c_long function(libressl.openssl.ossl_typ.BIO*, int, .BIO_info_cb);
-int BIO_meth_set_callback_ctrl(.BIO_METHOD* biom, .BIO_meth_set_callback_ctrl_func callback_ctrl);
+int BIO_meth_set_callback_ctrl(.BIO_METHOD* biom, core.stdc.config.c_long function(libressl.openssl.ossl_typ.BIO*, int, .BIO_info_cb) nothrow @nogc callback_ctrl);
 
 /* connect BIO stuff */
 enum BIO_CONN_S_BEFORE = 1;
@@ -1451,13 +1435,8 @@ int BIO_dgram_non_fatal_error(int _error);
 
 int BIO_fd_should_retry(int i);
 int BIO_fd_non_fatal_error(int _error);
-
-private alias BIO_dump_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (void)* data, size_t len, void* u);
-int BIO_dump_cb(.BIO_dump_cb_func cb, void* u, const (char)* s, int len);
-
-private alias BIO_dump_indent_cb_func = /* Temporary type */ extern (C) nothrow @nogc int function(const (void)* data, size_t len, void* u);
-int BIO_dump_indent_cb(.BIO_dump_indent_cb_func cb, void* u, const (char)* s, int len, int indent);
-
+int BIO_dump_cb(int function(const (void)* data, size_t len, void* u) nothrow @nogc cb, void* u, const (char)* s, int len);
+int BIO_dump_indent_cb(int function(const (void)* data, size_t len, void* u) nothrow @nogc cb, void* u, const (char)* s, int len, int indent);
 int BIO_dump(libressl.openssl.ossl_typ.BIO* b, const (char)* bytes, int len);
 int BIO_dump_indent(libressl.openssl.ossl_typ.BIO* b, const (char)* bytes, int len, int indent);
 int BIO_dump_fp(libressl.compat.stdio.FILE* fp, const (char)* s, int len);
