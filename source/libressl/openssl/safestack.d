@@ -77,16 +77,8 @@ public import libressl.openssl.stack;
 extern (C):
 nothrow @nogc:
 
-version (CHECKED_PTR_OF) {
-} else {
-	pragma(inline, true)
-	pure nothrow @trusted @nogc @live
-	void* CHECKED_PTR_OF(string type, P)(return scope P* p)
-
-		do
-		{
-			return cast(void*)((true) ? (p) : (cast(mixin (type)*)(0)));
-		}
+version (all) {
+	alias CHECKED_PTR_OF = libressl.openssl.asn1.CHECKED_PTR_OF;
 }
 
 /*
@@ -198,15 +190,15 @@ struct stack_st_OPENSSL_BLOCK
 #define SKM_sk_free(type, st) libressl.openssl.stack.sk_free(CHECKED_STACK_OF(type, st))
 #define SKM_sk_num(type, st) libressl.openssl.stack.sk_num(CHECKED_STACK_OF(type, st))
 #define SKM_sk_value(type, st, i) ((type*) libressl.openssl.stack.sk_value(CHECKED_STACK_OF(type, st), i))
-#define SKM_sk_set(type, st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(type, st), i, CHECKED_PTR_OF(type, val))
+#define SKM_sk_set(type, st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(type, st), i, libressl.openssl.asn1.CHECKED_PTR_OF(type, val))
 #define SKM_sk_zero(type, st) libressl.openssl.stack.sk_zero(CHECKED_STACK_OF(type, st))
-#define SKM_sk_push(type, st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, val))
-#define SKM_sk_unshift(type, st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, val))
-#define SKM_sk_find(type, st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, val))
-#define SKM_sk_find_ex(type, st, val) libressl.openssl.stack.sk_find_ex(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, val))
+#define SKM_sk_push(type, st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(type, st), libressl.openssl.asn1.CHECKED_PTR_OF(type, val))
+#define SKM_sk_unshift(type, st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(type, st), libressl.openssl.asn1.CHECKED_PTR_OF(type, val))
+#define SKM_sk_find(type, st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(type, st), libressl.openssl.asn1.CHECKED_PTR_OF(type, val))
+#define SKM_sk_find_ex(type, st, val) libressl.openssl.stack.sk_find_ex(CHECKED_STACK_OF(type, st), libressl.openssl.asn1.CHECKED_PTR_OF(type, val))
 #define SKM_sk_delete(type, st, i) cast(type*)(libressl.openssl.stack.sk_delete(CHECKED_STACK_OF(type, st), i))
-#define SKM_sk_delete_ptr(type, st, ptr_) cast(type*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, ptr_)))
-#define SKM_sk_insert(type, st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(type, st), CHECKED_PTR_OF(type, val), i)
+#define SKM_sk_delete_ptr(type, st, ptr_) cast(type*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(type, st), libressl.openssl.asn1.CHECKED_PTR_OF(type, ptr_)))
+#define SKM_sk_insert(type, st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(type, st), libressl.openssl.asn1.CHECKED_PTR_OF(type, val), i)
 #define SKM_sk_set_cmp_func(type, st, cmp) ((int (*)(const (type)* const*, const (type)* const*)) libressl.openssl.stack.sk_set_cmp_func(CHECKED_STACK_OF(type, st), CHECKED_SK_CMP_FUNC(type, cmp)))
 #define SKM_sk_dup(type, st) (libressl.openssl.safestack.STACK_OF!(type)*) libressl.openssl.stack.sk_dup(CHECKED_STACK_OF(type, st))
 #define SKM_sk_pop_free(type, st, free_func) libressl.openssl.stack.sk_pop_free(CHECKED_STACK_OF(type, st), CHECKED_SK_FREE_FUNC(type, free_func))
@@ -1979,19 +1971,19 @@ version (LIBRESSL_INTERNAL) {
 
 #define sk_OPENSSL_STRING_new(cmp) ((stack_st_OPENSSL_STRING*) libressl.openssl.stack.sk_new(CHECKED_SK_CMP_FUNC(char, cmp)))
 #define sk_OPENSSL_STRING_new_null() ((stack_st_OPENSSL_STRING*) libressl.openssl.stack.sk_new_null())
-#define sk_OPENSSL_STRING_push(st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(OPENSSL_STRING, st), CHECKED_PTR_OF(char, val))
-#define sk_OPENSSL_STRING_find(st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(OPENSSL_STRING, st), CHECKED_PTR_OF(char, val))
+#define sk_OPENSSL_STRING_push(st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(OPENSSL_STRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(char, val))
+#define sk_OPENSSL_STRING_find(st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(OPENSSL_STRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(char, val))
 #define sk_OPENSSL_STRING_value(st, i) ((OPENSSL_STRING) libressl.openssl.stack.sk_value(CHECKED_STACK_OF(OPENSSL_STRING, st), i))
 #define sk_OPENSSL_STRING_num(st) SKM_sk_num(OPENSSL_STRING, st)
 #define sk_OPENSSL_STRING_pop_free(st, free_func) libressl.openssl.stack.sk_pop_free(CHECKED_STACK_OF(OPENSSL_STRING, st), CHECKED_SK_FREE_FUNC2(OPENSSL_STRING, free_func))
-#define sk_OPENSSL_STRING_insert(st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(OPENSSL_STRING, st), CHECKED_PTR_OF(char, val), i)
+#define sk_OPENSSL_STRING_insert(st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(OPENSSL_STRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(char, val), i)
 #define sk_OPENSSL_STRING_free(st) SKM_sk_free(OPENSSL_STRING, st)
-#define sk_OPENSSL_STRING_set(st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(OPENSSL_STRING, st), i, CHECKED_PTR_OF(char, val))
+#define sk_OPENSSL_STRING_set(st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(OPENSSL_STRING, st), i, libressl.openssl.asn1.CHECKED_PTR_OF(char, val))
 #define sk_OPENSSL_STRING_zero(st) SKM_sk_zero(OPENSSL_STRING, st)
-#define sk_OPENSSL_STRING_unshift(st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(OPENSSL_STRING, st), CHECKED_PTR_OF(char, val))
+#define sk_OPENSSL_STRING_unshift(st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(OPENSSL_STRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(char, val))
 #define sk_OPENSSL_STRING_find_ex(st, val) libressl.openssl.stack.sk_find_ex((libressl.openssl.stack._STACK*) CHECKED_CONST_PTR_OF(stack_st_OPENSSL_STRING, st), CHECKED_CONST_PTR_OF(char, val))
 #define sk_OPENSSL_STRING_delete(st, i) SKM_sk_delete(OPENSSL_STRING, st, i)
-#define sk_OPENSSL_STRING_delete_ptr(st, ptr_) cast(OPENSSL_STRING*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(OPENSSL_STRING, st), CHECKED_PTR_OF(char, ptr_)))
+#define sk_OPENSSL_STRING_delete_ptr(st, ptr_) cast(OPENSSL_STRING*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(OPENSSL_STRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(char, ptr_)))
 #define sk_OPENSSL_STRING_set_cmp_func(st, cmp) ((int (*)(const (char)* const*, const (char)* const*)) libressl.openssl.stack.sk_set_cmp_func(CHECKED_STACK_OF(OPENSSL_STRING, st), CHECKED_SK_CMP_FUNC(char, cmp)))
 #define sk_OPENSSL_STRING_dup(st) SKM_sk_dup(OPENSSL_STRING, st)
 #define sk_OPENSSL_STRING_shift(st) SKM_sk_shift(OPENSSL_STRING, st)
@@ -2001,19 +1993,19 @@ version (LIBRESSL_INTERNAL) {
 
 #define sk_OPENSSL_BLOCK_new(cmp) ((stack_st_OPENSSL_BLOCK*) libressl.openssl.stack.sk_new(CHECKED_SK_CMP_FUNC(void, cmp)))
 #define sk_OPENSSL_BLOCK_new_null() ((stack_st_OPENSSL_BLOCK*) libressl.openssl.stack.sk_new_null())
-#define sk_OPENSSL_BLOCK_push(st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(OPENSSL_BLOCK, st), CHECKED_PTR_OF(void, val))
-#define sk_OPENSSL_BLOCK_find(st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(OPENSSL_BLOCK, st), CHECKED_PTR_OF(void, val))
+#define sk_OPENSSL_BLOCK_push(st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(OPENSSL_BLOCK, st), libressl.openssl.asn1.CHECKED_PTR_OF(void, val))
+#define sk_OPENSSL_BLOCK_find(st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(OPENSSL_BLOCK, st), libressl.openssl.asn1.CHECKED_PTR_OF(void, val))
 #define sk_OPENSSL_BLOCK_value(st, i) ((OPENSSL_BLOCK) libressl.openssl.stack.sk_value(CHECKED_STACK_OF(OPENSSL_BLOCK, st), i))
 #define sk_OPENSSL_BLOCK_num(st) SKM_sk_num(OPENSSL_BLOCK, st)
 #define sk_OPENSSL_BLOCK_pop_free(st, free_func) libressl.openssl.stack.sk_pop_free(CHECKED_STACK_OF(OPENSSL_BLOCK, st), CHECKED_SK_FREE_FUNC2(OPENSSL_BLOCK, free_func))
-#define sk_OPENSSL_BLOCK_insert(st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(OPENSSL_BLOCK, st), CHECKED_PTR_OF(void, val), i)
+#define sk_OPENSSL_BLOCK_insert(st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(OPENSSL_BLOCK, st), libressl.openssl.asn1.CHECKED_PTR_OF(void, val), i)
 #define sk_OPENSSL_BLOCK_free(st) SKM_sk_free(OPENSSL_BLOCK, st)
-#define sk_OPENSSL_BLOCK_set(st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(OPENSSL_BLOCK, st), i, CHECKED_PTR_OF(void, val))
+#define sk_OPENSSL_BLOCK_set(st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(OPENSSL_BLOCK, st), i, libressl.openssl.asn1.CHECKED_PTR_OF(void, val))
 #define sk_OPENSSL_BLOCK_zero(st) SKM_sk_zero(OPENSSL_BLOCK, st)
-#define sk_OPENSSL_BLOCK_unshift(st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(OPENSSL_BLOCK, st), CHECKED_PTR_OF(void, val))
+#define sk_OPENSSL_BLOCK_unshift(st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(OPENSSL_BLOCK, st), libressl.openssl.asn1.CHECKED_PTR_OF(void, val))
 #define sk_OPENSSL_BLOCK_find_ex(st, val) libressl.openssl.stack.sk_find_ex((libressl.openssl.stack._STACK*) CHECKED_CONST_PTR_OF(stack_st_OPENSSL_BLOCK, st), CHECKED_CONST_PTR_OF(void, val))
 #define sk_OPENSSL_BLOCK_delete(st, i) SKM_sk_delete(OPENSSL_BLOCK, st, i)
-#define sk_OPENSSL_BLOCK_delete_ptr(st, ptr_) cast(OPENSSL_BLOCK*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(OPENSSL_BLOCK, st), CHECKED_PTR_OF(void, ptr_)))
+#define sk_OPENSSL_BLOCK_delete_ptr(st, ptr_) cast(OPENSSL_BLOCK*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(OPENSSL_BLOCK, st), libressl.openssl.asn1.CHECKED_PTR_OF(void, ptr_)))
 #define sk_OPENSSL_BLOCK_set_cmp_func(st, cmp) ((int (*)(const (void)* const*, const (void)* const*)) libressl.openssl.stack.sk_set_cmp_func(CHECKED_STACK_OF(OPENSSL_BLOCK, st), CHECKED_SK_CMP_FUNC(void, cmp)))
 #define sk_OPENSSL_BLOCK_dup(st) SKM_sk_dup(OPENSSL_BLOCK, st)
 #define sk_OPENSSL_BLOCK_shift(st) SKM_sk_shift(OPENSSL_BLOCK, st)
@@ -2023,19 +2015,19 @@ version (LIBRESSL_INTERNAL) {
 
 #define sk_OPENSSL_PSTRING_new(cmp) ((stack_st_OPENSSL_PSTRING*) libressl.openssl.stack.sk_new(CHECKED_SK_CMP_FUNC(OPENSSL_STRING, cmp)))
 #define sk_OPENSSL_PSTRING_new_null() ((stack_st_OPENSSL_PSTRING*) libressl.openssl.stack.sk_new_null())
-#define sk_OPENSSL_PSTRING_push(st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(OPENSSL_PSTRING, st), CHECKED_PTR_OF(OPENSSL_STRING, val))
-#define sk_OPENSSL_PSTRING_find(st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(OPENSSL_PSTRING, st), CHECKED_PTR_OF(OPENSSL_STRING, val))
+#define sk_OPENSSL_PSTRING_push(st, val) libressl.openssl.stack.sk_push(CHECKED_STACK_OF(OPENSSL_PSTRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(OPENSSL_STRING, val))
+#define sk_OPENSSL_PSTRING_find(st, val) libressl.openssl.stack.sk_find(CHECKED_STACK_OF(OPENSSL_PSTRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(OPENSSL_STRING, val))
 #define sk_OPENSSL_PSTRING_value(st, i) ((OPENSSL_PSTRING) libressl.openssl.stack.sk_value(CHECKED_STACK_OF(OPENSSL_PSTRING, st), i))
 #define sk_OPENSSL_PSTRING_num(st) SKM_sk_num(OPENSSL_PSTRING, st)
 #define sk_OPENSSL_PSTRING_pop_free(st, free_func) libressl.openssl.stack.sk_pop_free(CHECKED_STACK_OF(OPENSSL_PSTRING, st), CHECKED_SK_FREE_FUNC2(OPENSSL_PSTRING, free_func))
-#define sk_OPENSSL_PSTRING_insert(st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(OPENSSL_PSTRING, st), CHECKED_PTR_OF(OPENSSL_STRING, val), i)
+#define sk_OPENSSL_PSTRING_insert(st, val, i) libressl.openssl.stack.sk_insert(CHECKED_STACK_OF(OPENSSL_PSTRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(OPENSSL_STRING, val), i)
 #define sk_OPENSSL_PSTRING_free(st) SKM_sk_free(OPENSSL_PSTRING, st)
-#define sk_OPENSSL_PSTRING_set(st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(OPENSSL_PSTRING, st), i, CHECKED_PTR_OF(OPENSSL_STRING, val))
+#define sk_OPENSSL_PSTRING_set(st, i, val) libressl.openssl.stack.sk_set(CHECKED_STACK_OF(OPENSSL_PSTRING, st), i, libressl.openssl.asn1.CHECKED_PTR_OF(OPENSSL_STRING, val))
 #define sk_OPENSSL_PSTRING_zero(st) SKM_sk_zero(OPENSSL_PSTRING, st)
-#define sk_OPENSSL_PSTRING_unshift(st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(OPENSSL_PSTRING, st), CHECKED_PTR_OF(OPENSSL_STRING, val))
+#define sk_OPENSSL_PSTRING_unshift(st, val) libressl.openssl.stack.sk_unshift(CHECKED_STACK_OF(OPENSSL_PSTRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(OPENSSL_STRING, val))
 #define sk_OPENSSL_PSTRING_find_ex(st, val) libressl.openssl.stack.sk_find_ex((libressl.openssl.stack._STACK*) CHECKED_CONST_PTR_OF(stack_st_OPENSSL_PSTRING, st), CHECKED_CONST_PTR_OF(OPENSSL_STRING, val))
 #define sk_OPENSSL_PSTRING_delete(st, i) SKM_sk_delete(OPENSSL_PSTRING, st, i)
-#define sk_OPENSSL_PSTRING_delete_ptr(st, ptr_) cast(OPENSSL_PSTRING*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(OPENSSL_PSTRING, st), CHECKED_PTR_OF(OPENSSL_STRING, ptr_)))
+#define sk_OPENSSL_PSTRING_delete_ptr(st, ptr_) cast(OPENSSL_PSTRING*)(libressl.openssl.stack.sk_delete_ptr(CHECKED_STACK_OF(OPENSSL_PSTRING, st), libressl.openssl.asn1.CHECKED_PTR_OF(OPENSSL_STRING, ptr_)))
 #define sk_OPENSSL_PSTRING_set_cmp_func(st, cmp) ((int (*)(const (OPENSSL_STRING)* const*, const (OPENSSL_STRING)* const*)) libressl.openssl.stack.sk_set_cmp_func(CHECKED_STACK_OF(OPENSSL_PSTRING, st), CHECKED_SK_CMP_FUNC(OPENSSL_STRING, cmp)))
 #define sk_OPENSSL_PSTRING_dup(st) SKM_sk_dup(OPENSSL_PSTRING, st)
 #define sk_OPENSSL_PSTRING_shift(st) SKM_sk_shift(OPENSSL_PSTRING, st)

@@ -399,7 +399,12 @@ version (LIBRESSL_INTERNAL) {
 //#define CHECKED_D2I_OF(type, d2i) ((d2i_of_void*) ((1) ? (d2i) : ((.D2I_OF(type)) 0)))
 //#define CHECKED_I2D_OF(type, i2d) ((i2d_of_void*) ((1) ? (i2d) : ((.I2D_OF(type)) 0)))
 //#define CHECKED_NEW_OF(type, xnew) ((void* (*) (void) )((1) ? (xnew) : ((type * (*) (void) ) 0)))
-//#define CHECKED_PTR_OF(type, p) ((void*) ((1) ? (p) : (cast(type*)(0))))
+
+template CHECKED_PTR_OF(string type, string p)
+{
+	enum CHECKED_PTR_OF = "(cast(void*)((true) ? (" ~ p ~ ") : (cast(" ~ type ~ "*)(0))))";
+}
+
 //#define CHECKED_PPTR_OF(type, p) ((void**) ((1) ? (p) : (cast(type**)(0))))
 
 //#define TYPEDEF_D2I_OF(type) typedef type* d2i_of_##type(type**, const (ubyte)**, core.stdc.config.c_long)
@@ -911,9 +916,9 @@ void* ASN1_d2i_fp(.ASN1_d2i_fp_func xnew, d2i_of_void* d2i, libressl.compat.stdi
 void* ASN1_item_d2i_fp(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.compat.stdio.FILE* in_, void* x);
 int ASN1_i2d_fp(i2d_of_void* i2d, libressl.compat.stdio.FILE* out_, void* x);
 
-//#define ASN1_i2d_fp_of(type, i2d, out_, x) (.ASN1_i2d_fp(.CHECKED_I2D_OF(type, i2d), out_, .CHECKED_PTR_OF(type, x)))
+//#define ASN1_i2d_fp_of(type, i2d, out_, x) (.ASN1_i2d_fp(.CHECKED_I2D_OF(type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(type, x)))
 
-//#define ASN1_i2d_fp_of_const(type, i2d, out_, x) (.ASN1_i2d_fp(.CHECKED_I2D_OF(const type, i2d), out_, .CHECKED_PTR_OF(const type, x)))
+//#define ASN1_i2d_fp_of_const(type, i2d, out_, x) (.ASN1_i2d_fp(.CHECKED_I2D_OF(const type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(const type, x)))
 
 int ASN1_item_i2d_fp(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.compat.stdio.FILE* out_, void* x);
 int ASN1_STRING_print_ex_fp(libressl.compat.stdio.FILE* fp, const (libressl.openssl.ossl_typ.ASN1_STRING)* str, core.stdc.config.c_ulong flags);
@@ -930,9 +935,9 @@ version (OPENSSL_NO_BIO) {
 	void* ASN1_item_d2i_bio(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.openssl.ossl_typ.BIO* in_, void* x);
 	int ASN1_i2d_bio(i2d_of_void* i2d, libressl.openssl.ossl_typ.BIO* out_, ubyte* x);
 
-	//#define ASN1_i2d_bio_of(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(type, i2d), out_, .CHECKED_PTR_OF(type, x)))
+	//#define ASN1_i2d_bio_of(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(type, x)))
 
-	//#define ASN1_i2d_bio_of_const(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(const type, i2d), out_, .CHECKED_PTR_OF(const type, x)))
+	//#define ASN1_i2d_bio_of_const(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(const type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(const type, x)))
 
 	int ASN1_item_i2d_bio(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.openssl.ossl_typ.BIO* out_, void* x);
 	int ASN1_UTCTIME_print(libressl.openssl.ossl_typ.BIO* fp, const (libressl.openssl.ossl_typ.ASN1_UTCTIME)* a);
