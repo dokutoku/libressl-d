@@ -275,8 +275,18 @@ alias ISSUING_DIST_POINT = libressl.openssl.x509v3.ISSUING_DIST_POINT_st;
 alias NAME_CONSTRAINTS = libressl.openssl.x509v3.NAME_CONSTRAINTS_st;
 
 /* If placed in pkcs12.h, we end up with a circular dependency with pkcs7.h */
-//#define DECLARE_PKCS12_STACK_OF(type) /* Nothing */
-//#define IMPLEMENT_PKCS12_STACK_OF(type) /* Nothing */
+
+/* Nothing */
+template DECLARE_PKCS12_STACK_OF(string type)
+{
+	enum DECLARE_PKCS12_STACK_OF = "";
+}
+
+/* Nothing */
+template IMPLEMENT_PKCS12_STACK_OF(string type)
+{
+	enum IMPLEMENT_PKCS12_STACK_OF = "";
+}
 
 alias CRYPTO_EX_DATA = libressl.openssl.crypto.crypto_ex_data_st;
 

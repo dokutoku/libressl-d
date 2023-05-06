@@ -60,10 +60,11 @@ module libressl.openssl.pem;
 
 private static import core.stdc.config;
 private static import libressl.compat.stdio;
-private static import libressl.openssl.ec;
+private static import libressl.openssl.asn1;
 private static import libressl.openssl.objects;
 private static import libressl.openssl.ossl_typ;
-private static import libressl.openssl.pkcs7;
+private import libressl.openssl.ec;
+private import libressl.openssl.pkcs7;
 public import libressl.openssl.evp;
 public import libressl.openssl.opensslconf;
 public import libressl.openssl.pem2;
@@ -263,88 +264,199 @@ version (LIBRESSL_INTERNAL) {
 	 * IMPLEMENT_PEM_rw(...) or IMPLEMENT_PEM_rw_cb(...)
 	 */
 
-	//#define IMPLEMENT_PEM_read_fp(name, type, str, asn1) type* PEM_read_##name(libressl.compat.stdio.FILE* fp, type** x, .pem_password_cb cb, void* u) { return .PEM_ASN1_read((d2i_of_void*) d2i_##asn1, str, fp, cast(void**)(x), cb, u); }
+	template IMPLEMENT_PEM_read_fp(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_read_fp = "extern (C) nothrow @nogc " ~ type ~ "* PEM_read_" ~ name ~ "(libressl.compat.stdio.FILE* fp, " ~ type ~ "** x, .pem_password_cb cb, void* u) { return .PEM_ASN1_read((libressl.openssl.asn1.d2i_of_void) d2i_" ~ asn1 ~ ", " ~ str ~ ", fp, cast(void**)(x), cb, u); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_fp(name, type, str, asn1) int PEM_write_##name(libressl.compat.stdio.FILE* fp, type* x) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, null, null, 0, null, null); }
+	template IMPLEMENT_PEM_write_fp(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_fp = "extern (C) nothrow @nogc int PEM_write_" ~ name ~ "(libressl.compat.stdio.FILE* fp, " ~ type ~ "* x) { return .PEM_ASN1_write((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", fp, x, null, null, 0, null, null); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_fp_const(name, type, str, asn1) int PEM_write_##name(libressl.compat.stdio.FILE* fp, const (type)* x) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, cast(void*)(x), null, null, 0, null, null); }
+	template IMPLEMENT_PEM_write_fp_const(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_fp_const = "extern (C) nothrow @nogc int PEM_write_" ~ name ~ "(libressl.compat.stdio.FILE* fp, const (" ~ type ~ ")* x) { return .PEM_ASN1_write((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", fp, cast(void*)(x), null, null, 0, null, null); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_cb_fp(name, type, str, asn1) int PEM_write_##name(libressl.compat.stdio.FILE* fp, type* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, enc, kstr, klen, cb, u); }
+	template IMPLEMENT_PEM_write_cb_fp(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_cb_fp = "extern (C) nothrow @nogc int PEM_write_" ~ name ~ "(libressl.compat.stdio.FILE* fp, " ~ type ~ "* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", fp, x, enc, kstr, klen, cb, u); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_cb_fp_const(name, type, str, asn1) int PEM_write_##name(libressl.compat.stdio.FILE* fp, type* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write((i2d_of_void*) i2d_##asn1, str, fp, x, enc, kstr, klen, cb, u); }
+	template IMPLEMENT_PEM_write_cb_fp_const(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_cb_fp_const = "extern (C) nothrow @nogc int PEM_write_" ~ name ~ "(libressl.compat.stdio.FILE* fp, " ~ type ~ "* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", fp, x, enc, kstr, klen, cb, u); }";
+	}
 
-	//#define IMPLEMENT_PEM_read_bio(name, type, str, asn1) type* PEM_read_bio_##name(libressl.openssl.ossl_typ.BIO* bp, type** x, .pem_password_cb cb, void* u) { return .PEM_ASN1_read_bio((d2i_of_void*) d2i_##asn1, str, bp, cast(void**)(x), cb, u); }
+	template IMPLEMENT_PEM_read_bio(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_read_bio = "extern (C) nothrow @nogc " ~ type ~ "* PEM_read_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, " ~ type ~ "** x, .pem_password_cb cb, void* u) { return .PEM_ASN1_read_bio((libressl.openssl.asn1.d2i_of_void) d2i_" ~ asn1 ~ ", " ~ str ~ ", bp, cast(void**)(x), cb, u); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_bio(name, type, str, asn1) int PEM_write_bio_##name(libressl.openssl.ossl_typ.BIO* bp, type* x) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, x, null, null, 0, null, null); }
+	template IMPLEMENT_PEM_write_bio(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_bio = "extern (C) nothrow @nogc int PEM_write_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, " ~ type ~ "* x) { return .PEM_ASN1_write_bio((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", bp, x, null, null, 0, null, null); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_bio_const(name, type, str, asn1) int PEM_write_bio_##name(libressl.openssl.ossl_typ.BIO* bp, const (type)* x) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, cast(void*)(x), null, null, 0, null, null); }
+	template IMPLEMENT_PEM_write_bio_const(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_bio_const = "extern (C) nothrow @nogc int PEM_write_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, const (" ~ type ~ ")* x) { return .PEM_ASN1_write_bio((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", bp, cast(void*)(x), null, null, 0, null, null); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_cb_bio(name, type, str, asn1) int PEM_write_bio_##name(libressl.openssl.ossl_typ.BIO* bp, type* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, x, enc, kstr, klen, cb, u); }
+	template IMPLEMENT_PEM_write_cb_bio(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_cb_bio = "extern (C) nothrow @nogc int PEM_write_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, " ~ type ~ "* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write_bio((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", bp, x, enc, kstr, klen, cb, u); }";
+	}
 
-	//#define IMPLEMENT_PEM_write_cb_bio_const(name, type, str, asn1) int PEM_write_bio_##name(libressl.openssl.ossl_typ.BIO* bp, type* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write_bio((i2d_of_void*) i2d_##asn1, str, bp, cast(void*)(x), enc, kstr, klen, cb, u); }
+	template IMPLEMENT_PEM_write_cb_bio_const(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_cb_bio_const = "extern (C) nothrow @nogc int PEM_write_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, " ~ type ~ "* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u) { return .PEM_ASN1_write_bio((libressl.openssl.asn1.i2d_of_void) i2d_" ~ asn1 ~ ", " ~ str ~ ", bp, cast(void*)(x), enc, kstr, klen, cb, u); }";
+	}
 
-	//#define IMPLEMENT_PEM_write(name, type, str, asn1) .IMPLEMENT_PEM_write_bio(name, type, str, asn1) .IMPLEMENT_PEM_write_fp(name, type, str, asn1)
+	template IMPLEMENT_PEM_write(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write = .IMPLEMENT_PEM_write_bio!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_write_fp!(name, type, str, asn1);
+	}
 
-	//#define IMPLEMENT_PEM_write_const(name, type, str, asn1) .IMPLEMENT_PEM_write_bio_const(name, type, str, asn1) .IMPLEMENT_PEM_write_fp_const(name, type, str, asn1)
+	template IMPLEMENT_PEM_write_const(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_const = .IMPLEMENT_PEM_write_bio_const!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_write_fp_const!(name, type, str, asn1);
+	}
 
-	//#define IMPLEMENT_PEM_write_cb(name, type, str, asn1) .IMPLEMENT_PEM_write_cb_bio(name, type, str, asn1) .IMPLEMENT_PEM_write_cb_fp(name, type, str, asn1)
+	template IMPLEMENT_PEM_write_cb(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_cb = .IMPLEMENT_PEM_write_cb_bio!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_write_cb_fp!(name, type, str, asn1);
+	}
 
-	//#define IMPLEMENT_PEM_write_cb_const(name, type, str, asn1) .IMPLEMENT_PEM_write_cb_bio_const(name, type, str, asn1) .IMPLEMENT_PEM_write_cb_fp_const(name, type, str, asn1)
+	template IMPLEMENT_PEM_write_cb_const(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_write_cb_const = .IMPLEMENT_PEM_write_cb_bio_const!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_write_cb_fp_const!(name, type, str, asn1);
+	}
 
-	//#define IMPLEMENT_PEM_read(name, type, str, asn1) .IMPLEMENT_PEM_read_bio(name, type, str, asn1) .IMPLEMENT_PEM_read_fp(name, type, str, asn1)
+	template IMPLEMENT_PEM_read(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_read = .IMPLEMENT_PEM_read_bio!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_read_fp!(name, type, str, asn1);
+	}
 
-	//#define IMPLEMENT_PEM_rw(name, type, str, asn1) .IMPLEMENT_PEM_read(name, type, str, asn1) .IMPLEMENT_PEM_write(name, type, str, asn1)
+	template IMPLEMENT_PEM_rw(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_rw = .IMPLEMENT_PEM_read!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_write!(name, type, str, asn1);
+	}
 
-	//#define IMPLEMENT_PEM_rw_const(name, type, str, asn1) .IMPLEMENT_PEM_read(name, type, str, asn1) .IMPLEMENT_PEM_write_const(name, type, str, asn1)
+	template IMPLEMENT_PEM_rw_const(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_rw_const = .IMPLEMENT_PEM_read!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_write_const!(name, type, str, asn1);
+	}
 
-	//#define IMPLEMENT_PEM_rw_cb(name, type, str, asn1) .IMPLEMENT_PEM_read(name, type, str, asn1) .IMPLEMENT_PEM_write_cb(name, type, str, asn1)
+	template IMPLEMENT_PEM_rw_cb(string name, string type, string str, string asn1)
+	{
+		enum IMPLEMENT_PEM_rw_cb = .IMPLEMENT_PEM_read!(name, type, str, asn1) ~  " " ~ .IMPLEMENT_PEM_write_cb!(name, type, str, asn1);
+	}
 }
 
 /* These are the same except they are for the declarations */
 
-//#define DECLARE_PEM_read_fp(name, type) type* PEM_read_##name(libressl.compat.stdio.FILE* fp, type** x, .pem_password_cb cb, void* u);
+template DECLARE_PEM_read_fp(string name, string type)
+{
+	enum DECLARE_PEM_read_fp = "extern (C) nothrow @nogc " ~ type ~ "* PEM_read_" ~ name ~ "(libressl.compat.stdio.FILE* fp, " ~ type ~ "** x, .pem_password_cb cb, void* u);";
+}
 
-//#define DECLARE_PEM_write_fp(name, type) int PEM_write_##name(libressl.compat.stdio.FILE* fp, type* x);
+template DECLARE_PEM_write_fp(string name, string type)
+{
+	enum DECLARE_PEM_write_fp = "extern (C) nothrow @nogc int PEM_write_" ~ name ~ "(libressl.compat.stdio.FILE* fp, " ~ type ~ "* x);";
+}
 
-//#define DECLARE_PEM_write_fp_const(name, type) int PEM_write_##name(libressl.compat.stdio.FILE* fp, const (type)* x);
+template DECLARE_PEM_write_fp_const(string name, string type)
+{
+	enum DECLARE_PEM_write_fp_const = "extern (C) nothrow @nogc int PEM_write_" ~ name ~ "(libressl.compat.stdio.FILE* fp, const (" ~ type ~ ")* x);";
+}
 
-//#define DECLARE_PEM_write_cb_fp(name, type) int PEM_write_##name(libressl.compat.stdio.FILE* fp, type* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
+template DECLARE_PEM_write_cb_fp(string name, string type)
+{
+	enum DECLARE_PEM_write_cb_fp = "extern (C) nothrow @nogc int PEM_write_" ~ name ~ "(libressl.compat.stdio.FILE* fp, " ~ type ~ "* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);";
+}
 
 version (OPENSSL_NO_BIO) {
 	/* */
-	//#define DECLARE_PEM_read_bio(name, type)
+	template DECLARE_PEM_read_bio(string name, string type)
+	{
+		enum DECLARE_PEM_read_bio = "";
+	}
 
 	/* */
-	//#define DECLARE_PEM_write_bio(name, type)
+	template DECLARE_PEM_write_bio(string name, string type)
+	{
+		enum DECLARE_PEM_write_bio = "";
+	}
 
 	/* */
-	//#define DECLARE_PEM_write_bio_const(name, type)
+	template DECLARE_PEM_write_bio_const(string name, string type)
+	{
+		enum DECLARE_PEM_write_bio_const = "";
+	}
 
 	/* */
-	//#define DECLARE_PEM_write_cb_bio(name, type)
+	template DECLARE_PEM_write_cb_bio(string name, string type)
+	{
+		enum DECLARE_PEM_write_cb_bio = "";
+	}
 } else {
-	//#define DECLARE_PEM_read_bio(name, type) type* PEM_read_bio_##name(libressl.openssl.ossl_typ.BIO* bp, type** x, .pem_password_cb cb, void* u);
+	package template DECLARE_PEM_read_bio(string name, string type)
+	{
+		enum DECLARE_PEM_read_bio = "extern (C) nothrow @nogc " ~ type ~ "* PEM_read_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, " ~ type ~ "** x, .pem_password_cb cb, void* u);";
+	}
 
-	//#define DECLARE_PEM_write_bio(name, type) int PEM_write_bio_##name(libressl.openssl.ossl_typ.BIO* bp, type* x);
+	template DECLARE_PEM_write_bio(string name, string type)
+	{
+		enum DECLARE_PEM_write_bio = "extern (C) nothrow @nogc int PEM_write_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, " ~ type ~ "* x);";
+	}
 
-	//#define DECLARE_PEM_write_bio_const(name, type) int PEM_write_bio_##name(libressl.openssl.ossl_typ.BIO* bp, const (type)* x);
+	template DECLARE_PEM_write_bio_const(string name, string type)
+	{
+		enum DECLARE_PEM_write_bio_const = "extern (C) nothrow @nogc int PEM_write_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, const (" ~ type ~ ")* x);";
+	}
 
-	//#define DECLARE_PEM_write_cb_bio(name, type) int PEM_write_bio_##name(libressl.openssl.ossl_typ.BIO* bp, type* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
+	template DECLARE_PEM_write_cb_bio(string name, string type)
+	{
+		enum DECLARE_PEM_write_cb_bio = "extern (C) nothrow @nogc int PEM_write_bio_" ~ name ~ "(libressl.openssl.ossl_typ.BIO* bp, " ~ type ~ "* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);";
+	}
 }
 
-//#define DECLARE_PEM_write(name, type) .DECLARE_PEM_write_bio(name, type) .DECLARE_PEM_write_fp(name, type)
+template DECLARE_PEM_write(string name, string type)
+{
+	enum DECLARE_PEM_write = .DECLARE_PEM_write_bio!(name, type) ~  " " ~ .DECLARE_PEM_write_fp!(name, type);
+}
 
-//#define DECLARE_PEM_write_const(name, type) .DECLARE_PEM_write_bio_const(name, type) .DECLARE_PEM_write_fp_const(name, type)
+template DECLARE_PEM_write_const(string name, string type)
+{
+	enum DECLARE_PEM_write_const = .DECLARE_PEM_write_bio_const!(name, type) ~  " " ~ .DECLARE_PEM_write_fp_const!(name, type);
+}
 
-//#define DECLARE_PEM_write_cb(name, type) .DECLARE_PEM_write_cb_bio(name, type) .DECLARE_PEM_write_cb_fp(name, type)
+template DECLARE_PEM_write_cb(string name, string type)
+{
+	enum DECLARE_PEM_write_cb = .DECLARE_PEM_write_cb_bio!(name, type) ~  " " ~ .DECLARE_PEM_write_cb_fp!(name, type);
+}
 
-//#define DECLARE_PEM_read(name, type) .DECLARE_PEM_read_bio(name, type) .DECLARE_PEM_read_fp(name, type)
+template DECLARE_PEM_read(string name, string type)
+{
+	enum DECLARE_PEM_read = .DECLARE_PEM_read_bio!(name, type) ~  " " ~ .DECLARE_PEM_read_fp!(name, type);
+}
 
-//#define DECLARE_PEM_rw(name, type) .DECLARE_PEM_read(name, type) .DECLARE_PEM_write(name, type)
+template DECLARE_PEM_rw(string name, string type)
+{
+	enum DECLARE_PEM_rw = .DECLARE_PEM_read!(name, type) ~  " " ~ .DECLARE_PEM_write!(name, type);
+}
 
-//#define DECLARE_PEM_rw_const(name, type) .DECLARE_PEM_read(name, type) .DECLARE_PEM_write_const(name, type)
+template DECLARE_PEM_rw_const(string name, string type)
+{
+	enum DECLARE_PEM_rw_const = .DECLARE_PEM_read!(name, type) ~  " " ~ .DECLARE_PEM_write_const!(name, type);
+}
 
-//#define DECLARE_PEM_rw_cb(name, type) .DECLARE_PEM_read(name, type) .DECLARE_PEM_write_cb(name, type)
+template DECLARE_PEM_rw_cb(string name, string type)
+{
+	enum DECLARE_PEM_rw_cb = .DECLARE_PEM_read!(name, type) ~  " " ~ .DECLARE_PEM_write_cb!(name, type);
+}
 
 package alias pem_password_cb = /* Not a function pointer type */ extern (C) nothrow @nogc int function(char* buf, int size, int rwflag, void* userdata);
 
@@ -353,14 +465,11 @@ int PEM_do_header(libressl.openssl.evp.EVP_CIPHER_INFO* cipher, ubyte* data, cor
 
 version (OPENSSL_NO_BIO) {
 } else {
-	package alias d2i_of_void = void;
-	package alias i2d_of_void = void;
-
 	int PEM_read_bio(libressl.openssl.ossl_typ.BIO* bp, char** name, char** header, ubyte** data, core.stdc.config.c_long* len);
 	int PEM_write_bio(libressl.openssl.ossl_typ.BIO* bp, const (char)* name, const (char)* hdr, const (ubyte)* data, core.stdc.config.c_long len);
 	int PEM_bytes_read_bio(ubyte** pdata, core.stdc.config.c_long* plen, char** pnm, const (char)* name, libressl.openssl.ossl_typ.BIO* bp, .pem_password_cb cb, void* u);
-	void* PEM_ASN1_read_bio(d2i_of_void* d2i, const (char)* name, libressl.openssl.ossl_typ.BIO* bp, void** x, .pem_password_cb cb, void* u);
-	int PEM_ASN1_write_bio(i2d_of_void* i2d, const (char)* name, libressl.openssl.ossl_typ.BIO* bp, void* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
+	void* PEM_ASN1_read_bio(libressl.openssl.asn1.d2i_of_void d2i, const (char)* name, libressl.openssl.ossl_typ.BIO* bp, void** x, .pem_password_cb cb, void* u);
+	int PEM_ASN1_write_bio(libressl.openssl.asn1.i2d_of_void i2d, const (char)* name, libressl.openssl.ossl_typ.BIO* bp, void* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb cb, void* u);
 
 	version (OPENSSL_NO_EVP) {
 	} else {
@@ -372,8 +481,8 @@ version (OPENSSL_NO_BIO) {
 
 int PEM_read(libressl.compat.stdio.FILE* fp, char** name, char** header, ubyte** data, core.stdc.config.c_long* len);
 int PEM_write(libressl.compat.stdio.FILE* fp, const (char)* name, const (char)* hdr, const (ubyte)* data, core.stdc.config.c_long len);
-void* PEM_ASN1_read(d2i_of_void* d2i, const (char)* name, libressl.compat.stdio.FILE* fp, void** x, .pem_password_cb cb, void* u);
-int PEM_ASN1_write(i2d_of_void* i2d, const (char)* name, libressl.compat.stdio.FILE* fp, void* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb callback, void* u);
+void* PEM_ASN1_read(libressl.openssl.asn1.d2i_of_void d2i, const (char)* name, libressl.compat.stdio.FILE* fp, void** x, .pem_password_cb cb, void* u);
+int PEM_ASN1_write(libressl.openssl.asn1.i2d_of_void i2d, const (char)* name, libressl.compat.stdio.FILE* fp, void* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb callback, void* u);
 
 version (OPENSSL_NO_EVP) {
 } else {
@@ -388,51 +497,55 @@ int PEM_def_callback(char* buf, int num, int w, void* key);
 void PEM_proc_type(char* buf, int type);
 void PEM_dek_info(char* buf, const (char)* type, int len, char* str);
 
-//.DECLARE_PEM_rw(libressl.openssl.ossl_typ.X509, libressl.openssl.ossl_typ.X509)
+mixin (.DECLARE_PEM_rw!("X509", "libressl.openssl.ossl_typ.X509"));
 
-//.DECLARE_PEM_rw(X509_AUX, libressl.openssl.ossl_typ.X509)
+mixin (.DECLARE_PEM_rw!("X509_AUX", "libressl.openssl.ossl_typ.X509"));
 
-//.DECLARE_PEM_rw(libressl.openssl.x509.X509_REQ, libressl.openssl.x509.X509_REQ) .DECLARE_PEM_write(X509_REQ_NEW, libressl.openssl.x509.X509_REQ)
+mixin (.DECLARE_PEM_rw!("X509_REQ", "libressl.openssl.x509.X509_REQ"));
+mixin (.DECLARE_PEM_write!("X509_REQ_NEW", "libressl.openssl.x509.X509_REQ"));
 
-//.DECLARE_PEM_rw(libressl.openssl.ossl_typ.X509_CRL, libressl.openssl.ossl_typ.X509_CRL)
+mixin (.DECLARE_PEM_rw!("X509_CRL", "libressl.openssl.ossl_typ.X509_CRL"));
 
-//.DECLARE_PEM_rw(libressl.openssl.pkcs7.PKCS7, libressl.openssl.pkcs7.PKCS7)
+mixin (.DECLARE_PEM_rw!("PKCS7", "libressl.openssl.pkcs7.PKCS7"));
 
-//.DECLARE_PEM_rw(libressl.openssl.x509.NETSCAPE_CERT_SEQUENCE, libressl.openssl.x509.NETSCAPE_CERT_SEQUENCE)
+mixin (.DECLARE_PEM_rw!("NETSCAPE_CERT_SEQUENCE", "libressl.openssl.x509.NETSCAPE_CERT_SEQUENCE"));
 
-//.DECLARE_PEM_rw(PKCS8, libressl.openssl.x509.X509_SIG)
+mixin (.DECLARE_PEM_rw!("PKCS8", "libressl.openssl.x509.X509_SIG"));
 
-//.DECLARE_PEM_rw(libressl.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO, libressl.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO)
+mixin (.DECLARE_PEM_rw!("PKCS8_PRIV_KEY_INFO", "libressl.openssl.ossl_typ.PKCS8_PRIV_KEY_INFO"));
 
 version (OPENSSL_NO_RSA) {
 } else {
-	//.DECLARE_PEM_rw_cb(RSAPrivateKey, libressl.openssl.ossl_typ.RSA)
+	mixin (.DECLARE_PEM_rw_cb!("RSAPrivateKey", "libressl.openssl.ossl_typ.RSA"));
 
-	//.DECLARE_PEM_rw_const(RSAPublicKey, libressl.openssl.ossl_typ.RSA) .DECLARE_PEM_rw(RSA_PUBKEY, libressl.openssl.ossl_typ.RSA)
+	mixin (.DECLARE_PEM_rw_const!("RSAPublicKey", "libressl.openssl.ossl_typ.RSA"));
+	mixin (.DECLARE_PEM_rw!("RSA_PUBKEY", "libressl.openssl.ossl_typ.RSA"));
 }
 
 version (OPENSSL_NO_DSA) {
 } else {
-	//.DECLARE_PEM_rw_cb(DSAPrivateKey, libressl.openssl.ossl_typ.DSA)
+	mixin (.DECLARE_PEM_rw_cb!("DSAPrivateKey", "libressl.openssl.ossl_typ.DSA"));
 
-	//.DECLARE_PEM_rw(DSA_PUBKEY, libressl.openssl.ossl_typ.DSA)
+	mixin (.DECLARE_PEM_rw!("DSA_PUBKEY", "libressl.openssl.ossl_typ.DSA"));
 
-	//.DECLARE_PEM_rw_const(DSAparams, libressl.openssl.ossl_typ.DSA)
+	mixin (.DECLARE_PEM_rw_const!("DSAparams", "libressl.openssl.ossl_typ.DSA"));
 }
 
 version (OPENSSL_NO_EC) {
 } else {
-	//.DECLARE_PEM_rw_const(ECPKParameters, libressl.openssl.ec.EC_GROUP) .DECLARE_PEM_rw_cb(ECPrivateKey, EC_KEY) .DECLARE_PEM_rw(EC_PUBKEY, EC_KEY)
+	mixin (.DECLARE_PEM_rw_const!("ECPKParameters", "libressl.openssl.ec.EC_GROUP"));
+	mixin (.DECLARE_PEM_rw_cb!("ECPrivateKey", "libressl.openssl.ec.EC_KEY"));
+	mixin (.DECLARE_PEM_rw!("EC_PUBKEY", "libressl.openssl.ec.EC_KEY"));
 }
 
 version (OPENSSL_NO_DH) {
 } else {
-	//.DECLARE_PEM_rw_const(DHparams, libressl.openssl.ossl_typ.DH)
+	mixin (.DECLARE_PEM_rw_const!("DHparams", "libressl.openssl.ossl_typ.DH"));
 }
 
-//.DECLARE_PEM_rw_cb(PrivateKey, libressl.openssl.ossl_typ.EVP_PKEY)
+mixin (.DECLARE_PEM_rw_cb!("PrivateKey", "libressl.openssl.ossl_typ.EVP_PKEY"));
 
-//.DECLARE_PEM_rw(PUBKEY, libressl.openssl.ossl_typ.EVP_PKEY)
+mixin (.DECLARE_PEM_rw!("PUBKEY", "libressl.openssl.ossl_typ.EVP_PKEY"));
 
 int PEM_write_bio_PrivateKey_traditional(libressl.openssl.ossl_typ.BIO* bp, libressl.openssl.ossl_typ.EVP_PKEY* x, const (libressl.openssl.ossl_typ.EVP_CIPHER)* enc, ubyte* kstr, int klen, .pem_password_cb* cb, void* u);
 int PEM_write_bio_PKCS8PrivateKey_nid(libressl.openssl.ossl_typ.BIO* bp, libressl.openssl.ossl_typ.EVP_PKEY* x, int nid, char* kstr, int klen, .pem_password_cb cb, void* u);

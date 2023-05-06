@@ -17,14 +17,61 @@ public import libressl.openssl.opensslfeatures;
 version (LIBRESSL_INTERNAL) {
 	version (LIBRESSL_NAMESPACE) {
 	} else {
-		//#define LCRYPTO_UNUSED(x)
-		//#define LCRYPTO_USED(x)
-		//#define LCRYPTO_ALIAS1(pre, x)
-		//#define LCRYPTO_ALIAS(x)
+		pragma(inline, true)
+		pure nothrow @safe @nogc @live
+		void LCRYPTO_UNUSED(X_TYPE)(X_TYPE x)
 
-		//#define LSSL_UNUSED(x)
-		//#define LSSL_USED(x)
-		//#define LSSL_ALIAS(x)
+			do
+			{
+			}
+
+		pragma(inline, true)
+		pure nothrow @safe @nogc @live
+		void LCRYPTO_USED(X_TYPE)(X_TYPE x)
+
+			do
+			{
+			}
+
+		pragma(inline, true)
+		pure nothrow @safe @nogc @live
+		void LCRYPTO_ALIAS1(PRE_TYPE, X_TYPE)(PRE_TYPE pre, X_TYPE x)
+
+			do
+			{
+			}
+
+		pragma(inline, true)
+		pure nothrow @safe @nogc @live
+		void LCRYPTO_ALIAS(X_TYPE)(X_TYPE x)
+
+			do
+			{
+			}
+
+		pragma(inline, true)
+		pure nothrow @safe @nogc @live
+		void LSSL_UNUSED(X_TYPE)(X_TYPE x)
+
+			do
+			{
+			}
+
+		pragma(inline, true)
+		pure nothrow @safe @nogc @live
+		void LSSL_USED(X_TYPE)(X_TYPE x)
+
+			do
+			{
+			}
+
+		pragma(inline, true)
+		pure nothrow @safe @nogc @live
+		void LSSL_ALIAS(X_TYPE)(X_TYPE x)
+
+			do
+			{
+			}
 	}
 }
 

@@ -369,49 +369,180 @@ version (LIBRESSL_INTERNAL) {
 } else {
 	/* Declare ASN1 functions: the implement macro in in asn1t.h */
 
-	//#define DECLARE_ASN1_FUNCTIONS(type) .DECLARE_ASN1_FUNCTIONS_name(type, type)
+	template DECLARE_ASN1_FUNCTIONS(string type)
+	{
+		enum DECLARE_ASN1_FUNCTIONS = .DECLARE_ASN1_FUNCTIONS_name!(type, type);
+	}
 
-	//#define DECLARE_ASN1_ALLOC_FUNCTIONS(type) .DECLARE_ASN1_ALLOC_FUNCTIONS_name(type, type)
+	template DECLARE_ASN1_ALLOC_FUNCTIONS(string type)
+	{
+		enum DECLARE_ASN1_ALLOC_FUNCTIONS = .DECLARE_ASN1_ALLOC_FUNCTIONS_name!(type, type);
+	}
 
-	//#define DECLARE_ASN1_FUNCTIONS_name(type, name) .DECLARE_ASN1_ALLOC_FUNCTIONS_name(type, name) .DECLARE_ASN1_ENCODE_FUNCTIONS(type, name, name)
+	template DECLARE_ASN1_FUNCTIONS_name(string type, string name)
+	{
+		enum DECLARE_ASN1_FUNCTIONS_name = .DECLARE_ASN1_ALLOC_FUNCTIONS_name!(type, name) ~ " " ~ .DECLARE_ASN1_ENCODE_FUNCTIONS!(type, name, name);
+	}
 
-	//#define DECLARE_ASN1_FUNCTIONS_fname(type, itname, name) .DECLARE_ASN1_ALLOC_FUNCTIONS_name(type, name) .DECLARE_ASN1_ENCODE_FUNCTIONS(type, itname, name)
+	template DECLARE_ASN1_FUNCTIONS_fname(string type, string itname, string name)
+	{
+		enum DECLARE_ASN1_FUNCTIONS_fname = .DECLARE_ASN1_ALLOC_FUNCTIONS_name!(type, name) ~ " " ~ .DECLARE_ASN1_ENCODE_FUNCTIONS!(type, itname, name);
+	}
 
-	//#define DECLARE_ASN1_ENCODE_FUNCTIONS(type, itname, name) type* d2i_##name(type** a, const (ubyte)** in_, core.stdc.config.c_long len); int i2d_##name(type* a, ubyte** out_); .DECLARE_ASN1_ITEM(itname)
+	template DECLARE_ASN1_ENCODE_FUNCTIONS(string type, string itname, string name)
+	{
+		enum DECLARE_ASN1_ENCODE_FUNCTIONS = "extern (C) nothrow @nogc " ~ type ~ "* d2i_" ~ name ~ "(" ~ type ~ "** a, const (ubyte)** in_, core.stdc.config.c_long len); extern (C) nothrow @nogc int i2d_" ~ name ~ "(" ~ type ~ "* a, ubyte** out_); " ~ .DECLARE_ASN1_ITEM!(itname);
+	}
 
-	//#define DECLARE_ASN1_ENCODE_FUNCTIONS_const(type, name) type* d2i_##name(type** a, const (ubyte)** in_, core.stdc.config.c_long len); int i2d_##name(const (type)* a, ubyte** out_); .DECLARE_ASN1_ITEM(name)
+	template DECLARE_ASN1_ENCODE_FUNCTIONS_const(string type, string name)
+	{
+		enum DECLARE_ASN1_ENCODE_FUNCTIONS_const = "extern (C) nothrow @nogc " ~ type ~ "* d2i_" ~ name ~ "(" ~ type ~ "** a, const (ubyte)** in_, core.stdc.config.c_long len); extern (C) nothrow @nogc int i2d_" ~ name ~ "(const (" ~ type ~ ")* a, ubyte** out_);" ~ .DECLARE_ASN1_ITEM!(name);
+	}
 
-	//#define DECLARE_ASN1_NDEF_FUNCTION(name) int i2d_##name##_NDEF(name* a, ubyte** out_);
+	template DECLARE_ASN1_NDEF_FUNCTION(string name)
+	{
+		enum DECLARE_ASN1_NDEF_FUNCTION = "extern (C) nothrow @nogc int i2d_" ~ name ~ "_NDEF(" ~ name ~ "* a, ubyte** out_)";
+	}
 
-	//#define DECLARE_ASN1_FUNCTIONS_const(name) .DECLARE_ASN1_ALLOC_FUNCTIONS(name) .DECLARE_ASN1_ENCODE_FUNCTIONS_const(name, name)
+	template DECLARE_ASN1_FUNCTIONS_const(string name)
+	{
+		enum DECLARE_ASN1_FUNCTIONS_const = .DECLARE_ASN1_ALLOC_FUNCTIONS!(name) ~ " " ~ .DECLARE_ASN1_ENCODE_FUNCTIONS_const!(name, name);
+	}
 
-	//#define DECLARE_ASN1_ALLOC_FUNCTIONS_name(type, name) type* name##_new(); void name##_free(type* a);
+	template DECLARE_ASN1_ALLOC_FUNCTIONS_name(string type, string name)
+	{
+		enum DECLARE_ASN1_ALLOC_FUNCTIONS_name = "extern (C) nothrow @nogc " ~ type ~ "* " ~ name ~ "_new(); extern (C) nothrow @nogc void " ~ name ~ "_free(" ~ type ~ "* a);";
+	}
 
-	//#define DECLARE_ASN1_PRINT_FUNCTION(stname) .DECLARE_ASN1_PRINT_FUNCTION_fname(stname, stname)
+	template DECLARE_ASN1_PRINT_FUNCTION(string stname)
+	{
+		enum DECLARE_ASN1_PRINT_FUNCTION = .DECLARE_ASN1_PRINT_FUNCTION_fname!(stname, stname);
+	}
 
-	//#define DECLARE_ASN1_PRINT_FUNCTION_fname(stname, fname) int fname##_print_ctx(libressl.openssl.ossl_typ.BIO* out_, stname* x, int indent, const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx);
+	template DECLARE_ASN1_PRINT_FUNCTION_fname(string stname, string fname)
+	{
+		enum DECLARE_ASN1_PRINT_FUNCTION_fname = "extern (C) nothrow @nogc int " ~ fname ~ "_print_ctx(libressl.openssl.ossl_typ.BIO* out_, " ~ stname ~ "* x, int indent, const (libressl.openssl.ossl_typ.ASN1_PCTX)* pctx)";
+	}
 }
 
-//#define D2I_OF(type) type* (*) (type**, const (ubyte)**, core.stdc.config.c_long)
-//#define I2D_OF(type) int (*)(type*, ubyte**)
-//#define I2D_OF_const(type) int (*)(const (type)*, ubyte**)
+version (none) {
+	template D2I_OF(string type)
+	{
+		enum D2I_OF = type ~ "* function(" ~ type ~ "**, const (ubyte)**, core.stdc.config.c_long)";
+	}
 
-//#define CHECKED_D2I_OF(type, d2i) ((d2i_of_void*) ((1) ? (d2i) : ((.D2I_OF(type)) 0)))
-//#define CHECKED_I2D_OF(type, i2d) ((i2d_of_void*) ((1) ? (i2d) : ((.I2D_OF(type)) 0)))
-//#define CHECKED_NEW_OF(type, xnew) ((void* (*) (void) )((1) ? (xnew) : ((type * (*) (void) ) 0)))
+	template I2D_OF(string type)
+	{
+		enum I2D_OF = "int function(" ~ type ~ "*, ubyte**)";
+	}
+
+	template I2D_OF_const(string type)
+	{
+		enum I2D_OF_const = "int function(const (" ~ type ~ ")*, ubyte**)";
+	}
+
+	template CHECKED_D2I_OF(string type, string d2i)
+	{
+		enum CHECKED_D2I_OF = "(cast(libressl.openssl.asn1.d2i_of_void)((true) ? (" ~ d2i ~ ") : (cast(" ~ .D2I_OF!(type) ~ ")(0))))";
+	}
+
+	template CHECKED_I2D_OF(string type, string i2d)
+	{
+		enum CHECKED_I2D_OF = "(cast(libressl.openssl.asn1.i2d_of_void)((true) ? (" ~ i2d ~ ") : (cast(" ~ .I2D_OF(type) ~ ")(0))))";
+	}
+
+	template CHECKED_NEW_OF(string type, string xnew)
+	{
+		enum CHECKED_NEW_OF = "(cast(void* function(void))((true) ? (" ~ xnew ~ ") : (cast(" ~ type ~ "* function(void))(0))))";
+	}
+} else {
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	.d2i_of_void CHECKED_D2I_OF(TYPE, D2I_TYPE)(D2I_TYPE d2i)
+
+		do
+		{
+			return cast(.d2i_of_void)(d2i);
+		}
+
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	.i2d_of_void CHECKED_I2D_OF(TYPE, i2d_TYPE)(i2d_TYPE i2d)
+
+		do
+		{
+			return cast(.i2d_of_void)(i2d);
+		}
+
+	private alias CHECKED_NEW_OF_return_type = /* Temporary type */ extern (C) nothrow @nogc void* function();
+
+	pragma(inline, true)
+	pure nothrow @trusted @nogc @live
+	.CHECKED_NEW_OF_return_type CHECKED_NEW_OF(TYPE, XNEW_TYPE)(XNEW_TYPE xnew)
+
+		do
+		{
+			return cast(.CHECKED_NEW_OF_return_type)(xnew);
+		}
+}
 
 template CHECKED_PTR_OF(string type, string p)
 {
 	enum CHECKED_PTR_OF = "(cast(void*)((true) ? (" ~ p ~ ") : (cast(" ~ type ~ "*)(0))))";
 }
 
-//#define CHECKED_PPTR_OF(type, p) ((void**) ((1) ? (p) : (cast(type**)(0))))
+pragma(inline, true)
+extern (D)
+pure nothrow @trusted @nogc @live
+void* CHECKED_PTR_OF(TYPE, P_TYPE)(P_TYPE p)
+	if (!is(TYPE == string))
 
-//#define TYPEDEF_D2I_OF(type) typedef type* d2i_of_##type(type**, const (ubyte)**, core.stdc.config.c_long)
-//#define TYPEDEF_I2D_OF(type) typedef int i2d_of_##type(type*, ubyte**)
-//#define TYPEDEF_D2I2D_OF(type) .TYPEDEF_D2I_OF(type); .TYPEDEF_I2D_OF(type)
+	do
+	{
+		return cast(void*)((true) ? (p) : (cast(TYPE*)(0)));
+	}
 
-//TYPEDEF_D2I2D_OF();
+pragma(inline, true)
+extern (D)
+pure nothrow @trusted @nogc @live
+void* CHECKED_PTR_OF(string type, P_TYPE)(P_TYPE p)
+
+	do
+	{
+		return cast(void*)((true) ? (p) : (cast(mixin (type ~ "*"))(0)));
+	}
+
+pragma(inline, true)
+pure nothrow @trusted @nogc @live
+void** CHECKED_PPTR_OF(TYPE, P_TYPE)(P_TYPE p)
+
+	do
+	{
+		return cast(void**)((true) ? (p) : (cast(TYPE**)(0)));
+	}
+
+private template TYPEDEF_D2I_OF(string type)
+{
+	enum TYPEDEF_D2I_OF = "package alias d2i_of_" ~ type ~ " = /* Not a function pointer type */ extern (C) nothrow @nogc " ~ type ~ "* function(" ~ type ~ "**, const (ubyte)**, core.stdc.config.c_long);";
+}
+
+private template TYPEDEF_I2D_OF(string type)
+{
+	enum TYPEDEF_I2D_OF = "package alias i2d_of_" ~ type ~ " = /* Not a function pointer type */ extern (C) nothrow @nogc int function(" ~ type ~ "*, ubyte**);";
+}
+
+private mixin template TYPEDEF_D2I2D_OF(string type)
+{
+	mixin (.TYPEDEF_D2I_OF!(type));
+	mixin (.TYPEDEF_I2D_OF!(type));
+}
+
+version (none) {
+	mixin TYPEDEF_D2I2D_OF!("void");
+} else {
+	package alias d2i_of_void = /* Not a function pointer type */ extern (C) nothrow @nogc void* function(void**, const (ubyte)**, core.stdc.config.c_long);
+	package alias i2d_of_void = /* Not a function pointer type */ extern (C) nothrow @nogc int function(void*, ubyte**);
+}
 
 /*
  * The following macros and typedefs allow an ASN1_ITEM
@@ -471,11 +602,20 @@ version (LIBRESSL_INTERNAL) {
 	/*
 	 * Macro to include ASN1_ITEM pointer from base type
 	 */
-	//#define ASN1_ITEM_ref(iptr) (&(iptr##_it))
+	template ASN1_ITEM_ref(string iptr)
+	{
+		enum ASN1_ITEM_ref = "(&(" ~ iptr ~ "_it))";
+	}
 
-	//#define ASN1_ITEM_rptr(ref_) (&(ref##_it))
+	template ASN1_ITEM_rptr(string ref_)
+	{
+		enum ASN1_ITEM_rptr = "(&(" ~ ref_ ~ "_it))";
+	}
 
-	//#define DECLARE_ASN1_ITEM(name) extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM name##_it;
+	template DECLARE_ASN1_ITEM(string name)
+	{
+		enum DECLARE_ASN1_ITEM = "extern __gshared const libressl.openssl.ossl_typ.ASN1_ITEM " ~ name ~ "_it;";
+	}
 }
 
 /* Parameters used by ASN1_STRING_print_ex() */
@@ -900,25 +1040,34 @@ int ASN1_object_size(int constructed, int length_, int tag);
 
 void* ASN1_item_dup(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, void* x);
 
-package alias d2i_of_void = void;
-package alias i2d_of_void = void;
-
 version (LIBRESSL_INTERNAL) {
 } else {
-	void* ASN1_dup(i2d_of_void* i2d, d2i_of_void* d2i, void* x);
+	void* ASN1_dup(.i2d_of_void i2d, .d2i_of_void d2i, void* x);
 }
 
 private alias ASN1_d2i_fp_func = /* Temporary type */ extern (C) nothrow @nogc void* function();
-void* ASN1_d2i_fp(.ASN1_d2i_fp_func xnew, d2i_of_void* d2i, libressl.compat.stdio.FILE* in_, void** x);
+void* ASN1_d2i_fp(.ASN1_d2i_fp_func xnew, .d2i_of_void d2i, libressl.compat.stdio.FILE* in_, void** x);
 
-//#define ASN1_d2i_fp_of(type, xnew, d2i, in_, x) ((type*) .ASN1_d2i_fp(.CHECKED_NEW_OF(type, xnew), .CHECKED_D2I_OF(type, d2i), in_, .CHECKED_PPTR_OF(type, x)))
+pragma(inline, true)
+TYPE* ASN1_d2i_fp_of(TYPE, XNEW_TYPE, D2I_TYPE, IN_TYPE, X_TYPE)(XNEW_TYPE xnew, D2I_TYPE d2i, IN_TYPE in_, X_TYPE x)
+
+	do
+	{
+		return cast(TYPE*)(.ASN1_d2i_fp(.CHECKED_NEW_OF!(TYPE)(xnew), .CHECKED_D2I_OF!(TYPE)(d2i), in_, .CHECKED_PPTR_OF!(TYPE)(x)));
+	}
 
 void* ASN1_item_d2i_fp(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.compat.stdio.FILE* in_, void* x);
-int ASN1_i2d_fp(i2d_of_void* i2d, libressl.compat.stdio.FILE* out_, void* x);
+int ASN1_i2d_fp(.i2d_of_void i2d, libressl.compat.stdio.FILE* out_, void* x);
 
-//#define ASN1_i2d_fp_of(type, i2d, out_, x) (.ASN1_i2d_fp(.CHECKED_I2D_OF(type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(type, x)))
+pragma(inline, true)
+int ASN1_i2d_fp_of(TYPE, i2d_TYPE, OUT_TYPE, X_TYPE)(i2d_TYPE i2d, OUT_TYPE out_, X_TYPE x)
 
-//#define ASN1_i2d_fp_of_const(type, i2d, out_, x) (.ASN1_i2d_fp(.CHECKED_I2D_OF(const type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(const type, x)))
+	do
+	{
+		return .ASN1_i2d_fp(.CHECKED_I2D_OF!(TYPE)(i2d), out_, .CHECKED_PTR_OF!(TYPE)(x));
+	}
+
+//#define ASN1_i2d_fp_of_const(type, i2d, out_, x) (.ASN1_i2d_fp(.CHECKED_I2D_OF!(const type)(i2d), out_, .CHECKED_PTR_OF!(const type)(x)))
 
 int ASN1_item_i2d_fp(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.compat.stdio.FILE* out_, void* x);
 int ASN1_STRING_print_ex_fp(libressl.compat.stdio.FILE* fp, const (libressl.openssl.ossl_typ.ASN1_STRING)* str, core.stdc.config.c_ulong flags);
@@ -928,16 +1077,28 @@ int ASN1_STRING_to_UTF8(ubyte** out_, const (libressl.openssl.ossl_typ.ASN1_STRI
 version (OPENSSL_NO_BIO) {
 } else {
 	private alias ASN1_d2i_bio_func = /* Temporary type */ extern (C) nothrow @nogc void* function();
-	void* ASN1_d2i_bio(.ASN1_d2i_bio_func xnew, d2i_of_void* d2i, libressl.openssl.ossl_typ.BIO* in_, void** x);
+	void* ASN1_d2i_bio(.ASN1_d2i_bio_func xnew, .d2i_of_void d2i, libressl.openssl.ossl_typ.BIO* in_, void** x);
 
-	//#define ASN1_d2i_bio_of(type, xnew, d2i, in_, x) ((type*) .ASN1_d2i_bio(.CHECKED_NEW_OF(type, xnew), .CHECKED_D2I_OF(type, d2i), in_, .CHECKED_PPTR_OF(type, x)))
+	pragma(inline, true)
+	TYPE* ASN1_d2i_bio_of(TYPE, XNEW_TYPE, D2I_TYPE, IN_TYPE, X_TYPE)(XNEW_TYPE xnew, D2I_TYPE d2i, IN_TYPE in_, X_TYPE x)
+
+		do
+		{
+			return cast(TYPE*)(.ASN1_d2i_bio(.CHECKED_NEW_OF!(TYPE)(xnew), .CHECKED_D2I_OF!(TYPE)(d2i), in_, .CHECKED_PPTR_OF!(TYPE)(x)));
+		}
 
 	void* ASN1_item_d2i_bio(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.openssl.ossl_typ.BIO* in_, void* x);
-	int ASN1_i2d_bio(i2d_of_void* i2d, libressl.openssl.ossl_typ.BIO* out_, ubyte* x);
+	int ASN1_i2d_bio(.i2d_of_void i2d, libressl.openssl.ossl_typ.BIO* out_, ubyte* x);
 
-	//#define ASN1_i2d_bio_of(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(type, x)))
+	pragma(inline, true)
+	int ASN1_i2d_bio_of(TYPE, i2d_TYPE, X_TYPE)(i2d_TYPE i2d, libressl.compat.stdio.FILE* out_, X_TYPE x)
 
-	//#define ASN1_i2d_bio_of_const(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF(const type, i2d), out_, libressl.openssl.asn1.CHECKED_PTR_OF(const type, x)))
+		do
+		{
+			return .ASN1_i2d_bio(.CHECKED_I2D_OF!(TYPE)(i2d), out_, .CHECKED_PTR_OF!(TYPE)(x));
+		}
+
+	//#define ASN1_i2d_bio_of_const(type, i2d, out_, x) (.ASN1_i2d_bio(.CHECKED_I2D_OF!(const type)(i2d), out_, .CHECKED_PTR_OF!(const type)(x)))
 
 	int ASN1_item_i2d_bio(const (libressl.openssl.ossl_typ.ASN1_ITEM)* it, libressl.openssl.ossl_typ.BIO* out_, void* x);
 	int ASN1_UTCTIME_print(libressl.openssl.ossl_typ.BIO* fp, const (libressl.openssl.ossl_typ.ASN1_UTCTIME)* a);

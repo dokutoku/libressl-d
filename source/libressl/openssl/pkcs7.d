@@ -357,7 +357,7 @@ struct stack_st_PKCS7
 	libressl.openssl.stack._STACK stack;
 }
 
-//libressl.openssl.ossl_typ.DECLARE_PKCS12_STACK_OF(PKCS7)
+mixin (libressl.openssl.ossl_typ.DECLARE_PKCS12_STACK_OF!("PKCS7"));
 
 enum PKCS7_OP_SET_DETACHED_SIGNATURE = 1;
 enum PKCS7_OP_GET_DETACHED_SIGNATURE = 2;

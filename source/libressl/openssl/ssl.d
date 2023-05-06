@@ -1206,8 +1206,24 @@ alias SSL_set_time = .SSL_SESSION_set_time;
 alias SSL_get_timeout = .SSL_SESSION_get_timeout;
 alias SSL_set_timeout = .SSL_SESSION_set_timeout;
 
-//#define d2i_SSL_SESSION_bio(bp, s_id) libressl.openssl.asn1.ASN1_d2i_bio_of(.SSL_SESSION, .SSL_SESSION_new, .d2i_SSL_SESSION, bp, s_id)
-//#define i2d_SSL_SESSION_bio(bp, s_id) libressl.openssl.asn1.ASN1_i2d_bio_of(.SSL_SESSION, .i2d_SSL_SESSION, bp, s_id)
+version (OPENSSL_NO_BIO) {
+} else {
+	pragma(inline, true)
+	auto d2i_SSL_SESSION_bio(BP_TYPE, S_ID_TYPE)(BP_TYPE bp, S_ID_TYPE s_id)
+
+		do
+		{
+			return libressl.openssl.asn1.ASN1_d2i_bio_of(.SSL_SESSION, &.SSL_SESSION_new, &.d2i_SSL_SESSION, bp, s_id);
+		}
+
+	pragma(inline, true)
+	int i2d_SSL_SESSION_bio(BP_TYPE, S_ID_TYPE)(BP_TYPE bp, S_ID_TYPE s_id)
+
+		do
+		{
+			return libressl.openssl.asn1.ASN1_i2d_bio_of!(.SSL_SESSION)(&.i2d_SSL_SESSION, bp, s_id);
+		}
+}
 
 .SSL_SESSION* PEM_read_bio_SSL_SESSION(libressl.openssl.ossl_typ.BIO* bp, .SSL_SESSION** x, libressl.openssl.pem.pem_password_cb cb, void* u);
 .SSL_SESSION* PEM_read_SSL_SESSION(libressl.compat.stdio.FILE* fp, .SSL_SESSION** x, libressl.openssl.pem.pem_password_cb cb, void* u);

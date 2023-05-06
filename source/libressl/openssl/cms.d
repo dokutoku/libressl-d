@@ -61,6 +61,7 @@ private static import libressl.openssl.asn1;
 private static import libressl.openssl.ossl_typ;
 private static import libressl.openssl.pem;
 private static import libressl.openssl.stack;
+private static import libressl.openssl.x509v3;
 public import libressl.openssl.opensslconf;
 
 version (OPENSSL_NO_CMS) {
@@ -302,11 +303,11 @@ version (OPENSSL_NO_CMS) {
 	void* CMS_unsigned_get0_data_by_OBJ(.CMS_SignerInfo* si, libressl.openssl.ossl_typ.ASN1_OBJECT* oid, int lastpos, int type);
 
 	static assert(libressl.openssl.x509v3.HEADER_X509V3_H);
-	struct stack_st_GENERAL_NAMES;
+	alias stack_st_GENERAL_NAMES = libressl.openssl.x509v3.stack_st_GENERAL_NAMES;
 	int CMS_get1_ReceiptRequest(.CMS_SignerInfo* si, .CMS_ReceiptRequest** prr);
-	.CMS_ReceiptRequest* CMS_ReceiptRequest_create0(ubyte* id, int idlen, int allorfirst, .stack_st_GENERAL_NAMES* receiptList, .stack_st_GENERAL_NAMES* receiptsTo);
+	.CMS_ReceiptRequest* CMS_ReceiptRequest_create0(ubyte* id, int idlen, int allorfirst, libressl.openssl.x509v3.stack_st_GENERAL_NAMES* receiptList, libressl.openssl.x509v3.stack_st_GENERAL_NAMES* receiptsTo);
 	int CMS_add1_ReceiptRequest(.CMS_SignerInfo* si, .CMS_ReceiptRequest* rr);
-	void CMS_ReceiptRequest_get0_values(.CMS_ReceiptRequest* rr, libressl.openssl.ossl_typ.ASN1_STRING** pcid, int* pallorfirst, .stack_st_GENERAL_NAMES** plist, .stack_st_GENERAL_NAMES** prto);
+	void CMS_ReceiptRequest_get0_values(.CMS_ReceiptRequest* rr, libressl.openssl.ossl_typ.ASN1_STRING** pcid, int* pallorfirst, libressl.openssl.x509v3.stack_st_GENERAL_NAMES** plist, libressl.openssl.x509v3.stack_st_GENERAL_NAMES** prto);
 
 	int CMS_RecipientInfo_kari_get0_alg(.CMS_RecipientInfo* ri, libressl.openssl.ossl_typ.X509_ALGOR** palg, libressl.openssl.ossl_typ.ASN1_OCTET_STRING** pukm);
 	.stack_st_CMS_RecipientEncryptedKey* CMS_RecipientInfo_kari_get0_reks(.CMS_RecipientInfo* ri);

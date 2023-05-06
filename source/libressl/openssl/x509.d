@@ -66,6 +66,7 @@ module libressl.openssl.x509;
 private static import core.stdc.config;
 private static import libressl.compat.stdio;
 private static import libressl.compat.time;
+private static import libressl.openssl.x509v3;
 public import libressl.openssl.asn1;
 public import libressl.openssl.ec;
 public import libressl.openssl.opensslconf;
@@ -400,7 +401,7 @@ struct stack_st_X509_REVOKED
 struct X509_crl_info_st;
 alias X509_CRL_INFO = .X509_crl_info_st;
 
-struct stack_st_GENERAL_NAMES;
+alias stack_st_GENERAL_NAMES = libressl.openssl.x509v3.stack_st_GENERAL_NAMES;
 
 //DECLARE_STACK_OF(X509_CRL)
 struct stack_st_X509_CRL

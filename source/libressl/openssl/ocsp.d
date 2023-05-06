@@ -218,17 +218,63 @@ alias OCSP_SERVICELOC = .ocsp_service_locator_st;
 enum PEM_STRING_OCSP_REQUEST = "OCSP REQUEST";
 enum PEM_STRING_OCSP_RESPONSE = "OCSP RESPONSE";
 
-//#define PEM_read_bio_OCSP_REQUEST(bp, x, cb) cast(.OCSP_REQUEST*)(libressl.openssl.pem.PEM_ASN1_read_bio((char* (*) ()) .d2i_OCSP_REQUEST, .PEM_STRING_OCSP_REQUEST, bp, cast(char**)(x), cb, null))
+version (OPENSSL_NO_BIO) {
+} else {
+	private alias PEM_read_bio_temp = /* Temporary type */ extern (C) nothrow @nogc char* function();
 
-//#define PEM_read_bio_OCSP_RESPONSE(bp, x, cb) cast(libressl.openssl.ossl_typ.OCSP_RESPONSE*)(libressl.openssl.pem.PEM_ASN1_read_bio((char* (*) ()) .d2i_OCSP_RESPONSE, .PEM_STRING_OCSP_RESPONSE, bp, cast(char**)(x), cb, null))
+	pragma(inline, true)
+	void* PEM_read_bio_OCSP_REQUEST(X_TYPE)(libressl.openssl.ossl_typ.BIO* bp, X_TYPE x, libressl.openssl.pem.pem_password_cb cb)
 
-//#define PEM_write_bio_OCSP_REQUEST(bp, o) libressl.openssl.pem.PEM_ASN1_write_bio((int (*)()) .i2d_OCSP_REQUEST, .PEM_STRING_OCSP_REQUEST, bp, cast(char*)(o), null, null, 0, null, null)
+		do
+		{
+			return cast(.OCSP_REQUEST*)(libressl.openssl.pem.PEM_ASN1_read_bio(cast(.PEM_read_bio_temp)(&.d2i_OCSP_REQUEST), .PEM_STRING_OCSP_REQUEST.ptr, bp, cast(char**)(x), cb, null));
+		}
 
-//#define PEM_write_bio_OCSP_RESPONSE(bp, o) libressl.openssl.pem.PEM_ASN1_write_bio((int (*)()) .i2d_OCSP_RESPONSE, .PEM_STRING_OCSP_RESPONSE, bp, cast(char*)(o), null, null, 0, null, null)
+	pragma(inline, true)
+	void* PEM_read_bio_OCSP_RESPONSE(X_TYPE)(libressl.openssl.ossl_typ.BIO* bp, X_TYPE x, libressl.openssl.pem.pem_password_cb cb)
 
-//#define ASN1_BIT_STRING_digest(data, type, md, len) libressl.openssl.x509.ASN1_item_digest(&ASN1_BIT_STRING_it, type, data, md, len)
+		do
+		{
+			return cast(libressl.openssl.ossl_typ.OCSP_RESPONSE*)(libressl.openssl.pem.PEM_ASN1_read_bio(cast(.PEM_read_bio_temp)(&.d2i_OCSP_RESPONSE), .PEM_STRING_OCSP_RESPONSE.ptr, bp, cast(char**)(x), cb, null));
+		}
 
-//#define OCSP_CERTSTATUS_dup(cs) libressl.openssl.asn1.ASN1_item_dup(&OCSP_CERTSTATUS_it, cs)
+	private alias PEM_write_bio_temp = /* Temporary type */ extern (C) nothrow @nogc int function();
+
+	pragma(inline, true)
+	int PEM_write_bio_OCSP_REQUEST(O_TYPE)(libressl.openssl.ossl_typ.BIO* bp, O_TYPE o)
+
+		do
+		{
+			return libressl.openssl.pem.PEM_ASN1_write_bio(cast(.PEM_write_bio_temp)(&.i2d_OCSP_REQUEST), .PEM_STRING_OCSP_REQUEST.ptr, bp, cast(char*)(o), null, null, 0, null, null);
+		}
+
+	pragma(inline, true)
+	int PEM_write_bio_OCSP_RESPONSE(O_TYPE)(libressl.openssl.ossl_typ.BIO* bp, O_TYPE o)
+
+		do
+		{
+			return libressl.openssl.pem.PEM_ASN1_write_bio(cast(.PEM_write_bio_temp)(&.i2d_OCSP_RESPONSE), .PEM_STRING_OCSP_RESPONSE.ptr, bp, cast(char*)(o), null, null, 0, null, null);
+		}
+}
+
+version (OPENSSL_NO_EVP) {
+} else {
+	pragma(inline, true)
+	int ASN1_BIT_STRING_digest(void* data, const (libressl.openssl.ossl_typ.EVP_MD)* type, ubyte* md, uint* len)
+
+		do
+		{
+			return libressl.openssl.x509.ASN1_item_digest(&libressl.openssl.asn1.ASN1_BIT_STRING_it, type, data, md, len);
+		}
+}
+
+pragma(inline, true)
+void* OCSP_CERTSTATUS_dup(void* cs)
+
+	do
+	{
+		return libressl.openssl.asn1.ASN1_item_dup(&.OCSP_CERTSTATUS_it, cs);
+	}
 
 .OCSP_CERTID* OCSP_CERTID_dup(.OCSP_CERTID* id);
 

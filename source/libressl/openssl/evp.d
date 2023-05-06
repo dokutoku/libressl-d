@@ -787,10 +787,37 @@ version (OPENSSL_NO_BIO) {
 
 int EVP_Cipher(libressl.openssl.ossl_typ.EVP_CIPHER_CTX* c, ubyte* out_, const (ubyte)* in_, uint inl);
 
-//#define EVP_add_cipher_alias(n, alias) libressl.openssl.objects.OBJ_NAME_add(alias, libressl.openssl.objects.OBJ_NAME_TYPE_CIPHER_METH | libressl.openssl.objects.OBJ_NAME_ALIAS, n)
-//#define EVP_add_digest_alias(n, alias) libressl.openssl.objects.OBJ_NAME_add(alias, libressl.openssl.objects.OBJ_NAME_TYPE_MD_METH | libressl.openssl.objects.OBJ_NAME_ALIAS, n)
-//#define EVP_delete_cipher_alias(alias) libressl.openssl.objects.OBJ_NAME_remove(alias, libressl.openssl.objects.OBJ_NAME_TYPE_CIPHER_METH | libressl.openssl.objects.OBJ_NAME_ALIAS);
-//#define EVP_delete_digest_alias(alias) libressl.openssl.objects.OBJ_NAME_remove(alias, libressl.openssl.objects.OBJ_NAME_TYPE_MD_METH | libressl.openssl.objects.OBJ_NAME_ALIAS);
+pragma(inline, true)
+int EVP_add_cipher_alias(const (char)* n, const (char)* alias_)
+
+	do
+	{
+		return libressl.openssl.objects.OBJ_NAME_add(alias_, libressl.openssl.objects.OBJ_NAME_TYPE_CIPHER_METH | libressl.openssl.objects.OBJ_NAME_ALIAS, n);
+	}
+
+pragma(inline, true)
+int EVP_add_digest_alias(const (char)* n, const (char)* alias_)
+
+	do
+	{
+		return libressl.openssl.objects.OBJ_NAME_add(alias_, libressl.openssl.objects.OBJ_NAME_TYPE_MD_METH | libressl.openssl.objects.OBJ_NAME_ALIAS, n);
+	}
+
+pragma(inline, true)
+int EVP_delete_cipher_alias(const (char)* alias_)
+
+	do
+	{
+		return libressl.openssl.objects.OBJ_NAME_remove(alias_, libressl.openssl.objects.OBJ_NAME_TYPE_CIPHER_METH | libressl.openssl.objects.OBJ_NAME_ALIAS);
+	}
+
+pragma(inline, true)
+int EVP_delete_digest_alias(const (char)* alias_)
+
+	do
+	{
+		return libressl.openssl.objects.OBJ_NAME_remove(alias_, libressl.openssl.objects.OBJ_NAME_TYPE_MD_METH | libressl.openssl.objects.OBJ_NAME_ALIAS);
+	}
 
 libressl.openssl.ossl_typ.EVP_MD_CTX* EVP_MD_CTX_new();
 void EVP_MD_CTX_free(libressl.openssl.ossl_typ.EVP_MD_CTX* ctx);

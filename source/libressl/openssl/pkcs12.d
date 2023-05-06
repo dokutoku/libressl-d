@@ -116,7 +116,7 @@ struct stack_st_PKCS12_SAFEBAG
 	libressl.openssl.stack._STACK stack;
 }
 
-//libressl.openssl.ossl_typ.DECLARE_PKCS12_STACK_OF(PKCS12_SAFEBAG)
+mixin (libressl.openssl.ossl_typ.DECLARE_PKCS12_STACK_OF!("PKCS12_SAFEBAG"));
 
 struct pkcs12_bag_st;
 alias PKCS12_BAGS = .pkcs12_bag_st;

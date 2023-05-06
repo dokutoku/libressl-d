@@ -715,7 +715,17 @@ int CRYPTO_mem_leaks_cb(.CRYPTO_MEM_LEAK_CB cb);
  * die if we have to
  */
 void OpenSSLDie(const (char)* file, int line, const (char)* assertion);
-//#define OPENSSL_assert(e) cast(void)(e ? (0) : (.OpenSSLDie(&(__FILE__[0]), __LINE__, #e), 1))
+
+template OPENSSL_assert(string e)
+{
+	enum OPENSSL_assert =
+	`
+		if (mixin (` ~ e ~ `)) {
+		} else {
+			libressl.openssl.crypto.OpenSSLDie(__FILE__.ptr, __LINE__, "` ~ e ~ `".ptr);
+		}
+	`;
+}
 
 core.stdc.stdint.uint64_t OPENSSL_cpu_caps();
 

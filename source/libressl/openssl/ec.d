@@ -932,16 +932,35 @@ alias ECPKPARAMETERS = .ecpk_parameters_st;
 .EC_GROUP* d2i_ECPKParameters(.EC_GROUP**, const (ubyte)** in_, core.stdc.config.c_long len);
 int i2d_ECPKParameters(const (.EC_GROUP)*, ubyte** out_);
 
-//#define d2i_ECPKParameters_bio(bp, x) libressl.openssl.asn1.ASN1_d2i_bio_of(.EC_GROUP, null, .d2i_ECPKParameters, bp, x)
+version (OPENSSL_NO_BIO) {
+} else {
+	pragma(inline, true)
+	.EC_GROUP* d2i_ECPKParameters_bio(BP_TYPE, X_TYPE)(BP_TYPE bp, X_TYPE x)
+
+		do
+		{
+			return libressl.openssl.asn1.ASN1_d2i_bio_of!(.EC_GROUP)(null, .d2i_ECPKParameters, bp, x);
+		}
+}
+
 //#define i2d_ECPKParameters_bio(bp, x) libressl.openssl.asn1.ASN1_i2d_bio_of_const(.EC_GROUP, .i2d_ECPKParameters, bp, x)
-//#define d2i_ECPKParameters_fp(fp, x) cast(.EC_GROUP*)(libressl.openssl.asn1.ASN1_d2i_fp(null, (char* (*) ()) .d2i_ECPKParameters, fp, cast(ubyte**)(x)))
+
+private alias d2i_ECPKParameters_fp_temp = /* Temporary type */ extern (C) nothrow @nogc char* function();
+
+pragma(inline, true)
+.EC_GROUP* d2i_ECPKParameters_fp(FP_TYPE, X_TYPE)(FP_TYPE fp, X_TYPE x)
+
+	do
+	{
+		return cast(.EC_GROUP*)(libressl.openssl.asn1.ASN1_d2i_fp(null, cast(.d2i_ECPKParameters_fp_temp)(&.d2i_ECPKParameters), fp, cast(ubyte**)(x)));
+	}
 
 pragma(inline, true)
 int i2d_ECPKParameters_fp(libressl.compat.stdio.FILE* fp, ubyte* x)
 
 	do
 	{
-		return libressl.openssl.asn1.ASN1_i2d_fp(&.i2d_ECPKParameters, fp, x);
+		return libressl.openssl.asn1.ASN1_i2d_fp(cast(libressl.openssl.asn1.i2d_of_void)(&.i2d_ECPKParameters), fp, x);
 	}
 
 version (OPENSSL_NO_BIO) {
